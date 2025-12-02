@@ -241,7 +241,7 @@ export default function Base44Templates() {
 
   const copyToClipboard = (text, label) => {
     navigator.clipboard.writeText(text);
-    toast.success(\`\${label} copiado!\`, {
+    toast.success(`${label} copiado!`, {
       description: 'Cole onde precisar usar.',
     });
   };
