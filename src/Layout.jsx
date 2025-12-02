@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -305,11 +304,50 @@ export default function Layout({ children, currentPageName }) {
          {/* Global Focus Style for Accessibility */}
          <style>{`
             :focus-visible {
-              outline: 38px solid #38bdf8 !important;
+              outline: 3px solid #38bdf8 !important;
               outline-offset: 2px !important;
-              box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.4) !important;
+              box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3) !important;
               border-radius: 4px;
-              transition: outline 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+              transition: outline 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            }
+
+            /* Melhorias de acessibilidade WCAG 2.1 AA */
+            *:focus:not(:focus-visible) {
+              outline: none;
+            }
+
+            /* Links com underline visível */
+            a:not([class]) {
+              text-decoration: underline;
+              text-underline-offset: 2px;
+            }
+
+            /* Contraste mínimo para texto */
+            .text-slate-500 { color: #64748b; }
+            .text-slate-600 { color: #475569; }
+
+            /* Skip links para navegação por teclado */
+            .skip-link {
+              position: absolute;
+              top: -40px;
+              left: 0;
+              background: #0A81D1;
+              color: white;
+              padding: 8px 16px;
+              z-index: 100;
+              transition: top 0.3s;
+            }
+
+            .skip-link:focus {
+              top: 0;
+            }
+
+            /* Touch targets mínimos de 44x44px para mobile */
+            @media (max-width: 768px) {
+              button, a, [role="button"] {
+                min-height: 44px;
+                min-width: 44px;
+              }
             }
           `}</style>
         <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors">

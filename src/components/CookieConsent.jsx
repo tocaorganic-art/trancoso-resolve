@@ -108,9 +108,10 @@ export default function CookieConsent() {
               <X className="w-4 h-4" />
             </Button>
           </div>
-          <CardDescription id="cookie-consent-description" className="text-sm">
-            Usamos cookies para melhorar sua experiência. Cookies essenciais são necessários para o funcionamento do site. 
-            Você pode aceitar todos, personalizar suas preferências ou recusar cookies não essenciais.
+          <CardDescription id="cookie-consent-description" className="text-sm leading-relaxed">
+            Usamos cookies para melhorar sua experiência. <strong>Cookies essenciais</strong> são necessários para autenticação e funcionamento básico. 
+            Você pode: <strong>Aceitar Todos</strong> (inclui analytics e marketing), <strong>Recusar Não Essenciais</strong> (apenas cookies obrigatórios), 
+            ou <strong>Personalizar</strong> suas preferências individualmente.
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">
