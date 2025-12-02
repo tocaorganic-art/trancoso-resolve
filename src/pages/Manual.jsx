@@ -18,30 +18,42 @@ const faqContent = {
   clientes: {
     title: <><User className="w-5 h-5" /> Para Clientes</>,
     items: [
-      { question: "Como contratar um serviço?", answer: "Use a barra de busca ou navegue pelas categorias. No perfil do prestador, escolha o serviço, a data e envie a solicitação. O prestador irá confirmar o agendamento." },
-      { question: "Como posso confiar em um prestador?", answer: "Procure por prestadores com o selo 'Verificado'. Leia as avaliações e comentários de outros clientes para tomar sua decisão." },
-      { question: "O que significa o selo 'Verificado'?", answer: "Significa que o prestador enviou um documento de identificação que foi validado por nossa equipe, confirmando sua identidade." },
-      { question: "Como avaliar um prestador?", answer: "Após a conclusão do serviço, acesse 'Meus Pedidos' no menu do seu perfil e clique em 'Avaliar'. Sua opinião é muito importante para a comunidade." },
-      { question: "Posso cancelar um serviço agendado?", answer: "Sim, você pode cancelar uma solicitação em 'Meus Pedidos'. Fique atento às políticas de cancelamento que podem variar entre os prestadores." },
+      { question: "Como contratar um serviço?", answer: "Use a barra de busca ou navegue pelas categorias na página inicial. Ao encontrar um profissional, veja seu perfil completo, escolha o serviço desejado, selecione data e horário, e envie a solicitação. O prestador irá confirmar o agendamento." },
+      { question: "Como posso confiar em um prestador?", answer: "Procure por prestadores com o selo 'Verificado' (ícone de estrela). Leia as avaliações e comentários de outros clientes, confira o portfólio de trabalhos anteriores e verifique há quanto tempo o profissional está na plataforma." },
+      { question: "O que significa o selo 'Verificado'?", answer: "Significa que o prestador enviou um documento de identificação (RG, CPF ou CNH) que foi validado por nossa equipe, confirmando sua identidade. Isso aumenta a segurança da contratação." },
+      { question: "Como avaliar um prestador após o serviço?", answer: "Após a conclusão do serviço, acesse 'Meus Pedidos' no menu do seu perfil. Localize o serviço concluído e clique em 'Avaliar'. Dê uma nota de 1 a 5 estrelas e deixe um comentário. Sua opinião ajuda outros clientes e melhora a comunidade." },
+      { question: "Posso cancelar um serviço agendado?", answer: "Sim, você pode cancelar uma solicitação em 'Meus Pedidos' a qualquer momento antes da confirmação. Após confirmado, entre em contato diretamente com o prestador para negociar. Cancele com antecedência para não prejudicar o profissional." },
+      { question: "Como entrar em contato com o prestador?", answer: "No perfil do prestador, você encontra o botão do WhatsApp para contato direto. Também pode enviar mensagens através da solicitação de serviço após enviá-la." },
+      { question: "Os preços são negociáveis?", answer: "Os preços exibidos são de referência. Você pode negociar diretamente com o prestador, especialmente para serviços maiores ou recorrentes. Use o WhatsApp ou mensagem na plataforma." },
+      { question: "Preciso pagar antecipadamente?", answer: "Atualmente, todo pagamento é feito diretamente entre você e o prestador, no momento que combinarem. A plataforma não intermedia pagamentos, mas estamos trabalhando para implementar essa funcionalidade." },
     ]
   },
   prestadores: {
     title: <><Briefcase className="w-5 h-5" /> Para Prestadores</>,
     items: [
-      { question: "Como me cadastrar como prestador?", answer: "Clique em 'Seja um prestador' na página inicial, crie sua conta e, em seguida, preencha o formulário em 'Meu Perfil de Prestador' com suas informações, serviços e fotos." },
-      { question: "Quais são os custos para ser um prestador?", answer: "Oferecemos diferentes planos, incluindo opções gratuitas e pagas com mais benefícios. Visite a página 'Planos' para ver os detalhes e escolher o melhor para você." },
-      { question: "Como recebo mais solicitações?", answer: "Um perfil completo e bem avaliado tem mais chances de ser contratado. Peça para seus clientes o avaliarem após o serviço e mantenha suas informações e agenda atualizadas." },
-      { question: "Como gerenciar minha agenda?", answer: "Acesse a 'Minha Agenda' no seu painel para ver todas as solicitações, confirmar, rejeitar e marcar serviços como concluídos. Manter a agenda atualizada é fundamental." },
-      { question: "Como ser um prestador 'Verificado'?", answer: "Na página 'Meu Perfil de Prestador', envie um documento de identificação na seção de verificação. Nossa equipe analisará e aplicará o selo ao seu perfil." },
+      { question: "Como me cadastrar como prestador?", answer: "Clique em 'Seja um prestador' na página inicial e crie sua conta. Ao entrar, selecione 'Sou prestador de serviços'. Depois, acesse 'Meu Perfil de Prestador' para completar suas informações: foto, bio, especialidades, preços e métodos de pagamento aceitos." },
+      { question: "Quais são os custos para ser um prestador?", answer: "Oferecemos planos flexíveis: o plano Básico é gratuito com recursos essenciais. Planos pagos oferecem destaque na busca, mais serviços cadastrados e menor taxa de comissão. Visite a página 'Planos' para comparar." },
+      { question: "Como cadastrar meus serviços?", answer: "Acesse 'Meus Serviços' no menu. Clique em 'Adicionar Serviço', preencha título, descrição detalhada, categoria, preço e adicione fotos do seu trabalho. Quanto mais completo, mais atrativo para clientes." },
+      { question: "Como recebo mais solicitações?", answer: "Dicas para aumentar contratações: 1) Complete 100% do seu perfil; 2) Adicione fotos de qualidade dos seus trabalhos; 3) Responda rapidamente às solicitações; 4) Peça avaliações aos clientes satisfeitos; 5) Mantenha preços competitivos; 6) Atualize sua disponibilidade regularmente." },
+      { question: "Como gerenciar minha agenda?", answer: "Acesse 'Minha Agenda' no painel. Lá você vê todas as solicitações pendentes, pode confirmar ou rejeitar. Após concluir um serviço, marque como 'Concluído' para que o cliente possa avaliar. Use os filtros para organizar por data ou status." },
+      { question: "Como ser um prestador 'Verificado'?", answer: "Na página 'Meu Perfil de Prestador', role até a seção 'Verificação'. Envie uma foto clara do seu documento (RG, CPF ou CNH). Nossa equipe analisa em até 48 horas. Após aprovação, o selo aparece automaticamente no seu perfil." },
+      { question: "Como funciona o pagamento pelos serviços?", answer: "Atualmente, você recebe diretamente do cliente pelo método combinado (PIX, dinheiro, cartão). Configure os métodos aceitos no seu perfil. Em breve, teremos pagamento integrado pela plataforma." },
+      { question: "Posso atender em outras cidades além de Trancoso?", answer: "Sim! No seu perfil, você pode definir o raio de atendimento. Isso ajuda clientes de cidades vizinhas a encontrarem você. Lembre-se de considerar custos de deslocamento no preço." },
+      { question: "O que acontece se eu cancelar um serviço?", answer: "Cancelamentos afetam sua reputação. Se precisar cancelar, faça o mais rápido possível e explique o motivo ao cliente. Cancelamentos frequentes podem resultar em menor visibilidade na busca." },
     ]
   },
   tecnico: {
     title: <><Wrench className="w-5 h-5" /> Técnico</>,
     items: [
-      { question: "Qual tecnologia a plataforma usa?", answer: "O aplicativo é construído sobre a plataforma Base44, usando React para o frontend, Deno para funções de backend e um banco de dados NoSQL gerenciado." },
-      { question: "Como o app funciona com internet instável?", answer: "Estamos trabalhando para otimizar o aplicativo para conexões lentas, comuns em Trancoso. Recursos essenciais são projetados para serem leves e rápidos. Imagens são otimizadas e carregadas de forma preguiçosa (lazy-loading)." },
-      { question: "Como a segurança dos dados é garantida?", answer: "Seguimos as melhores práticas de segurança, com autenticação, autorização e políticas de acesso restrito. A infraestrutura da Base44 gerencia a segurança em nível de nuvem, incluindo proteção contra ataques comuns." },
-      { question: "O Assistente de IA aprende com minhas conversas?", answer: "Não. Para proteger sua privacidade, cada conversa é tratada de forma isolada. O modelo de IA não é treinado com seus dados e não retém informações entre as sessões." },
+      { question: "Qual tecnologia a plataforma usa?", answer: "O aplicativo é construído sobre a plataforma Base44, usando React 18 para o frontend, Deno para funções de backend serverless, e um banco de dados NoSQL gerenciado com políticas de segurança em nível de linha (RLS)." },
+      { question: "O app funciona bem com internet instável?", answer: "Sim! Implementamos várias otimizações: imagens são carregadas com lazy-loading e comprimidas, dados são cacheados localmente quando possível, e a interface mostra estados de carregamento claros. Em conexões lentas, priorize o uso do WiFi." },
+      { question: "Como a segurança dos dados é garantida?", answer: "Seguimos padrões de segurança modernos: autenticação via OAuth 2.0, tokens JWT para sessões, políticas RLS no banco de dados, criptografia em trânsito (HTTPS), e conformidade com a LGPD. Dados sensíveis nunca são expostos no frontend." },
+      { question: "O Assistente de IA aprende com minhas conversas?", answer: "Não. Para proteger sua privacidade, cada conversa é processada de forma isolada e não é usada para treinar modelos. Os dados da conversa são armazenados apenas para seu histórico pessoal e podem ser deletados a qualquer momento." },
+      { question: "Quais navegadores são suportados?", answer: "O app funciona melhor em navegadores modernos: Chrome, Firefox, Safari e Edge nas versões mais recentes. No celular, recomendamos Chrome para Android e Safari para iOS. Internet Explorer não é suportado." },
+      { question: "Posso usar o app no celular como se fosse um aplicativo?", answer: "Sim! O site é um PWA (Progressive Web App). No Chrome Android, toque no menu (⋮) e selecione 'Adicionar à tela inicial'. No Safari iOS, toque no ícone de compartilhar e 'Adicionar à Tela de Início'. O app ficará disponível como um ícone." },
+      { question: "Como reportar um bug ou problema técnico?", answer: "Use o botão de suporte no canto inferior da tela, ou envie email para suporte com detalhes: qual página estava, o que tentou fazer, e prints de erro se houver. Quanto mais detalhes, mais rápido resolvemos." },
+      { question: "O app coleta dados de localização?", answer: "Apenas quando você permite explicitamente, para mostrar prestadores próximos ou preencher endereços automaticamente. Você pode negar a permissão e inserir endereços manualmente. Não rastreamos sua localização em segundo plano." },
+      { question: "Como os dados são backupados?", answer: "A infraestrutura Base44 realiza backups automáticos diários. Seus dados estão seguros em servidores redundantes. Em caso de problemas, podemos restaurar informações dos últimos 30 dias." },
     ]
   },
 };
