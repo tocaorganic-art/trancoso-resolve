@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { cn } from "@/lib/utils";
 import { ImageOff } from "lucide-react"; // Import an icon for fallback
 
-export default function LazyImage({ src, srcSet, sizes, alt, className, placeholderClassName }) {
+export default function LazyImage({ src, srcSet, sizes, alt, className, placeholderClassName, priority = false }) {
   const [imgSrc, setImgSrc] = useState(src);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -17,6 +17,12 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
   }, [src]);
 
   useEffect(() => {
+    // Se a imagem tem prioridade, carrega imediatamente
+    if (priority) {
+      setIsInView(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -26,7 +32,7 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
           }
         });
       },
-      { rootMargin: "200px" } // Carrega a imagem 200px antes de entrar na tela
+      { rootMargin: "300px" } // Carrega a imagem 300px antes de entrar na tela (aumentado para melhor UX)
     );
 
     const currentRef = imgRef.current;
@@ -39,7 +45,7 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [priority]);
 
   const handleError = () => {
     setHasError(true);
@@ -77,8 +83,9 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
           )}
           onLoad={() => setIsLoaded(true)}
           onError={handleError}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
           decoding="async"
+          fetchpriority={priority ? "high" : "auto"}
         />
       )}
     </div>
