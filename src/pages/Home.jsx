@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
@@ -277,18 +276,31 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {isLoadingServices ? (
-              Array.from({ length: 3 }).map((_, i) => <ServiceSkeletonCard key={i} />)
-            ) : isErrorServices ? (
-              <div className="col-span-full text-center py-10 bg-red-50 rounded-lg">
-                <AlertCircle className="w-8 h-8 mx-auto text-red-500 mb-2" />
-                <p className="text-red-700">Não foi possível carregar os serviços em destaque.</p>
-              </div>
-            ) : (
-              services.map((service) => {
-                const provider = providers?.find(p => p.id === service.provider_id);
-                return <ServiceCard key={service.id} service={service} provider={provider} />;
-              })
-            )}
+                  Array.from({ length: 3 }).map((_, i) => <ServiceSkeletonCard key={i} />)
+                ) : isErrorServices ? (
+                  <div className="col-span-full text-center py-10 bg-red-50 rounded-lg">
+                    <AlertCircle className="w-8 h-8 mx-auto text-red-500 mb-2" />
+                    <p className="text-red-700">Não foi possível carregar os serviços em destaque.</p>
+                  </div>
+                ) : services && services.length > 0 ? (
+                  services.map((service) => {
+                    const provider = providers?.find(p => p.id === service.provider_id);
+                    return <ServiceCard key={service.id} service={service} provider={provider} />;
+                  })
+                ) : (
+                  <div className="col-span-full text-center py-12 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-100">
+                    <Sparkles className="w-12 h-12 mx-auto text-blue-400 mb-3" />
+                    <h3 className="text-lg font-semibold text-slate-700 mb-2">Serviços em Destaque em Breve!</h3>
+                    <p className="text-slate-500 mb-4 max-w-md mx-auto">
+                      Estamos selecionando os melhores serviços para você. Enquanto isso, explore nossos profissionais.
+                    </p>
+                    <Link to={createPageUrl("ServicosCategoria")}>
+                      <Button className="bg-gradient-to-r from-cyan-500 to-blue-600">
+                        Explorar Profissionais
+                      </Button>
+                    </Link>
+                  </div>
+                )}
           </div>
         </section>
 
@@ -307,10 +319,10 @@ export default function HomePage() {
                 <AlertCircle className="w-8 h-8 mx-auto text-red-500 mb-2" />
                 <p className="text-red-700">Não foi possível carregar os profissionais.</p>
               </div>
-            ) : (
+            ) : topProviders.length > 0 ? (
                 topProviders.map((provider) => (
-                  <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
-                    <Card className="border-none shadow-lg hover:shadow-xl transition-all text-center cursor-pointer">
+                  <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
+                    <Card className="border-none shadow-lg hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2">
                       <CardContent className="p-4">
                         <div className="relative mb-3">
                           <LazyImage
@@ -319,7 +331,7 @@ export default function HomePage() {
                             className="w-20 h-20 rounded-full mx-auto border-4 border-white shadow-md"
                           />
                           {provider.verified && (
-                            <div className="absolute bottom-0 right-1/2 translate-x-1/2 bg-cyan-500 rounded-full p-1">
+                            <div className="absolute bottom-0 right-1/2 translate-x-1/2 bg-cyan-500 rounded-full p-1" aria-label="Profissional verificado">
                               <Star className="w-3 h-3 text-white fill-current" />
                             </div>
                           )}
@@ -327,13 +339,27 @@ export default function HomePage() {
                         <p className="font-semibold text-sm text-slate-900 mb-1">{provider.full_name}</p>
                         <p className="text-xs text-slate-600 mb-2">{provider.occupation}</p>
                         <div className="flex items-center justify-center gap-1">
-                          <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                          <Star className="w-3 h-3 text-yellow-500 fill-current" aria-hidden="true" />
                           <span className="text-sm font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
+                          <span className="sr-only">estrelas</span>
                         </div>
                       </CardContent>
                     </Card>
                   </Link>
                 ))
+            ) : (
+              <div className="col-span-full text-center py-12 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-100">
+                <Star className="w-12 h-12 mx-auto text-amber-400 mb-3" />
+                <h3 className="text-lg font-semibold text-slate-700 mb-2">Seja o Primeiro Avaliado!</h3>
+                <p className="text-slate-500 mb-4 max-w-md mx-auto">
+                  Os profissionais mais bem avaliados aparecerão aqui. Cadastre-se e conquiste suas primeiras avaliações.
+                </p>
+                <Link to={createPageUrl("SejaPrestador")}>
+                  <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                    Cadastrar como Prestador
+                  </Button>
+                </Link>
+              </div>
             )}
           </div>
         </section>
