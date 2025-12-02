@@ -17,23 +17,42 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 const categoryImageMap = {
+  // Categorias do enum: Limpeza, Garçom, Pedreiro, Jardinagem, Babá, Eletricista, Encanador, Pintor, Cozinheiro, Outro
   'Limpeza': 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Garçom': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Pedreiro': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Jardinagem': 'https://images.unsplash.com/photo-1557429287-b2e26467fc2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Babá': 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Eletricista': 'https://images.unsplash.com/photo-1621905251189-08b45249c6b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Construção': 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Encanador': 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Pintor': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Cozinheiro': 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Outro': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  // Categorias extras para compatibilidade
+  'Construção': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Beleza': 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Turismo': 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Gastronomia': 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Gastronomia': 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Festas': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Aulas': 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Transporte': 'https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Automóveis': 'https://images.unsplash.com/photo-1553440569-b506745199de?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'default': 'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'default': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
 };
 
 const categoryIconMap = {
     'Limpeza': Home,
+    'Garçom': UtensilsCrossed,
+    'Pedreiro': Hammer,
+    'Jardinagem': Leaf,
+    'Babá': Baby,
+    'Eletricista': Zap,
+    'Encanador': Wrench,
+    'Pintor': Hammer,
+    'Cozinheiro': UtensilsCrossed,
+    'Outro': Wrench,
     'Construção': Hammer,
     'Beleza': Shirt,
     'Transporte': Car,
@@ -42,7 +61,7 @@ const categoryIconMap = {
     'Festas': PartyPopper,
     'Aulas': BookOpen,
     'Automóveis': Wrench,
-    'default': Hammer
+    'default': Wrench
 };
 
 const ServiceSkeletonCard = () => (
@@ -73,8 +92,25 @@ const ProviderSkeletonCard = () => (
     </Card>
 );
 
+// Função para validar se uma URL de imagem parece válida e relevante
+const isValidImageUrl = (url) => {
+  if (!url || typeof url !== 'string') return false;
+  // Verifica se é uma URL válida de imagem
+  const validDomains = ['unsplash.com', 'images.unsplash.com', 'storage.googleapis.com', 'base44.com', 'ui-avatars.com'];
+  try {
+    const urlObj = new URL(url);
+    return validDomains.some(domain => urlObj.hostname.includes(domain));
+  } catch {
+    return false;
+  }
+};
+
 const ServiceCard = ({ service, provider }) => {
-    const imageSrc = service.images?.[0] || categoryImageMap[service.category] || categoryImageMap.default;
+    // Lógica de fallback melhorada: usa imagem cadastrada apenas se válida, senão usa fallback da categoria
+    const serviceImage = service.images?.[0];
+    const hasValidImage = isValidImageUrl(serviceImage);
+    const fallbackImage = categoryImageMap[service.category] || categoryImageMap.default;
+    const imageSrc = hasValidImage ? serviceImage : fallbackImage;
     const Icon = categoryIconMap[service.category] || categoryIconMap.default;
 
     return (
