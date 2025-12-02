@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Cookie } from 'lucide-react';
+import { Cookie, X, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -27,7 +27,9 @@ export default function CookieConsent() {
   useEffect(() => {
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
-      setVisible(true);
+      // Pequeno delay para não aparecer imediatamente
+      const timer = setTimeout(() => setVisible(true), 1500);
+      return () => clearTimeout(timer);
     } else {
       try {
         const savedPreferences = JSON.parse(consent);
@@ -44,7 +46,8 @@ export default function CookieConsent() {
   const handleSavePreferences = (newPreferences) => {
     const finalPreferences = {
       ...newPreferences,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      version: '1.0'
     };
     
     localStorage.setItem('cookieConsent', JSON.stringify(finalPreferences));
@@ -68,7 +71,7 @@ export default function CookieConsent() {
     handleSavePreferences(preferences);
   };
   
-  const handleEssentialOnly = () => {
+  const handleRejectAll = () => {
     handleSavePreferences({ essential: true, analytics: false, marketing: false });
   };
 
@@ -81,57 +84,102 @@ export default function CookieConsent() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-in slide-in-from-bottom-full duration-500">
-      <Card className="max-w-3xl mx-auto shadow-2xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Cookie className="w-5 h-5 text-cyan-600"/>
-            Nós Usamos Cookies
-          </CardTitle>
-          <CardDescription>
-            Sua privacidade é importante para nós. Usamos cookies para melhorar sua experiência, personalizar conteúdo e analisar nosso tráfego. Você pode gerenciar suas preferências abaixo.
+    <div 
+      className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-in slide-in-from-bottom-full duration-500"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cookie-consent-title"
+      aria-describedby="cookie-consent-description"
+    >
+      <Card className="max-w-3xl mx-auto shadow-2xl border-2 border-slate-200">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <CardTitle id="cookie-consent-title" className="flex items-center gap-2">
+              <Cookie className="w-5 h-5 text-cyan-600"/>
+              Sua Privacidade é Importante
+            </CardTitle>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 -mr-2 -mt-2"
+              onClick={handleRejectAll}
+              aria-label="Recusar cookies não essenciais e fechar"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+          <CardDescription id="cookie-consent-description" className="text-sm">
+            Usamos cookies para melhorar sua experiência. Cookies essenciais são necessários para o funcionamento do site. 
+            Você pode aceitar todos, personalizar suas preferências ou recusar cookies não essenciais.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           {expanded && (
             <div className="mb-6 space-y-4 pt-4 border-t">
-              <div className="flex items-start justify-between space-x-4">
+              <div className="flex items-start justify-between space-x-4 p-3 bg-slate-50 rounded-lg">
                 <div className="flex-1">
-                  <Label htmlFor="cookie-essential" className="font-semibold">Cookies Essenciais</Label>
-                  <p className="text-sm text-slate-500">Necessários para o funcionamento básico do site. Não podem ser desativados.</p>
+                  <Label htmlFor="cookie-essential" className="font-semibold flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-green-600" />
+                    Cookies Essenciais
+                  </Label>
+                  <p className="text-sm text-slate-500 mt-1">Necessários para o funcionamento básico do site. Incluem autenticação e preferências de sessão.</p>
                 </div>
-                <Switch id="cookie-essential" checked={preferences.essential} disabled />
+                <Switch id="cookie-essential" checked={preferences.essential} disabled aria-label="Cookies essenciais - sempre ativos" />
               </div>
-              <div className="flex items-start justify-between space-x-4">
+              <div className="flex items-start justify-between space-x-4 p-3 bg-slate-50 rounded-lg">
                 <div className="flex-1">
                   <Label htmlFor="cookie-analytics" className="font-semibold">Cookies Analíticos</Label>
-                  <p className="text-sm text-slate-500">Nos ajudam a entender como os visitantes interagem com o site.</p>
+                  <p className="text-sm text-slate-500 mt-1">Nos ajudam a entender como os visitantes interagem com o site para melhorar a experiência.</p>
                 </div>
-                <Switch id="cookie-analytics" checked={preferences.analytics} onCheckedChange={() => togglePreference('analytics')} />
+                <Switch 
+                  id="cookie-analytics" 
+                  checked={preferences.analytics} 
+                  onCheckedChange={() => togglePreference('analytics')} 
+                  aria-label="Ativar cookies analíticos"
+                />
               </div>
-              <div className="flex items-start justify-between space-x-4">
+              <div className="flex items-start justify-between space-x-4 p-3 bg-slate-50 rounded-lg">
                 <div className="flex-1">
                   <Label htmlFor="cookie-marketing" className="font-semibold">Cookies de Marketing</Label>
-                  <p className="text-sm text-slate-500">Usados para rastrear visitantes e exibir anúncios relevantes.</p>
+                  <p className="text-sm text-slate-500 mt-1">Usados para exibir anúncios relevantes baseados em seus interesses.</p>
                 </div>
-                <Switch id="cookie-marketing" checked={preferences.marketing} onCheckedChange={() => togglePreference('marketing')} />
+                <Switch 
+                  id="cookie-marketing" 
+                  checked={preferences.marketing} 
+                  onCheckedChange={() => togglePreference('marketing')} 
+                  aria-label="Ativar cookies de marketing"
+                />
               </div>
             </div>
           )}
 
           <div className="flex flex-col sm:flex-row gap-2">
-            <Button onClick={handleAcceptAll} className="flex-1">Aceitar Todos</Button>
-            <Button onClick={handleEssentialOnly} variant="secondary" className="flex-1">Apenas Essenciais</Button>
-             <Button 
-                variant="outline" 
-                onClick={() => expanded ? handleAcceptSelected() : setExpanded(true)}
-                className="flex-1"
-             >
-                {expanded ? 'Salvar Preferências' : 'Personalizar'}
-             </Button>
+            <Button 
+              onClick={handleAcceptAll} 
+              className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+            >
+              Aceitar Todos
+            </Button>
+            <Button 
+              onClick={handleRejectAll} 
+              variant="secondary" 
+              className="flex-1"
+            >
+              Recusar Não Essenciais
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => expanded ? handleAcceptSelected() : setExpanded(true)}
+              className="flex-1"
+            >
+              {expanded ? 'Salvar Preferências' : 'Personalizar'}
+            </Button>
           </div>
           <p className="text-xs text-slate-500 mt-4 text-center">
-            Para saber mais, consulte nossa <Link to={createPageUrl("PoliticaPrivacidade")} className="underline">Política de Privacidade</Link>.
+            Ao continuar navegando, você concorda com nossa{' '}
+            <Link to={createPageUrl("PoliticaPrivacidade")} className="underline text-cyan-600 hover:text-cyan-700">
+              Política de Privacidade
+            </Link>. Suas preferências podem ser alteradas a qualquer momento.
           </p>
         </CardContent>
       </Card>
