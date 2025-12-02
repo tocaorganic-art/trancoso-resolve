@@ -88,6 +88,35 @@ export default function ServicosCategoriaPage() {
   const [aiFilteredProviderIds, setAiFilteredProviderIds] = useState(null);
   const [viewMode, setViewMode] = useState('list');
 
+  // Contadores dinâmicos para filtros
+  const filterCounts = useMemo(() => {
+    if (!providers) return { price: {}, rating: {} };
+    
+    const baseFiltered = providers.filter(p => {
+      const matchesCategory = selectedCategory === 'Todos' || p.occupation === selectedCategory;
+      let matchesSearch = true;
+      if (searchQuery.trim() !== '' && aiFilteredProviderIds) {
+        matchesSearch = aiFilteredProviderIds.includes(p.id);
+      }
+      return matchesCategory && matchesSearch;
+    });
+
+    return {
+      price: {
+        all: baseFiltered.length,
+        '$': baseFiltered.filter(p => p.price_range === '$').length,
+        '$$': baseFiltered.filter(p => p.price_range === '$$').length,
+        '$$$': baseFiltered.filter(p => p.price_range === '$$$').length,
+      },
+      rating: {
+        all: baseFiltered.length,
+        '4.5': baseFiltered.filter(p => p.rating && p.rating >= 4.5).length,
+        '4.0': baseFiltered.filter(p => p.rating && p.rating >= 4.0).length,
+        '3.5': baseFiltered.filter(p => p.rating && p.rating >= 3.5).length,
+      }
+    };
+  }, [providers, selectedCategory, searchQuery, aiFilteredProviderIds]);
+
   const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
     queryKey: ['serviceProviders'],
     queryFn: () => base44.entities.ServiceProvider.list('-rating'),
@@ -202,11 +231,41 @@ export default function ServicosCategoriaPage() {
     }
     
     if (filteredProviders.length === 0) {
+        const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || searchQuery.trim() !== '';
         return (
-          <div className="col-span-full text-center py-16 bg-slate-100 rounded-lg">
-            <AlertCircle className="w-10 h-10 mx-auto text-slate-400 mb-4" />
-            <h3 className="text-xl font-semibold text-slate-700">Nenhum Profissional Encontrado</h3>
-            <p className="text-slate-500 mt-2">Tente ajustar seus filtros ou alterar os termos da sua busca.</p>
+          <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
+            <div className="w-16 h-16 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
+              <Search className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-700 mb-2">Nenhum Profissional Encontrado</h3>
+            <p className="text-slate-500 max-w-md mx-auto mb-6">
+              {hasActiveFilters 
+                ? "Não encontramos profissionais com os filtros selecionados. Experimente ajustar sua busca."
+                : "Ainda não há profissionais cadastrados nesta categoria."}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              {hasActiveFilters && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setSearchQuery('');
+                    setPriceFilter('all');
+                    setRatingFilter('all');
+                    setSelectedCategory('Todos');
+                  }}
+                  className="gap-2"
+                >
+                  <Filter className="w-4 h-4" />
+                  Limpar Filtros
+                </Button>
+              )}
+              <Link to={createPageUrl("SejaPrestador")}>
+                <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 gap-2">
+                  <Star className="w-4 h-4" />
+                  Seja o Primeiro!
+                </Button>
+              </Link>
+            </div>
           </div>
         );
     }
@@ -284,10 +343,10 @@ export default function ServicosCategoriaPage() {
                 <SelectValue placeholder="Faixa de Preço" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos os Preços</SelectItem>
-                <SelectItem value="$">$</SelectItem>
-                <SelectItem value="$$">$$</SelectItem>
-                <SelectItem value="$$$">$$$</SelectItem>
+                <SelectItem value="all">Todos os Preços ({filterCounts.price.all || 0})</SelectItem>
+                <SelectItem value="$">$ - Econômico ({filterCounts.price['$'] || 0})</SelectItem>
+                <SelectItem value="$$">$$ - Moderado ({filterCounts.price['$$'] || 0})</SelectItem>
+                <SelectItem value="$$$">$$$ - Premium ({filterCounts.price['$$$'] || 0})</SelectItem>
               </SelectContent>
             </Select>
             
@@ -296,10 +355,10 @@ export default function ServicosCategoriaPage() {
                 <SelectValue placeholder="Avaliação" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todas as Avaliações</SelectItem>
-                <SelectItem value="4.5">4.5+</SelectItem>
-                <SelectItem value="4.0">4.0+</SelectItem>
-                <SelectItem value="3.5">3.5+</SelectItem>
+                <SelectItem value="all">Todas as Avaliações ({filterCounts.rating.all || 0})</SelectItem>
+                <SelectItem value="4.5">⭐ 4.5+ Excelente ({filterCounts.rating['4.5'] || 0})</SelectItem>
+                <SelectItem value="4.0">⭐ 4.0+ Muito Bom ({filterCounts.rating['4.0'] || 0})</SelectItem>
+                <SelectItem value="3.5">⭐ 3.5+ Bom ({filterCounts.rating['3.5'] || 0})</SelectItem>
               </SelectContent>
             </Select>
           </div>
