@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import LazyImage from "@/components/ui/LazyImage";
 import ServiceLocationMap from "@/components/map/ServiceLocationMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map } from "lucide-react";
+import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
 
 const ProviderCard = ({ provider }) => (
     <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col">
