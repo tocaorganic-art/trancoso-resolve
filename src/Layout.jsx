@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
-  Home, Users, Calendar, Briefcase, UserCog, Compass,
-  Sparkles, TrendingUp, CreditCard, Wrench, Menu, X, Hammer, FileText, User, MessageCircle, Image, Rocket
+  Home, Calendar, Briefcase, UserCog,
+  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket
 } from "lucide-react";
 import ThemeToggle from "./components/ThemeToggle";
 import RoutePreloader from "./components/optimization/RoutePreloader";
-import ImagePreloader from "./components/optimization/ImagePreloader"; // Added import
-import PerformanceMonitor from "./components/optimization/PerformanceMonitor"; // Added import
+import ImagePreloader from "./components/optimization/ImagePreloader";
+import PerformanceMonitor from "./components/optimization/PerformanceMonitor";
 import { Button } from "@/components/ui/button";
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
@@ -27,16 +27,13 @@ import OfflineIndicator from "./components/OfflineIndicator";
 import SkipToContent from "./components/ui/SkipToContent";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PageViewTracker from "./components/analytics/PageViewTracker";
-import ContinuousMonitor from "./components/monitoring/ContinuousMonitor";
-import AlertSystem from "./components/monitoring/AlertSystem";
 import AccessLogger from "./components/auth/AccessLogger";
-import PushOptIn from "./components/notifications/PushOptIn";
 import SupportChat from "./components/support/SupportChat";
 import FeedbackCollector from "./components/feedback/FeedbackCollector";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -46,8 +43,7 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     document.documentElement.lang = 'pt-BR';
-    
-    // Meta tags dinâmicas baseadas na página
+
     const pageTitles = {
       '/': 'Trancoso Experience - Encontre os Melhores Serviços em Trancoso',
       '/Home': 'Trancoso Experience - Encontre os Melhores Serviços em Trancoso',
@@ -69,39 +65,23 @@ export default function Layout({ children, currentPageName }) {
       '/MeuPerfilPrestador': 'Meu Perfil de Prestador - Trancoso Experience',
       '/MeusServicos': 'Meus Serviços - Trancoso Experience',
       '/DeployDashboard': 'Deploy Dashboard - Trancoso Experience',
+      '/Chat': 'Minhas Conversas - Trancoso Experience',
     };
-    
+
     const pageDescriptions = {
       '/': 'Encontre os melhores prestadores de serviço em Trancoso. Conectamos você a profissionais de limpeza, construção, beleza, turismo e muito mais.',
       '/Home': 'Encontre os melhores prestadores de serviço em Trancoso. Conectamos você a profissionais de limpeza, construção, beleza, turismo e muito mais.',
       '/ServicosCategoria': 'Navegue por categorias e encontre o profissional ideal para suas necessidades em Trancoso.',
       '/PrestadorPerfil': 'Veja o perfil detalhado dos prestadores de serviço, avaliações e serviços oferecidos em Trancoso.',
       '/ServicoDetalhes': 'Conheça os detalhes de cada serviço e contrate com confiança em Trancoso.',
-      '/Planos': 'Conheça nossos planos para prestadores de serviço e escolha o melhor para impulsionar seu negócio em Trancoso.',
-      '/Manual': 'Tire suas dúvidas sobre como usar a plataforma Trancoso Experience com nosso guia completo.',
-      '/SejaPrestador': 'Cadastre-se como prestador de serviço e alcance novos clientes em Trancoso.',
-      '/ComoFunciona': 'Entenda o processo de contratação e prestação de serviços na plataforma Trancoso Experience.',
-      '/Seguranca': 'Saiba mais sobre as medidas de segurança e proteção de dados que garantimos na Trancoso Experience.',
-      '/MeusPedidos': 'Acompanhe seus pedidos de serviço, status e histórico na Trancoso Experience.',
-      '/Dashboard': 'Gerencie seus serviços, agenda e finanças como prestador na Trancoso Experience.',
-      '/Financeiro': 'Acesse seus extratos financeiros, pagamentos e recebimentos na Trancoso Experience.',
-      '/Assistentevirtual': 'Use nosso assistente virtual inteligente para encontrar informações e suporte.',
-      '/GeradorDeImagem': 'Crie imagens incríveis com inteligência artificial para seus projetos.',
-      '/PoliticaPrivacidade': 'Leia nossa política de privacidade para entender como seus dados são coletados e utilizados.',
-      '/MinhaAgenda': 'Organize seus compromissos e disponibilidades com a agenda integrada.',
-      '/MeuPerfilPrestador': 'Atualize suas informações pessoais e de serviço para atrair mais clientes.',
-      '/MeusServicos': 'Gerencie seus serviços, adicione novos ou edite os existentes para sua oferta em Trancoso.',
-      '/DeployDashboard': 'Monitore e gerencie os deploys da sua aplicação.',
     };
-    
-    // Normalize path to handle /Home as / for SEO purposes if needed, otherwise use full path
-    const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
 
+    const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
     const currentTitle = pageTitles[currentPath] || 'Trancoso Experience';
     const currentDescription = pageDescriptions[currentPath] || 'A forma mais fácil de encontrar e contratar serviços de confiança em Trancoso, Bahia.';
-    
+
     document.title = currentTitle;
-    
+
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -109,7 +89,7 @@ export default function Layout({ children, currentPageName }) {
       document.head.appendChild(metaDescription);
     }
     metaDescription.content = currentDescription;
-    
+
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) {
       ogTitle = document.createElement('meta');
@@ -117,7 +97,7 @@ export default function Layout({ children, currentPageName }) {
       document.head.appendChild(ogTitle);
     }
     ogTitle.content = currentTitle;
-    
+
     let ogDescription = document.querySelector('meta[property="og:description"]');
     if (!ogDescription) {
       ogDescription = document.createElement('meta');
@@ -126,9 +106,6 @@ export default function Layout({ children, currentPageName }) {
     }
     ogDescription.content = currentDescription;
 
-    // The og:image and og:type defaults are now managed externally or by specific components
-    // and removed from this useEffect to keep it focused on title/description.
-    
   }, [location.pathname]);
 
   const adminNavItems = [
@@ -141,17 +118,17 @@ export default function Layout({ children, currentPageName }) {
     { name: "Manual", path: createPageUrl("Manual"), icon: FileText },
     { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
   ];
-  
-  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem'];
+
+  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat'];
   const isPublicPage = publicPages.some(page => {
-    const pagePath = page.replace('/Home', '/'); // This line treats '/Home' as '/'
-    const currentLocationPath = location.pathname === '/Home' ? '/' : location.pathname; // Normalize current location too
+    const pagePath = page === '/Home' ? '/' : page;
+    const currentLocationPath = location.pathname === '/Home' ? '/' : location.pathname;
     return currentLocationPath === pagePath || currentLocationPath === `${pagePath}/`;
   });
 
   const isActive = (path) => location.pathname === path;
 
-  // Layout público (MeAjudaToca)
+  // Layout público
   if (isPublicPage) {
     return (
       <ErrorBoundary>
@@ -160,10 +137,8 @@ export default function Layout({ children, currentPageName }) {
         <ImagePreloader />
         <PerformanceMonitor />
         <PageViewTracker />
-        <AlertSystem />
         <AccessLogger />
-        <PushOptIn />
-        
+
         <div className="min-h-screen bg-[var(--background)]">
           <style>{`
             :root {
@@ -182,14 +157,12 @@ export default function Layout({ children, currentPageName }) {
               transition: outline 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
             }
           `}</style>
-          
-          {/* Content Security Policy meta tag removed from here, should be handled via HTTP headers or index.html for better security/performance. */}
-          
+
           <nav className="bg-white shadow-md sticky top-0 z-50">
             <div className="container mx-auto px-8 py-4 flex items-center justify-between">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2" data-testid="nav-logo-link">
-                 <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
-                 <span className="font-bold text-xl text-slate-800">Trancoso Experience</span>
+                <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
+                <span className="font-bold text-xl text-slate-800">Trancoso Experience</span>
               </Link>
 
               {/* Desktop Navigation */}
@@ -201,7 +174,7 @@ export default function Layout({ children, currentPageName }) {
                   <MessageCircle className="w-4 h-4" /> Assistente
                 </Link>
                 {user && (
-                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors relative">
+                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
                     <MessageCircle className="w-4 h-4" /> Chat
                   </Link>
                 )}
@@ -224,9 +197,9 @@ export default function Layout({ children, currentPageName }) {
                       <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       {user.user_type === 'prestador' && (
-                         <Link to={createPageUrl("Dashboard")}>
+                        <Link to={createPageUrl("Dashboard")}>
                           <DropdownMenuItem data-testid="user-menu-dashboard" className="cursor-pointer">Dashboard</DropdownMenuItem>
-                         </Link>
+                        </Link>
                       )}
                       <Link to={createPageUrl("MeusPedidos")}>
                         <DropdownMenuItem className="cursor-pointer" data-testid="user-menu-meus-pedidos">
@@ -245,41 +218,42 @@ export default function Layout({ children, currentPageName }) {
                     Entrar
                   </Button>
                 )}
-                 <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Abrir menu de navegação">
+                <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Abrir menu de navegação">
                   {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
               </div>
             </div>
-             {/* Mobile Navigation */}
+
+            {/* Mobile Navigation */}
             {mobileMenuOpen && (
               <div className="md:hidden mt-2 pb-4 space-y-2 px-4" data-testid="mobile-menu-content-public">
-                 <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
                   <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Criar Imagem</span>
-                 </Link>
-                 <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                </Link>
+                <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
                   <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Assistente</span>
-                 </Link>
-                 {user && (
-                   <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
-                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
-                   </Link>
-                 )}
-                 <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
+                </Link>
+                {user && (
+                  <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                    <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
+                  </Link>
+                )}
+                <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
                 <Link to={createPageUrl("Seguranca")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
                 <Link to={createPageUrl("Manual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
               </div>
             )}
           </nav>
+
           <main id="main-content">{children}</main>
 
-          {/* Footer */}
           <footer className="bg-slate-900 text-white py-8 mt-16">
             <div className="container mx-auto px-4 text-center">
               <div className="flex justify-center gap-4 mb-4">
-                 <Link to={createPageUrl("PoliticaPrivacidade")} className="text-sm text-slate-400 hover:text-white" data-testid="footer-privacy-link">
-                      Política de Privacidade
-                 </Link>
+                <Link to={createPageUrl("PoliticaPrivacidade")} className="text-sm text-slate-400 hover:text-white" data-testid="footer-privacy-link">
+                  Política de Privacidade
+                </Link>
               </div>
               <p className="text-slate-400 text-sm">
                 © 2025 Trancoso Experience • Por TOCA Experience • Todos os direitos reservados
@@ -297,7 +271,7 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  // Layout administrativo (dashboard Trancoso Experience)
+  // Layout administrativo
   return (
     <ErrorBoundary>
       <SkipToContent />
@@ -305,72 +279,32 @@ export default function Layout({ children, currentPageName }) {
       <ImagePreloader />
       <PerformanceMonitor />
       <PageViewTracker />
-      <AlertSystem />
       <AccessLogger />
-      <PushOptIn />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-colors">
-         {/* Content Security Policy meta tag removed from here, should be handled via HTTP headers or index.html for better security/performance. */}
-         {/* Global Focus Style for Accessibility */}
-         <style>{`
-            :focus-visible {
-              outline: 3px solid #38bdf8 !important;
-              outline-offset: 2px !important;
-              box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3) !important;
-              border-radius: 4px;
-              transition: outline 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-            }
+        <style>{`
+          :focus-visible {
+            outline: 3px solid #38bdf8 !important;
+            outline-offset: 2px !important;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3) !important;
+            border-radius: 4px;
+            transition: outline 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+          }
+          *:focus:not(:focus-visible) { outline: none; }
+          a:not([class]) { text-decoration: underline; text-underline-offset: 2px; }
+          .skip-link { position: absolute; top: -40px; left: 0; background: #0A81D1; color: white; padding: 8px 16px; z-index: 100; transition: top 0.3s; }
+          .skip-link:focus { top: 0; }
+          @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
+        `}</style>
 
-            /* Melhorias de acessibilidade WCAG 2.1 AA */
-            *:focus:not(:focus-visible) {
-              outline: none;
-            }
-
-            /* Links com underline visível */
-            a:not([class]) {
-              text-decoration: underline;
-              text-underline-offset: 2px;
-            }
-
-            /* Contraste mínimo para texto */
-            .text-slate-500 { color: #64748b; }
-            .text-slate-600 { color: #475569; }
-
-            /* Skip links para navegação por teclado */
-            .skip-link {
-              position: absolute;
-              top: -40px;
-              left: 0;
-              background: #0A81D1;
-              color: white;
-              padding: 8px 16px;
-              z-index: 100;
-              transition: top 0.3s;
-            }
-
-            .skip-link:focus {
-              top: 0;
-            }
-
-            /* Touch targets mínimos de 44x44px para mobile */
-            @media (max-width: 768px) {
-              button, a, [role="button"] {
-                min-height: 44px;
-                min-width: 44px;
-              }
-            }
-          `}</style>
         <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors">
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
                 <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">
-                  Trancoso Experience
-                </span>
+                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Trancoso Experience</span>
               </Link>
 
-              {/* Desktop Navigation */}
               <div className="hidden lg:flex items-center gap-2">
                 {adminNavItems.map((item) => {
                   const Icon = item.icon;
@@ -393,7 +327,6 @@ export default function Layout({ children, currentPageName }) {
                 <ThemeToggle />
               </div>
 
-              {/* Mobile Menu Button */}
               <div className="lg:hidden flex items-center gap-2">
                 <ThemeToggle />
                 <Button
@@ -408,7 +341,6 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </div>
 
-            {/* Mobile Navigation */}
             {mobileMenuOpen && (
               <div className="lg:hidden mt-4 pb-4 space-y-2" data-testid="mobile-menu-content">
                 {adminNavItems.map((item) => {
