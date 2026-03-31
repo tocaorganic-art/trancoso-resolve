@@ -302,7 +302,7 @@ export default function Layout({ children, currentPageName }) {
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
                 <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Seu Gu</span>
+                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Seu Guia de erviços em Trancoso</span>
               </Link>
 
               <div className="hidden lg:flex items-center gap-2">
