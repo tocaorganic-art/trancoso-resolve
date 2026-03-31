@@ -1,17 +1,38 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, AlertCircle, Check } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Loader2, AlertCircle, Check, Zap } from "lucide-react";
+import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { cn } from "@/lib/utils";
+import { createCheckoutSession } from "@/functions/createCheckoutSession";
 
 const PlanCard = ({ plan, isCurrentPlan }) => {
+  const [loading, setLoading] = useState(false);
   const isFeatured = plan.is_featured;
+
+  const handleCheckout = async () => {
+    // Bloqueia checkout dentro de iframe (preview)
+    if (window.self !== window.top) {
+      alert("O checkout só funciona no app publicado. Abra o link do app em uma nova aba para testar o pagamento.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await createCheckoutSession({
+        price_id: plan.price_id,
+        plan_name: plan.name,
+      });
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      }
+    } catch (err) {
+      alert("Erro ao iniciar pagamento. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card 
@@ -26,15 +47,11 @@ const PlanCard = ({ plan, isCurrentPlan }) => {
             {isFeatured && <Badge className="absolute -top-3 right-5 bg-yellow-400 text-black">Mais Popular</Badge>}
             <h2 className={cn("text-2xl font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>{plan.name}</h2>
             
-            {plan.monthly_price > 0 ? (
-                <div className={cn("font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>
-                    <span className="text-4xl">R${plan.monthly_price.toFixed(2).split('.')[0]}</span>
-                    <span className="text-2xl">,{plan.monthly_price.toFixed(2).split('.')[1]}</span>
-                    <span className="text-base font-normal">/mês</span>
-                </div>
-            ) : (
-                <span className="text-4xl font-extrabold text-green-600">Grátis</span>
-            )}
+            <div className={cn("font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>
+                <span className="text-4xl">R${plan.monthly_price.toFixed(2).split('.')[0]}</span>
+                <span className="text-2xl">,{plan.monthly_price.toFixed(2).split('.')[1]}</span>
+                <span className="text-base font-normal">/mês</span>
+            </div>
         </CardHeader>
 
         <CardContent className="flex-grow p-6 space-y-4">
@@ -51,21 +68,25 @@ const PlanCard = ({ plan, isCurrentPlan }) => {
         </CardContent>
 
         <CardFooter className="p-6">
-             <Button asChild className="w-full" variant={isFeatured ? 'default' : 'outline'} style={{backgroundColor: isFeatured ? plan.color_theme : undefined}}>
-                <Link to={createPageUrl('CadastroTipo')}>
-                    {isCurrentPlan ? "Seu Plano Atual" : "Escolher Plano"}
-                </Link>
-             </Button>
+            <Button 
+                className="w-full gap-2" 
+                variant={isFeatured ? 'default' : 'outline'}
+                style={{ backgroundColor: isFeatured ? plan.color_theme : undefined }}
+                onClick={handleCheckout}
+                disabled={loading}
+            >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+                {isCurrentPlan ? "Seu Plano Atual" : "Assinar Agora"}
+            </Button>
         </CardFooter>
     </Card>
   );
 };
 
 export default function PlanosPage() {
-  const { data: user, isLoading: isUserLoading } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: () => base44.auth.me(),
-  });
+  const urlParams = new URLSearchParams(window.location.search);
+  const paymentSuccess = urlParams.get('success') === 'true';
+  const paymentCancelled = urlParams.get('cancelled') === 'true';
 
   const allPlans = [
     {
@@ -73,7 +94,7 @@ export default function PlanosPage() {
       name: 'Básico',
       description: 'Ideal para começar e ter sua presença na plataforma.',
       monthly_price: 29.90,
-      commission_rate: 0,
+      price_id: 'price_1TH9z4RjscpJTwpu6QhaOLe0',
       features: ["Listagem de serviços básica", "Até 3 categorias", "Suporte por e-mail", "Perfil verificado", "Estatísticas básicas"],
       is_featured: false,
       color_theme: "#6c757d",
@@ -83,6 +104,7 @@ export default function PlanosPage() {
       name: 'Profissional',
       description: "Recursos avançados para prestadores que buscam crescimento.",
       monthly_price: 69.90,
+      price_id: 'price_1TH9z4RjscpJTwpuZSUTzRnC',
       features: [
         'Listagem de serviços destacada',
         'Até 8 categorias',
@@ -94,13 +116,13 @@ export default function PlanosPage() {
       ],
       is_featured: true,
       color_theme: "#0A81D1",
-      commission_rate: 0,
     },
     {
       id: 'premium',
       name: 'Premium',
       description: "O pacote completo para dominar o mercado local.",
       monthly_price: 119.90,
+      price_id: 'price_1TH9z4RjscpJTwpuDmT5w6UA',
       features: [
         'Listagem de serviços premium',
         'Categorias ilimitadas',
@@ -112,18 +134,8 @@ export default function PlanosPage() {
       ],
       is_featured: false,
       color_theme: "#6366f1",
-      commission_rate: 0,
     },
   ];
-
-  if (isUserLoading) {
-    return (
-      <div className="container mx-auto py-12 text-center text-slate-500">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4"/> 
-        Carregando...
-      </div>
-    );
-  }
 
   return (
     <div className="bg-slate-50 py-12">
@@ -134,21 +146,33 @@ export default function PlanosPage() {
             Impulsione seu negócio em Trancoso com nossos planos personalizados para prestadores de serviço.
           </p>
         </div>
-        
-        <Alert className="mb-8 max-w-4xl mx-auto bg-blue-50 border-blue-200">
-            <AlertCircle className="h-4 w-4 !text-blue-700" />
-            <AlertTitle className="text-blue-800">Funcionalidade de Compra</AlertTitle>
-            <AlertDescription className="text-blue-700">
-                A integração de pagamento será implementada em breve. No momento, a seleção de um plano direciona para a página de cadastro.
+
+        {paymentSuccess && (
+          <Alert className="mb-8 max-w-4xl mx-auto bg-green-50 border-green-300">
+            <Check className="h-4 w-4 !text-green-700" />
+            <AlertTitle className="text-green-800">Pagamento realizado com sucesso!</AlertTitle>
+            <AlertDescription className="text-green-700">
+              Sua assinatura foi ativada. Bem-vindo ao Trancoso Experience!
             </AlertDescription>
-        </Alert>
+          </Alert>
+        )}
+
+        {paymentCancelled && (
+          <Alert className="mb-8 max-w-4xl mx-auto bg-yellow-50 border-yellow-300">
+            <AlertCircle className="h-4 w-4 !text-yellow-700" />
+            <AlertTitle className="text-yellow-800">Pagamento cancelado</AlertTitle>
+            <AlertDescription className="text-yellow-700">
+              Você cancelou o processo de pagamento. Escolha um plano quando estiver pronto.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start justify-center">
           {allPlans.map(plan => (
             <PlanCard 
               key={plan.id} 
               plan={plan} 
-              isCurrentPlan={user?.plan_id === plan.id}
+              isCurrentPlan={false}
             />
           ))}
         </div>
