@@ -161,8 +161,7 @@ export default function Layout({ children, currentPageName }) {
           <nav className="bg-white shadow-md sticky top-0 z-50">
             <div className="container mx-auto px-8 py-4 flex items-center justify-between">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2" data-testid="nav-logo-link">
-                <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-800">Trancoso Experience</span>
+                <span className="font-bold text-xl text-slate-800">Seu Guia de Serviços em Trancoso</span>
               </Link>
 
               {/* Desktop Navigation */}
