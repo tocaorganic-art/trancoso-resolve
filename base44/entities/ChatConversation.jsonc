@@ -1,0 +1,76 @@
+{
+  "name": "ChatConversation",
+  "type": "object",
+  "properties": {
+    "client_email": {
+      "type": "string",
+      "description": "Email do cliente"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente"
+    },
+    "provider_id": {
+      "type": "string",
+      "description": "ID do prestador"
+    },
+    "provider_name": {
+      "type": "string",
+      "description": "Nome do prestador"
+    },
+    "service_id": {
+      "type": "string",
+      "description": "ID do servi\u00e7o relacionado (opcional)"
+    },
+    "service_title": {
+      "type": "string",
+      "description": "T\u00edtulo do servi\u00e7o relacionado"
+    },
+    "last_message": {
+      "type": "string",
+      "description": "Preview da \u00faltima mensagem"
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data da \u00faltima mensagem"
+    },
+    "unread_client": {
+      "type": "integer",
+      "default": 0,
+      "description": "Mensagens n\u00e3o lidas pelo cliente"
+    },
+    "unread_provider": {
+      "type": "integer",
+      "default": 0,
+      "description": "Mensagens n\u00e3o lidas pelo prestador"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "client_email",
+    "provider_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "client_email": "{{user.email}}"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    },
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

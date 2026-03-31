@@ -1,0 +1,288 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { MessageCircle, Send, ArrowLeft, User, Clock, CheckCheck } from "lucide-react";
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+
+function ConversationList({ conversations, selectedId, onSelect, currentUser }) {
+  if (!conversations || conversations.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 text-slate-400 p-6 text-center">
+        <MessageCircle className="w-12 h-12 mb-3 opacity-40" />
+        <p className="font-medium text-slate-600">Nenhuma conversa ainda</p>
+        <p className="text-sm mt-1">Inicie um chat pelo perfil de um prestador</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="divide-y divide-slate-100">
+      {conversations.map((conv) => {
+        const isClient = conv.client_email === currentUser?.email;
+        const otherName = isClient ? conv.provider_name : conv.client_name;
+        const unread = isClient ? conv.unread_client : conv.unread_provider;
+        const isSelected = conv.id === selectedId;
+
+        return (
+          <button
+            key={conv.id}
+            onClick={() => onSelect(conv)}
+            className={`w-full text-left p-4 hover:bg-slate-50 transition-colors ${isSelected ? "bg-cyan-50 border-l-4 border-cyan-500" : ""}`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold shrink-0">
+                {otherName?.charAt(0)?.toUpperCase() || "?"}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <p className="font-semibold text-sm text-slate-900 truncate">{otherName || "Usuário"}</p>
+                  {unread > 0 && (
+                    <Badge className="bg-cyan-500 text-white text-xs ml-2 shrink-0">{unread}</Badge>
+                  )}
+                </div>
+                {conv.service_title && (
+                  <p className="text-xs text-cyan-600 truncate">📋 {conv.service_title}</p>
+                )}
+                <p className="text-xs text-slate-500 truncate mt-0.5">{conv.last_message || "Sem mensagens"}</p>
+                {conv.last_message_at && (
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {formatDistanceToNow(new Date(conv.last_message_at), { addSuffix: true, locale: ptBR })}
+                  </p>
+                )}
+              </div>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function MessageBubbleChat({ message, isOwn }) {
+  return (
+    <div className={`flex ${isOwn ? "justify-end" : "justify-start"} mb-3`}>
+      <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${isOwn ? "bg-cyan-500 text-white rounded-br-sm" : "bg-white border border-slate-200 text-slate-900 rounded-bl-sm"}`}>
+        <p className="text-sm leading-relaxed">{message.content}</p>
+        <div className={`flex items-center gap-1 mt-1 ${isOwn ? "justify-end" : "justify-start"}`}>
+          <span className={`text-xs ${isOwn ? "text-cyan-100" : "text-slate-400"}`}>
+            {message.created_date ? format(new Date(message.created_date), "HH:mm") : ""}
+          </span>
+          {isOwn && <CheckCheck className={`w-3 h-3 ${message.read ? "text-cyan-200" : "text-cyan-300"}`} />}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChatWindow({ conversation, currentUser, onBack }) {
+  const [newMessage, setNewMessage] = useState("");
+  const messagesEndRef = useRef(null);
+  const queryClient = useQueryClient();
+  const isClient = conversation.client_email === currentUser?.email;
+
+  const { data: messages } = useQuery({
+    queryKey: ["chatMessages", conversation.id],
+    queryFn: () => base44.entities.ChatMessage.filter({ conversation_id: conversation.id }, "created_date", 100),
+    refetchInterval: 3000,
+  });
+
+  const sendMessageMutation = useMutation({
+    mutationFn: async (content) => {
+      const msg = await base44.entities.ChatMessage.create({
+        conversation_id: conversation.id,
+        sender_email: currentUser.email,
+        sender_name: currentUser.full_name || currentUser.email,
+        sender_role: isClient ? "client" : "provider",
+        content,
+        read: false,
+      });
+      await base44.entities.ChatConversation.update(conversation.id, {
+        last_message: content,
+        last_message_at: new Date().toISOString(),
+        unread_client: isClient ? 0 : (conversation.unread_client || 0) + 1,
+        unread_provider: isClient ? (conversation.unread_provider || 0) + 1 : 0,
+      });
+      return msg;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chatMessages", conversation.id] });
+      queryClient.invalidateQueries({ queryKey: ["chatConversations"] });
+      setNewMessage("");
+    },
+  });
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+    sendMessageMutation.mutate(newMessage.trim());
+  };
+
+  const otherName = isClient ? conversation.provider_name : conversation.client_name;
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="flex items-center gap-3 p-4 border-b bg-white">
+        <Button variant="ghost" size="icon" onClick={onBack} className="md:hidden">
+          <ArrowLeft className="w-5 h-5" />
+        </Button>
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold">
+          {otherName?.charAt(0)?.toUpperCase() || "?"}
+        </div>
+        <div>
+          <p className="font-semibold text-slate-900">{otherName || "Usuário"}</p>
+          {conversation.service_title && (
+            <p className="text-xs text-cyan-600">📋 {conversation.service_title}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 bg-slate-50 space-y-1">
+        {!messages || messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-slate-400">
+            <MessageCircle className="w-10 h-10 mb-2 opacity-40" />
+            <p className="text-sm">Inicie a conversa!</p>
+          </div>
+        ) : (
+          messages.map((msg) => (
+            <MessageBubbleChat
+              key={msg.id}
+              message={msg}
+              isOwn={msg.sender_email === currentUser?.email}
+            />
+          ))
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input */}
+      <form onSubmit={handleSend} className="p-4 bg-white border-t flex gap-2">
+        <Input
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Digite sua mensagem..."
+          className="flex-1"
+          autoComplete="off"
+        />
+        <Button
+          type="submit"
+          disabled={!newMessage.trim() || sendMessageMutation.isPending}
+          className="bg-cyan-500 hover:bg-cyan-600 shrink-0"
+        >
+          <Send className="w-4 h-4" />
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+export default function ChatPage() {
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const urlParams = new URLSearchParams(window.location.search);
+  const autoOpenConvId = urlParams.get("conv");
+
+  const { data: currentUser } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: conversations } = useQuery({
+    queryKey: ["chatConversations"],
+    queryFn: () => base44.entities.ChatConversation.list("-last_message_at", 50),
+    refetchInterval: 5000,
+  });
+
+  // Auto-open conversation from URL param
+  useEffect(() => {
+    if (autoOpenConvId && conversations) {
+      const conv = conversations.find((c) => c.id === autoOpenConvId);
+      if (conv) setSelectedConversation(conv);
+    }
+  }, [autoOpenConvId, conversations]);
+
+  const totalUnread = conversations?.reduce((sum, c) => {
+    const isClient = c.client_email === currentUser?.email;
+    return sum + (isClient ? (c.unread_client || 0) : (c.unread_provider || 0));
+  }, 0) || 0;
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Card className="max-w-sm w-full mx-4">
+          <CardContent className="p-8 text-center">
+            <MessageCircle className="w-12 h-12 mx-auto text-cyan-500 mb-4" />
+            <h2 className="text-xl font-bold text-slate-900 mb-2">Faça login para usar o chat</h2>
+            <p className="text-slate-500 mb-6">Você precisa estar logado para conversar com prestadores.</p>
+            <Button onClick={() => base44.auth.redirectToLogin()} className="w-full bg-cyan-500 hover:bg-cyan-600">
+              Entrar
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <div className="container mx-auto max-w-5xl px-4 py-6">
+        <div className="flex items-center gap-3 mb-6">
+          <MessageCircle className="w-7 h-7 text-cyan-600" />
+          <h1 className="text-2xl font-bold text-slate-900">Minhas Conversas</h1>
+          {totalUnread > 0 && (
+            <Badge className="bg-cyan-500 text-white">{totalUnread} nova{totalUnread > 1 ? "s" : ""}</Badge>
+          )}
+        </div>
+
+        <Card className="border-none shadow-xl overflow-hidden" style={{ height: "70vh" }}>
+          <div className="flex h-full">
+            {/* Sidebar - Lista de conversas */}
+            <div className={`w-full md:w-80 border-r flex flex-col ${selectedConversation ? "hidden md:flex" : "flex"}`}>
+              <div className="p-4 border-b bg-slate-50">
+                <p className="text-sm text-slate-500 font-medium">
+                  {conversations?.length || 0} conversa{conversations?.length !== 1 ? "s" : ""}
+                </p>
+              </div>
+              <div className="flex-1 overflow-y-auto">
+                <ConversationList
+                  conversations={conversations}
+                  selectedId={selectedConversation?.id}
+                  onSelect={setSelectedConversation}
+                  currentUser={currentUser}
+                />
+              </div>
+            </div>
+
+            {/* Chat area */}
+            <div className={`flex-1 ${!selectedConversation ? "hidden md:flex" : "flex"} flex-col`}>
+              {selectedConversation ? (
+                <ChatWindow
+                  conversation={selectedConversation}
+                  currentUser={currentUser}
+                  onBack={() => setSelectedConversation(null)}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                  <MessageCircle className="w-16 h-16 mb-4 opacity-30" />
+                  <p className="font-medium text-slate-500">Selecione uma conversa</p>
+                  <p className="text-sm mt-1">ou inicie um chat pelo perfil de um prestador</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}

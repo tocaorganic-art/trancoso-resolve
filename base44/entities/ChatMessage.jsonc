@@ -1,0 +1,49 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string",
+      "description": "ID da conversa"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email do remetente"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Nome do remetente"
+    },
+    "sender_role": {
+      "type": "string",
+      "enum": [
+        "client",
+        "provider"
+      ],
+      "description": "Papel do remetente"
+    },
+    "content": {
+      "type": "string",
+      "description": "Conte\u00fado da mensagem"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mensagem lida"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "sender_email",
+    "content",
+    "sender_role"
+  ],
+  "rls": {
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

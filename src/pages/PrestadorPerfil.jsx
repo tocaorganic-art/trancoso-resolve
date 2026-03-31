@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
@@ -23,6 +22,7 @@ import {
 import { toast } from "sonner";
 import StarRating from "@/components/reviews/StarRating";
 import ServiceLocationMap from "@/components/map/ServiceLocationMap";
+import StartChatButton from "@/components/chat/StartChatButton";
 
 export default function PrestadorPerfilPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -270,7 +270,7 @@ export default function PrestadorPerfilPage() {
             )}
 
             <div className="p-8">
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
                 <Button
                   size="lg"
                   className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
@@ -281,18 +281,16 @@ export default function PrestadorPerfilPage() {
                   <CalendarIcon className="w-5 h-5 mr-2" />
                   {user ? "Agendar Serviço" : "Faça login para Agendar"}
                 </Button>
-                {isUserLoaded && user && provider.phone ? (
-                  <Button size="lg" variant="outline" asChild className="flex-1 border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300">
-                    <a href={`https://wa.me/55${provider.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" aria-label="Conversar com o prestador no WhatsApp">
+                {isUserLoaded && user && (
+                  <StartChatButton provider={provider} className="flex-1" size="lg" />
+                )}
+                {isUserLoaded && user && provider.phone && (
+                  <Button size="lg" variant="outline" asChild className="flex-1 border-slate-300 text-slate-700">
+                    <a href={`https://wa.me/55${provider.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
                       <MessageCircle className="w-5 h-5 mr-2" />
-                      Conversar no WhatsApp
+                      WhatsApp
                     </a>
                   </Button>
-                ) : (
-                   <Button size="lg" variant="outline" className="flex-1 border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300" onClick={() => base44.auth.redirectToLogin()} aria-label="Faça login para conversar com o prestador no WhatsApp">
-                      <MessageCircle className="w-5 h-5 mr-2" />
-                      Faça login para conversar
-                    </Button>
                 )}
               </div>
             </div>

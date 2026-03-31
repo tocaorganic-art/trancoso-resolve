@@ -26,6 +26,7 @@ import AdminUserManagement from './pages/AdminUserManagement';
 import Base44ReportViewer from './pages/Base44ReportViewer';
 import Base44Templates from './pages/Base44Templates';
 import DeployDashboard from './pages/DeployDashboard';
+import Chat from './pages/Chat';
 import __Layout from './Layout.jsx';
 
 
@@ -58,6 +59,7 @@ export const PAGES = {
     "Base44ReportViewer": Base44ReportViewer,
     "Base44Templates": Base44Templates,
     "DeployDashboard": DeployDashboard,
+    "Chat": Chat,
 }
 
 export const pagesConfig = {

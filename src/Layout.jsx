@@ -200,6 +200,11 @@ export default function Layout({ children, currentPageName }) {
                 <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
                   <MessageCircle className="w-4 h-4" /> Assistente
                 </Link>
+                {user && (
+                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors relative">
+                    <MessageCircle className="w-4 h-4" /> Chat
+                  </Link>
+                )}
                 <Link to={createPageUrl("SejaPrestador")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Como funciona?</Link>
                 <Link to={createPageUrl("Seguranca")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Segurança</Link>
@@ -254,6 +259,11 @@ export default function Layout({ children, currentPageName }) {
                  <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
                   <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Assistente</span>
                  </Link>
+                 {user && (
+                   <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
+                   </Link>
+                 )}
                  <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
                 <Link to={createPageUrl("Seguranca")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
