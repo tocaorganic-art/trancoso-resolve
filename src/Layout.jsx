@@ -119,12 +119,7 @@ export default function Layout({ children, currentPageName }) {
   { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket }];
 
 
-  const publicPages = [
-    '/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', 
-    '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', 
-    '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', 
-    '/Chat', '/CadastroTipo', '/Planos'
-  ];
+  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat'];
   const isPublicPage = publicPages.some((page) => {
     const pagePath = page === '/Home' ? '/' : page;
     const currentLocationPath = location.pathname === '/Home' ? '/' : location.pathname;
@@ -302,12 +297,12 @@ export default function Layout({ children, currentPageName }) {
           @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
         `}</style>
 
-        <nav className="bg-white shadow-md sticky top-0 z-50">
-          <div className="container mx-auto px-8 py-4">
+        <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors">
+          <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
-              <Link to={createPageUrl("Home")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/5a0231cb4_toca_apresenta.jpg" alt="Trancoso Experience Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-800">Seu Guia de Serviços em Trancoso</span>
+              <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
+                <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
+                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Trancoso Experience</span>
               </Link>
 
               <div className="hidden lg:flex items-center gap-2">
