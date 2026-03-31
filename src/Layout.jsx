@@ -302,12 +302,12 @@ export default function Layout({ children, currentPageName }) {
           @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
         `}</style>
 
-        <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors">
-          <div className="container mx-auto px-4 py-3">
+        <nav className="bg-white shadow-md sticky top-0 z-50">
+          <div className="container mx-auto px-8 py-4">
             <div className="flex items-center justify-between gap-4">
-              <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
-                <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Trancoso Experience</span>
+              <Link to={createPageUrl("Home")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/5a0231cb4_toca_apresenta.jpg" alt="Trancoso Experience Logo" className="h-10" />
+                <span className="font-bold text-xl text-slate-800">Seu Guia de Serviços em Trancoso</span>
               </Link>
 
               <div className="hidden lg:flex items-center gap-2">
