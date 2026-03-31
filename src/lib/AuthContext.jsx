@@ -18,12 +18,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAppState = async () => {
-    // Safety timeout: if loading takes more than 8 seconds, force-stop the spinner
-    const safetyTimeout = setTimeout(() => {
-      setIsLoadingPublicSettings(false);
-      setIsLoadingAuth(false);
-    }, 8000);
-
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
@@ -51,7 +45,6 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(false);
         }
         setIsLoadingPublicSettings(false);
-        clearTimeout(safetyTimeout);
       } catch (appError) {
         console.error('App state check failed:', appError);
         
@@ -82,7 +75,6 @@ export const AuthProvider = ({ children }) => {
         }
         setIsLoadingPublicSettings(false);
         setIsLoadingAuth(false);
-        clearTimeout(safetyTimeout);
       }
     } catch (error) {
       console.error('Unexpected error:', error);
@@ -92,7 +84,6 @@ export const AuthProvider = ({ children }) => {
       });
       setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
-      clearTimeout(safetyTimeout);
     }
   };
 
