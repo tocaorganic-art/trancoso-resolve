@@ -3,8 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket
-} from "lucide-react";
+  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket } from
+"lucide-react";
 import ThemeToggle from "./components/ThemeToggle";
 import RoutePreloader from "./components/optimization/RoutePreloader";
 import ImagePreloader from "./components/optimization/ImagePreloader";
@@ -18,8 +18,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger } from
+"@/components/ui/dropdown-menu";
 import { Toaster } from "@/components/ui/sonner";
 import ConnectionStatus from "./components/ConnectionStatus";
 import CookieConsent from "./components/CookieConsent";
@@ -38,7 +38,7 @@ export default function Layout({ children, currentPageName }) {
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
-    staleTime: Infinity,
+    staleTime: Infinity
   });
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function Layout({ children, currentPageName }) {
       '/MeuPerfilPrestador': 'Meu Perfil de Prestador - Trancoso Experience',
       '/MeusServicos': 'Meus Serviços - Trancoso Experience',
       '/DeployDashboard': 'Deploy Dashboard - Trancoso Experience',
-      '/Chat': 'Minhas Conversas - Trancoso Experience',
+      '/Chat': 'Minhas Conversas - Trancoso Experience'
     };
 
     const pageDescriptions = {
@@ -73,7 +73,7 @@ export default function Layout({ children, currentPageName }) {
       '/Home': 'Encontre os melhores prestadores de serviço em Trancoso. Conectamos você a profissionais de limpeza, construção, beleza, turismo e muito mais.',
       '/ServicosCategoria': 'Navegue por categorias e encontre o profissional ideal para suas necessidades em Trancoso.',
       '/PrestadorPerfil': 'Veja o perfil detalhado dos prestadores de serviço, avaliações e serviços oferecidos em Trancoso.',
-      '/ServicoDetalhes': 'Conheça os detalhes de cada serviço e contrate com confiança em Trancoso.',
+      '/ServicoDetalhes': 'Conheça os detalhes de cada serviço e contrate com confiança em Trancoso.'
     };
 
     const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
@@ -109,18 +109,18 @@ export default function Layout({ children, currentPageName }) {
   }, [location.pathname]);
 
   const adminNavItems = [
-    { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
-    { name: "Minha Agenda", path: createPageUrl("MinhaAgenda"), icon: Calendar },
-    { name: "Meus Serviços", path: createPageUrl("MeusServicos"), icon: Briefcase },
-    { name: "Meu Perfil", path: createPageUrl("MeuPerfilPrestador"), icon: UserCog },
-    { name: "Financeiro", path: createPageUrl("Financeiro"), icon: TrendingUp },
-    { name: "Planos", path: createPageUrl("Planos"), icon: CreditCard },
-    { name: "Manual", path: createPageUrl("Manual"), icon: FileText },
-    { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
-  ];
+  { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
+  { name: "Minha Agenda", path: createPageUrl("MinhaAgenda"), icon: Calendar },
+  { name: "Meus Serviços", path: createPageUrl("MeusServicos"), icon: Briefcase },
+  { name: "Meu Perfil", path: createPageUrl("MeuPerfilPrestador"), icon: UserCog },
+  { name: "Financeiro", path: createPageUrl("Financeiro"), icon: TrendingUp },
+  { name: "Planos", path: createPageUrl("Planos"), icon: CreditCard },
+  { name: "Manual", path: createPageUrl("Manual"), icon: FileText },
+  { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket }];
+
 
   const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat'];
-  const isPublicPage = publicPages.some(page => {
+  const isPublicPage = publicPages.some((page) => {
     const pagePath = page === '/Home' ? '/' : page;
     const currentLocationPath = location.pathname === '/Home' ? '/' : location.pathname;
     return currentLocationPath === pagePath || currentLocationPath === `${pagePath}/`;
@@ -161,7 +161,8 @@ export default function Layout({ children, currentPageName }) {
           <nav className="bg-white shadow-md sticky top-0 z-50">
             <div className="container mx-auto px-8 py-4 flex items-center justify-between">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2" data-testid="nav-logo-link">
-                <span className="font-bold text-xl text-slate-800">Seu Guia de Serviços em Trancoso</span>
+                <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="text-slate-800 mx-2 text-xl font-bold" />
+                <span className="font-bold text-xl text-slate-800">Trancoso Experience</span>
               </Link>
 
               {/* Desktop Navigation */}
@@ -172,11 +173,11 @@ export default function Layout({ children, currentPageName }) {
                 <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
                   <MessageCircle className="w-4 h-4" /> Assistente
                 </Link>
-                {user && (
-                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
+                {user &&
+                <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
                     <MessageCircle className="w-4 h-4" /> Chat
                   </Link>
-                )}
+                }
                 <Link to={createPageUrl("SejaPrestador")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Como funciona?</Link>
                 <Link to={createPageUrl("Seguranca")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Segurança</Link>
@@ -184,8 +185,8 @@ export default function Layout({ children, currentPageName }) {
               </div>
 
               <div className="flex items-center gap-2">
-                {user ? (
-                  <DropdownMenu>
+                {user ?
+                <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="flex items-center gap-2 text-[var(--text-dark)]" data-testid="user-menu-trigger">
                         <User className="w-5 h-5" />
@@ -195,11 +196,11 @@ export default function Layout({ children, currentPageName }) {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      {user.user_type === 'prestador' && (
-                        <Link to={createPageUrl("Dashboard")}>
+                      {user.user_type === 'prestador' &&
+                    <Link to={createPageUrl("Dashboard")}>
                           <DropdownMenuItem data-testid="user-menu-dashboard" className="cursor-pointer">Dashboard</DropdownMenuItem>
                         </Link>
-                      )}
+                    }
                       <Link to={createPageUrl("MeusPedidos")}>
                         <DropdownMenuItem className="cursor-pointer" data-testid="user-menu-meus-pedidos">
                           <FileText className="w-4 h-4 mr-2" />
@@ -211,12 +212,12 @@ export default function Layout({ children, currentPageName }) {
                         Sair
                       </DropdownMenuItem>
                     </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Button onClick={() => base44.auth.redirectToLogin()} className="bg-[var(--primary)] text-[var(--text-light)] hover:bg-blue-700" size="sm" data-testid="login-button">
+                  </DropdownMenu> :
+
+                <Button onClick={() => base44.auth.redirectToLogin()} className="bg-[var(--primary)] text-[var(--text-light)] hover:bg-blue-700" size="sm" data-testid="login-button">
                     Entrar
                   </Button>
-                )}
+                }
                 <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Abrir menu de navegação">
                   {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
@@ -224,25 +225,25 @@ export default function Layout({ children, currentPageName }) {
             </div>
 
             {/* Mobile Navigation */}
-            {mobileMenuOpen && (
-              <div className="md:hidden mt-2 pb-4 space-y-2 px-4" data-testid="mobile-menu-content-public">
+            {mobileMenuOpen &&
+            <div className="md:hidden mt-2 pb-4 space-y-2 px-4" data-testid="mobile-menu-content-public">
                 <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
                   <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Criar Imagem</span>
                 </Link>
                 <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
                   <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Assistente</span>
                 </Link>
-                {user && (
-                  <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                {user &&
+              <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
                   </Link>
-                )}
+              }
                 <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
                 <Link to={createPageUrl("Seguranca")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
                 <Link to={createPageUrl("Manual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
               </div>
-            )}
+            }
           </nav>
 
           <main id="main-content">{children}</main>
@@ -266,8 +267,8 @@ export default function Layout({ children, currentPageName }) {
         </div>
         <SupportChat />
         <FeedbackCollector />
-      </ErrorBoundary>
-    );
+      </ErrorBoundary>);
+
   }
 
   // Layout administrativo
@@ -312,16 +313,16 @@ export default function Layout({ children, currentPageName }) {
                       key={item.name}
                       to={item.path}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
-                        isActive(item.path)
-                          ? 'bg-blue-600 text-white dark:bg-blue-500'
-                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
-                      }`}
-                      data-testid={`admin-nav-${item.name.toLowerCase().replace(' ', '-')}`}
-                    >
+                      isActive(item.path) ?
+                      'bg-blue-600 text-white dark:bg-blue-500' :
+                      'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`
+                      }
+                      data-testid={`admin-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
+                      
                       <Icon className="w-4 h-4" />
                       <span className="text-sm">{item.name}</span>
-                    </Link>
-                  );
+                    </Link>);
+
                 })}
                 <ThemeToggle />
               </div>
@@ -333,36 +334,36 @@ export default function Layout({ children, currentPageName }) {
                   size="icon"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                   data-testid="mobile-menu-button"
-                  aria-label="Abrir menu de navegação"
-                >
+                  aria-label="Abrir menu de navegação">
+                  
                   {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
               </div>
             </div>
 
-            {mobileMenuOpen && (
-              <div className="lg:hidden mt-4 pb-4 space-y-2" data-testid="mobile-menu-content">
+            {mobileMenuOpen &&
+            <div className="lg:hidden mt-4 pb-4 space-y-2" data-testid="mobile-menu-content">
                 {adminNavItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.path}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
-                        isActive(item.path)
-                          ? 'bg-blue-600 text-white'
-                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
-                      }`}
-                      data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}
-                    >
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+                    isActive(item.path) ?
+                    'bg-blue-600 text-white' :
+                    'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`
+                    }
+                    data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
+                    
                       <Icon className="w-4 h-4" />
                       <span className="text-sm">{item.name}</span>
-                    </Link>
-                  );
-                })}
+                    </Link>);
+
+              })}
               </div>
-            )}
+            }
           </div>
         </nav>
 
@@ -376,6 +377,6 @@ export default function Layout({ children, currentPageName }) {
       </div>
       <SupportChat />
       <FeedbackCollector />
-    </ErrorBoundary>
-  );
+    </ErrorBoundary>);
+
 }
