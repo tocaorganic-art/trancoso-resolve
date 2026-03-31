@@ -17,15 +17,21 @@ export default function ChatInterface({ conversationId, onConversationUpdate }) 
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (conversationId) {
-      const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
+    if (!conversationId) return;
+
+    let unsubscribe;
+    try {
+      unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
         setMessages(data.messages || []);
         if (onConversationUpdate) {
           onConversationUpdate(data);
         }
       });
-      return () => unsubscribe();
+    } catch (err) {
+      console.error('Failed to subscribe to conversation:', err);
     }
+
+    return () => { if (unsubscribe) unsubscribe(); };
   }, [conversationId, onConversationUpdate]);
 
   useEffect(() => {
@@ -66,7 +72,12 @@ export default function ChatInterface({ conversationId, onConversationUpdate }) 
         throw new Error('Nenhuma conversa ativa');
       }
 
-      const conversation = await base44.agents.getConversation(conversationId);
+      let conversation;
+      try {
+        conversation = await base44.agents.getConversation(conversationId);
+      } catch (err) {
+        throw new Error('Esta conversa não existe mais. Crie uma nova conversa.');
+      }
       
       await base44.agents.addMessage(conversation, {
         role: 'user',
@@ -77,7 +88,7 @@ export default function ChatInterface({ conversationId, onConversationUpdate }) 
     },
     onError: (error) => {
       console.error('Error sending message:', error);
-      toast.error('Erro ao enviar mensagem. Tente novamente.');
+      toast.error(error.message || 'Erro ao enviar mensagem. Tente novamente.');
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['conversation', conversationId]);

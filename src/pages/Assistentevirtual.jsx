@@ -18,7 +18,21 @@ export default function AssistentevirtualPage() {
 
   const { data: conversations, isLoading: isConversationsLoading } = useQuery({
     queryKey: ['conversations', user?.id],
-    queryFn: () => base44.entities.Conversation.filter({ userId: user.id }, '-created_date'),
+    queryFn: async () => {
+      const list = await base44.entities.Conversation.filter({ userId: user.id }, '-created_date');
+      // Filtra apenas conversas que ainda existem no sistema de agentes
+      const valid = await Promise.all(
+        list.map(async (convo) => {
+          try {
+            await base44.agents.getConversation(convo.id);
+            return convo;
+          } catch {
+            return null;
+          }
+        })
+      );
+      return valid.filter(Boolean);
+    },
     enabled: !!user,
     initialData: [],
   });
