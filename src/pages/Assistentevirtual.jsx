@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import ChatInterface from '@/components/chat/ChatInterface';
-import { Loader2, PlusCircle, MessageSquare } from 'lucide-react';
+import PublicAssistant from '@/components/assistant/PublicAssistant';
+import { Loader2, PlusCircle, MessageSquare, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -48,16 +49,41 @@ export default function AssistentevirtualPage() {
     return <div className="flex items-center justify-center h-screen"><Loader2 className="w-10 h-10 animate-spin text-blue-600" /></div>;
   }
 
+  // Usuário não logado — exibe assistente público limitado
   if (!user) {
     return (
-        <div className="flex flex-col items-center justify-center h-screen text-center p-4 bg-gradient-to-br from-slate-50 to-blue-50">
-            <MessageSquare className="w-20 h-20 text-blue-600 mb-6" />
-            <h2 className="text-3xl font-bold text-slate-900 mb-3">Assistente Virtual Toca</h2>
-            <p className="text-lg text-slate-600 mb-8 max-w-md">Faça login para conversar com o Toca e receber ajuda personalizada sobre serviços em Trancoso.</p>
-            <Button onClick={() => base44.auth.redirectToLogin()} size="lg" className="bg-blue-600 hover:bg-blue-700">
-              Fazer Login
-            </Button>
+      <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <MessageSquare className="w-6 h-6" aria-hidden="true" />
+            <div>
+              <h1 className="text-lg font-bold">Assistente Virtual Toca</h1>
+              <p className="text-blue-200 text-xs">Modo visitante · Respostas básicas</p>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => base44.auth.redirectToLogin()}
+            className="border-white text-white hover:bg-white hover:text-blue-600 gap-2"
+            aria-label="Fazer login para acesso completo"
+          >
+            <LogIn className="w-4 h-4" />
+            Entrar
+          </Button>
         </div>
+        <div className="flex-1 overflow-hidden">
+          <PublicAssistant />
+        </div>
+        <div className="bg-blue-50 border-t border-blue-100 px-4 py-2 text-center">
+          <p className="text-xs text-slate-500">
+            <button onClick={() => base44.auth.redirectToLogin()} className="text-blue-600 font-medium underline underline-offset-2">
+              Faça login
+            </button>
+            {" "}para salvar conversas e acessar recursos completos
+          </p>
+        </div>
+      </div>
     );
   }
   
