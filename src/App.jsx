@@ -34,11 +34,9 @@ const AuthenticatedApp = () => {
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
     }
+    // For auth_required and unknown errors on a public app, just render normally
+    // (user will be prompted to login when they try to access protected features)
   }
 
   // Render the main app
