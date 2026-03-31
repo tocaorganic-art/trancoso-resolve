@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, Send, ArrowLeft, User, Clock, CheckCheck } from "lucide-react";
+import { MessageCircle, Send, ArrowLeft, CheckCheck } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
 function ConversationList({ conversations, selectedId, onSelect, currentUser }) {
@@ -132,7 +131,6 @@ function ChatWindow({ conversation, currentUser, onBack }) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b bg-white">
         <Button variant="ghost" size="icon" onClick={onBack} className="md:hidden">
           <ArrowLeft className="w-5 h-5" />
@@ -148,7 +146,6 @@ function ChatWindow({ conversation, currentUser, onBack }) {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 bg-slate-50 space-y-1">
         {!messages || messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-slate-400">
@@ -167,7 +164,6 @@ function ChatWindow({ conversation, currentUser, onBack }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
       <form onSubmit={handleSend} className="p-4 bg-white border-t flex gap-2">
         <Input
           value={newMessage}
@@ -204,7 +200,6 @@ export default function ChatPage() {
     refetchInterval: 5000,
   });
 
-  // Auto-open conversation from URL param
   useEffect(() => {
     if (autoOpenConvId && conversations) {
       const conv = conversations.find((c) => c.id === autoOpenConvId);
@@ -247,7 +242,6 @@ export default function ChatPage() {
 
         <Card className="border-none shadow-xl overflow-hidden" style={{ height: "70vh" }}>
           <div className="flex h-full">
-            {/* Sidebar - Lista de conversas */}
             <div className={`w-full md:w-80 border-r flex flex-col ${selectedConversation ? "hidden md:flex" : "flex"}`}>
               <div className="p-4 border-b bg-slate-50">
                 <p className="text-sm text-slate-500 font-medium">
@@ -264,7 +258,6 @@ export default function ChatPage() {
               </div>
             </div>
 
-            {/* Chat area */}
             <div className={`flex-1 ${!selectedConversation ? "hidden md:flex" : "flex"} flex-col`}>
               {selectedConversation ? (
                 <ChatWindow
