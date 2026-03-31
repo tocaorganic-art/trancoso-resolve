@@ -74,7 +74,8 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     }
 
     // Verificar se user_type está indefinido (novo usuário)
-    if (user.user_type === 'indefinido' && window.location.pathname !== '/CadastroTipo') {
+    const userTypeUndefined = !user.user_type || user.user_type === 'indefinido';
+    if (userTypeUndefined && window.location.pathname !== '/CadastroTipo') {
       setPermissionStatus('needs_setup');
       setErrorDetails({
         code: 'USER_SETUP_REQUIRED',

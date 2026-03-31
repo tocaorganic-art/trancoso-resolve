@@ -36,7 +36,7 @@ export default function CadastroTipoPage() {
   }
   
   // Se o usuário já tiver um tipo definido, redireciona
-  if (user && user.user_type !== 'indefinido') {
+  if (user && user.user_type && user.user_type !== 'indefinido') {
     const targetUrl = user.user_type === 'cliente' 
       ? '/Home' 
       : '/Dashboard';

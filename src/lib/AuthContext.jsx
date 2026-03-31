@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { appParams } from '@/lib/app-params';
 
 const AuthContext = createContext();
 
@@ -16,34 +15,18 @@ export const AuthProvider = ({ children }) => {
 
   const checkAppState = async () => {
     try {
-      if (appParams.token) {
-        try {
-          const currentUser = await base44.auth.me();
-          setUser(currentUser);
-          setIsAuthenticated(true);
-        } catch (err) {
-          // Token inválido/expirado - não bloqueia o app público
-          if (err.status === 403 && err.data?.extra_data?.reason === 'user_not_registered') {
-            setAuthError({ type: 'user_not_registered', message: 'User not registered' });
-          }
-          setIsAuthenticated(false);
-        }
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+      setIsAuthenticated(true);
+    } catch (err) {
+      // Usuário não logado ou token inválido - normal para app público
+      if (err?.status === 403 && err?.data?.extra_data?.reason === 'user_not_registered') {
+        setAuthError({ type: 'user_not_registered', message: 'User not registered' });
       }
-    } catch (error) {
-      console.error('Auth check failed:', error);
+      setIsAuthenticated(false);
     } finally {
       setIsLoadingAuth(false);
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    base44.auth.logout(window.location.href);
-  };
-
-  const navigateToLogin = () => {
-    base44.auth.redirectToLogin(window.location.href);
   };
 
   return (
@@ -54,8 +37,6 @@ export const AuthProvider = ({ children }) => {
       isLoadingPublicSettings: false,
       authError,
       appPublicSettings: null,
-      logout,
-      navigateToLogin,
       checkAppState
     }}>
       {children}
