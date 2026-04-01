@@ -161,7 +161,7 @@ export default function Layout({ children, currentPageName }) {
           <nav className="bg-white shadow-md sticky top-0 z-50">
             <div className="container mx-auto px-8 py-4 flex items-center justify-between">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0" data-testid="nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/5a0231cb4_toca_apresenta.jpg" alt="Trancoso Experience Logo" className="h-8 shrink-0" />
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience Logo" className="h-10 shrink-0" />
                 <span className="font-bold text-sm md:text-xl text-slate-800 truncate">Seu Guia de Serviços em Trancoso</span>
               </Link>
 
@@ -301,7 +301,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
-                <img src="https://base44.com/img/logo-symbol-blue.png" alt="Trancoso Experience Logo" className="h-10" />
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience Logo" className="h-10" />
                 <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Seu Guia de Serviços em Trancoso</span>
               </Link>
 
