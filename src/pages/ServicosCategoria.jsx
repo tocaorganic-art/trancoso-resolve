@@ -90,9 +90,14 @@ export default function ServicosCategoriaPage() {
   const [aiFilteredProviderIds, setAiFilteredProviderIds] = useState(null);
   const [viewMode, setViewMode] = useState('list');
 
+  const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
+    queryKey: ['serviceProviders'],
+    queryFn: () => base44.entities.ServiceProvider.list('-rating'),
+  });
+
   // Contadores dinâmicos para filtros
   const filterCounts = useMemo(() => {
-    if (!providers) return { price: {}, rating: {} };
+    if (!providers) return { price: {}, rating: {}, availability: {}, neighborhoods: [] };
     
     const baseFiltered = providers.filter(p => {
       const matchesCategory = selectedCategory === 'Todos' || p.occupation === selectedCategory;
@@ -126,11 +131,6 @@ export default function ServicosCategoriaPage() {
       neighborhoods,
     };
   }, [providers, selectedCategory, searchQuery, aiFilteredProviderIds]);
-
-  const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
-    queryKey: ['serviceProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list('-rating'),
-  });
 
   useEffect(() => {
     const handler = setTimeout(() => {
