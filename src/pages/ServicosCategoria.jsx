@@ -84,6 +84,7 @@ export default function ServicosCategoriaPage() {
   
   const [priceFilter, setPriceFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
+  const [availabilityFilter, setAvailabilityFilter] = useState("all");
   const [isSearching, setIsSearching] = useState(false);
   const [aiFilteredProviderIds, setAiFilteredProviderIds] = useState(null);
   const [viewMode, setViewMode] = useState('list');
@@ -113,6 +114,11 @@ export default function ServicosCategoriaPage() {
         '4.5': baseFiltered.filter(p => p.rating && p.rating >= 4.5).length,
         '4.0': baseFiltered.filter(p => p.rating && p.rating >= 4.0).length,
         '3.5': baseFiltered.filter(p => p.rating && p.rating >= 3.5).length,
+      },
+      availability: {
+        all: baseFiltered.length,
+        'Disponível': baseFiltered.filter(p => p.availability === 'Disponível').length,
+        'Ocupado': baseFiltered.filter(p => p.availability === 'Ocupado').length,
       }
     };
   }, [providers, selectedCategory, searchQuery, aiFilteredProviderIds]);
@@ -184,9 +190,10 @@ export default function ServicosCategoriaPage() {
 
     const matchesPrice = priceFilter === "all" || provider.price_range === priceFilter;
     const matchesRating = ratingFilter === "all" || (provider.rating && provider.rating >= parseFloat(ratingFilter));
+    const matchesAvailability = availabilityFilter === "all" || provider.availability === availabilityFilter;
     
-    return matchesCategory && matchesSearch && matchesPrice && matchesRating;
-  }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter]);
+    return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability;
+  }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter]);
   
   const locations = useMemo(() => filteredProviders
     .filter(p => p.location?.lat && p.location?.lng)
@@ -231,7 +238,7 @@ export default function ServicosCategoriaPage() {
     }
     
     if (filteredProviders.length === 0) {
-        const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || searchQuery.trim() !== '';
+        const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || searchQuery.trim() !== '';
         return (
           <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
             <div className="w-16 h-16 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
@@ -248,10 +255,11 @@ export default function ServicosCategoriaPage() {
                 <Button 
                   variant="outline" 
                   onClick={() => {
-                    setSearchQuery('');
-                    setPriceFilter('all');
-                    setRatingFilter('all');
-                    setSelectedCategory('Todos');
+                  setSearchQuery('');
+                  setPriceFilter('all');
+                  setRatingFilter('all');
+                  setAvailabilityFilter('all');
+                  setSelectedCategory('Todos');
                   }}
                   className="gap-2"
                 >
@@ -361,6 +369,36 @@ export default function ServicosCategoriaPage() {
                 <SelectItem value="3.5">⭐ 3.5+ Bom ({filterCounts.rating['3.5'] || 0})</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-slate-100">
+            <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
+              <SelectTrigger aria-label="Filtrar por disponibilidade">
+                <SelectValue placeholder="Disponibilidade" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Qualquer Disponibilidade ({filterCounts.availability?.all || 0})</SelectItem>
+                <SelectItem value="Disponível">🟢 Disponível agora ({filterCounts.availability?.['Disponível'] || 0})</SelectItem>
+                <SelectItem value="Ocupado">🟡 Ocupado ({filterCounts.availability?.['Ocupado'] || 0})</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {(priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || searchQuery.trim() !== '') && (
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchQuery('');
+                  setPriceFilter('all');
+                  setRatingFilter('all');
+                  setAvailabilityFilter('all');
+                }}
+                className="gap-2 text-slate-600"
+                aria-label="Limpar todos os filtros"
+              >
+                <X className="w-4 h-4" />
+                Limpar Filtros
+              </Button>
+            )}
           </div>
         </div>
 

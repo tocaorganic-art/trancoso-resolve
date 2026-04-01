@@ -21,8 +21,8 @@ export default function ServicoDetalhesPage() {
   const { data: service, isLoading, error } = useQuery({
     queryKey: ['serviceListing', serviceId],
     queryFn: async () => {
-      const services = await base44.entities.ServiceListing.list();
-      return services.find(s => s.id === serviceId);
+      const services = await base44.entities.ServiceListing.filter({ id: serviceId });
+      return services?.[0];
     },
     enabled: !!serviceId,
   });
@@ -30,8 +30,8 @@ export default function ServicoDetalhesPage() {
   const { data: provider } = useQuery({
     queryKey: ['serviceProvider', service?.provider_id],
     queryFn: async () => {
-      const providers = await base44.entities.ServiceProvider.list();
-      return providers.find(p => p.id === service.provider_id);
+      const providers = await base44.entities.ServiceProvider.filter({ id: service.provider_id });
+      return providers?.[0];
     },
     enabled: !!service?.provider_id,
   });
@@ -69,7 +69,7 @@ export default function ServicoDetalhesPage() {
       <div className="relative h-64 md:h-96 bg-gradient-to-r from-cyan-500 to-blue-600">
         <LazyImage
           src={imageSrc}
-          alt={service.title}
+          alt={`Imagem de capa do serviço: ${service.title}`}
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
       </div>
@@ -131,7 +131,7 @@ export default function ServicoDetalhesPage() {
                 <div className="flex items-center gap-4 mb-4">
                   <LazyImage
                     src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
-                    alt={provider.full_name}
+                    alt={`Foto de perfil de ${provider.full_name}, prestador de ${provider.occupation}`}
                     className="w-16 h-16 rounded-full object-cover"
                   />
                   <div className="flex-1">

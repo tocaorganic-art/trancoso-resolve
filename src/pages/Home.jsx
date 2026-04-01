@@ -20,26 +20,39 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 const categoryImageMap = {
   // Categorias do enum: Limpeza, Garçom, Pedreiro, Jardinagem, Babá, Eletricista, Encanador, Pintor, Cozinheiro, Outro
-  'Limpeza': 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Garçom': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Limpeza': 'https://images.unsplash.com/photo-1527515637462-cff94edd56f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Garçom': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Pedreiro': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Jardinagem': 'https://images.unsplash.com/photo-1557429287-b2e26467fc2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Jardinagem': 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Babá': 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Eletricista': 'https://images.unsplash.com/photo-1621905251189-08b45249c6b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Encanador': 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Eletricista': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Encanador': 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Pintor': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Cozinheiro': 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Cozinheiro': 'https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Outro': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   // Categorias extras para compatibilidade
   'Construção': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Beleza': 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Turismo': 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Gastronomia': 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Gastronomia': 'https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Festas': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Aulas': 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Transporte': 'https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Automóveis': 'https://images.unsplash.com/photo-1553440569-b506745199de?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'default': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+};
+
+// Descrições melhoradas por categoria para serviços sem descrição cadastrada
+const categoryDescriptionMap = {
+  'Limpeza': 'Serviço completo de limpeza e higienização residencial com produtos ecológicos e técnicas avançadas para um ambiente impecável.',
+  'Eletricista': 'Instalação e manutenção de sistemas elétricos residenciais e comerciais. Profissionais certificados com garantia de segurança.',
+  'Jardinagem': 'Criação e manutenção de jardins tropicais com plantas nativas da Bahia. Poda especializada, adubação orgânica e design paisagístico.',
+  'Cozinheiro': 'Chef particular para jantares e eventos com menu personalizado focado na culinária baiana e frutos do mar frescos.',
+  'Encanador': 'Soluções completas para vazamentos, entupimentos e instalações hidráulicas. Atendimento emergencial 24h com equipe qualificada.',
+  'Pedreiro': 'Construção, reforma e manutenção com materiais de qualidade. Acabamento perfeito e prazo garantido.',
+  'Garçom': 'Serviço profissional para eventos e jantares. Equipe treinada e uniformizada para elevar o padrão do seu evento.',
+  'Babá': 'Cuidados especializados para crianças de todas as idades. Profissionais com experiência e referências verificadas.',
+  'Pintor': 'Pintura residencial e comercial com técnicas modernas. Acabamento de alta qualidade em ambientes internos e externos.',
 };
 
 const categoryIconMap = {
@@ -106,12 +119,12 @@ const isValidImageUrl = (url) => {
 };
 
 const ServiceCard = ({ service, provider }) => {
-    // Lógica de fallback melhorada: usa imagem cadastrada apenas se válida, senão usa fallback da categoria
     const serviceImage = service.images?.[0];
     const hasValidImage = isValidImageUrl(serviceImage);
     const fallbackImage = categoryImageMap[service.category] || categoryImageMap.default;
     const imageSrc = hasValidImage ? serviceImage : fallbackImage;
     const Icon = categoryIconMap[service.category] || categoryIconMap.default;
+    const description = service.description || categoryDescriptionMap[service.category] || 'Serviço profissional de qualidade em Trancoso.';
 
     return (
         <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group flex flex-col">
@@ -119,11 +132,11 @@ const ServiceCard = ({ service, provider }) => {
                 {imageSrc ? (
                     <LazyImage
                         src={imageSrc}
-                        alt={`Imagem do serviço: ${service.title}`}
+                        alt={`${service.title} — serviço de ${service.category} em Trancoso`}
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                 ) : (
-                    <div className="flex items-center justify-center h-full">
+                    <div className="flex items-center justify-center h-full" aria-hidden="true">
                         <Icon className="w-10 h-10 text-slate-400" />
                     </div>
                 )}
@@ -138,7 +151,7 @@ const ServiceCard = ({ service, provider }) => {
                     <p className="text-sm text-slate-600 mb-3">{provider.full_name}</p>
                 )}
 
-                <p className="text-sm text-slate-600 mb-4 line-clamp-2 flex-grow">{service.description}</p>
+                <p className="text-sm text-slate-600 mb-4 line-clamp-2 flex-grow">{description}</p>
 
                 <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-1">
