@@ -18,21 +18,7 @@ export default function AssistentevirtualPage() {
 
   const { data: conversations, isLoading: isConversationsLoading } = useQuery({
     queryKey: ['conversations', user?.id],
-    queryFn: async () => {
-      const list = await base44.entities.Conversation.filter({ userId: user.id }, '-created_date');
-      // Filtra apenas conversas que ainda existem no sistema de agentes
-      const valid = await Promise.all(
-        list.map(async (convo) => {
-          try {
-            await base44.agents.getConversation(convo.id);
-            return convo;
-          } catch {
-            return null;
-          }
-        })
-      );
-      return valid.filter(Boolean);
-    },
+    queryFn: () => base44.agents.listConversations({ agent_name: 'toca' }),
     enabled: !!user,
     initialData: [],
   });
@@ -46,10 +32,9 @@ export default function AssistentevirtualPage() {
   }, [conversations, activeConversationId]);
   
   const createConversationMutation = useMutation({
-    mutationFn: () => base44.entities.Conversation.create({ 
-      userId: user.id, 
-      userName: user.full_name || user.email,
-      lastMessage: "Nova conversa iniciada..."
+    mutationFn: () => base44.agents.createConversation({
+      agent_name: 'toca',
+      metadata: { name: `Conversa de ${user.full_name || user.email}` }
     }),
     onSuccess: (newConversation) => {
       queryClient.invalidateQueries({ queryKey: ['conversations', user?.id] });
