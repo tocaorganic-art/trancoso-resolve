@@ -185,7 +185,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    document.title = "Trancoso Experience - Encontre os Melhores Serviços Locais";
+    document.title = "Trancoso Resolve - Serviços Confiáveis em Trancoso";
   }, []);
 
   const { data: user } = useQuery({
@@ -223,10 +223,10 @@ export default function HomePage() {
         <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-5 md:py-20 px-4 overflow-hidden">
           <div className="hero-content text-center lg:text-left">
             <h1 className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-2">
-              Encontre serviços em Trancoso
+              Trancoso Resolve
             </h1>
             <p className="text-sm md:text-lg text-slate-600 mb-4">
-              Conectamos você aos melhores serviços da região.
+              Profissionais verificados que resolvem seus problemas em Trancoso.
             </p>
             
             <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0">
@@ -272,16 +272,16 @@ export default function HomePage() {
 
       {/* CTA Destacado */}
       <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-8 md:py-16 my-4 md:my-12">
-        <div className="container mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
-            Pronto para encontrar o profissional ideal?
-          </h2>
-          <p className="text-base md:text-xl text-blue-100 mb-6">
-            Milhares de prestadores verificados esperando para ajudar você.
-          </p>
+      <div className="container mx-auto max-w-4xl px-4 text-center">
+        <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
+          Pronto para resolver seu problema?
+        </h2>
+        <p className="text-base md:text-xl text-blue-100 mb-6">
+          Profissionais verificados em Trancoso prontos para resolver.
+        </p>
           <Link to={createPageUrl("ServicosCategoria")}>
             <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-lg px-8 py-6">
-              Buscar Serviços Agora
+              Encontrar Solução Agora
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>

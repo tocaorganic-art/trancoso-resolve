@@ -46,34 +46,34 @@ export default function Layout({ children, currentPageName }) {
     document.documentElement.lang = 'pt-BR';
 
     const pageTitles = {
-      '/': 'Trancoso Experience - Encontre os Melhores Serviços em Trancoso',
-      '/Home': 'Trancoso Experience - Encontre os Melhores Serviços em Trancoso',
-      '/ServicosCategoria': 'Buscar Serviços - Trancoso Experience',
-      '/PrestadorPerfil': 'Perfil do Prestador - Trancoso Experience',
-      '/ServicoDetalhes': 'Detalhes do Serviço - Trancoso Experience',
-      '/Planos': 'Planos e Preços - Trancoso Experience',
-      '/Manual': 'Manual e FAQ - Trancoso Experience',
-      '/SejaPrestador': 'Seja um Prestador - Trancoso Experience',
-      '/ComoFunciona': 'Como Funciona - Trancoso Experience',
-      '/Seguranca': 'Segurança e Privacidade - Trancoso Experience',
-      '/MeusPedidos': 'Meus Pedidos - Trancoso Experience',
-      '/Dashboard': 'Dashboard - Trancoso Experience',
-      '/Financeiro': 'Portal Financeiro - Trancoso Experience',
-      '/Assistentevirtual': 'Assistente Virtual Toca - Trancoso Experience',
-      '/GeradorDeImagem': 'Gerador de Imagens IA - Trancoso Experience',
-      '/PoliticaPrivacidade': 'Política de Privacidade - Trancoso Experience',
-      '/MinhaAgenda': 'Minha Agenda - Trancoso Experience',
-      '/MeuPerfilPrestador': 'Meu Perfil de Prestador - Trancoso Experience',
-      '/MeusServicos': 'Meus Serviços - Trancoso Experience',
-      '/DeployDashboard': 'Deploy Dashboard - Trancoso Experience',
-      '/Chat': 'Minhas Conversas - Trancoso Experience'
+      '/': 'Trancoso Resolve - Serviços Confiáveis em Trancoso',
+      '/Home': 'Trancoso Resolve - Serviços Confiáveis em Trancoso',
+      '/ServicosCategoria': 'Buscar Serviços - Trancoso Resolve',
+      '/PrestadorPerfil': 'Perfil do Prestador - Trancoso Resolve',
+      '/ServicoDetalhes': 'Detalhes do Serviço - Trancoso Resolve',
+      '/Planos': 'Planos e Preços - Trancoso Resolve',
+      '/Manual': 'Manual e FAQ - Trancoso Resolve',
+      '/SejaPrestador': 'Seja um Prestador - Trancoso Resolve',
+      '/ComoFunciona': 'Como Funciona - Trancoso Resolve',
+      '/Seguranca': 'Segurança e Privacidade - Trancoso Resolve',
+      '/MeusPedidos': 'Meus Pedidos - Trancoso Resolve',
+      '/Dashboard': 'Dashboard - Trancoso Resolve',
+      '/Financeiro': 'Portal Financeiro - Trancoso Resolve',
+      '/Assistentevirtual': 'Assistente Virtual Toca - Trancoso Resolve',
+      '/GeradorDeImagem': 'Gerador de Imagens IA - Trancoso Resolve',
+      '/PoliticaPrivacidade': 'Política de Privacidade - Trancoso Resolve',
+      '/MinhaAgenda': 'Minha Agenda - Trancoso Resolve',
+      '/MeuPerfilPrestador': 'Meu Perfil de Prestador - Trancoso Resolve',
+      '/MeusServicos': 'Meus Serviços - Trancoso Resolve',
+      '/DeployDashboard': 'Deploy Dashboard - Trancoso Resolve',
+      '/Chat': 'Minhas Conversas - Trancoso Resolve'
     };
 
     const pageDescriptions = {
-      '/': 'Encontre os melhores prestadores de serviço em Trancoso. Conectamos você a profissionais de limpeza, construção, beleza, turismo e muito mais.',
-      '/Home': 'Encontre os melhores prestadores de serviço em Trancoso. Conectamos você a profissionais de limpeza, construção, beleza, turismo e muito mais.',
-      '/ServicosCategoria': 'Navegue por categorias e encontre o profissional ideal para suas necessidades em Trancoso.',
-      '/PrestadorPerfil': 'Veja o perfil detalhado dos prestadores de serviço, avaliações e serviços oferecidos em Trancoso.',
+      '/': 'Trancoso Resolve: Profissionais verificados que resolvem seus problemas em Trancoso. Faxina, eletricista, jardinagem, cozinheiro, passeios e muito mais.',
+      '/Home': 'Trancoso Resolve: Profissionais verificados que resolvem seus problemas em Trancoso. Faxina, eletricista, jardinagem, cozinheiro, passeios e muito mais.',
+      '/ServicosCategoria': 'Navegue por categorias e encontre o profissional que resolve seu problema em Trancoso.',
+      '/PrestadorPerfil': 'Veja o perfil detalhado e avaliações dos profissionais verificados em Trancoso.',
       '/ServicoDetalhes': 'Conheça os detalhes de cada serviço e contrate com confiança em Trancoso.'
     };
 
@@ -163,7 +163,7 @@ export default function Layout({ children, currentPageName }) {
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience - Serviços em Trancoso, Bahia" className="h-9 shrink-0" width="36" height="36" loading="eager" fetchpriority="high" />
-                <span className="font-bold text-sm md:text-lg text-slate-800 truncate hidden xs:inline sm:inline">Trancoso Experience</span>
+                <span className="font-bold text-sm md:text-lg text-slate-800 truncate hidden xs:inline sm:inline">Trancoso Resolve</span>
               </Link>
 
               {/* Desktop Navigation */}
@@ -257,7 +257,7 @@ export default function Layout({ children, currentPageName }) {
                 </Link>
               </div>
               <p className="text-slate-400 text-sm">
-                © 2025 Trancoso Experience • Por TOCA Experience • Todos os direitos reservados
+                © 2025 Trancoso Resolve • Plataforma de Serviços em Trancoso • Todos os direitos reservados
               </p>
             </div>
           </footer>
@@ -304,7 +304,7 @@ export default function Layout({ children, currentPageName }) {
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Seu Guia de Serviços em Trancoso</span>
+                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Trancoso Resolve</span>
               </Link>
 
               <div className="hidden lg:flex items-center gap-2">
