@@ -140,7 +140,7 @@ export default function Layout({ children, currentPageName }) {
         <PageViewTracker />
         <AccessLogger />
 
-        <div className="min-h-screen bg-[var(--background)]">
+        <div className="min-h-screen bg-[var(--background)] overflow-x-hidden">
           <style>{`
             :root {
               --primary: #0A81D1;
@@ -160,10 +160,10 @@ export default function Layout({ children, currentPageName }) {
           `}</style>
 
           <nav className="bg-white shadow-md sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
-            <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-              <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0" data-testid="nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience Logo" className="h-10 shrink-0" />
-                <span className="font-bold text-sm md:text-xl text-slate-800 truncate">Seu Guia de Serviços em Trancoso</span>
+            <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
+              <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience Logo" className="h-9 shrink-0" />
+                <span className="font-bold text-sm md:text-lg text-slate-800 truncate hidden xs:inline sm:inline">Trancoso Experience</span>
               </Link>
 
               {/* Desktop Navigation */}

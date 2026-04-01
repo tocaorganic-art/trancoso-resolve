@@ -1,4 +1,5 @@
-import { Home, Hammer, Shirt, Car, Compass, UtensilsCrossed, PartyPopper, BookOpen, Wrench } from "lucide-react";
+import React from "react";
+import { Home, Hammer, Shirt, Car, Compass, UtensilsCrossed, PartyPopper, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
@@ -16,18 +17,20 @@ export default function BannerCategorias() {
 
   return (
     <section className="py-6 md:py-8 bg-[var(--background)]">
-        <div className="container mx-auto px-4">
-            <div className="grid grid-cols-4 md:flex md:justify-center gap-3 md:gap-8 py-2">
+        <div className="container mx-auto px-4 max-w-full overflow-hidden">
+            <div className="grid grid-cols-4 md:flex md:justify-center gap-2 md:gap-8 py-2">
                 {categorias.map((cat, i) => (
                     <Link 
                       key={i} 
                       to={createPageUrl("ServicosCategoria", `?cat=${cat.name}`)}
-                      className="group flex flex-col items-center gap-2 text-center"
+                      className="group flex flex-col items-center gap-1.5 text-center min-w-0"
                     >
-                         <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out group-hover:bg-[var(--secondary)] group-hover:-translate-y-1 group-hover:shadow-lg">
-                           <div className="text-gray-600 transition-colors duration-300 group-hover:text-white">{cat.icon}</div>
+                         <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out group-hover:bg-[var(--secondary)] group-hover:-translate-y-1 group-hover:shadow-lg shrink-0">
+                           <div className="text-gray-600 transition-colors duration-300 group-hover:text-white">
+                             {React.cloneElement(cat.icon, { size: 20 })}
+                           </div>
                          </div>
-                         <span className="text-xs md:text-sm font-medium text-[var(--text-dark)]">{cat.name}</span>
+                         <span className="text-[10px] md:text-sm font-medium text-[var(--text-dark)] leading-tight truncate w-full">{cat.name}</span>
                     </Link>
                 ))}
             </div>

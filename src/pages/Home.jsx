@@ -217,19 +217,19 @@ export default function HomePage() {
   const popularServices = ["Faxina", "Eletricista", "Passeio Turístico", "Transporte", "Massagem"];
 
   return (
-    <div className="bg-slate-50">
+    <div className="bg-slate-50 overflow-x-hidden">
       {/* Hero Section */}
       <div className="bg-white">
-        <section className="container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-6 md:py-20 px-4">
+        <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-5 md:py-20 px-4 overflow-hidden">
           <div className="hero-content text-center lg:text-left">
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-3">
+            <h1 className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-2">
               Encontre serviços em Trancoso
             </h1>
-            <p className="text-base md:text-lg text-slate-600 mb-6">
+            <p className="text-sm md:text-lg text-slate-600 mb-4">
               Conectamos você aos melhores serviços da região.
             </p>
             
-            <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4">
+            <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0">
               <Input
                 type="text"
                 placeholder="O que você precisa?"
