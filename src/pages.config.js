@@ -17,7 +17,7 @@ import Seguranca from './pages/Seguranca';
 import Assistentevirtual from './pages/Assistentevirtual';
 import GeradorDeImagem from './pages/GeradorDeImagem';
 import ServicoDetalhes from './pages/ServicoDetalhes';
-import MeusServicos from './pages/MeusServicos';
+import MeusServicos from './pages/MeusServicos.jsx';
 import DiagnosticosCompletos from './pages/DiagnosticosCompletos';
 import ManutencaoSistema from './pages/ManutencaoSistema';
 import MonitoringDashboard from './pages/MonitoringDashboard';
