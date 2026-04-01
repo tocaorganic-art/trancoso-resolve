@@ -220,7 +220,7 @@ export default function HomePage() {
     <div className="bg-slate-50">
       {/* Hero Section */}
       <div className="bg-white">
-        <section className="container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 py-8 md:py-20 px-4">
+        <section className="container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-6 md:py-20 px-4">
           <div className="hero-content text-center lg:text-left">
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-3">
               Encontre serviços em Trancoso
@@ -264,14 +264,14 @@ export default function HomePage() {
         </section>
       </div>
 
-      <div className="container mx-auto max-w-7xl px-4 lg:hidden mt-2">
+      <div className="container mx-auto max-w-7xl px-4 lg:hidden mt-0">
         <PromotionalBanner />
       </div>
 
       <BannerCategorias />
 
       {/* CTA Destacado */}
-      <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-8 md:py-16 my-6 md:my-12">
+      <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-8 md:py-16 my-4 md:my-12">
         <div className="container mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
             Pronto para encontrar o profissional ideal?

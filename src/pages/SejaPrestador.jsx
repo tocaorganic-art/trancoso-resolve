@@ -53,20 +53,20 @@ export default function SejaPrestadorPage() {
       <HeroSection />
 
       {/* Benefícios */}
-      <section className="container mx-auto py-20 px-4 max-w-5xl">
-        <div className="text-center mb-12">
+      <section className="container mx-auto py-10 md:py-20 px-4 max-w-5xl">
+        <div className="text-center mb-6 md:mb-12">
           <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Vantagens exclusivas</span>
-          <h2 className="text-3xl font-bold text-slate-800 mt-2">Por que ser um Parceiro Toca?</h2>
+          <h2 className="text-xl md:text-3xl font-bold text-slate-800 mt-2">Por que ser um Parceiro Toca?</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
           {beneficios.map((item, index) => (
             <Card key={index} className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CardContent className="p-6 md:p-8">
+                <div className="w-14 h-14 md:w-16 md:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-slate-600">{item.description}</p>
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-sm md:text-base text-slate-600">{item.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -83,10 +83,10 @@ export default function SejaPrestadorPage() {
       <Testimonials />
 
       {/* Como Funciona */}
-      <section id="como-funciona" className="container mx-auto py-20 px-4 max-w-2xl">
-        <div className="text-center mb-12">
+      <section id="como-funciona" className="container mx-auto py-10 md:py-20 px-4 max-w-2xl">
+        <div className="text-center mb-6 md:mb-12">
           <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Simples e rápido</span>
-          <h2 className="text-3xl font-bold text-slate-800 mt-2">Como funciona</h2>
+          <h2 className="text-xl md:text-3xl font-bold text-slate-800 mt-2">Como funciona</h2>
         </div>
         <ul className="space-y-6">
           {steps.map(s => (
@@ -104,14 +104,14 @@ export default function SejaPrestadorPage() {
       </section>
 
       {/* CTA Final */}
-      <div className="bg-gradient-to-r from-blue-600 to-cyan-500 py-20">
+      <div className="bg-gradient-to-r from-blue-600 to-cyan-500 py-12 md:py-20">
         <div className="container mx-auto text-center px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Pronto para começar?</h2>
-          <p className="text-blue-100 mb-8 max-w-xl mx-auto text-lg">
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-3">Pronto para começar?</h2>
+          <p className="text-blue-100 mb-6 max-w-xl mx-auto text-base md:text-lg">
             Faça parte da comunidade de profissionais que está prosperando em Trancoso.
           </p>
           <Link to={createPageUrl('CadastroTipo')}>
-            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-lg px-10 py-6 shadow-xl">
+            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-lg px-8 py-4 md:py-6 shadow-xl min-h-[48px]">
               Cadastre-se Agora — É Grátis
             </Button>
           </Link>

@@ -77,7 +77,7 @@ export default function GeradorDeImagemPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
           {/* Input Section */}
           <Card className="border-none shadow-xl">
             <CardHeader>
@@ -91,15 +91,15 @@ export default function GeradorDeImagemPage() {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Ex: Uma foto profissional de um eletricista trabalhando em Trancoso, com ferramentas modernas, iluminação natural..."
-                rows={5}
-                className="resize-none w-full text-base"
+                rows={6}
+                className="resize-none"
               />
 
               <Button
-                onClick={handleGenerate}
-                disabled={isGenerating || !prompt.trim()}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 h-12"
-                size="lg"
+               onClick={handleGenerate}
+               disabled={isGenerating || !prompt.trim()}
+               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 min-h-[48px]"
+               size="lg"
               >
                 {isGenerating ? (
                   <>
@@ -122,7 +122,7 @@ export default function GeradorDeImagemPage() {
                     <button
                       key={index}
                       onClick={() => setPrompt(example)}
-                      className="w-full text-left text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors"
+                      className="w-full text-left text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 p-3 rounded-lg transition-colors min-h-[44px]"
                     >
                       {example}
                     </button>

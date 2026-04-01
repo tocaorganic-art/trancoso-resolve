@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -64,7 +63,7 @@ export default function PromotionalBanner() {
   };
 
   return (
-    <div className="relative w-full h-[450px] rounded-2xl overflow-hidden shadow-2xl my-8">
+    <div className="relative w-full h-[220px] md:h-[450px] rounded-2xl overflow-hidden shadow-2xl my-4 md:my-8">
       {banners.map((banner, index) => (
         <div
           key={banner.id}
@@ -89,11 +88,11 @@ export default function PromotionalBanner() {
 
             {/* Text Content */}
             <div className="relative container mx-auto h-full flex items-center z-20">
-              <div className="text-white md:w-1/2 p-8">
-                <h2 className="text-4xl font-bold mb-3 drop-shadow-md">{banner.title}</h2>
-                <p className="text-lg opacity-90 mb-6 drop-shadow-sm">{banner.subtitle}</p>
+              <div className="text-white md:w-1/2 p-4 md:p-8">
+                <h2 className="text-lg md:text-4xl font-bold mb-1 md:mb-3 drop-shadow-md">{banner.title}</h2>
+                <p className="text-sm md:text-lg opacity-90 mb-3 md:mb-6 drop-shadow-sm line-clamp-2">{banner.subtitle}</p>
                 <Link to={banner.ctaLink}>
-                  <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-slate-100 shadow-lg">
+                  <Button size="sm" variant="secondary" className="bg-white text-blue-600 hover:bg-slate-100 shadow-lg md:text-base md:px-6 md:py-5 min-h-[44px]">
                     {banner.cta}
                   </Button>
                 </Link>
