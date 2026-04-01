@@ -1,12 +1,12 @@
-
 import React, { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Calendar, AlertCircle, Inbox, CheckCircle, Clock, XCircle, AlertTriangle } from "lucide-react";
+import { Loader2, Calendar, AlertCircle, Inbox, CheckCircle, Clock, XCircle, AlertTriangle, Settings2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RequestDetailsModal from "@/components/agenda/RequestDetailsModal";
+import DisponibilidadeEditor from "@/components/agenda/DisponibilidadeEditor";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from "sonner";
@@ -156,16 +156,17 @@ function MinhaAgendaContent() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3"><Calendar /> Minha Agenda</h1>
-        <p className="text-slate-600">Gerencie suas solicitações de serviço.</p>
+        <p className="text-slate-600">Gerencie suas solicitações de serviço e configure sua disponibilidade.</p>
       </div>
 
       <Tabs defaultValue="Pendente">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 mb-6">
+        <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 mb-6">
           <TabsTrigger value="Pendente" className="gap-1.5"><Clock className="w-4 h-4"/>Pendentes <Badge className="ml-1">{requestsByStatus.Pendente.length}</Badge></TabsTrigger>
           <TabsTrigger value="Confirmado" className="gap-1.5"><CheckCircle className="w-4 h-4"/>Confirmados</TabsTrigger>
-          <TabsTrigger value="Concluído" className="gap-1.5"><Calendar className="w-4 h-4"/>Concluídos</TabsTrigger>
-          <TabsTrigger value="Rejeitado" className="gap-1.5"><XCircle className="w-4 h-4"/>Rejeitados</TabsTrigger>
-          <TabsTrigger value="Cancelado" className="gap-1.5"><AlertTriangle className="w-4 h-4"/>Cancelados</TabsTrigger>
+          <TabsTrigger value="Concluído" className="gap-1.5 hidden md:flex"><Calendar className="w-4 h-4"/>Concluídos</TabsTrigger>
+          <TabsTrigger value="Rejeitado" className="gap-1.5 hidden md:flex"><XCircle className="w-4 h-4"/>Rejeitados</TabsTrigger>
+          <TabsTrigger value="Cancelado" className="gap-1.5 hidden md:flex"><AlertTriangle className="w-4 h-4"/>Cancelados</TabsTrigger>
+          <TabsTrigger value="Disponibilidade" className="gap-1.5"><Settings2 className="w-4 h-4"/>Horários</TabsTrigger>
         </TabsList>
 
         <TabsContent value="Pendente">
@@ -220,6 +221,23 @@ function MinhaAgendaContent() {
             </CardHeader>
             <CardContent>
               {renderRequestList(requestsByStatus.Cancelado)}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="Disponibilidade">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings2 className="w-5 h-5 text-blue-600" />
+                Configurar Minha Disponibilidade
+              </CardTitle>
+              <CardDescription>
+                Defina os dias e horários em que você está disponível. Clientes só poderão agendar nos horários que você liberar.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DisponibilidadeEditor providerId={user?.id} />
             </CardContent>
           </Card>
         </TabsContent>

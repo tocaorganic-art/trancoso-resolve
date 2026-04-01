@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import StarRating from "@/components/reviews/StarRating";
 import ServiceLocationMap from "@/components/map/ServiceLocationMap";
 import StartChatButton from "@/components/chat/StartChatButton";
+import SlotPicker from "@/components/agenda/SlotPicker";
 
 export default function PrestadorPerfilPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -41,6 +42,7 @@ export default function PrestadorPerfilPage() {
     client_phone: "",
     service_id: "",
     date: undefined,
+    time: "",
     message: "",
     location: { address: '', number: '', complement: '', reference: '', lat: null, lng: null },
   });
@@ -82,6 +84,7 @@ export default function PrestadorPerfilPage() {
         client_phone: "",
         service_id: "",
         date: undefined,
+        time: "",
         message: "",
         location: { address: '', number: '', complement: '', reference: '', lat: null, lng: null },
       });
@@ -117,6 +120,7 @@ export default function PrestadorPerfilPage() {
       toast.error("Por favor, selecione uma data para o serviço.");
       return;
     }
+    // time is optional — provider may not have schedule configured
     setStep(2);
   }
 
@@ -138,6 +142,7 @@ export default function PrestadorPerfilPage() {
       client_id: user?.id,
       provider_id: providerId,
       date: requestData.date ? format(requestData.date, "yyyy-MM-dd") : null,
+      time: requestData.time || null,
     });
   };
 
@@ -357,7 +362,7 @@ export default function PrestadorPerfilPage() {
                           <Calendar
                             mode="single"
                             selected={requestData.date}
-                            onSelect={(date) => setRequestData({ ...requestData, date })}
+                            onSelect={(date) => setRequestData({ ...requestData, date, time: "" })}
                             initialFocus
                             locale={ptBR}
                             disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
@@ -366,6 +371,21 @@ export default function PrestadorPerfilPage() {
                         </PopoverContent>
                       </Popover>
                     </div>
+
+                    {/* Slot picker — real-time availability */}
+                    {requestData.date && (
+                      <div>
+                        <Label>Horário Disponível</Label>
+                        <div className="mt-1">
+                          <SlotPicker
+                            providerId={providerId}
+                            selectedDate={requestData.date}
+                            selectedTime={requestData.time}
+                            onTimeSelect={(time) => setRequestData(prev => ({ ...prev, time: time || "" }))}
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div>
                       <Label htmlFor="message">Observações / Necessidades Especiais</Label>
                       <Textarea id="message" value={requestData.message} onChange={(e) => setRequestData({...requestData, message: e.target.value})} placeholder="Ex: Tenho um cachorro grande, mas ele é dócil." rows={3} aria-label="Observações ou necessidades especiais para o serviço" />
