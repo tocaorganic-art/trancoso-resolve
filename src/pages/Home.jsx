@@ -220,63 +220,63 @@ export default function HomePage() {
     <div className="bg-slate-50">
       {/* Hero Section */}
       <div className="bg-white">
-        <section className="container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-8 py-12 md:py-20 px-4">
+        <section className="container mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 py-8 md:py-20 px-4">
           <div className="hero-content text-center lg:text-left">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-4">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-3">
               Encontre serviços em Trancoso
             </h1>
-            <p className="text-lg text-slate-600 mb-8">
+            <p className="text-base md:text-lg text-slate-600 mb-6">
               Conectamos você aos melhores serviços da região.
             </p>
             
-            <div className="search-container flex w-full max-w-lg mx-auto lg:mx-0 mb-6">
+            <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4">
               <Input
                 type="text"
                 placeholder="O que você precisa?"
-                className="search-input flex-1 rounded-r-none focus:ring-0 focus:ring-offset-0 border-r-0 text-base py-6"
+                className="flex-1 rounded-r-none focus:ring-0 focus:ring-offset-0 border-r-0 text-base h-12"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 aria-label="Buscar serviços"
               />
-              <Link to={createPageUrl("ServicosCategoria", `?q=${searchQuery}`)} className="search-button">
-                <Button className="rounded-l-none h-full bg-[var(--primary)]" aria-label="Buscar">
+              <Link to={createPageUrl("ServicosCategoria", `?q=${searchQuery}`)}>
+                <Button className="rounded-l-none h-12 bg-[var(--primary)] min-w-[80px]" aria-label="Buscar">
                     <Search className="w-5 h-5 mr-1" />
                     Buscar
                 </Button>
               </Link>
             </div>
             
-            <div className="popular-services mt-6 flex items-center justify-center lg:justify-start gap-3 flex-wrap">
-              <span className="popular-label text-sm font-medium text-slate-700">Popular:</span>
-              <div className="popular-tags flex gap-2 flex-wrap">
+            <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap">
+              <span className="text-sm font-medium text-slate-700">Popular:</span>
+              <div className="flex gap-2 flex-wrap justify-center lg:justify-start">
                 {popularServices.map(service => (
                     <Link key={service} to={createPageUrl("ServicosCategoria", `?cat=${service}`)}>
-                        <Badge variant="outline" className="cursor-pointer hover:bg-[var(--secondary)] hover:border-[var(--secondary)] bg-white border-slate-200 rounded-full text-sm py-1.5 px-3">{service}</Badge>
+                        <Badge variant="outline" className="cursor-pointer hover:bg-[var(--secondary)] hover:border-[var(--secondary)] bg-white border-slate-200 rounded-full text-xs py-1 px-2">{service}</Badge>
                     </Link>
                 ))}
               </div>
             </div>
           </div>
           
-          <div className="promotional-banner-column hidden lg:block">
+          <div className="hidden lg:block">
             <PromotionalBanner />
           </div>
         </section>
       </div>
 
-      <div className="container mx-auto max-w-7xl px-4 lg:hidden">
+      <div className="container mx-auto max-w-7xl px-4 lg:hidden mt-2">
         <PromotionalBanner />
       </div>
 
       <BannerCategorias />
 
       {/* CTA Destacado */}
-      <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-16 my-12">
+      <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-8 md:py-16 my-6 md:my-12">
         <div className="container mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
             Pronto para encontrar o profissional ideal?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-base md:text-xl text-blue-100 mb-6">
             Milhares de prestadores verificados esperando para ajudar você.
           </p>
           <Link to={createPageUrl("ServicosCategoria")}>
@@ -288,7 +288,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="container mx-auto max-w-6xl px-4 py-16">
+      <div className="container mx-auto max-w-6xl px-4 py-8 md:py-16">
 
         {/* Recomendações com IA */}
         {user && (isLoadingRecommendations || (recommendedServices?.data && recommendedServices.data.length > 0)) && (
@@ -313,9 +313,9 @@ export default function HomePage() {
         )}
 
         {/* Featured Services */}
-        <section className="mb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-slate-900">Serviços em Destaque</h2>
+        <section className="mb-10 md:mb-20">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Serviços em Destaque</h2>
             <Link to={createPageUrl("ServicosLista")} data-testid="home-ver-todos-servicos-link">
               <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700" aria-label="Ver todos os serviços">
                 Ver todos
@@ -323,7 +323,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {isLoadingServices ? (
                   Array.from({ length: 3 }).map((_, i) => <ServiceSkeletonCard key={i} />)
                 ) : isErrorServices ? (
@@ -354,13 +354,13 @@ export default function HomePage() {
         </section>
 
         {/* Top Rated Providers */}
-        <section className="mb-20">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-slate-900">Profissionais Bem Avaliados</h2>
-            <p className="text-slate-600 mt-2">Os favoritos da comunidade, com qualidade comprovada.</p>
+        <section className="mb-10 md:mb-20">
+          <div className="text-center mb-4 md:mb-8">
+            <h2 className="text-xl md:text-3xl font-bold text-slate-900">Profissionais Bem Avaliados</h2>
+            <p className="text-sm md:text-base text-slate-600 mt-2">Os favoritos da comunidade, com qualidade comprovada.</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6">
             {isLoadingProviders ? (
                 Array.from({ length: 6 }).map((_, i) => <ProviderSkeletonCard key={i} />)
             ) : isErrorProviders ? (
@@ -417,11 +417,11 @@ export default function HomePage() {
         <Testimonials />
 
         {/* Quick Help CTA */}
-        <Card className="border-none bg-gradient-to-r from-orange-400 to-amber-500 text-white shadow-2xl mt-20">
-          <CardContent className="p-8 text-center">
-            <Zap className="w-12 h-12 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Preciso de Ajuda Urgente!</h3>
-            <p className="text-orange-50 mb-6">
+        <Card className="border-none bg-gradient-to-r from-orange-400 to-amber-500 text-white shadow-2xl mt-10 md:mt-20">
+          <CardContent className="p-6 md:p-8 text-center">
+            <Zap className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3" />
+            <h3 className="text-xl md:text-2xl font-bold mb-2">Preciso de Ajuda Urgente!</h3>
+            <p className="text-orange-50 mb-5 text-sm md:text-base">
               Precisa de um serviço com urgência? Entre em contato e encontraremos alguém disponível agora.
             </p>
             <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-orange-50" data-testid="home-ajuda-urgente-button">

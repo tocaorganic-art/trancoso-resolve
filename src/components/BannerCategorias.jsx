@@ -15,19 +15,19 @@ export default function BannerCategorias() {
   ];
 
   return (
-    <section className="py-8 bg-[var(--background)]">
-        <div className="container mx-auto">
-            <div className="flex justify-center gap-4 md:gap-8 overflow-x-auto py-4">
+    <section className="py-6 md:py-8 bg-[var(--background)]">
+        <div className="container mx-auto px-4">
+            <div className="grid grid-cols-4 md:flex md:justify-center gap-3 md:gap-8 py-2">
                 {categorias.map((cat, i) => (
                     <Link 
                       key={i} 
                       to={createPageUrl("ServicosCategoria", `?cat=${cat.name}`)}
-                      className="group flex flex-col items-center gap-2 text-center flex-shrink-0"
+                      className="group flex flex-col items-center gap-2 text-center"
                     >
-                         <div className="w-16 h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out group-hover:bg-[var(--secondary)] group-hover:-translate-y-1 group-hover:shadow-lg">
+                         <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out group-hover:bg-[var(--secondary)] group-hover:-translate-y-1 group-hover:shadow-lg">
                            <div className="text-gray-600 transition-colors duration-300 group-hover:text-white">{cat.icon}</div>
                          </div>
-                         <span className="text-sm font-medium text-[var(--text-dark)]">{cat.name}</span>
+                         <span className="text-xs md:text-sm font-medium text-[var(--text-dark)]">{cat.name}</span>
                     </Link>
                 ))}
             </div>

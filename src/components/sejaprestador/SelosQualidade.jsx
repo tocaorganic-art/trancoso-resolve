@@ -40,10 +40,10 @@ export default function SelosQualidade() {
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4 max-w-5xl">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Programa de Qualidade</span>
-          <h2 className="text-3xl font-bold text-slate-900 mt-2 mb-3">Selos de Reconhecimento Toca</h2>
-          <p className="text-slate-500 max-w-xl mx-auto">
+          <h2 className="text-xl md:text-3xl font-bold text-slate-900 mt-2 mb-3">Selos de Reconhecimento Toca</h2>
+          <p className="text-sm md:text-base text-slate-500 max-w-xl mx-auto">
             Nossa plataforma reconhece e destaca os melhores profissionais com selos que aumentam sua visibilidade e credibilidade.
           </p>
         </div>

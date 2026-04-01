@@ -64,20 +64,20 @@ export default function GeradorDeImagemPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 py-8 md:py-12 px-4">
       <div className="container mx-auto max-w-5xl">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+        <div className="text-center mb-6 md:mb-8">
+          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-3">
             <Sparkles className="w-4 h-4" />
             Powered by AI
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 mb-3">Gerador de Imagens IA</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <h1 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2">Gerador de Imagens IA</h1>
+          <p className="text-sm md:text-lg text-slate-600 max-w-2xl mx-auto">
             Crie imagens incríveis para seus serviços, portfólio ou redes sociais usando inteligência artificial.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
           {/* Input Section */}
           <Card className="border-none shadow-xl">
             <CardHeader>
@@ -91,14 +91,14 @@ export default function GeradorDeImagemPage() {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Ex: Uma foto profissional de um eletricista trabalhando em Trancoso, com ferramentas modernas, iluminação natural..."
-                rows={6}
-                className="resize-none"
+                rows={5}
+                className="resize-none w-full text-base"
               />
 
               <Button
                 onClick={handleGenerate}
                 disabled={isGenerating || !prompt.trim()}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 h-12"
                 size="lg"
               >
                 {isGenerating ? (
