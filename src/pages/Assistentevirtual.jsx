@@ -86,50 +86,100 @@ export default function AssistentevirtualPage() {
     );
   }
   
-  return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-sans">
-      {/* Sidebar de Conversas - Melhorado com contraste */}
-      <div className="w-full md:w-1/3 max-w-sm bg-white border-r border-slate-300 flex flex-col shadow-lg">
-        <div className="p-6 border-b border-slate-200 flex justify-between items-center shrink-0 bg-gradient-to-r from-blue-600 to-blue-700">
-          <h2 className="text-xl font-bold text-white">Minhas Conversas</h2>
-          <Button size="icon" variant="ghost" onClick={() => createConversationMutation.mutate()} disabled={createConversationMutation.isPending} aria-label="Iniciar nova conversa" className="hover:bg-white/20 text-white">
-            {createConversationMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
-          </Button>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          {conversations && conversations.length > 0 ? (
-            <ul>
-              {conversations.map(convo => (
-                <li key={convo.id}
-                    className={`p-5 cursor-pointer border-l-4 transition-all hover:bg-slate-50 ${activeConversationId === convo.id ? 'bg-blue-50 border-blue-600 shadow-inner' : 'border-transparent'}`}
-                    onClick={() => setActiveConversationId(convo.id)}>
-                    <p className="font-semibold text-slate-900 truncate mb-1">
-                        Conversa de {format(new Date(convo.created_date), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}
-                    </p>
-                    <p className="text-sm text-slate-600 truncate">{convo.lastMessage || 'Nenhuma mensagem ainda'}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="p-8 text-center text-slate-500 flex flex-col items-center justify-center h-full">
-               <MessageSquare className="w-16 h-16 mx-auto mb-4 text-slate-400" />
-               <p className="font-semibold text-slate-700 mb-2">Nenhuma conversa encontrada.</p>
-               <p className="text-sm text-slate-500">Clique no <PlusCircle className="inline w-4 h-4" /> para começar a conversar com o assistente.</p>
-            </div>
-          )}
-        </div>
+  // Mobile: se tiver conversa ativa, mostra o chat; senão mostra a lista
+  const [mobileView, setMobileView] = useState('list'); // 'list' | 'chat'
+
+  const handleSelectConversation = (id) => {
+    setActiveConversationId(id);
+    setMobileView('chat');
+  };
+
+  const handleNewConversation = () => {
+    createConversationMutation.mutate();
+    setMobileView('chat');
+  };
+
+  const SidebarContent = (
+    <>
+      <div className="p-4 border-b border-slate-200 flex justify-between items-center shrink-0 bg-gradient-to-r from-blue-600 to-blue-700">
+        <h2 className="text-lg font-bold text-white">Minhas Conversas</h2>
+        <Button size="icon" variant="ghost" onClick={handleNewConversation} disabled={createConversationMutation.isPending} aria-label="Iniciar nova conversa" className="hover:bg-white/20 text-white">
+          {createConversationMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
+        </Button>
       </div>
-      
-      {/* Área do Chat - Expandida */}
-      <main className="flex-1 flex flex-col">
+      <div className="flex-1 overflow-y-auto">
+        {conversations && conversations.length > 0 ? (
+          <ul>
+            {conversations.map(convo => (
+              <li key={convo.id}
+                  className={`p-4 cursor-pointer border-l-4 transition-all hover:bg-slate-50 ${activeConversationId === convo.id ? 'bg-blue-50 border-blue-600' : 'border-transparent'}`}
+                  onClick={() => handleSelectConversation(convo.id)}>
+                  <p className="font-semibold text-slate-900 truncate text-sm mb-0.5">
+                      Conversa de {format(new Date(convo.created_date), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}
+                  </p>
+                  <p className="text-xs text-slate-500 truncate">{convo.lastMessage || 'Nenhuma mensagem ainda'}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="p-6 text-center text-slate-500 flex flex-col items-center justify-center h-full">
+             <MessageSquare className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+             <p className="font-semibold text-slate-700 mb-1 text-sm">Nenhuma conversa ainda.</p>
+             <p className="text-xs text-slate-500">Toque em + para começar.</p>
+          </div>
+        )}
+      </div>
+    </>
+  );
+
+  const ChatContent = (
+    <>
+      {/* Mobile back button */}
+      <div className="md:hidden flex items-center gap-2 px-4 py-3 bg-blue-600 border-b border-blue-700">
+        <Button size="sm" variant="ghost" className="text-white hover:bg-white/20 gap-1 px-2" onClick={() => setMobileView('list')}>
+          ← Conversas
+        </Button>
+      </div>
+      {activeConversationId ? (
+        <ChatInterface conversationId={activeConversationId} key={activeConversationId} />
+      ) : (
+        <div className="flex items-center justify-center h-full text-slate-500 p-8 text-center">
+          <div>
+            <MessageSquare className="w-16 h-16 mx-auto mb-4 text-blue-300" />
+            <h3 className="text-xl font-semibold text-slate-800 mb-2">Selecione uma conversa</h3>
+            <p className="text-slate-500 text-sm">Ou crie uma nova com o botão +</p>
+          </div>
+        </div>
+      )}
+    </>
+  );
+
+  return (
+    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-sans overflow-hidden">
+      {/* Desktop: sidebar sempre visível */}
+      <div className="hidden md:flex w-80 bg-white border-r border-slate-200 flex-col shadow-sm">
+        {SidebarContent}
+      </div>
+
+      {/* Mobile: alterna entre lista e chat */}
+      <div className="flex md:hidden flex-col w-full">
+        {mobileView === 'list' ? (
+          <div className="flex flex-col h-full bg-white">{SidebarContent}</div>
+        ) : (
+          <div className="flex flex-col h-full">{ChatContent}</div>
+        )}
+      </div>
+
+      {/* Desktop: área de chat */}
+      <main className="hidden md:flex flex-1 flex-col overflow-hidden">
         {activeConversationId ? (
           <ChatInterface conversationId={activeConversationId} key={activeConversationId} />
         ) : (
           <div className="flex items-center justify-center h-full text-slate-500 p-8 text-center bg-gradient-to-br from-white to-slate-50">
             <div>
-              <MessageSquare className="w-20 h-20 mx-auto mb-6 text-blue-600 opacity-50" />
+              <MessageSquare className="w-20 h-20 mx-auto mb-6 text-blue-300" />
               <h3 className="text-2xl font-semibold text-slate-800 mb-2">Selecione ou crie uma conversa</h3>
-              <p className="text-slate-600 max-w-md mx-auto">Suas interações com o assistente Toca ficarão salvas aqui. Use o botão <PlusCircle className="inline w-4 h-4" /> para começar.</p>
+              <p className="text-slate-500 max-w-md mx-auto text-sm">Use o botão + para começar a conversar com a Toca.</p>
             </div>
           </div>
         )}
