@@ -69,9 +69,25 @@ function MeusServicosContent() {
 
   const toggleActiveMutation = useMutation({
     mutationFn: ({ id, active }) => base44.entities.ServiceListing.update(id, { active }),
+    onMutate: async ({ id, active }) => {
+      await queryClient.cancelQueries({ queryKey: ['myServiceListings', provider?.id] });
+      const previous = queryClient.getQueryData(['myServiceListings', provider?.id]);
+      queryClient.setQueryData(['myServiceListings', provider?.id], (old) =>
+        (old || []).map((s) => s.id === id ? { ...s, active } : s)
+      );
+      return { previous };
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries(['myServiceListings']);
       toast.success('Status atualizado!');
+    },
+    onError: (error, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(['myServiceListings', provider?.id], context.previous);
+      }
+      toast.error('Erro ao atualizar status.', { description: error.message });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['myServiceListings']);
     },
   });
 

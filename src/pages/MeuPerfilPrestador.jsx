@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
@@ -9,6 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, User, Camera, Trash2, PlusCircle, AlertCircle, FileUp, Info } from 'lucide-react';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import ServiceLocationMap from '@/components/map/ServiceLocationMap';
 import { Progress } from '@/components/ui/progress';
@@ -142,6 +145,18 @@ function MeuPerfilPrestadorContent() {
       });
     }
   }, [provider, isLoadingProvider, user]);
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: async () => {
+      if (provider?.id) {
+        await base44.entities.ServiceProvider.delete(provider.id);
+      }
+      await base44.auth.logout('/');
+    },
+    onError: (error) => {
+      toast.error('Erro ao excluir conta.', { description: error.message });
+    },
+  });
 
   const mutation = useMutation({
     mutationFn: (data) => {
@@ -530,8 +545,36 @@ function MeuPerfilPrestadorContent() {
             </div>
 
             {/* Ações */}
-            <div className="flex justify-end pt-6 border-t">
-              <Button type="submit" disabled={mutation.isPending || isUploading}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button type="button" variant="destructive" className="select-none">
+                    <Trash2 className="w-4 h-4 mr-2 select-none" />
+                    Excluir Conta
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta ação é permanente. Seu perfil de prestador e todos os dados associados serão excluídos. Você será desconectado imediatamente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="select-none">Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90 select-none"
+                      onClick={() => deleteAccountMutation.mutate()}
+                      disabled={deleteAccountMutation.isPending}
+                    >
+                      {deleteAccountMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                      Sim, excluir minha conta
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <Button type="submit" disabled={mutation.isPending || isUploading} className="select-none">
                 {(mutation.isPending || isUploading) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Salvar Perfil
               </Button>

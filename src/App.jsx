@@ -5,11 +5,12 @@ import { queryClientInstance } from '@/lib/query-client'
 import VisualEditAgent from '@/lib/VisualEditAgent'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -19,10 +20,22 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
+const pageVariants = {
+  initial: { opacity: 0, x: 16 },
+  animate: { opacity: 1, x: 0, transition: { duration: 0.22, ease: 'easeOut' } },
+  exit: { opacity: 0, x: -16, transition: { duration: 0.18, ease: 'easeIn' } },
+};
+
+const AnimatedPage = ({ children }) => (
+  <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+    {children}
+  </motion.div>
+);
+
 const AuthenticatedApp = () => {
   const { isLoadingAuth, authError } = useAuth();
+  const location = useLocation();
 
-  // Só mostra loading se ainda está checando auth (breve)
   if (isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-white">
@@ -31,32 +44,32 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Usuário não registrado no app
   if (authError?.type === 'user_not_registered') {
     return <UserNotRegisteredError />;
   }
 
-  // Renderiza a app normalmente (app pública - não bloqueia por outros erros)
   return (
-    <Routes>
-      <Route path="/" element={
-        <LayoutWrapper currentPageName={mainPageKey}>
-          <MainPage />
-        </LayoutWrapper>
-      } />
-      {Object.entries(Pages).map(([path, Page]) => (
-        <Route
-          key={path}
-          path={`/${path}`}
-          element={
-            <LayoutWrapper currentPageName={path}>
-              <Page />
-            </LayoutWrapper>
-          }
-        />
-      ))}
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={
+          <LayoutWrapper currentPageName={mainPageKey}>
+            <AnimatedPage><MainPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        {Object.entries(Pages).map(([path, Page]) => (
+          <Route
+            key={path}
+            path={`/${path}`}
+            element={
+              <LayoutWrapper currentPageName={path}>
+                <AnimatedPage><Page /></AnimatedPage>
+              </LayoutWrapper>
+            }
+          />
+        ))}
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </AnimatePresence>
   );
 };
 

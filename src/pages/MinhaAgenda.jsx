@@ -76,15 +76,28 @@ function MinhaAgendaContent() {
 
   const updateRequestMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.ServiceRequest.update(id, data),
+    onMutate: async ({ id, data }) => {
+      await queryClient.cancelQueries({ queryKey: ['serviceRequests', user?.id] });
+      const previous = queryClient.getQueryData(['serviceRequests', user?.id]);
+      queryClient.setQueryData(['serviceRequests', user?.id], (old) =>
+        (old || []).map((r) => r.id === id ? { ...r, ...data } : r)
+      );
+      return { previous };
+    },
     onSuccess: (updatedRequest) => {
-      queryClient.invalidateQueries({ queryKey: ['serviceRequests'] });
       toast.success(`Solicitação ${updatedRequest.status.toLowerCase()} com sucesso!`);
       setIsModalOpen(false);
       setSelectedRequest(null);
     },
-    onError: (error) => {
+    onError: (error, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(['serviceRequests', user?.id], context.previous);
+      }
       toast.error("Erro ao atualizar solicitação.", { description: error.message });
-    }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['serviceRequests'] });
+    },
   });
 
   const handleConfirm = (id) => {

@@ -30,6 +30,7 @@ import PageViewTracker from "./components/analytics/PageViewTracker";
 import AccessLogger from "./components/auth/AccessLogger";
 import SupportChat from "./components/support/SupportChat";
 import FeedbackCollector from "./components/feedback/FeedbackCollector";
+import BottomNav from "./components/BottomNav";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
@@ -158,7 +159,7 @@ export default function Layout({ children, currentPageName }) {
             }
           `}</style>
 
-          <nav className="bg-white shadow-md sticky top-0 z-50">
+          <nav className="bg-white shadow-md sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-4 py-4 flex items-center justify-between">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0" data-testid="nav-logo-link">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience Logo" className="h-10 shrink-0" />
@@ -246,9 +247,9 @@ export default function Layout({ children, currentPageName }) {
             }
           </nav>
 
-          <main id="main-content">{children}</main>
+          <main id="main-content" className="pb-16 md:pb-0">{children}</main>
 
-          <footer className="bg-slate-900 text-white py-8 mt-16">
+          <footer className="bg-slate-900 text-white py-8 mt-16 pb-safe" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
               <div className="flex justify-center gap-4 mb-4">
                 <Link to={createPageUrl("PoliticaPrivacidade")} className="text-sm text-slate-400 hover:text-white" data-testid="footer-privacy-link">
@@ -265,6 +266,7 @@ export default function Layout({ children, currentPageName }) {
           <OfflineIndicator />
           <CookieConsent />
         </div>
+        <BottomNav />
         <SupportChat />
         <FeedbackCollector />
       </ErrorBoundary>);
@@ -297,7 +299,7 @@ export default function Layout({ children, currentPageName }) {
           @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
         `}</style>
 
-        <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors">
+        <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
