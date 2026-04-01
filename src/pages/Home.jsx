@@ -239,10 +239,10 @@ export default function HomePage() {
                 aria-label="Buscar serviços"
               />
               <Link to={createPageUrl("ServicosCategoria", `?q=${searchQuery}`)}>
-                <Button className="rounded-l-none h-12 bg-[var(--primary)] min-w-[80px]" aria-label="Buscar">
-                    <Search className="w-5 h-5 mr-1" />
-                    Buscar
-                </Button>
+              <Button className="rounded-l-none h-12 bg-[var(--primary)] min-w-[80px]" aria-label={`Buscar serviços: ${searchQuery || 'todos'}`}>
+                  <Search className="w-5 h-5 mr-1" aria-hidden="true" />
+                  <span>Buscar</span>
+              </Button>
               </Link>
             </div>
             
@@ -424,8 +424,8 @@ export default function HomePage() {
             <p className="text-orange-50 mb-5 text-sm md:text-base">
               Precisa de um serviço com urgência? Entre em contato e encontraremos alguém disponível agora.
             </p>
-            <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-orange-50" data-testid="home-ajuda-urgente-button">
-              <Phone className="w-5 h-5 mr-2" />
+            <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-orange-50 font-semibold" data-testid="home-ajuda-urgente-button" aria-label="Solicitar serviço urgente agora">
+              <Phone className="w-5 h-5 mr-2" aria-hidden="true" />
               Solicitar Agora
             </Button>
           </CardContent>

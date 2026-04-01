@@ -24,6 +24,7 @@ export default function BannerCategorias() {
                       key={i} 
                       to={createPageUrl("ServicosCategoria", `?cat=${cat.name}`)}
                       className="group flex flex-col items-center gap-1.5 text-center min-w-0"
+                      aria-label={`Ver serviços de ${cat.name} em Trancoso`}
                     >
                          <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out group-hover:bg-[var(--secondary)] group-hover:-translate-y-1 group-hover:shadow-lg shrink-0">
                            <div className="text-gray-600 transition-colors duration-300 group-hover:text-white">

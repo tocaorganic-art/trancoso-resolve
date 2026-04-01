@@ -162,7 +162,7 @@ export default function Layout({ children, currentPageName }) {
           <nav className="bg-white shadow-md sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience Logo" className="h-9 shrink-0" />
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/322d721b1_tocaapresenta.jpg" alt="Trancoso Experience - Serviços em Trancoso, Bahia" className="h-9 shrink-0" width="36" height="36" loading="eager" fetchpriority="high" />
                 <span className="font-bold text-sm md:text-lg text-slate-800 truncate hidden xs:inline sm:inline">Trancoso Experience</span>
               </Link>
 
