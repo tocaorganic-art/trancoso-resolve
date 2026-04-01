@@ -85,6 +85,7 @@ export default function ServicosCategoriaPage() {
   const [priceFilter, setPriceFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
+  const [neighborhoodFilter, setNeighborhoodFilter] = useState("all");
   const [isSearching, setIsSearching] = useState(false);
   const [aiFilteredProviderIds, setAiFilteredProviderIds] = useState(null);
   const [viewMode, setViewMode] = useState('list');
@@ -101,6 +102,8 @@ export default function ServicosCategoriaPage() {
       }
       return matchesCategory && matchesSearch;
     });
+
+    const neighborhoods = [...new Set(baseFiltered.map(p => p.location?.neighborhood).filter(Boolean))].sort();
 
     return {
       price: {
@@ -119,7 +122,8 @@ export default function ServicosCategoriaPage() {
         all: baseFiltered.length,
         'Disponível': baseFiltered.filter(p => p.availability === 'Disponível').length,
         'Ocupado': baseFiltered.filter(p => p.availability === 'Ocupado').length,
-      }
+      },
+      neighborhoods,
     };
   }, [providers, selectedCategory, searchQuery, aiFilteredProviderIds]);
 
@@ -191,9 +195,10 @@ export default function ServicosCategoriaPage() {
     const matchesPrice = priceFilter === "all" || provider.price_range === priceFilter;
     const matchesRating = ratingFilter === "all" || (provider.rating && provider.rating >= parseFloat(ratingFilter));
     const matchesAvailability = availabilityFilter === "all" || provider.availability === availabilityFilter;
+    const matchesNeighborhood = neighborhoodFilter === "all" || provider.location?.neighborhood === neighborhoodFilter;
     
-    return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability;
-  }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter]);
+    return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability && matchesNeighborhood;
+  }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter, neighborhoodFilter]);
   
   const locations = useMemo(() => filteredProviders
     .filter(p => p.location?.lat && p.location?.lng)
@@ -238,7 +243,7 @@ export default function ServicosCategoriaPage() {
     }
     
     if (filteredProviders.length === 0) {
-        const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || searchQuery.trim() !== '';
+        const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '';
         return (
           <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
             <div className="w-16 h-16 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
@@ -383,7 +388,21 @@ export default function ServicosCategoriaPage() {
               </SelectContent>
             </Select>
 
-            {(priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || searchQuery.trim() !== '') && (
+            <Select value={neighborhoodFilter} onValueChange={setNeighborhoodFilter}>
+              <SelectTrigger aria-label="Filtrar por bairro">
+                <SelectValue placeholder="Bairro / Região" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  <span className="flex items-center gap-2"><Navigation className="w-3 h-3" /> Toda Trancoso</span>
+                </SelectItem>
+                {filterCounts.neighborhoods?.map(n => (
+                  <SelectItem key={n} value={n}>{n}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {(priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '') && (
               <Button
                 variant="outline"
                 onClick={() => {
@@ -391,6 +410,7 @@ export default function ServicosCategoriaPage() {
                   setPriceFilter('all');
                   setRatingFilter('all');
                   setAvailabilityFilter('all');
+                  setNeighborhoodFilter('all');
                 }}
                 className="gap-2 text-slate-600"
                 aria-label="Limpar todos os filtros"

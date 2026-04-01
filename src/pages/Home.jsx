@@ -20,15 +20,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 const categoryImageMap = {
   // Categorias do enum: Limpeza, Garçom, Pedreiro, Jardinagem, Babá, Eletricista, Encanador, Pintor, Cozinheiro, Outro
-  'Limpeza': 'https://images.unsplash.com/photo-1527515637462-cff94edd56f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Limpeza': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/inigQzgVMUPeKrkL.png',
   'Garçom': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Pedreiro': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Jardinagem': 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Jardinagem': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/MmnYpPgxNHhyniba.png',
   'Babá': 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Eletricista': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Encanador': 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Eletricista': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/loNdoqfPbYrpiZUY.png',
+  'Encanador': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/SzIYzgzmeNbfcRvv.png',
   'Pintor': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Cozinheiro': 'https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Cozinheiro': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/XKIqXQfxYpLpcnsh.png',
   'Outro': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   // Categorias extras para compatibilidade
   'Construção': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -109,7 +109,7 @@ const ProviderSkeletonCard = () => (
 const isValidImageUrl = (url) => {
   if (!url || typeof url !== 'string') return false;
   // Verifica se é uma URL válida de imagem
-  const validDomains = ['unsplash.com', 'images.unsplash.com', 'storage.googleapis.com', 'base44.com', 'ui-avatars.com'];
+  const validDomains = ['unsplash.com', 'images.unsplash.com', 'storage.googleapis.com', 'base44.com', 'ui-avatars.com', 'manuscdn.com'];
   try {
     const urlObj = new URL(url);
     return validDomains.some(domain => urlObj.hostname.includes(domain));
