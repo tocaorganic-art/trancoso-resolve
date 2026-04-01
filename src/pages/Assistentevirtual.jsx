@@ -24,6 +24,7 @@ export default function AssistentevirtualPage() {
   });
 
   const [activeConversationId, setActiveConversationId] = useState(null);
+  const [mobileView, setMobileView] = useState('list');
 
   useEffect(() => {
     if (!activeConversationId && conversations && conversations.length > 0) {
@@ -86,9 +87,6 @@ export default function AssistentevirtualPage() {
     );
   }
   
-  // Mobile: se tiver conversa ativa, mostra o chat; senão mostra a lista
-  const [mobileView, setMobileView] = useState('list'); // 'list' | 'chat'
-
   const handleSelectConversation = (id) => {
     setActiveConversationId(id);
     setMobileView('chat');
