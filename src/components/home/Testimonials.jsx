@@ -8,7 +8,7 @@ const testimonials = [
     role: 'Cliente de São Paulo',
     avatar: 'https://i.pravatar.cc/150?img=1',
     rating: 5,
-    comment: 'Contratei um serviço de limpeza de última hora e foi impecável. O prestador era verificado e super profissional. O MeAjudaToca salvou minhas férias!'
+    comment: 'Contratei um serviço de limpeza de última hora e foi impecável. O prestador era verificado e super profissional. O Trancoso Resolve salvou minhas férias!'
   },
   {
     name: 'Carlos F.',
