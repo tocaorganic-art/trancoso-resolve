@@ -94,8 +94,8 @@ export default function PlanosPage() {
       name: 'Básico',
       description: 'Ideal para começar e ter sua presença na plataforma.',
       monthly_price: 29.90,
-      price_id: 'price_1TH9z4RjscpJTwpu6QhaOLe0',
-      features: ["Listagem de serviços básica", "Até 3 categorias", "Suporte por e-mail", "Perfil verificado", "Estatísticas básicas"],
+      price_id: 'price_1THbrjRjscpJTwpuwIGQy2Pq',
+      features: ["Listagem de serviços básica", "Até 3 categorias", "Suporte por e-mail", "Perfil verificado", "Estatísticas básicas", "Comissão de 10% por serviço realizado"],
       is_featured: false,
       color_theme: "#6c757d",
     },
@@ -104,7 +104,7 @@ export default function PlanosPage() {
       name: 'Profissional',
       description: "Recursos avançados para prestadores que buscam crescimento.",
       monthly_price: 69.90,
-      price_id: 'price_1TH9z4RjscpJTwpuZSUTzRnC',
+      price_id: 'price_1THbrjRjscpJTwpu4ew1zIlQ',
       features: [
         'Listagem de serviços destacada',
         'Até 8 categorias',
@@ -122,7 +122,7 @@ export default function PlanosPage() {
       name: 'Premium',
       description: "O pacote completo para dominar o mercado local.",
       monthly_price: 119.90,
-      price_id: 'price_1TH9z4RjscpJTwpuDmT5w6UA',
+      price_id: 'price_1THbrpRjscpJTwpuVjfHmxyq',
       features: [
         'Listagem de serviços premium',
         'Categorias ilimitadas',
@@ -152,7 +152,7 @@ export default function PlanosPage() {
             <Check className="h-4 w-4 !text-green-700" />
             <AlertTitle className="text-green-800">Pagamento realizado com sucesso!</AlertTitle>
             <AlertDescription className="text-green-700">
-              Sua assinatura foi ativada. Bem-vindo ao Trancoso Experience!
+              Sua assinatura foi ativada. Bem-vindo ao Trancoso Resolve!
             </AlertDescription>
           </Alert>
         )}
