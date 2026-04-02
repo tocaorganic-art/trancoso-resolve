@@ -267,7 +267,7 @@ function MeuPerfilPrestadorContent() {
     
     if (!formData.phone || formData.phone.trim() === '') {
       newErrors.phone = 'Telefone de contato é obrigatório.';
-    } else if (!/^\(\d{2}\)\s\d{4,5}-\d{4}$/.test(formData.phone)) {
+    } else if (!/^\(\d{2}\) \d{4,5}-\d{4}$/.test(formData.phone)) {
       newErrors.phone = 'Telefone inválido. Use o formato (XX) XXXXX-XXXX.';
     }
     
@@ -396,7 +396,7 @@ function MeuPerfilPrestadorContent() {
                 <Input 
                   id="phone" 
                   value={formatPhoneNumber(formData.phone)} 
-                  onChange={(e) => handleInputChange('phone', e.target.value)} 
+                  onChange={(e) => handleInputChange('phone', formatPhoneNumber(e.target.value))} 
                   placeholder="(73) 99999-9999"
                   className={errors.phone ? 'border-red-500' : ''}
                 />
