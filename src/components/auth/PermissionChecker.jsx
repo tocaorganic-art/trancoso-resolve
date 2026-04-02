@@ -109,27 +109,10 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     return null;
   }
 
-  // Unauthorized (não logado)
+  // Unauthorized (não logado) — redireciona automaticamente para login
   if (permissionStatus === 'unauthorized') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50">
-        <Card className="w-full max-w-md border-red-200">
-          <CardContent className="p-8 text-center">
-            <Shield className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Acesso Negado</h2>
-            <p className="text-slate-600 mb-4">{errorDetails?.details}</p>
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-              <p className="text-xs text-red-800 font-mono">
-                Código: {errorDetails?.code}
-              </p>
-            </div>
-            <Button onClick={() => base44.auth.redirectToLogin(window.location.pathname)} className="w-full">
-              Fazer Login
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    base44.auth.redirectToLogin(window.location.pathname);
+    return null;
   }
 
   // Forbidden (logado mas sem permissão)
@@ -164,34 +147,10 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     );
   }
 
-  // Error
+  // Error de autenticação — redireciona para login
   if (permissionStatus === 'error') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
-        <Card className="w-full max-w-md border-red-200">
-          <CardContent className="p-8 text-center">
-            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Erro de Autenticação</h2>
-            <p className="text-slate-600 mb-4">{errorDetails?.details}</p>
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-              <p className="text-xs text-red-800 font-mono">
-                Código: {errorDetails?.code}
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button onClick={() => refetch()} variant="outline" className="flex-1">
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Tentar Novamente
-              </Button>
-              <Button onClick={() => base44.auth.logout()} variant="destructive" className="flex-1">
-                <LogOut className="w-4 h-4 mr-2" />
-                Sair e Relogar
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    base44.auth.redirectToLogin(window.location.pathname);
+    return null;
   }
 
   // Authorized - render children
