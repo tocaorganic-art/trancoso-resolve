@@ -8,37 +8,37 @@ import LazyImage from '@/components/ui/LazyImage';
 const banners = [
   {
     id: 1,
-    title: "MeAjudaToca agora em Trancoso!",
-    subtitle: "Conectando você aos melhores prestadores de serviços da região.",
-    cta: "Explore Serviços",
+    title: "Trancoso Resolve — Serviços com Confiança",
+    subtitle: "Conectando você aos melhores prestadores verificados da região.",
+    cta: "Explorar Serviços",
     ctaLink: "/ServicosCategoria",
     bgColor: "linear-gradient(135deg, #0A81D1 0%, #0D8A6F 100%)",
     image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   {
     id: 2,
-    title: "Ganhe R$ 30 OFF no primeiro serviço",
-    subtitle: "Use o código BEMVINDO30 ao agendar com qualquer prestador.",
-    cta: "Aproveitar Agora",
-    ctaLink: "/ServicosCategoria",
+    title: "🎉 Oferta de Lançamento — Vagas Limitadas!",
+    subtitle: "Os 50 primeiros prestadores cadastrados têm 3 meses de gratuidade na plataforma.",
+    cta: "Quero Participar",
+    ctaLink: "/SejaPrestador",
     bgColor: "linear-gradient(135deg, #F4D35E 0%, #F95738 100%)",
-    image: "https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-  },
-  {
-    id: 3,
-    title: "Seja um Prestador Premium",
-    subtitle: "3 meses grátis no plano Premium para os 50 primeiros cadastros.",
-    cta: "Cadastre-se Agora",
-    ctaLink: "/CadastroTipo",
-    bgColor: "linear-gradient(135deg, #0D8A6F 0%, #2D3047 100%)",
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   {
+    id: 3,
+    title: "Sem mensalidade. Só 20% por serviço.",
+    subtitle: "Cadastre-se gratuitamente e pague apenas quando realizar um serviço.",
+    cta: "Seja um Prestador",
+    ctaLink: "/SejaPrestador",
+    bgColor: "linear-gradient(135deg, #0D8A6F 0%, #2D3047 100%)",
+    image: "https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+  },
+  {
     id: 4,
-    title: "Baixe nosso aplicativo",
-    subtitle: "Serviços mesmo offline, perfeito para Trancoso. Disponível em breve!",
-    cta: "Saiba Mais",
-    ctaLink: "#",
+    title: "Profissionais Verificados em Trancoso",
+    subtitle: "Faxina, eletricista, jardinagem, cozinheiro e muito mais — tudo num só lugar.",
+    cta: "Ver Profissionais",
+    ctaLink: "/ServicosCategoria",
     bgColor: "linear-gradient(135deg, #2D3047 0%, #0A81D1 100%)",
     image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   }
