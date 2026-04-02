@@ -1,189 +1,61 @@
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Loader2, AlertCircle, Check, Zap } from "lucide-react";
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { cn } from "@/lib/utils";
-import { createCheckoutSession } from "@/functions/createCheckoutSession";
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check, Percent } from "lucide-react";
 
-const PlanCard = ({ plan, isCurrentPlan }) => {
-  const [loading, setLoading] = useState(false);
-  const isFeatured = plan.is_featured;
-
-  const handleCheckout = async () => {
-    // Bloqueia checkout dentro de iframe (preview)
-    if (window.self !== window.top) {
-      alert("O checkout só funciona no app publicado. Abra o link do app em uma nova aba para testar o pagamento.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await createCheckoutSession({
-        price_id: plan.price_id,
-        plan_name: plan.name,
-      });
-      if (res.data?.url) {
-        window.location.href = res.data.url;
-      }
-    } catch (err) {
-      alert("Erro ao iniciar pagamento. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Card 
-        className={cn(
-            "flex flex-col shadow-lg transition-all hover:shadow-xl hover:-translate-y-2",
-            isFeatured && "scale-105 ring-2",
-            isCurrentPlan ? "bg-slate-50" : "bg-white"
-        )}
-        style={{ borderColor: isFeatured ? plan.color_theme : undefined }}
-    >
-        <CardHeader className="relative text-center p-6" style={{ backgroundColor: isFeatured ? plan.color_theme : (isCurrentPlan ? '#e2e8f0' : '#f8fafc')}}>
-            {isFeatured && <Badge className="absolute -top-3 right-5 bg-yellow-400 text-black">Mais Popular</Badge>}
-            <h2 className={cn("text-2xl font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>{plan.name}</h2>
-            
-            <div className={cn("font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>
-                <span className="text-4xl">R${plan.monthly_price.toFixed(2).split('.')[0]}</span>
-                <span className="text-2xl">,{plan.monthly_price.toFixed(2).split('.')[1]}</span>
-                <span className="text-base font-normal">/mês</span>
-            </div>
-        </CardHeader>
-
-        <CardContent className="flex-grow p-6 space-y-4">
-            <p className="text-slate-600 text-sm h-12">{plan.description}</p>
-            
-            <ul className="space-y-3 text-slate-700">
-                {(plan.features || []).map((feature, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                        <Check className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                        <span>{feature}</span>
-                    </li>
-                ))}
-            </ul>
-        </CardContent>
-
-        <CardFooter className="p-6">
-            <Button 
-                className="w-full gap-2" 
-                variant={isFeatured ? 'default' : 'outline'}
-                style={{ backgroundColor: isFeatured ? plan.color_theme : undefined }}
-                onClick={handleCheckout}
-                disabled={loading}
-            >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
-                {isCurrentPlan ? "Seu Plano Atual" : "Assinar Agora"}
-            </Button>
-        </CardFooter>
-    </Card>
-  );
-};
+const beneficios = [
+  "Acesso completo à plataforma",
+  "Perfil verificado e listagem ativa",
+  "Agenda e gestão de solicitações",
+  "Suporte por e-mail",
+  "Estatísticas de desempenho",
+  "Sem mensalidade fixa",
+];
 
 export default function PlanosPage() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const paymentSuccess = urlParams.get('success') === 'true';
-  const paymentCancelled = urlParams.get('cancelled') === 'true';
-
-  const allPlans = [
-    {
-      id: 'basic',
-      name: 'Básico',
-      description: 'Ideal para começar e ter sua presença na plataforma.',
-      monthly_price: 29.90,
-      price_id: 'price_1THbrjRjscpJTwpuwIGQy2Pq',
-      features: ["Listagem de serviços básica", "Até 3 categorias", "Suporte por e-mail", "Perfil verificado", "Estatísticas básicas", "Comissão de 10% por serviço realizado"],
-      is_featured: false,
-      color_theme: "#6c757d",
-    },
-    {
-      id: 'pro',
-      name: 'Profissional',
-      description: "Recursos avançados para prestadores que buscam crescimento.",
-      monthly_price: 69.90,
-      price_id: 'price_1THbrjRjscpJTwpu4ew1zIlQ',
-      features: [
-        'Listagem de serviços destacada',
-        'Até 8 categorias',
-        'Suporte prioritário',
-        'Perfil verificado',
-        'Estatísticas avançadas',
-        'Sem taxa por agendamento',
-        'Destaque nos resultados de busca'
-      ],
-      is_featured: true,
-      color_theme: "#0A81D1",
-    },
-    {
-      id: 'premium',
-      name: 'Premium',
-      description: "O pacote completo para dominar o mercado local.",
-      monthly_price: 119.90,
-      price_id: 'price_1THbrpRjscpJTwpuVjfHmxyq',
-      features: [
-        'Listagem de serviços premium',
-        'Categorias ilimitadas',
-        'Suporte 24/7',
-        'Perfil verificado e destacado',
-        'Estatísticas completas e insights de IA',
-        'Acesso ao assistente de IA',
-        'Ferramentas de marketing'
-      ],
-      is_featured: false,
-      color_theme: "#6366f1",
-    },
-  ];
-
   return (
-    <div className="bg-slate-50 py-12">
-      <div className="container mx-auto max-w-7xl px-4">
+    <div className="bg-slate-50 min-h-screen py-16">
+      <div className="container mx-auto max-w-3xl px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-slate-900 mb-4">Escolha o Plano Ideal para Você</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Impulsione seu negócio em Trancoso com nossos planos personalizados para prestadores de serviço.
+          <h1 className="text-4xl font-extrabold text-slate-900 mb-4">
+            Simples e Transparente
+          </h1>
+          <p className="text-lg text-slate-600 max-w-xl mx-auto">
+            Sem mensalidade. Sem surpresas. Você só paga quando realiza um serviço.
           </p>
         </div>
 
-        {paymentSuccess && (
-          <Alert className="mb-8 max-w-4xl mx-auto bg-green-50 border-green-300">
-            <Check className="h-4 w-4 !text-green-700" />
-            <AlertTitle className="text-green-800">Pagamento realizado com sucesso!</AlertTitle>
-            <AlertDescription className="text-green-700">
-              Sua assinatura foi ativada. Bem-vindo ao Trancoso Resolve!
-            </AlertDescription>
-          </Alert>
-        )}
+        <Card className="shadow-2xl border-2 border-blue-500 overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-10 text-center text-white">
+            <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 rounded-full mb-4">
+              <Percent className="w-12 h-12 text-white" />
+            </div>
+            <h2 className="text-5xl font-extrabold mb-1">20%</h2>
+            <p className="text-xl text-blue-100">de comissão por serviço realizado</p>
+          </div>
 
-        {paymentCancelled && (
-          <Alert className="mb-8 max-w-4xl mx-auto bg-yellow-50 border-yellow-300">
-            <AlertCircle className="h-4 w-4 !text-yellow-700" />
-            <AlertTitle className="text-yellow-800">Pagamento cancelado</AlertTitle>
-            <AlertDescription className="text-yellow-700">
-              Você cancelou o processo de pagamento. Escolha um plano quando estiver pronto.
-            </AlertDescription>
-          </Alert>
-        )}
+          <CardContent className="p-8">
+            <p className="text-slate-600 text-center mb-8">
+              Cadastre-se gratuitamente e comece a receber clientes agora. A plataforma retém 20% do valor do serviço somente após a conclusão.
+            </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start justify-center">
-          {allPlans.map(plan => (
-            <PlanCard 
-              key={plan.id} 
-              plan={plan} 
-              isCurrentPlan={false}
-            />
-          ))}
-        </div>
+            <ul className="space-y-4 mb-8">
+              {beneficios.map((item) => (
+                <li key={item} className="flex items-center gap-3 text-slate-700">
+                  <Check className="w-5 h-5 text-green-500 shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
 
-        <div className="text-center mt-16 pt-12 border-t">
-          <h3 className="text-2xl font-semibold text-slate-800">Ainda com dúvidas?</h3>
-          <p className="text-slate-600 mt-2 mb-6">Nossa equipe está pronta para ajudar a encontrar a melhor solução para você.</p>
-          <Button variant="outline" className="border-cyan-600 text-cyan-600 hover:bg-cyan-50 hover:text-cyan-700">
-            Falar com um Consultor
-          </Button>
-        </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800 text-center">
+              <strong>Exemplo:</strong> Serviço de R$200 → você recebe R$160 e a plataforma retém R$40.
+            </div>
+          </CardContent>
+        </Card>
+
+        <p className="text-center text-slate-500 text-sm mt-8">
+          Dúvidas? Entre em contato com nossa equipe pelo e-mail <strong>contato@trancosoresolve.com.br</strong>
+        </p>
       </div>
     </div>
   );
