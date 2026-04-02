@@ -16,13 +16,14 @@ export default function CadastroTipoPage() {
 
   const updateUserMutation = useMutation({
     mutationFn: (userType) => base44.auth.updateMe({ user_type: userType }),
-    onSuccess: (data) => {
-      queryClient.setQueryData(['currentUser'], data);
-      // Redireciona para a página correta após a seleção
+    onSuccess: async (data) => {
+      // Invalida e recarrega os dados do usuário antes de redirecionar
+      await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      await queryClient.refetchQueries({ queryKey: ['currentUser'] });
       if (data.user_type === 'cliente') {
-        window.location.replace('/Home');
+        window.location.replace('/');
       } else if (data.user_type === 'prestador') {
-        window.location.replace('/Dashboard'); // Dashboard do prestador
+        window.location.replace('/Dashboard');
       }
     },
   });

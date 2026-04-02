@@ -23,6 +23,7 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     },
     retry: 2,
     retryDelay: 1000,
+    staleTime: 0, // Sempre busca dados frescos para verificar permissões
   });
 
   useEffect(() => {
