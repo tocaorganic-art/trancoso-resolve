@@ -35,21 +35,20 @@ export default function CadastroTipoPage() {
     return <div className="text-center py-12">Carregando...</div>;
   }
   
-  // Se o usuário já tiver um tipo definido, redireciona
-  if (user && user.user_type && user.user_type !== 'indefinido') {
-    const targetUrl = user.user_type === 'cliente' 
-      ? '/Home' 
-      : '/Dashboard';
-    window.location.replace(targetUrl);
-    return null; // Evita renderização enquanto redireciona
-  }
+  // Não redireciona automaticamente — permite trocar o tipo
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-cyan-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl text-center shadow-2xl border-none">
         <CardContent className="p-10">
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Bem-vindo(a) ao MeAjudaToca!</h1>
-          <p className="text-slate-600 mb-10 text-lg">Para começar, nos diga como você gostaria de usar a plataforma.</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-4">
+            {user?.user_type && user.user_type !== 'indefinido' ? 'Alterar tipo de conta' : 'Bem-vindo(a) ao Trancoso Resolve!'}
+          </h1>
+          <p className="text-slate-600 mb-10 text-lg">
+            {user?.user_type && user.user_type !== 'indefinido'
+              ? `Você está usando como ${user.user_type === 'cliente' ? 'Cliente' : 'Prestador'}. Deseja trocar?`
+              : 'Para começar, nos diga como você gostaria de usar a plataforma.'}
+          </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card 
