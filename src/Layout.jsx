@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket } from
+  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket, Globe } from
 "lucide-react";
 import ThemeToggle from "./components/ThemeToggle";
 import RoutePreloader from "./components/optimization/RoutePreloader";
@@ -117,7 +117,8 @@ export default function Layout({ children, currentPageName }) {
   { name: "Financeiro", path: createPageUrl("Financeiro"), icon: TrendingUp },
   { name: "Planos", path: createPageUrl("Planos"), icon: CreditCard },
   { name: "Manual", path: createPageUrl("Manual"), icon: FileText },
-  { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket }];
+  { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
+  { name: "Ver Site", path: "/", icon: Globe }];
 
 
   const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat'];
