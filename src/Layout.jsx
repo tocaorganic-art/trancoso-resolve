@@ -302,7 +302,7 @@ export default function Layout({ children, currentPageName }) {
         <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
-              <Link to="/" className="flex items-center gap-2" data-testid="admin-nav-logo-link">
+              <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/607538b94_generated_image.png" alt="Trancoso Resolve Logo" className="h-10" />
                 <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Trancoso Resolve</span>
               </Link>
