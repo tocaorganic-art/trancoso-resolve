@@ -180,7 +180,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
 export default function FilaVerificacaoPage() {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("Aguardando Admin");
+  const [statusFilter, setStatusFilter] = useState("Todos");
   const [selected, setSelected] = useState(null);
   const [reviewOpen, setReviewOpen] = useState(false);
 
@@ -190,9 +190,10 @@ export default function FilaVerificacaoPage() {
   });
 
   const { data: verificacoes, isLoading } = useQuery({
-    queryKey: ["todasVerificacoes", statusFilter],
-    queryFn: () => base44.entities.Verificacao.list("-submission_date", 100),
-    enabled: user?.role === "admin",
+    queryKey: ["todasVerificacoes"],
+    queryFn: () => base44.entities.Verificacao.filter({}, "-created_date", 200),
+    enabled: !!user && user?.role === "admin",
+    staleTime: 0,
   });
 
   const handleAction = async (id, action, motivo) => {
