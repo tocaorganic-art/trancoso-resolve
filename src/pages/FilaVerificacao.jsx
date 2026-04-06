@@ -21,6 +21,7 @@ import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
 const statusConfig = {
   "Em Análise": { color: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
+  "Aguardando Admin": { color: "bg-indigo-100 text-indigo-700 border-indigo-200", icon: ShieldCheck },
   "Pendente": { color: "bg-orange-100 text-orange-700 border-orange-200", icon: AlertTriangle },
   "Verificado": { color: "bg-blue-100 text-blue-700 border-blue-200", icon: BadgeCheck },
   "Rejeitado": { color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
@@ -129,7 +130,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
             )}
 
             {/* Motivo rejeição */}
-            {verificacao.status !== "Verificado" && verificacao.status !== "Rejeitado" && (
+            {["Em Análise", "Aguardando Admin", "Pendente"].includes(verificacao.status) && (
               <div className="space-y-1.5">
                 <Label htmlFor="motivo" className="text-xs text-slate-500 uppercase tracking-wide">
                   Motivo da rejeição (se for rejeitar)
@@ -149,7 +150,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
 
         <DialogFooter className="gap-2">
           <Button variant="outline" onClick={onClose} disabled={isSubmitting}>Fechar</Button>
-          {verificacao.status !== "Verificado" && verificacao.status !== "Rejeitado" && (
+          {["Em Análise", "Aguardando Admin", "Pendente"].includes(verificacao.status) && (
             <>
               <Button
                 variant="destructive"
@@ -179,7 +180,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
 export default function FilaVerificacaoPage() {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("Em Análise");
+  const [statusFilter, setStatusFilter] = useState("Aguardando Admin");
   const [selected, setSelected] = useState(null);
   const [reviewOpen, setReviewOpen] = useState(false);
 
@@ -247,9 +248,10 @@ export default function FilaVerificacaoPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
         {[
           { label: "Em Análise", key: "Em Análise", color: "border-amber-200 bg-amber-50", textColor: "text-amber-700" },
+          { label: "Aguardando Admin", key: "Aguardando Admin", color: "border-indigo-200 bg-indigo-50", textColor: "text-indigo-700" },
           { label: "Pendente", key: "Pendente", color: "border-orange-200 bg-orange-50", textColor: "text-orange-700" },
           { label: "Verificado", key: "Verificado", color: "border-blue-200 bg-blue-50", textColor: "text-blue-700" },
           { label: "Rejeitado", key: "Rejeitado", color: "border-red-200 bg-red-50", textColor: "text-red-700" },
@@ -284,6 +286,7 @@ export default function FilaVerificacaoPage() {
               <SelectContent>
                 <SelectItem value="Todos">Todos os status</SelectItem>
                 <SelectItem value="Em Análise">Em Análise</SelectItem>
+                <SelectItem value="Aguardando Admin">Aguardando Admin</SelectItem>
                 <SelectItem value="Pendente">Pendente</SelectItem>
                 <SelectItem value="Verificado">Verificado</SelectItem>
                 <SelectItem value="Rejeitado">Rejeitado</SelectItem>

@@ -14,7 +14,9 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'verificacao_id e document_url são obrigatórios' }, { status: 400 });
     }
 
-    // Pré-análise por IA
+    console.log(`[analisarDocumento] Iniciando análise para ${user_full_name}, doc_type=${document_type}`);
+
+    // Análise por IA — extrai nome e data de nascimento do documento
     const aiResult = await base44.integrations.Core.InvokeLLM({
       prompt: `Você é um especialista em verificação de documentos brasileiros. Analise a imagem do documento (${document_type}) e extraia as seguintes informações:
 1. Nome completo da pessoa
@@ -25,7 +27,7 @@ Responda APENAS no formato JSON exigido, sem texto adicional.
 
 Nome do usuário cadastrado na plataforma: "${user_full_name}"
 
-Compare o nome extraído com o nome cadastrado e informe se há divergência.`,
+Compare o nome extraído com o nome cadastrado. Considere 100% de correspondência apenas se os nomes forem exatamente iguais (desconsiderando maiúsculas/minúsculas e acentuação mínima). Se houver qualquer diferença, marque name_matches como false e explique na divergence_notes.`,
       file_urls: [document_url],
       response_json_schema: {
         type: "object",
@@ -42,8 +44,11 @@ Compare o nome extraído com o nome cadastrado e informe se há divergência.`,
 
     console.log('[analisarDocumento] AI result:', JSON.stringify(aiResult));
 
-    const nameMatches = aiResult.name_matches && aiResult.document_readable;
-    const newStatus = nameMatches ? "Em Análise" : "Pendente";
+    // Lógica de status:
+    // - 100% correspondência de nome + documento legível → "Aguardando Admin"
+    // - Divergência ou documento ilegível → "Pendente"
+    const nameMatches = aiResult.name_matches === true && aiResult.document_readable === true;
+    const newStatus = nameMatches ? "Aguardando Admin" : "Pendente";
 
     let adminNotes = "";
     if (!aiResult.document_readable) {
@@ -54,7 +59,7 @@ Compare o nome extraído com o nome cadastrado e informe se há divergência.`,
       adminNotes = `✅ IA: Nome confirmado (${aiResult.extracted_name}). Aguardando aprovação manual do admin.`;
     }
 
-    // Atualiza a verificação com os dados da IA usando service role
+    // Atualiza a verificação com os dados da IA
     await base44.asServiceRole.entities.Verificacao.update(verificacao_id, {
       status: newStatus,
       ai_extracted_name: aiResult.extracted_name || "",
@@ -62,6 +67,8 @@ Compare o nome extraído com o nome cadastrado e informe se há divergência.`,
       ai_confidence: aiResult.confidence || 0,
       admin_notes: adminNotes
     });
+
+    console.log(`[analisarDocumento] Status definido como "${newStatus}" para verificacao ${verificacao_id}`);
 
     return Response.json({
       ok: true,

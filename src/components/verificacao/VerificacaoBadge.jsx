@@ -16,14 +16,14 @@ export default function VerificacaoBadge({ verified, size = "sm", showLabel = fa
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className="inline-flex items-center gap-1">
+          <span className="inline-flex items-center gap-2 align-middle" style={{ verticalAlign: "middle" }}>
             <BadgeCheck className={`${sizes[size]} text-blue-500 fill-blue-50 shrink-0`} />
             {showLabel && (
-              <span className="text-xs font-medium text-blue-600">Verificado</span>
+              <span className="text-xs font-semibold text-blue-600 leading-none">Verificado</span>
             )}
           </span>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent side="top">
           <p className="text-xs">Identidade verificada pela plataforma</p>
         </TooltipContent>
       </Tooltip>
