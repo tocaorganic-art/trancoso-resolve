@@ -28,6 +28,7 @@
       "enum": [
         "Pendente",
         "Em An\u00e1lise",
+        "Aguardando Admin",
         "Verificado",
         "Rejeitado"
       ],
@@ -75,7 +76,16 @@
       ]
     },
     "write": {
-      "user_email": "{{user.email}}"
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
     }
   }
 }
