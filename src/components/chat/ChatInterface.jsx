@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Send, Loader2, AlertCircle, Mic, MicOff } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import { toast } from 'sonner';
+import { checkContactData } from '@/lib/contactFilter';
 
 export default function ChatInterface({ conversationId, onConversationUpdate }) {
   const [messages, setMessages] = useState([]);
@@ -100,6 +101,11 @@ export default function ChatInterface({ conversationId, onConversationUpdate }) 
     if (!inputMessage.trim() || sendMessageMutation.isPending) return;
 
     const messageToSend = inputMessage.trim();
+    const { blocked, reason } = checkContactData(messageToSend);
+    if (blocked) {
+      toast.warning(reason, { duration: 6000 });
+      return;
+    }
     setInputMessage('');
     
     try {

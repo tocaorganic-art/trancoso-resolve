@@ -10,6 +10,8 @@ import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { checkContactData } from "@/lib/contactFilter";
+import { toast } from "sonner";
 
 function ConversationList({ conversations, selectedId, onSelect, currentUser }) {
   if (!conversations || conversations.length === 0) {
@@ -125,6 +127,11 @@ function ChatWindow({ conversation, currentUser, onBack }) {
   const handleSend = (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
+    const { blocked, reason } = checkContactData(newMessage.trim());
+    if (blocked) {
+      toast.warning(reason, { duration: 6000 });
+      return;
+    }
     sendMessageMutation.mutate(newMessage.trim());
   };
 
