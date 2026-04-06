@@ -87,8 +87,8 @@ export default function DisponibilidadeEditor({ providerId }) {
 
   const addCustomSlot = (dayKey) => {
     const val = customSlotInput[dayKey]?.trim();
-    if (!val || !/^\d{2}:\d{2}$/.test(val)) {
-      toast.error('Formato inválido. Use HH:MM (ex: 07:30)');
+    if (!val) {
+      toast.error('Selecione um horário antes de adicionar.');
       return;
     }
     setAvailability(prev => {
