@@ -234,6 +234,7 @@ export default function PrestadorPerfilPage() {
                       </div>
                     )}
                   </div>
+                  {/* Telefone e email ocultados — comunicação apenas pelo app */}
 
                   <Badge className={`text-sm ${
                     provider.availability === 'Disponível' ? 'bg-green-100 text-green-800' :

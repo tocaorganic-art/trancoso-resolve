@@ -54,24 +54,34 @@ function MinhaAgendaContent() {
     queryFn: () => base44.auth.me(),
   });
 
+  const { data: myProvider } = useQuery({
+    queryKey: ['myProviderProfile', user?.email],
+    queryFn: async () => {
+      const all = await base44.entities.ServiceProvider.list();
+      return all.find(p => p.created_by === user.email) || null;
+    },
+    enabled: !!user?.email,
+  });
+
+  const providerId = myProvider?.id;
+
   const { data: serviceRequests, isLoading: isLoadingRequests } = useQuery({
-    queryKey: ['serviceRequests', user?.id],
-    queryFn: () => user?.id ? base44.entities.ServiceRequest.filter({ provider_id: user.id }, '-date') : [],
-    enabled: !!user,
+    queryKey: ['serviceRequests', providerId],
+    queryFn: () => base44.entities.ServiceRequest.filter({ provider_id: providerId }, '-date'),
+    enabled: !!providerId,
   });
 
   const { data: services, isLoading: isLoadingServices } = useQuery({
-    queryKey: ['allProviderServices', user?.id],
+    queryKey: ['allProviderServices', providerId],
     queryFn: async () => {
-      if (!user?.id) return [];
-      const providerServices = await base44.entities.ServiceListing.filter({ provider_id: user.id });
+      const providerServices = await base44.entities.ServiceListing.filter({ provider_id: providerId });
       const serviceMap = {};
       providerServices.forEach(s => {
         serviceMap[s.id] = s;
       });
       return serviceMap;
     },
-    enabled: !!user,
+    enabled: !!providerId,
   });
 
   const updateRequestMutation = useMutation({
@@ -250,7 +260,7 @@ function MinhaAgendaContent() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <DisponibilidadeEditor providerId={user?.id} />
+              <DisponibilidadeEditor providerId={providerId} />
             </CardContent>
           </Card>
         </TabsContent>
