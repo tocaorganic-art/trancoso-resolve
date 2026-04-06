@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
@@ -7,11 +7,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import LazyImage from "@/components/ui/LazyImage";
-import { ArrowLeft, Star, MapPin, DollarSign, Clock, Phone, MessageCircle, AlertCircle, Loader2 } from "lucide-react";
+import { ArrowLeft, Star, Clock, MessageCircle, AlertCircle, Loader2, CalendarIcon } from "lucide-react";
+import BookingForm from "@/components/booking/BookingForm";
+import StartChatButton from "@/components/chat/StartChatButton";
 
 export default function ServicoDetalhesPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const serviceId = urlParams.get('id');
+  const [showBooking, setShowBooking] = useState(false);
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -34,6 +37,13 @@ export default function ServicoDetalhesPage() {
       return providers?.[0];
     },
     enabled: !!service?.provider_id,
+  });
+
+  const { data: providerServices } = useQuery({
+    queryKey: ['providerServices', service?.provider_id],
+    queryFn: () => base44.entities.ServiceListing.filter({ provider_id: service.provider_id, active: true }),
+    enabled: !!service?.provider_id,
+    initialData: [],
   });
 
   if (isLoading) {
@@ -84,10 +94,10 @@ export default function ServicoDetalhesPage() {
 
         <Card className="border-none shadow-2xl mb-8">
           <CardContent className="p-8">
-            <div className="flex items-start justify-between mb-6">
+            <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-slate-900 mb-2">{service.title}</h1>
-                <Badge className="bg-cyan-100 text-cyan-800 mb-4">{service.category}</Badge>
+                <Badge className="bg-cyan-100 text-cyan-800">{service.category}</Badge>
               </div>
               <div className="text-right">
                 <p className="text-3xl font-bold text-cyan-600">R$ {service.price.toFixed(2)}</p>
@@ -102,7 +112,7 @@ export default function ServicoDetalhesPage() {
               </div>
             )}
 
-            <div className="prose prose-slate max-w-none mb-8">
+            <div className="prose prose-slate max-w-none mb-6">
               <h3 className="text-xl font-semibold mb-3">O que está incluso:</h3>
               <p className="text-slate-700 whitespace-pre-line">{service.description}</p>
 
@@ -131,7 +141,7 @@ export default function ServicoDetalhesPage() {
                 <div className="flex items-center gap-4 mb-4">
                   <LazyImage
                     src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
-                    alt={`Foto de perfil de ${provider.full_name}, prestador de ${provider.occupation}`}
+                    alt={`Foto de ${provider.full_name}`}
                     className="w-16 h-16 rounded-full object-cover"
                   />
                   <div className="flex-1">
@@ -144,37 +154,54 @@ export default function ServicoDetalhesPage() {
                     </div>
                   </div>
                   <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
-                    <Button variant="outline">Ver Perfil</Button>
+                    <Button variant="outline" size="sm">Ver Perfil</Button>
                   </Link>
                 </div>
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row gap-3 mt-8">
-              {user && provider ? (
-                <>
-                  <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} className="flex-1">
-                    <Button size="lg" className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700">
-                      Agendar Serviço
+            {/* CTA Buttons */}
+            {!showBooking && (
+              <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                {user && provider ? (
+                  <>
+                    <Button
+                      size="lg"
+                      className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
+                      onClick={() => setShowBooking(true)}
+                    >
+                      <CalendarIcon className="w-5 h-5 mr-2" />
+                      Agendar Agora
                     </Button>
-                  </Link>
-                  {provider.phone && (
-                    <Button size="lg" variant="outline" className="flex-1" asChild>
-                      <a href={`https://wa.me/55${provider.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
-                        <MessageCircle className="w-5 h-5 mr-2" />
-                        WhatsApp
-                      </a>
-                    </Button>
-                  )}
-                </>
-              ) : (
-                <Button size="lg" className="w-full" onClick={() => base44.auth.redirectToLogin()}>
-                  Faça login para agendar
-                </Button>
-              )}
-            </div>
+                    <StartChatButton provider={provider} size="lg" className="flex-1" />
+                    {provider.phone && (
+                      <Button size="lg" variant="outline" asChild className="flex-1">
+                        <a href={`https://wa.me/55${provider.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                          <MessageCircle className="w-5 h-5 mr-2" />
+                          WhatsApp
+                        </a>
+                      </Button>
+                    )}
+                  </>
+                ) : (
+                  <Button size="lg" className="w-full" onClick={() => base44.auth.redirectToLogin()}>
+                    Faça login para agendar
+                  </Button>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
+
+        {/* Booking Form inline */}
+        {showBooking && provider && (
+          <BookingForm
+            provider={provider}
+            services={providerServices}
+            user={user}
+            onCancel={() => setShowBooking(false)}
+          />
+        )}
       </div>
     </div>
   );
