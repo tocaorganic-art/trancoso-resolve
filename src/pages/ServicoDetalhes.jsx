@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import LazyImage from "@/components/ui/LazyImage";
-import { ArrowLeft, Star, Clock, MessageCircle, AlertCircle, Loader2, CalendarIcon } from "lucide-react";
+import { ArrowLeft, Star, Clock, AlertCircle, Loader2, CalendarIcon } from "lucide-react";
 import BookingForm from "@/components/booking/BookingForm";
 import StartChatButton from "@/components/chat/StartChatButton";
 
@@ -76,11 +76,12 @@ export default function ServicoDetalhesPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="relative h-64 md:h-96 bg-gradient-to-r from-cyan-500 to-blue-600">
-        <LazyImage
+      <div className="relative h-48 md:h-72 bg-gradient-to-r from-cyan-500 to-blue-600 overflow-hidden">
+        <img
           src={imageSrc}
           alt={`Imagem de capa do serviço: ${service.title}`}
           className="absolute inset-0 w-full h-full object-cover opacity-30"
+          onError={e => { e.target.style.display = 'none'; }}
         />
       </div>
 
@@ -174,14 +175,6 @@ export default function ServicoDetalhesPage() {
                       Agendar Agora
                     </Button>
                     <StartChatButton provider={provider} size="lg" className="flex-1" />
-                    {provider.phone && (
-                      <Button size="lg" variant="outline" asChild className="flex-1">
-                        <a href={`https://wa.me/55${provider.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
-                          <MessageCircle className="w-5 h-5 mr-2" />
-                          WhatsApp
-                        </a>
-                      </Button>
-                    )}
                   </>
                 ) : (
                   <Button size="lg" className="w-full" onClick={() => base44.auth.redirectToLogin()}>

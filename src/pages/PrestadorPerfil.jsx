@@ -16,8 +16,8 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import LazyImage from "@/components/ui/LazyImage";
 import {
-  ArrowLeft, Star, MapPin, Phone, Mail, Award, Clock,
-  DollarSign, MessageCircle, CheckCircle, Calendar as CalendarIcon, Images, PartyPopper, ChevronRight, Check
+  ArrowLeft, Star, MapPin, Award, Clock,
+  DollarSign, CheckCircle, Calendar as CalendarIcon, Images, PartyPopper, ChevronRight, Check
 } from "lucide-react";
 import { toast } from "sonner";
 import StarRating from "@/components/reviews/StarRating";
@@ -221,26 +221,6 @@ export default function PrestadorPerfilPage() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 text-sm">
-                    {provider.phone && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Phone className="w-4 h-4" />
-                        {isUserLoaded && user ? (
-                          <span>{provider.phone}</span>
-                        ) : (
-                          <span className="italic text-slate-500">Faça login para ver</span>
-                        )}
-                      </div>
-                    )}
-                    {provider.email && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Mail className="w-4 h-4" />
-                         {isUserLoaded && user ? (
-                          <span>{provider.email}</span>
-                        ) : (
-                          <span className="italic text-slate-500">Faça login para ver</span>
-                        )}
-                      </div>
-                    )}
                     {provider.location?.city && (
                       <div className="flex items-center gap-2 text-slate-600">
                         <MapPin className="w-4 h-4" />
@@ -276,27 +256,19 @@ export default function PrestadorPerfilPage() {
 
             <div className="p-8">
               <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
-                <Button
-                  size="lg"
-                  className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
-                  onClick={() => { setShowRequestForm(true); setBookingSuccess(false); setStep(1); }}
-                  aria-label="Agendar um serviço com o prestador"
-                  disabled={!isUserLoaded}
-                >
-                  <CalendarIcon className="w-5 h-5 mr-2" />
-                  {user ? "Agendar Serviço" : "Faça login para Agendar"}
-                </Button>
-                {isUserLoaded && user && (
-                  <StartChatButton provider={provider} className="flex-1" size="lg" />
-                )}
-                {isUserLoaded && user && provider.phone && (
-                  <Button size="lg" variant="outline" asChild className="flex-1 border-slate-300 text-slate-700">
-                    <a href={`https://wa.me/55${provider.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                      <MessageCircle className="w-5 h-5 mr-2" />
-                      WhatsApp
-                    </a>
-                  </Button>
-                )}
+              <Button
+              size="lg"
+              className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
+              onClick={() => { setShowRequestForm(true); setBookingSuccess(false); setStep(1); }}
+              aria-label="Agendar um serviço com o prestador"
+              disabled={!isUserLoaded}
+              >
+              <CalendarIcon className="w-5 h-5 mr-2" />
+              {user ? "Agendar Serviço" : "Faça login para Agendar"}
+              </Button>
+              {isUserLoaded && user && (
+              <StartChatButton provider={provider} className="flex-1" size="lg" />
+              )}
               </div>
             </div>
           </CardContent>
