@@ -3,12 +3,31 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const body = await req.json();
 
-    const { verificacao_id, document_url, document_type, user_full_name } = await req.json();
+    // Suporta dois modos de chamada:
+    // 1. Chamada direta do modal (verificacao_id, document_url, document_type, user_full_name)
+    // 2. Chamada via automação entity (event, data)
+    let verificacao_id, document_url, document_type, user_full_name;
+
+    if (body.event && body.data) {
+      // Chamada via automação
+      const verificacao = body.data;
+      verificacao_id = body.event.entity_id;
+      document_url = verificacao.document_url;
+      document_type = verificacao.document_type;
+      user_full_name = verificacao.user_name;
+    } else {
+      // Chamada direta do modal (requer autenticação)
+      const user = await base44.auth.me();
+      if (!user) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      verificacao_id = body.verificacao_id;
+      document_url = body.document_url;
+      document_type = body.document_type;
+      user_full_name = body.user_full_name;
+    }
 
     if (!verificacao_id || !document_url) {
       return Response.json({ error: 'verificacao_id e document_url são obrigatórios' }, { status: 400 });
@@ -17,7 +36,7 @@ Deno.serve(async (req) => {
     console.log(`[analisarDocumento] Iniciando análise para ${user_full_name}, doc_type=${document_type}`);
 
     // Análise por IA — extrai nome e data de nascimento do documento
-    const aiResult = await base44.integrations.Core.InvokeLLM({
+    const aiResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt: `Você é um especialista em verificação de documentos brasileiros. Analise a imagem do documento (${document_type}) e extraia as seguintes informações:
 1. Nome completo da pessoa
 2. Data de nascimento (formato DD/MM/AAAA)
