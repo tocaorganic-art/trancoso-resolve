@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, Send, ArrowLeft, User, Clock, CheckCheck } from "lucide-react";
+import { MessageCircle, Send, ArrowLeft, User, Clock, CheckCheck, Bell } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { checkContactData } from "@/lib/contactFilter";
 import { toast } from "sonner";
+import { playMessageSound } from "@/components/chat/ChatNotificationSound";
 
 function ConversationList({ conversations, selectedId, onSelect, currentUser }) {
   if (!conversations || conversations.length === 0) {
@@ -88,12 +89,30 @@ function ChatWindow({ conversation, currentUser, onBack }) {
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
   const isClient = conversation.client_email === currentUser?.email;
+  const prevMessageCountRef = useRef(null);
 
   const { data: messages } = useQuery({
     queryKey: ["chatMessages", conversation.id],
     queryFn: () => base44.entities.ChatMessage.filter({ conversation_id: conversation.id }, "created_date", 100),
     refetchInterval: 3000,
   });
+
+  // Som + toast quando chegam mensagens novas de outro usuário
+  useEffect(() => {
+    if (!messages) return;
+    const prev = prevMessageCountRef.current;
+    if (prev !== null && messages.length > prev) {
+      const lastMsg = messages[messages.length - 1];
+      if (lastMsg?.sender_email !== currentUser?.email) {
+        playMessageSound();
+        toast.info(`💬 Nova mensagem de ${lastMsg.sender_name || 'alguém'}`, {
+          description: lastMsg.content?.substring(0, 80),
+          duration: 4000,
+        });
+      }
+    }
+    prevMessageCountRef.current = messages.length;
+  }, [messages]);
 
   const sendMessageMutation = useMutation({
     mutationFn: async (content) => {
