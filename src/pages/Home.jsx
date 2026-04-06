@@ -16,6 +16,7 @@ import {
   Baby, Zap, Star, MapPin, Phone, Grid3x3, AlertCircle, Loader2, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import OnboardingTour from "@/components/onboarding/OnboardingTour";
 
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 const categoryImageMap = {
@@ -218,6 +219,7 @@ export default function HomePage() {
 
   return (
     <div className="bg-slate-50 overflow-x-hidden">
+      <OnboardingTour />
       {/* Hero Section */}
       <div className="bg-white">
         <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-5 md:py-20 px-4 overflow-hidden">
