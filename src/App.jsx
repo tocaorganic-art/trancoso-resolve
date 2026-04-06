@@ -10,6 +10,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import FilaVerificacaoPage from '@/pages/FilaVerificacao';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -67,6 +68,11 @@ const AuthenticatedApp = () => {
             }
           />
         ))}
+        <Route path="/FilaVerificacao" element={
+          <LayoutWrapper currentPageName="FilaVerificacao">
+            <AnimatedPage><FilaVerificacaoPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatePresence>

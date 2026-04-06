@@ -1,0 +1,81 @@
+{
+  "name": "Verificacao",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email do usu\u00e1rio que enviou o documento"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Nome do usu\u00e1rio no momento do envio"
+    },
+    "document_url": {
+      "type": "string",
+      "description": "URL da imagem do documento enviado"
+    },
+    "document_type": {
+      "type": "string",
+      "enum": [
+        "CNH",
+        "RG"
+      ],
+      "description": "Tipo de documento enviado"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Em An\u00e1lise",
+        "Verificado",
+        "Rejeitado"
+      ],
+      "default": "Em An\u00e1lise",
+      "description": "Status da verifica\u00e7\u00e3o"
+    },
+    "submission_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora do envio"
+    },
+    "admin_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es do admin ou da IA"
+    },
+    "ai_extracted_name": {
+      "type": "string",
+      "description": "Nome extra\u00eddo pela IA do documento"
+    },
+    "ai_extracted_dob": {
+      "type": "string",
+      "description": "Data de nascimento extra\u00edda pela IA"
+    },
+    "ai_confidence": {
+      "type": "number",
+      "description": "Confian\u00e7a da an\u00e1lise da IA (0-1)"
+    }
+  },
+  "required": [
+    "user_email",
+    "document_url",
+    "document_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "write": {
+      "user_email": "{{user.email}}"
+    }
+  }
+}

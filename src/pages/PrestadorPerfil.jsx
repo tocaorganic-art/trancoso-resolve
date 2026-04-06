@@ -24,6 +24,7 @@ import StarRating from "@/components/reviews/StarRating";
 import ServiceLocationMap from "@/components/map/ServiceLocationMap";
 import StartChatButton from "@/components/chat/StartChatButton";
 import SlotPicker from "@/components/agenda/SlotPicker";
+import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
 export default function PrestadorPerfilPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -202,10 +203,7 @@ export default function PrestadorPerfilPage() {
                       <p className="text-lg text-cyan-600 font-medium">{provider.occupation}</p>
                     </div>
                     {provider.verified && (
-                      <Badge className="bg-cyan-100 text-cyan-800">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Verificado
-                      </Badge>
+                      <VerificacaoBadge verified showLabel size="md" />
                     )}
                   </div>
 

@@ -12,6 +12,7 @@ import LazyImage from "@/components/ui/LazyImage";
 import ServiceLocationMap from "@/components/map/ServiceLocationMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
+import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
 const ProviderCard = ({ provider }) => (
     <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col">
@@ -29,7 +30,7 @@ const ProviderCard = ({ provider }) => (
                             <p className="text-sm text-slate-600">{provider.occupation}</p>
                         </div>
                         {provider.verified && (
-                            <Badge className="bg-cyan-100 text-cyan-800">✓ Verificado</Badge>
+                            <VerificacaoBadge verified showLabel size="sm" />
                         )}
                     </div>
                     <div className="flex items-center gap-2 mt-2">

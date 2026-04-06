@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, User, Camera, Trash2, PlusCircle, AlertCircle, FileUp, Info } from 'lucide-react';
+import VerificacaoStatusCard from '@/components/verificacao/VerificacaoStatusCard';
+import VerificacaoBadge from '@/components/verificacao/VerificacaoBadge';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
@@ -517,31 +519,12 @@ function MeuPerfilPrestadorContent() {
             </div>
 
             {/* Verificação */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold border-b pb-2">Verificação de Identidade</h3>
-              <Card className="bg-slate-50 border-slate-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                      <Label htmlFor="verification_document">Documento de Verificação (CNH ou RG)</Label>
-                      <p className="text-xs text-slate-500">Envie um documento para receber o selo "Verificado" em seu perfil. Seu documento é confidencial.</p>
-                      {formData.verification_document_url && (
-                        <p className="text-sm text-green-600 mt-2">✅ Documento enviado. Aguardando análise.</p>
-                      )}
-                      {/* Assuming 'verified' status might come from the backend after document analysis */}
-                      {provider?.verified && (
-                        <p className="text-sm text-blue-600 mt-2">🎉 Seu perfil foi verificado!</p>
-                      )}
-                    </div>
-                    <label htmlFor="verification-upload">
-                      <Button variant="outline" asChild className="cursor-pointer">
-                        <span><FileUp className="w-4 h-4 mr-2" /> Enviar Documento</span>
-                      </Button>
-                      <input id="verification-upload" type="file" accept="image/*,application/pdf" className="hidden" onChange={(e) => handleFileUpload(e.target.files[0], 'document')} />
-                    </label>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="space-y-4 pt-2">
+              <h3 className="text-lg font-semibold border-b pb-2 flex items-center gap-2">
+                Verificação de Identidade
+                {provider?.verified && <VerificacaoBadge verified showLabel size="md" />}
+              </h3>
+              {user && <VerificacaoStatusCard user={user} />}
             </div>
 
             {/* Ações */}
