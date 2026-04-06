@@ -9,6 +9,7 @@ import HeroSection from '@/components/sejaprestador/HeroSection';
 import SelosQualidade from '@/components/sejaprestador/SelosQualidade';
 import TabelaComparativa from '@/components/sejaprestador/TabelaComparativa';
 import ChatOnboarding from '@/components/sejaprestador/ChatOnboarding';
+import CalculadoraGanhos from '@/components/sejaprestador/CalculadoraGanhos';
 
 const beneficios = [
   {
@@ -81,6 +82,9 @@ export default function SejaPrestadorPage() {
 
       {/* Testimonials */}
       <Testimonials />
+
+      {/* Calculadora de Ganhos */}
+      <CalculadoraGanhos />
 
       {/* Como Funciona */}
       <section id="como-funciona" className="container mx-auto py-10 md:py-20 px-4 max-w-2xl">
