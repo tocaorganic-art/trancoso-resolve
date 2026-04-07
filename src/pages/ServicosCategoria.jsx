@@ -326,7 +326,7 @@ export default function ServicosCategoriaPage() {
               <Filter className="w-5 h-5 text-slate-600" />
               <h3 className="font-semibold text-slate-900">Filtros</h3>
             </div>
-            <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value)} className="hidden md:flex">
+            <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value)} className="flex">
               <ToggleGroupItem value="list" aria-label="Ver em lista">
                 <List className="h-4 w-4" />
               </ToggleGroupItem>

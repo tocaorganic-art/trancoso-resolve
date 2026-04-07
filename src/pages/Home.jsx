@@ -297,7 +297,7 @@ export default function HomePage() {
             <section className="mb-20">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2"><BrainCircuit className="w-6 h-6 text-purple-600" /> Para Você</h2>
-                    <Link to={createPageUrl("ServicosLista", "?filter=recommended")}>
+                    <Link to={createPageUrl("ServicosCategoria")}>
                         <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700">Ver todos</Button>
                     </Link>
                 </div>
@@ -318,7 +318,7 @@ export default function HomePage() {
         <section className="mb-10 md:mb-20">
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-xl md:text-2xl font-bold text-slate-900">Serviços em Destaque</h2>
-            <Link to={createPageUrl("ServicosLista")} data-testid="home-ver-todos-servicos-link">
+            <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
               <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700" aria-label="Ver todos os serviços">
                 Ver todos
               </Button>
@@ -346,7 +346,7 @@ export default function HomePage() {
                       Estamos selecionando os melhores serviços para você. Enquanto isso, explore nossos profissionais.
                     </p>
                     <Link to={createPageUrl("ServicosCategoria")}>
-                      <Button className="bg-gradient-to-r from-cyan-500 to-blue-600">
+                      <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700">
                         Explorar Profissionais
                       </Button>
                     </Link>
