@@ -51,9 +51,13 @@ Deno.serve(async (req) => {
     });
 
     if (payment.request_id) {
-      await base44.asServiceRole.entities.ServiceRequest.update(payment.request_id, {
-        status: 'Cancelado',
-      });
+      try {
+        await base44.asServiceRole.entities.ServiceRequest.update(payment.request_id, {
+          status: 'Cancelado',
+        });
+      } catch (e) {
+        console.warn(`[cancelarPagamento] Não foi possível atualizar ServiceRequest ${payment.request_id}: ${e.message}`);
+      }
     }
 
     console.log(`[cancelarPagamento] Pagamento ${payment.id} cancelado`);

@@ -26,6 +26,7 @@ Deno.serve(async (req) => {
       amount: amountCents,
       currency: 'brl',
       capture_method: 'manual',
+      payment_method_types: ['card'],
       metadata: {
         base44_app_id: Deno.env.get('BASE44_APP_ID'),
         request_id,

@@ -59,9 +59,13 @@ Deno.serve(async (req) => {
 
     // Atualiza o status da ServiceRequest para Concluído
     if (payment.request_id) {
-      await base44.asServiceRole.entities.ServiceRequest.update(payment.request_id, {
-        status: 'Concluído',
-      });
+      try {
+        await base44.asServiceRole.entities.ServiceRequest.update(payment.request_id, {
+          status: 'Concluído',
+        });
+      } catch (e) {
+        console.warn(`[confirmarServico] Não foi possível atualizar ServiceRequest ${payment.request_id}: ${e.message}`);
+      }
     }
 
     console.log(`[confirmarServico] Pagamento ${payment.id} capturado e ServiceRequest ${payment.request_id} marcada como Concluída`);
