@@ -199,7 +199,7 @@ export default function PrestadorPerfilPage() {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h1 className="text-3xl font-bold text-slate-900 mb-1">{provider.full_name}</h1>
+                      <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1 break-words">{provider.full_name}</h1>
                       <p className="text-lg text-cyan-600 font-medium">{provider.occupation}</p>
                     </div>
                     {provider.verified && (
@@ -258,9 +258,16 @@ export default function PrestadorPerfilPage() {
               <Button
               size="lg"
               className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
-              onClick={() => { setShowRequestForm(true); setBookingSuccess(false); setStep(1); }}
+              onClick={() => {
+                if (!user) {
+                  base44.auth.redirectToLogin(window.location.href);
+                } else {
+                  setShowRequestForm(true);
+                  setBookingSuccess(false);
+                  setStep(1);
+                }
+              }}
               aria-label="Agendar um serviço com o prestador"
-              disabled={!isUserLoaded}
               >
               <CalendarIcon className="w-5 h-5 mr-2" />
               {user ? "Agendar Serviço" : "Faça login para Agendar"}
