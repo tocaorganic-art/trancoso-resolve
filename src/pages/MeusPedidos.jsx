@@ -4,12 +4,14 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Calendar, Info, Star } from 'lucide-react';
+import { Loader2, Calendar, Info, Star, CreditCard, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import ReviewModal from '@/components/reviews/ReviewModal';
+import ConfirmarServicoButton from '@/components/pagamento/ConfirmarServicoButton';
+import StatusPagamentoBadge from '@/components/pagamento/StatusPagamentoBadge';
 
 const statusConfig = {
   Pendente: { color: "bg-yellow-500", text: "Pendente" },
@@ -20,7 +22,7 @@ const statusConfig = {
   Cancelado: { color: "bg-slate-500", text: "Cancelado" },
 };
 
-function RequestCard({ request, provider, onReviewClick, hasReview }) {
+function RequestCard({ request, provider, onReviewClick, hasReview, payment, onPaymentConfirmed }) {
   return (
     <Card className="shadow-md hover:shadow-lg transition-shadow flex flex-col">
       <CardHeader>
@@ -34,19 +36,48 @@ function RequestCard({ request, provider, onReviewClick, hasReview }) {
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="flex-grow">
-        <div className="space-y-3 text-sm">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-slate-500" />
-            <span>{format(new Date(request.date), "PPP", { locale: ptBR })}</span>
-          </div>
-          <p className="text-slate-600 bg-slate-50 p-3 rounded-md border">{request.message || "Nenhuma observação enviada."}</p>
+      <CardContent className="flex-grow space-y-3">
+        <div className="flex items-center gap-2 text-sm">
+          <Calendar className="w-4 h-4 text-slate-500" />
+          <span>{format(new Date(request.date), "PPP", { locale: ptBR })}</span>
         </div>
+        <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-md border">{request.message || "Nenhuma observação enviada."}</p>
+
+        {/* Informações de pagamento */}
+        {payment && (
+          <div className="border rounded-lg p-3 bg-slate-50 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                <CreditCard className="w-4 h-4" />
+                Pagamento
+              </div>
+              <StatusPagamentoBadge status={payment.status} />
+            </div>
+            <div className="text-sm text-slate-600">
+              <span>Total: <strong>R$ {((payment.amount_total || 0) / 100).toFixed(2)}</strong></span>
+            </div>
+            {payment.status === 'requires_capture' && payment.auto_capture_after && (
+              <div className="flex items-center gap-1 text-xs text-amber-700 bg-amber-50 p-2 rounded">
+                <Clock className="w-3 h-3 shrink-0" />
+                Auto-liberação em: {format(new Date(payment.auto_capture_after), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+              </div>
+            )}
+          </div>
+        )}
       </CardContent>
+
+      {/* Botão confirmar serviço (escrow) */}
+      {payment && (
+        <div className="px-6 pb-3">
+          <ConfirmarServicoButton payment={payment} onConfirmed={onPaymentConfirmed} />
+        </div>
+      )}
+
+      {/* Botão avaliação */}
       {(request.status === 'Concluído' || hasReview) && (
         <div className="p-4 pt-0">
-          <Button 
-            className="w-full border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300" 
+          <Button
+            className="w-full border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300"
             variant={hasReview ? "secondary" : "outline"}
             onClick={() => !hasReview && onReviewClick(request, provider)}
             disabled={hasReview}
@@ -74,25 +105,33 @@ export default function MeusPedidosPage() {
     enabled: !!user,
     initialData: [],
   });
-  
-  const { data: reviews, isLoading: isLoadingReviews } = useQuery({
+
+  const { data: reviews } = useQuery({
     queryKey: ['myReviews', user?.id],
     queryFn: () => base44.entities.ServiceReview.filter({ created_by: user.email }),
     enabled: !!user,
     initialData: [],
   });
 
-  const { data: providers, isLoading: isLoadingProviders } = useQuery({
+  const { data: providers } = useQuery({
     queryKey: ['allProviders'],
     queryFn: () => base44.entities.ServiceProvider.list(),
     initialData: [],
   });
 
-  if (isLoadingRequests || isLoadingProviders || isLoadingReviews) {
+  const { data: payments, refetch: refetchPayments } = useQuery({
+    queryKey: ['myPayments', user?.email],
+    queryFn: () => base44.entities.Payment.filter({ client_email: user.email }),
+    enabled: !!user,
+    initialData: [],
+  });
+
+  if (isLoadingRequests) {
     return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin" /></div>;
   }
 
   const reviewedRequestIds = new Set(reviews.map(r => r.request_id));
+  const paymentByRequestId = Object.fromEntries((payments || []).map(p => [p.request_id, p]));
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -107,7 +146,7 @@ export default function MeusPedidosPage() {
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-slate-900">Meus Pedidos</h1>
-          <p className="text-slate-600">Acompanhe e avalie suas solicitações de serviço.</p>
+          <p className="text-slate-600">Acompanhe, confirme e avalie suas solicitações de serviço.</p>
         </div>
       </div>
       <div className="container mx-auto px-4 py-8">
@@ -116,13 +155,16 @@ export default function MeusPedidosPage() {
             {requests.map(req => {
               const provider = providers.find(p => p.id === req.provider_id);
               const hasReview = reviewedRequestIds.has(req.id);
+              const payment = paymentByRequestId[req.id];
               return (
-                <RequestCard 
-                  key={req.id} 
-                  request={req} 
-                  provider={provider} 
+                <RequestCard
+                  key={req.id}
+                  request={req}
+                  provider={provider}
                   hasReview={hasReview}
-                  onReviewClick={(request, provider) => setReviewingRequest({ request, provider })} 
+                  payment={payment}
+                  onPaymentConfirmed={refetchPayments}
+                  onReviewClick={(request, provider) => setReviewingRequest({ request, provider })}
                 />
               );
             })}

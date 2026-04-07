@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import FilaVerificacaoPage from '@/pages/FilaVerificacao';
+import AdminPagamentosPage from '@/pages/AdminPagamentos';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -71,6 +72,11 @@ const AuthenticatedApp = () => {
         <Route path="/FilaVerificacao" element={
           <LayoutWrapper currentPageName="FilaVerificacao">
             <AnimatedPage><FilaVerificacaoPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/AdminPagamentos" element={
+          <LayoutWrapper currentPageName="AdminPagamentos">
+            <AnimatedPage><AdminPagamentosPage /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="*" element={<PageNotFound />} />

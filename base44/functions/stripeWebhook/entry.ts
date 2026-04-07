@@ -21,6 +21,85 @@ Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
 
   try {
+    // ─── Pagamento de Serviço (Payment Intent com captura manual) ───
+    if (event.type === 'payment_intent.amount_capturable_updated') {
+      const pi = event.data.object;
+      const requestId = pi.metadata?.request_id;
+      if (requestId) {
+        const payments = await base44.asServiceRole.entities.Payment.filter({ stripe_payment_intent_id: pi.id });
+        if (payments.length > 0) {
+          await base44.asServiceRole.entities.Payment.update(payments[0].id, { status: 'requires_capture' });
+          console.log(`PaymentIntent ${pi.id} pronto para captura`);
+        }
+      }
+    }
+
+    if (event.type === 'payment_intent.succeeded') {
+      const pi = event.data.object;
+      if (pi.metadata?.request_id) {
+        const payments = await base44.asServiceRole.entities.Payment.filter({ stripe_payment_intent_id: pi.id });
+        if (payments.length > 0 && payments[0].status !== 'captured') {
+          await base44.asServiceRole.entities.Payment.update(payments[0].id, {
+            status: 'captured',
+            stripe_charge_id: pi.latest_charge || null,
+            captured_at: new Date().toISOString(),
+          });
+          console.log(`PaymentIntent ${pi.id} confirmado como capturado via webhook`);
+        }
+      }
+    }
+
+    if (event.type === 'payment_intent.payment_failed') {
+      const pi = event.data.object;
+      if (pi.metadata?.request_id) {
+        const payments = await base44.asServiceRole.entities.Payment.filter({ stripe_payment_intent_id: pi.id });
+        if (payments.length > 0) {
+          await base44.asServiceRole.entities.Payment.update(payments[0].id, {
+            status: 'canceled',
+            notes: `Falha no pagamento: ${pi.last_payment_error?.message || 'desconhecido'}`,
+          });
+        }
+      }
+    }
+
+    if (event.type === 'payment_intent.canceled') {
+      const pi = event.data.object;
+      if (pi.metadata?.request_id) {
+        const payments = await base44.asServiceRole.entities.Payment.filter({ stripe_payment_intent_id: pi.id });
+        if (payments.length > 0) {
+          await base44.asServiceRole.entities.Payment.update(payments[0].id, { status: 'canceled' });
+        }
+      }
+    }
+
+    if (event.type === 'charge.dispute.created') {
+      const dispute = event.data.object;
+      const chargeId = dispute.charge;
+      const payments = await base44.asServiceRole.entities.Payment.filter({ stripe_charge_id: chargeId });
+      if (payments.length > 0) {
+        await base44.asServiceRole.entities.Payment.update(payments[0].id, {
+          status: 'disputed',
+          dispute_reason: dispute.reason,
+        });
+        console.log(`Disputa aberta para charge ${chargeId}: ${dispute.reason}`);
+      }
+    }
+
+    if (event.type === 'account.updated') {
+      const account = event.data.object;
+      const stripeAccounts = await base44.asServiceRole.entities.ProviderStripeAccount.filter({ stripe_account_id: account.id });
+      if (stripeAccounts.length > 0) {
+        await base44.asServiceRole.entities.ProviderStripeAccount.update(stripeAccounts[0].id, {
+          charges_enabled: account.charges_enabled,
+          payouts_enabled: account.payouts_enabled,
+          details_submitted: account.details_submitted,
+          onboarding_status: account.details_submitted ? 'complete' : 'in_progress',
+        });
+        console.log(`Conta Connect ${account.id} atualizada: charges=${account.charges_enabled}`);
+      }
+    }
+
+    // ─── Assinaturas de Planos (lógica existente) ───
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const customerEmail = session.customer_details?.email;
