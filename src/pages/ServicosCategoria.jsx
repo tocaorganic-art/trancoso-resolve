@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import LazyImage from "@/components/ui/LazyImage";
-import ServiceLocationMap from "@/components/map/ServiceLocationMap";
+import ProvidersMap from "@/components/map/ProvidersMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
@@ -201,18 +201,7 @@ export default function ServicosCategoriaPage() {
     return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability && matchesNeighborhood;
   }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter, neighborhoodFilter]);
   
-  const locations = useMemo(() => filteredProviders
-    .filter(p => p.location?.lat && p.location?.lng)
-    .map(p => ({
-        position: [p.location.lat, p.location.lng],
-        popupContent: `
-            <div class="font-sans">
-                <h4 class="font-bold text-sm mb-1">${p.full_name}</h4>
-                <p class="text-xs text-slate-600">${p.occupation}</p>
-                <a href="${createPageUrl("PrestadorPerfil", `?id=${p.id}`)}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 mt-1 block">Ver perfil</a>
-            </div>
-        `
-    })), [filteredProviders]);
+
 
   const renderContent = () => {
     if (isLoadingProviders) {
@@ -286,8 +275,8 @@ export default function ServicosCategoriaPage() {
 
     if (viewMode === 'map') {
         return (
-            <div className="col-span-full h-[600px] md:h-[700px] w-full rounded-lg overflow-hidden shadow-lg">
-                <ServiceLocationMap locations={locations} />
+            <div className="col-span-full">
+                <ProvidersMap providers={filteredProviders} />
             </div>
         );
     }
