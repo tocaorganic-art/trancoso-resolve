@@ -11,7 +11,7 @@ export default function VirtualAssistant() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Olá! 👋 Sou o assistente virtual do TOCA Experience. Estou aqui para ajudá-lo a usar todas as ferramentas da plataforma. Pode me perguntar qualquer coisa sobre:\n\n• Como cadastrar clientes\n• Gerenciar hospedagens\n• Criar eventos\n• Alocar equipes\n• Usar o concierge virtual\n• Controlar finanças\n• E muito mais!\n\nComo posso ajudar você hoje?"
+      content: "Olá! 👋 Sou o assistente virtual da Trancoso Resolve. Estou aqui para ajudá-lo a usar todas as ferramentas da plataforma. Pode me perguntar qualquer coisa sobre:\n\n• Como cadastrar clientes\n• Gerenciar hospedagens\n• Criar eventos\n• Alocar equipes\n• Usar o concierge virtual\n• Controlar finanças\n• E muito mais!\n\nComo posso ajudar você hoje?"
     }
   ]);
   const [input, setInput] = useState("");
@@ -27,7 +27,7 @@ export default function VirtualAssistant() {
 
     try {
       const prompt = `
-Você é o assistente virtual do TOCA Experience, uma plataforma inteligente para gestão de eventos, hospitalidade e serviços de concierge.
+Você é o assistente virtual da Trancoso Resolve, uma plataforma inteligente para encontrar e contratar profissionais verificados em Trancoso, Bahia.
 
 O usuário perguntou: "${userMessage}"
 
