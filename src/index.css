@@ -16,7 +16,7 @@ body::before {
   background-position: center;
   background-size: contain;
   opacity: 1;
-  filter: opacity(0.08) drop-shadow(0 0 32px #60b8f8) sepia(1) saturate(3) hue-rotate(180deg) brightness(1.5);
+  filter: opacity(0.18) drop-shadow(0 0 40px #38bdf8) sepia(1) saturate(4) hue-rotate(185deg) brightness(2);
   z-index: 0;
   pointer-events: none;
 }
