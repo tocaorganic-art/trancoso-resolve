@@ -173,6 +173,7 @@ export default function ChatInterface({ conversationId, onConversationUpdate }) 
               size="icon"
               onClick={toggleVoiceInput}
               disabled={sendMessageMutation.isPending}
+              className="min-w-[44px] min-h-[44px]"
             >
               {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
             </Button>
@@ -180,6 +181,7 @@ export default function ChatInterface({ conversationId, onConversationUpdate }) 
           <Button
             type="submit"
             disabled={!inputMessage.trim() || sendMessageMutation.isPending}
+            className="min-w-[44px] min-h-[44px]"
           >
             {sendMessageMutation.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />

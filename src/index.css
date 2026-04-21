@@ -199,6 +199,16 @@ button:focus-visible {
   }
 }
 
+/* Mobile: minimum touch target sizes for Android */
+@media (max-width: 768px) {
+  button,
+  input,
+  [data-radix-select-trigger],
+  [role="combobox"] {
+    min-height: 44px;
+  }
+}
+
 /* Mobile: prevent accidental text selection on interactive elements */
 button, a, nav, [role="button"], [role="tab"],
 .select-none, svg, img {

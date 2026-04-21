@@ -19,7 +19,7 @@ export default function BottomNav() {
     if (isActive) {
       e.preventDefault();
       navigate(path, { replace: true });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo(0, 0);
     }
   };
 

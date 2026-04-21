@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket, Globe, ShieldCheck, Banknote } from
+  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft } from
 "lucide-react";
 import ThemeToggle from "./components/ThemeToggle";
 import RoutePreloader from "./components/optimization/RoutePreloader";
@@ -34,7 +34,9 @@ import BottomNav from "./components/BottomNav";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isRoot = location.pathname === "/" || location.pathname === "/Home";
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -250,7 +252,26 @@ export default function Layout({ children, currentPageName }) {
             }
           </nav>
 
-          <main id="main-content" className="pb-16 md:pb-0">{children}</main>
+          {/* Mobile-only top bar: logo on root, back button on sub-pages */}
+          <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-slate-200 flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
+            {isRoot ? (
+              <Link to="/" className="flex items-center gap-2">
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve" className="h-8 w-8" />
+                <span className="font-bold text-sm text-slate-800">Trancoso Resolve</span>
+              </Link>
+            ) : (
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center gap-2 text-slate-700 min-w-[44px] min-h-[44px] -ml-1"
+                aria-label="Voltar"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span className="text-sm font-medium">Voltar</span>
+              </button>
+            )}
+          </div>
+
+          <main id="main-content" className="pb-16 md:pb-0 pt-12 md:pt-0">{children}</main>
 
           <footer className="bg-slate-900 text-white py-8 mt-16 pb-safe" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
