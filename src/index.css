@@ -20,6 +20,16 @@ body::before {
   pointer-events: none;
 }
 
+@media (max-width: 768px) {
+  body::before {
+    width: 280px;
+    height: 280px;
+    opacity: 0.04;
+    top: 300px;
+    transform: translateX(-50%);
+  }
+}
+
 
 
 
