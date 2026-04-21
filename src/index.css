@@ -198,3 +198,16 @@ button:focus-visible {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
+
+/* Mobile: prevent accidental text selection on interactive elements */
+button, a, nav, [role="button"], [role="tab"],
+.select-none, svg, img {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Keep text content selectable */
+p, span, h1, h2, h3, h4, h5, h6, li, td, th, label, input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}

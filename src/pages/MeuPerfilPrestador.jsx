@@ -169,11 +169,18 @@ function MeuPerfilPrestadorContent() {
         return base44.entities.ServiceProvider.create(rest);
       }
     },
+    onMutate: async (newData) => {
+      await queryClient.cancelQueries({ queryKey: ['myServiceProvider'] });
+      const previous = queryClient.getQueryData(['myServiceProvider', user?.email]);
+      queryClient.setQueryData(['myServiceProvider', user?.email], newData);
+      return { previous };
+    },
     onSuccess: () => {
       toast.success('Perfil salvo com sucesso!');
       queryClient.invalidateQueries({ queryKey: ['myServiceProvider'] });
     },
-    onError: (error) => {
+    onError: (error, _newData, context) => {
+      if (context?.previous) queryClient.setQueryData(['myServiceProvider', user?.email], context.previous);
       toast.error('Erro ao salvar perfil.', { description: error.message });
     }
   });

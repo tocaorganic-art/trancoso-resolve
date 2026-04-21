@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Home, Grid3x3, Calendar, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +12,16 @@ const navItems = [
 
 export default function BottomNav() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavClick = (e, path) => {
+    const isActive = path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+    if (isActive) {
+      e.preventDefault();
+      navigate(path, { replace: true });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <nav
@@ -25,6 +35,7 @@ export default function BottomNav() {
           <Link
             key={path}
             to={path}
+            onClick={(e) => handleNavClick(e, path)}
             className={cn(
               "select-none flex flex-col items-center justify-center flex-1 py-2 gap-0.5 text-xs transition-colors",
               isActive ? "text-blue-600" : "text-slate-500 hover:text-slate-800"

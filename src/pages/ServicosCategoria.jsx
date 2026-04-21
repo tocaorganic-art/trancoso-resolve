@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import usePullToRefresh from "@/hooks/usePullToRefresh";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -90,11 +91,18 @@ export default function ServicosCategoriaPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [aiFilteredProviderIds, setAiFilteredProviderIds] = useState(null);
   const [viewMode, setViewMode] = useState('list');
+  const queryClient = useQueryClient();
 
   const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
     queryKey: ['serviceProviders'],
     queryFn: () => base44.entities.ServiceProvider.list('-rating'),
   });
+
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['serviceProviders'] });
+  }, [queryClient]);
+
+  const { isPulling, pullDistance, threshold } = usePullToRefresh(handleRefresh);
 
   // Contadores dinâmicos para filtros
   const filterCounts = useMemo(() => {
@@ -286,6 +294,20 @@ export default function ServicosCategoriaPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Pull-to-refresh indicator */}
+      {pullDistance > 10 && (
+        <div
+          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-blue-50 border-b border-blue-200 transition-all"
+          style={{ height: `${Math.min(pullDistance, threshold)}px` }}
+        >
+          <div className={`flex items-center gap-2 text-blue-600 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            {isPulling ? 'Atualizando...' : pullDistance >= threshold ? 'Solte para atualizar' : 'Puxe para atualizar'}
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-8 px-4">
         <div className="container mx-auto max-w-7xl">

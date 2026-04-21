@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,12 +39,25 @@ export default function BookingForm({ provider, services, user, onCancel }) {
     location: { address: '', number: '', complement: '', reference: '', lat: null, lng: null },
   });
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: (payload) => base44.entities.ServiceRequest.create(payload),
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({ queryKey: ['serviceRequests'] });
+      const previous = queryClient.getQueryData(['serviceRequests']);
+      const optimistic = { ...payload, id: 'temp-' + Date.now(), status: 'Pendente' };
+      queryClient.setQueryData(['serviceRequests'], (old) => old ? [optimistic, ...old] : [optimistic]);
+      return { previous };
+    },
     onSuccess: () => {
       setSuccess(true);
+      queryClient.invalidateQueries({ queryKey: ['serviceRequests'] });
     },
-    onError: () => toast.error("Erro ao enviar solicitação. Tente novamente."),
+    onError: (_err, _payload, context) => {
+      if (context?.previous) queryClient.setQueryData(['serviceRequests'], context.previous);
+      toast.error("Erro ao enviar solicitação. Tente novamente.");
+    },
   });
 
   const update = (field, value) => setData(prev => ({ ...prev, [field]: value }));
