@@ -31,9 +31,9 @@ export default function Base44CommandValidator() {
       // Check operations structure
       if (command.operations && Array.isArray(command.operations)) {
         command.operations.forEach((op, idx) => {
-          if (!op.id) issues.push(\`Operação #\${idx + 1} sem campo "id"\`);
+          if (!op.id) issues.push(`Operação #${idx + 1} sem campo "id"`);
           if (!op.actions || !Array.isArray(op.actions)) {
-            issues.push(\`Operação #\${idx + 1} sem campo "actions" (array)\`);
+            issues.push(`Operação #${idx + 1} sem campo "actions" (array)`);
           }
         });
       }
