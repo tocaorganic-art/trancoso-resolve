@@ -5,10 +5,10 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { CheckCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function CompletarPerfilModal({ user, open }) {
+export default function CompletarPerfilModal({ user, open, onClose }) {
   const queryClient = useQueryClient();
   const [form, setForm] = useState({
     phone: '',
@@ -55,6 +55,10 @@ export default function CompletarPerfilModal({ user, open }) {
     });
   };
 
+  const handleClose = () => {
+    if (onClose) onClose();
+  };
+
   const handlePhone = (e) => {
     let v = e.target.value.replace(/\D/g, '').slice(0, 11);
     if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
@@ -64,10 +68,17 @@ export default function CompletarPerfilModal({ user, open }) {
   };
 
   return (
-    <Dialog open={open}>
-      <DialogContent className="max-w-md p-0 overflow-hidden" onInteractOutside={(e) => e.preventDefault()}>
+    <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose(); }}>
+      <DialogContent className="max-w-md p-0 overflow-hidden" onInteractOutside={handleClose}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-5 text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-5 text-white relative">
+          <button
+            onClick={handleClose}
+            className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors"
+            aria-label="Fechar"
+          >
+            <X className="w-5 h-5" />
+          </button>
           <div className="flex items-center gap-3 mb-1">
             <img
               src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"

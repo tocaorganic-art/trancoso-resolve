@@ -113,7 +113,8 @@ export default function Layout({ children, currentPageName }) {
   }, [location.pathname]);
 
   const isAdmin = user?.role === "admin";
-  const precisaCompletarPerfil = !!user && !user.profile_completed && !location.pathname.includes('CadastroTipo');
+  const [perfilModalFechado, setPerfilModalFechado] = useState(false);
+  const precisaCompletarPerfil = !!user && !user.profile_completed && !location.pathname.includes('CadastroTipo') && !perfilModalFechado;
 
   const adminNavItems = [
   { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
@@ -299,7 +300,7 @@ export default function Layout({ children, currentPageName }) {
         <BottomNav />
         <SupportChat />
         <FeedbackCollector />
-        <CompletarPerfilModal user={user} open={precisaCompletarPerfil} />
+        <CompletarPerfilModal user={user} open={precisaCompletarPerfil} onClose={() => setPerfilModalFechado(true)} />
       </ErrorBoundary>);
 
   }
