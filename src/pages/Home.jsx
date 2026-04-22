@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import usePullToRefresh from "@/hooks/usePullToRefresh";
 import { base44 } from "@/api/base44Client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -186,6 +186,7 @@ const ServiceCard = ({ service, provider }) => {
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Trancoso Resolve - Serviços Confiáveis em Trancoso";
@@ -204,6 +205,16 @@ export default function HomePage() {
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
   });
+
+  // Redirecionar automaticamente se o usuário já tem tipo definido
+  useEffect(() => {
+    if (!user) return;
+    if (user.user_type === 'prestador') {
+      navigate('/Dashboard', { replace: true });
+    } else if (user.user_type === 'cliente') {
+      navigate('/MeusPedidos', { replace: true });
+    }
+  }, [user, navigate]);
 
   const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
     queryKey: ['serviceProviders'],
