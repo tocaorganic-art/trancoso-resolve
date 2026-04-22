@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
-import { Check, Zap, Tag } from "lucide-react";
+import { Check, Zap, Tag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { toast } from "sonner";
+import { createSubscriptionCheckout } from "@/functions/createSubscriptionCheckout";
 
 const beneficios = [
   "Perfil verificado e listagem ativa",
@@ -18,7 +20,13 @@ const beneficios = [
 ];
 
 export default function PlanosPage() {
-  // Conta prestadores já cadastrados para saber se ainda há vagas promocionais
+  const [loadingPlan, setLoadingPlan] = useState(null);
+
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me(),
+  });
+
   const { data: providers } = useQuery({
     queryKey: ['totalProviders'],
     queryFn: () => base44.entities.ServiceProvider.list('-created_date', 200),
@@ -29,6 +37,29 @@ export default function PlanosPage() {
   const PROMO_LIMIT = 100;
   const vagasRestantes = Math.max(0, PROMO_LIMIT - totalProviders);
   const isPromoActive = vagasRestantes > 0;
+
+  const handleCheckout = async (plan) => {
+    // Bloquear se em iframe
+    if (window.self !== window.top) {
+      toast.error('O checkout só funciona no app publicado. Acesse trancosoresolve.base44.app');
+      return;
+    }
+    if (!user) {
+      base44.auth.redirectToLogin(window.location.pathname);
+      return;
+    }
+    setLoadingPlan(plan);
+    try {
+      const res = await createSubscriptionCheckout({ plan, user_email: user.email });
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      }
+    } catch (e) {
+      toast.error('Erro ao iniciar pagamento. Tente novamente.');
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen py-16">
@@ -77,9 +108,14 @@ export default function PlanosPage() {
                 ))}
               </ul>
               {isPromoActive && (
-                <Link to={createPageUrl("SejaPrestador")}>
-                  <Button className="w-full bg-amber-500 hover:bg-amber-600">Garantir minha vaga</Button>
-                </Link>
+                <Button
+                  className="w-full bg-amber-500 hover:bg-amber-600"
+                  onClick={() => handleCheckout('lancamento')}
+                  disabled={loadingPlan === 'lancamento'}
+                >
+                  {loadingPlan === 'lancamento' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                  Garantir minha vaga — R$ 29,90/mês
+                </Button>
               )}
             </CardContent>
           </Card>
@@ -106,9 +142,14 @@ export default function PlanosPage() {
                   </li>
                 ))}
               </ul>
-              <Link to={createPageUrl("SejaPrestador")}>
-                <Button className="w-full">Cadastrar como Prestador</Button>
-              </Link>
+              <Button
+                className="w-full"
+                onClick={() => handleCheckout('regular')}
+                disabled={loadingPlan === 'regular'}
+              >
+                {loadingPlan === 'regular' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                Assinar — R$ 49,90/mês
+              </Button>
             </CardContent>
           </Card>
         </div>

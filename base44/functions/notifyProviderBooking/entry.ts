@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
     const emailBody = `
 Olá, ${provider.full_name.split(' ')[0]}! 🌴
 
-Você tem uma nova solicitação de agendamento na plataforma Trancoso Experience.
+Você tem uma nova solicitação de agendamento na plataforma Trancoso Resolve.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 DETALHES DO AGENDAMENTO
@@ -62,17 +62,17 @@ ${request.location?.address ? `📍 Local: ${request.location.address}${request.
 
 Por favor, acesse seu painel (Minha Agenda) para confirmar ou recusar esta solicitação.
 
-Acesse: https://app.base44.com
+Acesse: https://trancosoresolve.base44.app/MinhaAgenda
 
 Um abraço,
-Equipe Trancoso Experience 🌊
+Equipe Trancoso Resolve 🌊
     `.trim();
 
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: providerEmail,
       subject: `🌴 Nova solicitação de agendamento — ${request.client_name}`,
       body: emailBody,
-      from_name: 'Trancoso Experience'
+      from_name: 'Trancoso Resolve'
     });
 
     console.log(`Notificação enviada para ${providerEmail} — pedido de ${request.client_name}`);
