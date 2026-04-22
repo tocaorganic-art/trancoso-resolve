@@ -31,6 +31,7 @@ import AccessLogger from "./components/auth/AccessLogger";
 import SupportChat from "./components/support/SupportChat";
 import FeedbackCollector from "./components/feedback/FeedbackCollector";
 import BottomNav from "./components/BottomNav";
+import CompletarPerfilModal from "./components/auth/CompletarPerfilModal";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
@@ -112,6 +113,7 @@ export default function Layout({ children, currentPageName }) {
   }, [location.pathname]);
 
   const isAdmin = user?.role === "admin";
+  const precisaCompletarPerfil = !!user && !user.profile_completed && !location.pathname.includes('CadastroTipo');
 
   const adminNavItems = [
   { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
@@ -297,6 +299,7 @@ export default function Layout({ children, currentPageName }) {
         <BottomNav />
         <SupportChat />
         <FeedbackCollector />
+        <CompletarPerfilModal user={user} open={precisaCompletarPerfil} />
       </ErrorBoundary>);
 
   }
