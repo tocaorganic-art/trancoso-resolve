@@ -2,32 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Logo Trancoso Resolve como fundo global sutil */
+/* Igreja de Trancoso como marca d'água global */
 body::before {
   content: "";
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 340px;
-  height: 340px;
-  background-image: url("https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png");
+  width: 40vw;
+  height: 40vw;
+  max-width: 500px;
+  max-height: 500px;
+  background-image: url("https://media.base44.com/images/public/68eb21726a9614db4a82ba99/d73fbd00d_watermark_light.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  background-attachment: fixed;
   opacity: 1;
-  filter: opacity(0.18) drop-shadow(0 0 40px #38bdf8) sepia(1) saturate(4) hue-rotate(185deg) brightness(2);
   z-index: 0;
   pointer-events: none;
 }
 
 @media (max-width: 768px) {
   body::before {
-    width: 220px;
-    height: 220px;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    filter: opacity(0.07) drop-shadow(0 0 24px #60b8f8) sepia(1) saturate(3) hue-rotate(180deg) brightness(1.5);
+    width: 70vw;
+    height: 70vw;
   }
 }
 
