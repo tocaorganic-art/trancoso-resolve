@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import ChatInterface from '@/components/chat/ChatInterface';
-import PublicAssistant from '@/components/assistant/PublicAssistant';
-import { Loader2, PlusCircle, MessageSquare, LogIn } from 'lucide-react';
+import { Loader2, PlusCircle, MessageSquare, LogIn, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+
+// Sugestões de perguntas iniciais
+const SUGGESTED_QUESTIONS = [
+  "Sugira experiências VIP em Trancoso",
+  "Monte um roteiro de 3 dias",
+  "Me ajude a responder um cliente",
+  "Quais são os melhores restaurantes?",
+];
 
 export default function AssistentevirtualPage() {
   const queryClient = useQueryClient();
@@ -31,7 +38,7 @@ export default function AssistentevirtualPage() {
       setActiveConversationId(conversations[0].id);
     }
   }, [conversations, activeConversationId]);
-  
+
   const createConversationMutation = useMutation({
     mutationFn: () => base44.agents.createConversation({
       agent_name: 'toca',
@@ -49,44 +56,32 @@ export default function AssistentevirtualPage() {
     return <div className="flex items-center justify-center h-screen"><Loader2 className="w-10 h-10 animate-spin text-blue-600" /></div>;
   }
 
-  // Usuário não logado — exibe assistente público limitado
+  // Usuário não logado — bloqueio obrigatório
   if (!user) {
     return (
-      <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <MessageSquare className="w-6 h-6" aria-hidden="true" />
-            <div>
-              <h1 className="text-lg font-bold">Assistente Virtual Toca</h1>
-              <p className="text-blue-200 text-xs">Modo visitante · Respostas básicas</p>
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 to-slate-900 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Bot className="w-8 h-8 text-blue-600" />
           </div>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => base44.auth.redirectToLogin()}
-            className="border-white text-white hover:bg-white hover:text-blue-600 gap-2"
-            aria-label="Fazer login para acesso completo"
-          >
-            <LogIn className="w-4 h-4" />
-            Entrar
-          </Button>
-        </div>
-        <div className="flex-1 overflow-hidden">
-          <PublicAssistant />
-        </div>
-        <div className="bg-blue-50 border-t border-blue-100 px-4 py-2 text-center">
-          <p className="text-xs text-slate-500">
-            <button onClick={() => base44.auth.redirectToLogin()} className="text-blue-600 font-medium underline underline-offset-2">
-              Faça login
-            </button>
-            {" "}para salvar conversas e acessar recursos completos
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">Toca TrIA</h1>
+          <p className="text-slate-600 mb-2 text-sm font-medium">Seu assistente de IA em Trancoso</p>
+          <p className="text-slate-500 text-sm mb-6">
+            Para usar a <strong>Toca TrIA</strong>, é necessário ter cadastro e estar logado como prestador ou cliente.
           </p>
+          <Button
+            className="w-full bg-blue-600 hover:bg-blue-700 mb-3"
+            onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
+          >
+            <LogIn className="w-4 h-4 mr-2" />
+            Entrar para usar a Toca TrIA
+          </Button>
+          <p className="text-xs text-slate-400">Não tem conta? Clique em Entrar e escolha "Cadastre-se".</p>
         </div>
       </div>
     );
   }
-  
+
   const handleSelectConversation = (id) => {
     setActiveConversationId(id);
     setMobileView('chat');
@@ -100,8 +95,11 @@ export default function AssistentevirtualPage() {
   const SidebarContent = (
     <>
       <div className="p-4 border-b border-slate-200 flex justify-between items-center shrink-0 bg-gradient-to-r from-blue-600 to-blue-700">
-        <h2 className="text-lg font-bold text-white">Minhas Conversas</h2>
-        <Button size="icon" variant="ghost" onClick={handleNewConversation} disabled={createConversationMutation.isPending} aria-label="Iniciar nova conversa" className="hover:bg-white/20 text-white">
+        <div>
+          <h2 className="text-lg font-bold text-white">Toca TrIA</h2>
+          <p className="text-blue-200 text-xs">Assistente de IA em Trancoso</p>
+        </div>
+        <Button size="icon" variant="ghost" onClick={handleNewConversation} disabled={createConversationMutation.isPending} aria-label="Nova conversa" className="hover:bg-white/20 text-white">
           {createConversationMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
         </Button>
       </div>
@@ -113,26 +111,52 @@ export default function AssistentevirtualPage() {
                   className={`p-4 cursor-pointer border-l-4 transition-all hover:bg-slate-50 ${activeConversationId === convo.id ? 'bg-blue-50 border-blue-600' : 'border-transparent'}`}
                   onClick={() => handleSelectConversation(convo.id)}>
                   <p className="font-semibold text-slate-900 truncate text-sm mb-0.5">
-                      Conversa de {format(new Date(convo.created_date), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}
+                    {format(new Date(convo.created_date), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}
                   </p>
                   <p className="text-xs text-slate-500 truncate">{convo.lastMessage || 'Nenhuma mensagem ainda'}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <div className="p-6 text-center text-slate-500 flex flex-col items-center justify-center h-full">
-             <MessageSquare className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-             <p className="font-semibold text-slate-700 mb-1 text-sm">Nenhuma conversa ainda.</p>
-             <p className="text-xs text-slate-500">Toque em + para começar.</p>
+          <div className="p-6 text-center flex flex-col items-center justify-center h-full">
+            <Bot className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+            <p className="font-semibold text-slate-700 mb-1 text-sm">Nenhuma conversa ainda.</p>
+            <p className="text-xs text-slate-500">Toque em + para começar.</p>
           </div>
         )}
       </div>
     </>
   );
 
+  const EmptyChat = (
+    <div className="flex items-center justify-center h-full p-8 text-center bg-gradient-to-br from-white to-slate-50">
+      <div>
+        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Bot className="w-10 h-10 text-blue-600" />
+        </div>
+        <h3 className="text-2xl font-bold text-slate-800 mb-1">Toca TrIA</h3>
+        <p className="text-slate-500 mb-6 text-sm max-w-xs mx-auto">Converse com a IA para tirar dúvidas, planejar experiências e resolver o dia a dia em Trancoso.</p>
+        <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto mb-6">
+          {SUGGESTED_QUESTIONS.map((q) => (
+            <button
+              key={q}
+              onClick={() => createConversationMutation.mutate()}
+              className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl px-3 py-2 text-left transition-colors"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+        <Button onClick={handleNewConversation} disabled={createConversationMutation.isPending} className="bg-blue-600 hover:bg-blue-700">
+          {createConversationMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <PlusCircle className="w-4 h-4 mr-2" />}
+          Conversar com a Toca TrIA
+        </Button>
+      </div>
+    </div>
+  );
+
   const ChatContent = (
     <>
-      {/* Mobile back button */}
       <div className="md:hidden flex items-center gap-2 px-4 py-3 bg-blue-600 border-b border-blue-700">
         <Button size="sm" variant="ghost" className="text-white hover:bg-white/20 gap-1 px-2" onClick={() => setMobileView('list')}>
           ← Conversas
@@ -140,26 +164,15 @@ export default function AssistentevirtualPage() {
       </div>
       {activeConversationId ? (
         <ChatInterface conversationId={activeConversationId} key={activeConversationId} />
-      ) : (
-        <div className="flex items-center justify-center h-full text-slate-500 p-8 text-center">
-          <div>
-            <MessageSquare className="w-16 h-16 mx-auto mb-4 text-blue-300" />
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Selecione uma conversa</h3>
-            <p className="text-slate-500 text-sm">Ou crie uma nova com o botão +</p>
-          </div>
-        </div>
-      )}
+      ) : EmptyChat}
     </>
   );
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-sans overflow-hidden">
-      {/* Desktop: sidebar sempre visível */}
       <div className="hidden md:flex w-80 bg-white border-r border-slate-200 flex-col shadow-sm">
         {SidebarContent}
       </div>
-
-      {/* Mobile: alterna entre lista e chat */}
       <div className="flex md:hidden flex-col w-full">
         {mobileView === 'list' ? (
           <div className="flex flex-col h-full bg-white">{SidebarContent}</div>
@@ -167,20 +180,10 @@ export default function AssistentevirtualPage() {
           <div className="flex flex-col h-full">{ChatContent}</div>
         )}
       </div>
-
-      {/* Desktop: área de chat */}
       <main className="hidden md:flex flex-1 flex-col overflow-hidden">
         {activeConversationId ? (
           <ChatInterface conversationId={activeConversationId} key={activeConversationId} />
-        ) : (
-          <div className="flex items-center justify-center h-full text-slate-500 p-8 text-center bg-gradient-to-br from-white to-slate-50">
-            <div>
-              <MessageSquare className="w-20 h-20 mx-auto mb-6 text-blue-300" />
-              <h3 className="text-2xl font-semibold text-slate-800 mb-2">Selecione ou crie uma conversa</h3>
-              <p className="text-slate-500 max-w-md mx-auto text-sm">Use o botão + para começar a conversar com a Toca.</p>
-            </div>
-          </div>
-        )}
+        ) : EmptyChat}
       </main>
     </div>
   );

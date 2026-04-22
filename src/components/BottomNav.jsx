@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, Grid3x3, Calendar, TrendingUp } from "lucide-react";
+import { Home, Grid3x3, Wand2, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Início", path: "/", icon: Home },
   { label: "Serviços", path: "/ServicosCategoria", icon: Grid3x3 },
-  { label: "Agenda", path: "/MinhaAgenda", icon: Calendar },
-  { label: "Financeiro", path: "/Financeiro", icon: TrendingUp },
+  { label: "Toca Vision", path: "/GeradorDeImagem", icon: Wand2 },
+  { label: "Toca TrIA", path: "/Assistentevirtual", icon: Bot },
 ];
 
 export default function BottomNav() {

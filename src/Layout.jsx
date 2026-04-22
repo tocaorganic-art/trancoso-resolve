@@ -178,10 +178,10 @@ export default function Layout({ children, currentPageName }) {
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-8">
                 <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
-                  <Image className="w-4 h-4" /> Criar Imagem
+                  <Image className="w-4 h-4" /> Toca Vision
                 </Link>
                 <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
-                  <MessageCircle className="w-4 h-4" /> Assistente
+                  <MessageCircle className="w-4 h-4" /> Toca TrIA
                 </Link>
                 {user &&
                 <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
@@ -238,10 +238,10 @@ export default function Layout({ children, currentPageName }) {
             {mobileMenuOpen &&
             <div className="md:hidden mt-2 pb-4 space-y-2 px-4" data-testid="mobile-menu-content-public">
                 <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
-                  <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Criar Imagem</span>
+                  <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Toca Vision</span>
                 </Link>
                 <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
-                  <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Assistente</span>
+                  <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Toca TrIA</span>
                 </Link>
                 {user &&
               <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>

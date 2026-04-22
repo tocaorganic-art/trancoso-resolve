@@ -26,15 +26,15 @@ export default function HeroSection() {
           </div>
 
           <h1 className="text-2xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
-            Sua Expertise no{' '}
+            Seja um Parceiro{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-              Coração de Trancoso
+              Trancoso Resolve
             </span>
           </h1>
 
           <p className="text-base md:text-xl text-slate-300 mb-6 leading-relaxed max-w-xl">
-            Junte-se à rede exclusiva de profissionais que atende clientes de alto padrão 
-            em um dos destinos mais desejados do Brasil.
+            Conecte-se com clientes que buscam profissionais qualificados em Trancoso. 
+            Cadastre seus serviços e comece a receber solicitações hoje.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-8">
