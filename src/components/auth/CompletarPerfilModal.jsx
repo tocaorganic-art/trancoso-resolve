@@ -5,12 +5,11 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { CheckCircle, Loader2, X } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function CompletarPerfilModal({ user, open }) {
   const queryClient = useQueryClient();
-  const [dismissed, setDismissed] = useState(false);
   const [form, setForm] = useState({
     phone: '',
     birth_date: '',
@@ -64,20 +63,11 @@ export default function CompletarPerfilModal({ user, open }) {
     setForm(f => ({ ...f, phone: v }));
   };
 
-  if (dismissed) return null;
-
   return (
-    <Dialog open={open && !dismissed}>
+    <Dialog open={open}>
       <DialogContent className="max-w-md p-0 overflow-hidden" onInteractOutside={(e) => e.preventDefault()}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-5 text-white relative">
-          <button
-            onClick={() => setDismissed(true)}
-            className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors"
-            aria-label="Fechar"
-          >
-            <X className="w-5 h-5" />
-          </button>
+        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-5 text-white">
           <div className="flex items-center gap-3 mb-1">
             <img
               src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
