@@ -20,12 +20,12 @@ const banners = [
   },
   {
     id: 2,
-    badge: "🎉 Oferta de Lançamento — Vagas Limitadas!",
-    title: "Seja um dos Primeiros",
-    highlight: "e Ganhe Mais!",
-    subtitle: "Os 50 primeiros prestadores cadastrados têm 3 meses de gratuidade total na plataforma. Sem mensalidade, apenas 20% de comissão por serviço realizado.",
-    cta: "Quero Minha Gratuidade",
-    ctaLink: "/SejaPrestador",
+    badge: "🔥 Oferta de Lançamento — 100 Vagas!",
+    title: "R$ 29,90/mês",
+    highlight: "0% de Comissão.",
+    subtitle: "Primeiros 100 prestadores pagam apenas R$ 29,90/mês e ficam com 100% do que ganham. Sem taxas por serviço, sem surpresas.",
+    cta: "Garantir Minha Vaga",
+    ctaLink: "/Planos",
     bgColor: "linear-gradient(135deg, #F9A825 0%, #F95738 100%)",
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: Zap,
@@ -34,11 +34,11 @@ const banners = [
   {
     id: 3,
     badge: null,
-    title: "Sem Mensalidade.",
-    highlight: "Só 20% por Serviço.",
-    subtitle: "Cadastre-se gratuitamente e comece a receber clientes agora. Você paga apenas quando realiza um serviço — simples assim.",
-    cta: "Comece a Lucrar Agora",
-    ctaLink: "/SejaPrestador",
+    title: "Mensalidade Fixa.",
+    highlight: "Comissão Zero.",
+    subtitle: "Assine por R$ 49,90/mês e fique com 100% de tudo que você ganhar. Sem desconto por serviço, sem surpresas no final do mês.",
+    cta: "Ver Planos",
+    ctaLink: "/Planos",
     bgColor: "linear-gradient(135deg, #0D8A6F 0%, #2D3047 100%)",
     image: "https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: Percent,
@@ -125,7 +125,7 @@ export default function PromotionalBanner() {
                         <div key={i} className={cn("w-2 h-2 md:w-3 md:h-3 rounded-full", i < 3 ? "bg-red-400" : "bg-white/40")} />
                       ))}
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-yellow-200">Apenas 50 vagas disponíveis</span>
+                    <span className="text-xs md:text-sm font-medium text-yellow-200">Apenas 100 vagas promocionais</span>
                   </div>
                 )}
 
