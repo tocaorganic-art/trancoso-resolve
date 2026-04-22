@@ -35,10 +35,18 @@ export default function AdminPagamentosPage() {
     initialData: [],
   });
 
-  if (user?.role !== 'admin') {
+  const isLoadingUser = user === undefined;
+
+  if (isLoadingUser) {
+    return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
+  }
+
+  if (!user || user.role !== 'admin') {
     return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-slate-500">Acesso restrito a administradores.</p>
+      <div className="flex flex-col items-center justify-center h-screen gap-4 text-center px-4">
+        <AlertTriangle className="w-16 h-16 text-red-400" />
+        <h2 className="text-2xl font-bold text-slate-800">Acesso Restrito</h2>
+        <p className="text-slate-500 max-w-sm">Esta página é exclusiva para administradores da plataforma.</p>
       </div>
     );
   }

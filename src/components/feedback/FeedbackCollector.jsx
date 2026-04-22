@@ -47,16 +47,7 @@ export default function FeedbackCollector() {
   };
 
   if (!isOpen) {
-    return (
-      <Button
-        onClick={() => setIsOpen(true)}
-        variant="outline"
-        className="fixed bottom-24 right-6 shadow-lg z-40"
-      >
-        <MessageSquare className="w-4 h-4 mr-2" />
-        Dar Feedback
-      </Button>
-    );
+    return null;
   }
 
   return (
