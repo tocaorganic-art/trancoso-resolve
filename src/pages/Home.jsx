@@ -201,20 +201,28 @@ export default function HomePage() {
 
   const { isPulling, pullDistance, threshold } = usePullToRefresh(handleRefresh);
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading: isLoadingUser, isFetched: isUserFetched } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
+    retry: false,
   });
 
-  // Redirecionar automaticamente se o usuário já tem tipo definido
+  // Redirecionar apenas após o login (não no acesso inicial ao site)
+  // Só redireciona se: dados carregados, usuário existe E veio de um login recente
   useEffect(() => {
-    if (!user) return;
+    if (!isUserFetched || !user) return;
+    // Verifica se o login foi recente (último minuto) para evitar redirect no acesso direto
+    const loginTime = sessionStorage.getItem('loginTimestamp');
+    const isRecentLogin = loginTime && (Date.now() - parseInt(loginTime)) < 60000;
+    if (!isRecentLogin) return;
     if (user.user_type === 'prestador') {
+      sessionStorage.removeItem('loginTimestamp');
       navigate('/Dashboard', { replace: true });
     } else if (user.user_type === 'cliente') {
+      sessionStorage.removeItem('loginTimestamp');
       navigate('/MeusPedidos', { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, isUserFetched, navigate]);
 
   const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
     queryKey: ['serviceProviders'],

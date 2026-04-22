@@ -227,7 +227,7 @@ export default function Layout({ children, currentPageName }) {
                     </DropdownMenuContent>
                   </DropdownMenu> :
 
-                <Button onClick={() => base44.auth.redirectToLogin()} className="bg-[var(--primary)] text-[var(--text-light)] hover:bg-blue-700" size="sm" data-testid="login-button">
+                <Button onClick={() => { sessionStorage.setItem('loginTimestamp', Date.now().toString()); base44.auth.redirectToLogin(); }} className="bg-[var(--primary)] text-[var(--text-light)] hover:bg-blue-700" size="sm" data-testid="login-button">
                     Entrar
                   </Button>
                 }
