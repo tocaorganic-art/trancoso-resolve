@@ -129,7 +129,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
     { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
   ] : []),
-  { name: "Ver Site", path: "/", icon: Globe }];
+  { name: "Ver Site", path: "/", icon: Globe, clearLogin: true }];
 
 
   const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat'];
@@ -346,6 +346,7 @@ export default function Layout({ children, currentPageName }) {
                     <Link
                       key={item.name}
                       to={item.path}
+                      onClick={() => item.clearLogin && sessionStorage.removeItem('loginTimestamp')}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                       isActive(item.path) ?
                       'bg-blue-600 text-white dark:bg-blue-500' :
@@ -380,16 +381,16 @@ export default function Layout({ children, currentPageName }) {
                 {adminNavItems.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
-                    isActive(item.path) ?
-                    'bg-blue-600 text-white' :
-                    'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`
-                    }
-                    data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  onClick={() => { setMobileMenuOpen(false); item.clearLogin && sessionStorage.removeItem('loginTimestamp'); }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+                  isActive(item.path) ?
+                  'bg-blue-600 text-white' :
+                  'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`
+                  }
+                  data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
                     
                       <Icon className="w-4 h-4" />
                       <span className="text-sm">{item.name}</span>
