@@ -177,17 +177,17 @@ export default function Layout({ children, currentPageName }) {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-8">
-                <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
-                  <Image className="w-4 h-4" /> Toca Vision
-                </Link>
-                <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
-                  <MessageCircle className="w-4 h-4" /> Toca TrIA
-                </Link>
-                {user &&
-                <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
+                {user && <>
+                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
+                    <Image className="w-4 h-4" /> Toca Vision
+                  </Link>
+                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
+                    <MessageCircle className="w-4 h-4" /> Toca TrIA
+                  </Link>
+                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">
                     <MessageCircle className="w-4 h-4" /> Chat
                   </Link>
-                }
+                </>}
                 <Link to={createPageUrl("SejaPrestador")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Como funciona?</Link>
                 <Link to={createPageUrl("Seguranca")} className="text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] transition-colors">Segurança</Link>
@@ -237,17 +237,17 @@ export default function Layout({ children, currentPageName }) {
             {/* Mobile Navigation */}
             {mobileMenuOpen &&
             <div className="md:hidden mt-2 pb-4 space-y-2 px-4" data-testid="mobile-menu-content-public">
-                <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
-                  <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Toca Vision</span>
-                </Link>
-                <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
-                  <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Toca TrIA</span>
-                </Link>
-                {user &&
-              <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                {user && <>
+                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                    <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Toca Vision</span>
+                  </Link>
+                  <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
+                    <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Toca TrIA</span>
+                  </Link>
+                  <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
                   </Link>
-              }
+                </>}
                 <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
                 <Link to={createPageUrl("Seguranca")} className="block text-sm font-medium text-[var(--text-dark)] hover:text-[var(--primary)] py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
