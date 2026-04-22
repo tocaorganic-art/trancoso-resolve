@@ -128,7 +128,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
     { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
   ] : []),
-  { name: "Ver Site", path: "/", icon: Globe }];
+  { name: "Ver Site", path: "/Home", icon: Globe }];
 
 
   const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat'];
