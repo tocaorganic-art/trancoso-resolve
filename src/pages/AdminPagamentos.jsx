@@ -35,18 +35,25 @@ export default function AdminPagamentosPage() {
     initialData: [],
   });
 
-  const isLoadingUser = user === undefined;
-
-  if (isLoadingUser) {
+  // Aguarda usuário carregar (undefined = ainda carregando)
+  if (user === undefined) {
     return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
   }
 
-  if (!user || user.role !== 'admin') {
+  // Usuário não autenticado → redireciona para login
+  if (user === null) {
+    base44.auth.redirectToLogin(window.location.pathname);
+    return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
+  }
+
+  // Usuário autenticado mas sem role admin
+  if (user.role !== 'admin') {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-4 text-center px-4">
         <AlertTriangle className="w-16 h-16 text-red-400" />
         <h2 className="text-2xl font-bold text-slate-800">Acesso Restrito</h2>
         <p className="text-slate-500 max-w-sm">Esta página é exclusiva para administradores da plataforma.</p>
+        <button onClick={() => base44.auth.redirectToLogin()} className="text-sm text-blue-600 underline">Entrar com outra conta</button>
       </div>
     );
   }

@@ -429,19 +429,23 @@ function MeuPerfilPrestadorContent() {
 
             {/* Biografia */}
             <div>
-              <Label htmlFor="bio">
-                Sobre mim (Biografia) <span className="text-red-500">*</span>
-                <span className="text-xs text-slate-500 ml-2">
-                  ({formData.bio?.length || 0}/50 caracteres mínimos)
+              <div className="flex items-center justify-between mb-1">
+                <Label htmlFor="bio">
+                  Sobre mim (Biografia) <span className="text-red-500">*</span>
+                </Label>
+                <span className={`text-xs font-medium ${
+                  (formData.bio?.length || 0) >= 50 ? 'text-green-600' : 'text-red-500'
+                }`}>
+                  {formData.bio?.length || 0}/50 {(formData.bio?.length || 0) >= 50 ? '✓ Mínimo atingido' : `caracteres mínimos`}
                 </span>
-              </Label>
+              </div>
               <Textarea 
                 id="bio" 
                 value={formData.bio} 
                 onChange={(e) => handleInputChange('bio', e.target.value)} 
                 placeholder="Fale um pouco sobre você, sua experiência e seus serviços..." 
                 rows={5}
-                className={errors.bio ? 'border-red-500' : ''}
+                className={errors.bio ? 'border-red-500' : (formData.bio?.length >= 50 ? 'border-green-400' : '')}
               />
               {errors.bio && <p className="text-xs text-red-500 mt-1">{errors.bio}</p>}
             </div>
