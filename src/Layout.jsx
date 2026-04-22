@@ -111,6 +111,8 @@ export default function Layout({ children, currentPageName }) {
 
   }, [location.pathname]);
 
+  const isAdmin = user?.role === "admin";
+
   const adminNavItems = [
   { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
   { name: "Minha Agenda", path: createPageUrl("MinhaAgenda"), icon: Calendar },
@@ -120,8 +122,10 @@ export default function Layout({ children, currentPageName }) {
   { name: "Planos", path: createPageUrl("Planos"), icon: CreditCard },
   { name: "Manual", path: createPageUrl("Manual"), icon: FileText },
   { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
-  { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
-  { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
+  ...(isAdmin ? [
+    { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
+    { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
+  ] : []),
   { name: "Ver Site", path: "/", icon: Globe }];
 
 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
@@ -134,35 +133,35 @@ function FinanceiroContent() { // Renamed from FinanceiroPage
 
         {/* KPIs Rápidos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="border-none shadow-lg bg-gradient-to-br from-blue-50 to-white">
+          <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
             <CardContent className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Saldo Disponível</p>
+              <p className="text-sm font-medium text-slate-600 mb-1">Saldo Disponível</p>
               <p className={`text-2xl font-bold ${saldo >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                 R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </p>
             </CardContent>
           </Card>
-           <Card className="border-none shadow-lg bg-gradient-to-br from-green-50 to-white">
+          <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
             <CardContent className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Total Faturado (mês)</p>
+              <p className="text-sm font-medium text-slate-600 mb-1">Total Faturado (mês)</p>
               <p className="text-2xl font-bold text-green-600">
                 R$ {totalReceita.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </p>
             </CardContent>
           </Card>
-          <Card className="border-none shadow-lg bg-gradient-to-br from-amber-50 to-white">
+          <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
             <CardContent className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Serviços Concluídos</p>
+              <p className="text-sm font-medium text-slate-600 mb-1">Serviços Concluídos</p>
               <p className="text-2xl font-bold text-amber-600">{servicosConcluidos}</p>
             </CardContent>
           </Card>
-          <Card className="border-none shadow-lg bg-gradient-to-br from-yellow-50 to-white">
+          <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
             <CardContent className="p-4">
-                <p className="text-sm text-slate-600 mb-1">Sua Avaliação Média</p>
-                <div className="flex items-baseline gap-2">
-                    <p className="text-2xl font-bold text-yellow-600">{mediaAvaliacao}</p>
-                    <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                </div>
+              <p className="text-sm font-medium text-slate-600 mb-1">Sua Avaliação Média</p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-2xl font-bold text-yellow-600">{mediaAvaliacao}</p>
+                <Star className="w-5 h-5 text-yellow-500 fill-current" />
+              </div>
             </CardContent>
           </Card>
         </div>
