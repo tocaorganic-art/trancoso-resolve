@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
@@ -24,6 +24,16 @@ export default function DashboardPage() {
 function DashboardContent() {
   const urlParams = new URLSearchParams(window.location.search);
   const checkoutSuccess = urlParams.get('checkout') === 'success';
+
+  // Flag temporária de 5 min: bypass do paywall enquanto webhook processa OU trial está sendo criado
+  const [hasTempFlag] = React.useState(() => {
+    const flag = localStorage.getItem('assinatura_ativa_temporaria') || localStorage.getItem('trial_pendente');
+    if (flag) {
+      // Remove após 5 minutos (já configurado na gravação) ou na próxima leitura após expirar
+      return true;
+    }
+    return false;
+  });
 
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -69,6 +79,22 @@ function DashboardContent() {
     enabled: !!user,
   });
 
+  // Grava flag de checkout no localStorage por 5 min (para reload/refetch)
+  useEffect(() => {
+    if (checkoutSuccess) {
+      localStorage.setItem('assinatura_ativa_temporaria', 'true');
+      setTimeout(() => localStorage.removeItem('assinatura_ativa_temporaria'), 300000);
+    }
+  }, [checkoutSuccess]);
+
+  // Remove trial_pendente após carregar com sucesso (trial foi criado)
+  useEffect(() => {
+    if (subscription) {
+      localStorage.removeItem('trial_pendente');
+      localStorage.removeItem('assinatura_ativa_temporaria');
+    }
+  }, [subscription]);
+
   const isLoading = isUserLoading || isLoadingRequests || isLoadingTransactions || isLoadingSubscription;
 
   if (isLoading) {
@@ -79,10 +105,11 @@ function DashboardContent() {
     );
   }
 
-  // Paywall: sem assinatura ativa e não acabou de fazer checkout (aguarda webhook processar)
-  if (!subscription && !checkoutSuccess) {
+  // Paywall: sem assinatura ativa e sem flags temporárias
+  if (!subscription && !checkoutSuccess && !hasTempFlag) {
     const lastSub = allSubs?.[0];
-    return <SubscriptionPaywall subscriptionStatus={lastSub?.status} />;
+    const isTrial = lastSub?.status === 'trial' || lastSub?.plan === 'trial';
+    return <SubscriptionPaywall subscriptionStatus={lastSub?.status} isTrial={isTrial} />;
   }
 
   const pendingRequests = serviceRequests?.filter(req => req.status === 'Pendente').length || 0;

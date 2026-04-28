@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { LockKeyhole, CreditCard, Zap } from "lucide-react";
+import CancelSubscriptionButton from "./CancelSubscriptionButton";
 
-export default function SubscriptionPaywall({ subscriptionStatus }) {
+export default function SubscriptionPaywall({ subscriptionStatus, isTrial }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-8 text-center">
@@ -55,6 +56,13 @@ export default function SubscriptionPaywall({ subscriptionStatus }) {
             </ul>
           </div>
         </div>
+
+        {isTrial && (
+          <div className="mt-5 border-t border-slate-100 pt-4">
+            <p className="text-xs text-slate-400 mb-2">Seu trial expirou. Caso prefira cancelar:</p>
+            <CancelSubscriptionButton />
+          </div>
+        )}
 
         <p className="text-xs text-slate-400 mt-5">
           Dúvidas? contato@tocaexperience.com.br

@@ -23,8 +23,18 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Assinatura já cancelada.' }, { status: 400 });
     }
 
-    // Cancela no Stripe ao fim do período (cancel_at_period_end = true)
+    // Se for trial: cancela direto sem passar pelo Stripe
     let periodEnd = null;
+    if (sub.plan === 'trial' || sub.status === 'trial') {
+      await base44.asServiceRole.entities.Subscription.update(sub.id, {
+        status: 'cancelled',
+        notes: `Trial cancelado pelo prestador em ${new Date().toLocaleDateString('pt-BR')}.`,
+      });
+      console.log(`[cancelarAssinatura] Trial cancelado para ${user.email}`);
+      return Response.json({ ok: true, access_until: null });
+    }
+
+    // Cancela no Stripe ao fim do período (cancel_at_period_end = true)
     if (sub.stripe_subscription_id) {
       const stripeSub = await stripe.subscriptions.update(sub.stripe_subscription_id, {
         cancel_at_period_end: true,

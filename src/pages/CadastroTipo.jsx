@@ -21,8 +21,13 @@ export default function CadastroTipoPage() {
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       await queryClient.refetchQueries({ queryKey: ['currentUser'] });
       if (data.user_type === 'prestador') {
-        // Cria trial automaticamente (fire-and-forget, não bloqueia o redirect)
-        criarTrialPrestador({ user_email: data.email, user_name: data.full_name }).catch(() => {});
+        // Cria trial — aguarda para garantir que exista antes de entrar no Dashboard
+        try {
+          await criarTrialPrestador({ user_email: data.email, user_name: data.full_name });
+        } catch (e) {
+          // fallback: grava flag no localStorage para o Dashboard ignorar paywall temporariamente
+          localStorage.setItem('trial_pendente', 'true');
+        }
         window.location.replace('/Dashboard');
       } else {
         window.location.replace('/');
