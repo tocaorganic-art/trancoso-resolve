@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import StarRating from "@/components/reviews/StarRating";
 import ServiceLocationMap from "@/components/map/ServiceLocationMap";
 import StartChatButton from "@/components/chat/StartChatButton";
+import WhatsAppCallButton from "@/components/whatsapp/WhatsAppCallButton";
 import SlotPicker from "@/components/agenda/SlotPicker";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
@@ -272,6 +273,7 @@ export default function PrestadorPerfilPage() {
               <CalendarIcon className="w-5 h-5 mr-2" />
               {user ? "Agendar Serviço" : "Faça login para Agendar"}
               </Button>
+              <WhatsAppCallButton provider={provider} className="flex-1" size="lg" />
               {isUserLoaded && user && (
               <StartChatButton provider={provider} className="flex-1" size="lg" />
               )}
