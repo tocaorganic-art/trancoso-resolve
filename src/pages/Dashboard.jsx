@@ -109,7 +109,15 @@ function DashboardContent() {
   if (!subscription && !checkoutSuccess && !hasTempFlag) {
     const lastSub = allSubs?.[0];
     const isTrial = lastSub?.status === 'trial' || lastSub?.plan === 'trial';
-    return <SubscriptionPaywall subscriptionStatus={lastSub?.status} isTrial={isTrial} />;
+    const hasAnySubscription = !!(allSubs && allSubs.length > 0);
+    return (
+      <SubscriptionPaywall
+        subscriptionStatus={lastSub?.status}
+        isTrial={isTrial}
+        hasAnySubscription={hasAnySubscription}
+        userEmail={user?.email}
+      />
+    );
   }
 
   const pendingRequests = serviceRequests?.filter(req => req.status === 'Pendente').length || 0;

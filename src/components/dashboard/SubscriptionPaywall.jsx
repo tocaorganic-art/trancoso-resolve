@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { LockKeyhole, CreditCard, Zap } from "lucide-react";
+import { LockKeyhole, CreditCard, Zap, Gift, Loader2 } from "lucide-react";
 import CancelSubscriptionButton from "./CancelSubscriptionButton";
+import { criarTrialPrestador } from "@/functions/criarTrialPrestador";
+import { toast } from "sonner";
 
-export default function SubscriptionPaywall({ subscriptionStatus, isTrial }) {
+export default function SubscriptionPaywall({ subscriptionStatus, isTrial, hasAnySubscription, userEmail }) {
+  const [activatingTrial, setActivatingTrial] = useState(false);
+
+  const handleActivateTrial = async () => {
+    setActivatingTrial(true);
+    try {
+      await criarTrialPrestador({ user_email: userEmail });
+      localStorage.setItem('trial_pendente', Date.now().toString());
+      toast.success("Trial ativado! Carregando seu painel...");
+      setTimeout(() => window.location.reload(), 1500);
+    } catch (e) {
+      toast.error("Não foi possível ativar o trial. Tente novamente.");
+      setActivatingTrial(false);
+    }
+  };
+
+  // Mostra botão de trial apenas quando não há nenhuma assinatura prévia
+  const showTrialButton = !hasAnySubscription && userEmail;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-8 text-center">
@@ -37,10 +57,25 @@ export default function SubscriptionPaywall({ subscriptionStatus, isTrial }) {
         )}
 
         <div className="space-y-3">
+          {showTrialButton && (
+            <Button
+              onClick={handleActivateTrial}
+              disabled={activatingTrial}
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 font-bold h-12 text-base"
+            >
+              {activatingTrial ? (
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              ) : (
+                <Gift className="w-5 h-5 mr-2" />
+              )}
+              Ativar teste grátis de 14 dias
+            </Button>
+          )}
+
           <Link to={createPageUrl("Planos")} className="block">
-            <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 font-bold h-12 text-base">
+            <Button className={`w-full font-bold h-12 text-base ${showTrialButton ? 'bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50' : 'bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600'}`} variant={showTrialButton ? "outline" : "default"}>
               <CreditCard className="w-5 h-5 mr-2" />
-              Ativar assinatura
+              {showTrialButton ? "Ou assinar direto" : "Ativar assinatura"}
             </Button>
           </Link>
 
