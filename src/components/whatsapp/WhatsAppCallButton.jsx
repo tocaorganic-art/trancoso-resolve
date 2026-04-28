@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Loader2, X, Phone } from "lucide-react";
+import { MessageCircle, Loader2, X, AlertCircle } from "lucide-react";
 import { chamarPrestador } from "@/functions/chamarPrestador";
 import { toast } from "sonner";
+import CompletarPerfilModal from "@/components/auth/CompletarPerfilModal";
 
 // Sanitiza número: remove tudo que não é dígito, adiciona 55 se necessário
 function sanitizeWhatsApp(number) {
@@ -110,8 +111,10 @@ function ContactModal({ providerName, whatsappPrestador, whatsappCliente, onClos
 
 export default function WhatsAppCallButton({ provider, className = "", size = "default" }) {
   const [loading, setLoading] = useState(false);
-  const [contactData, setContactData] = useState(null); // null = não contatado, objeto = contatado
+  const [contactData, setContactData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: user, isSuccess: userLoaded } = useQuery({
     queryKey: ['currentUser'],
@@ -147,6 +150,12 @@ export default function WhatsAppCallButton({ provider, className = "", size = "d
     if (!user) {
       sessionStorage.setItem('loginTimestamp', Date.now().toString());
       base44.auth.redirectToLogin(window.location.href);
+      return;
+    }
+
+    // Cliente sem WhatsApp: abre modal de completar perfil
+    if (!user.phone || user.phone.replace(/\D/g, '').length < 10) {
+      setShowProfileModal(true);
       return;
     }
 
@@ -198,6 +207,16 @@ export default function WhatsAppCallButton({ provider, className = "", size = "d
 
   return (
     <>
+      {showProfileModal && (
+        <CompletarPerfilModal
+          user={user}
+          open={showProfileModal}
+          onClose={() => {
+            setShowProfileModal(false);
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+          }}
+        />
+      )}
       <Button
         size={size}
         onClick={handleCall}

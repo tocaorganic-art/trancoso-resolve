@@ -10,6 +10,8 @@ import FinancialDashboard from "../components/financial/FinancialDashboard";
 import AssistenteFinanceiro from "../components/financial/AssistenteFinanceiro";
 import GettingStartedGuide from "../components/dashboard/GettingStartedGuide";
 import PermissionChecker from "../components/auth/PermissionChecker";
+import SubscriptionPaywall from "../components/dashboard/SubscriptionPaywall";
+import CheckoutSuccessBanner from "../components/dashboard/CheckoutSuccessBanner";
 
 export default function DashboardPage() {
   return (
@@ -20,9 +22,39 @@ export default function DashboardPage() {
 }
 
 function DashboardContent() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const checkoutSuccess = urlParams.get('checkout') === 'success';
+
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
+  });
+
+  // Verifica assinatura ativa (trial ou active)
+  const { data: subscription, isLoading: isLoadingSubscription } = useQuery({
+    queryKey: ['mySubscription', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      const today = new Date().toISOString().split('T')[0];
+      const subs = await base44.entities.Subscription.filter({ user_email: user.email });
+      return subs?.find(sub => {
+        if (sub.status === 'active') {
+          if (sub.next_billing_date && today > sub.next_billing_date) return false;
+          return true;
+        }
+        if (sub.status === 'trial') {
+          return sub.trial_end && today <= sub.trial_end;
+        }
+        return false;
+      }) || null;
+    },
+    enabled: !!user,
+  });
+
+  const { data: allSubs } = useQuery({
+    queryKey: ['allMySubscriptions', user?.email],
+    queryFn: () => base44.entities.Subscription.filter({ user_email: user.email }),
+    enabled: !!user,
   });
 
   const { data: serviceRequests, isLoading: isLoadingRequests } = useQuery({
@@ -37,7 +69,7 @@ function DashboardContent() {
     enabled: !!user,
   });
 
-  const isLoading = isUserLoading || isLoadingRequests || isLoadingTransactions;
+  const isLoading = isUserLoading || isLoadingRequests || isLoadingTransactions || isLoadingSubscription;
 
   if (isLoading) {
     return (
@@ -45,6 +77,12 @@ function DashboardContent() {
         <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
       </div>
     );
+  }
+
+  // Paywall: sem assinatura ativa e não acabou de fazer checkout (aguarda webhook processar)
+  if (!subscription && !checkoutSuccess) {
+    const lastSub = allSubs?.[0];
+    return <SubscriptionPaywall subscriptionStatus={lastSub?.status} />;
   }
 
   const pendingRequests = serviceRequests?.filter(req => req.status === 'Pendente').length || 0;
@@ -56,11 +94,27 @@ function DashboardContent() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {checkoutSuccess && <CheckoutSuccessBanner />}
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900">Painel do Prestador</h1>
         <p className="text-slate-600">Bem-vindo(a) de volta, {user?.full_name || 'Prestador'}!</p>
       </div>
       
+      {/* Alerta: prestador sem telefone cadastrado */}
+      {user && !user.phone && (
+        <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 mb-6 flex items-start gap-3">
+          <span className="text-amber-500 text-xl mt-0.5">⚠️</span>
+          <div className="flex-1">
+            <p className="font-semibold text-amber-800 text-sm">Complete seu perfil — WhatsApp obrigatório</p>
+            <p className="text-amber-700 text-xs mt-0.5">Clientes não conseguem entrar em contato sem seu número de WhatsApp cadastrado no perfil de prestador.</p>
+          </div>
+          <Link to={createPageUrl("MeuPerfilPrestador")}>
+            <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shrink-0">Completar</Button>
+          </Link>
+        </div>
+      )}
+
       {serviceRequests?.length === 0 && (
         <GettingStartedGuide />
       )}

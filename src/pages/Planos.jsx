@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
 import { createSubscriptionCheckout } from "@/functions/createSubscriptionCheckout";
+import CancelSubscriptionButton from "@/components/dashboard/CancelSubscriptionButton";
 
 const beneficios = [
   "Perfil verificado e listagem ativa",
@@ -31,6 +32,16 @@ export default function PlanosPage() {
     queryKey: ['totalProviders'],
     queryFn: () => base44.entities.ServiceProvider.list('-created_date', 200),
     initialData: [],
+  });
+
+  const { data: mySubscription } = useQuery({
+    queryKey: ['mySubscription', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      const subs = await base44.entities.Subscription.filter({ user_email: user.email });
+      return subs?.[0] || null;
+    },
+    enabled: !!user,
   });
 
   const totalProviders = providers?.length || 0;
@@ -158,9 +169,22 @@ export default function PlanosPage() {
           <strong>Transparência total:</strong> Sem comissão sobre seus serviços. Você negocia diretamente com o cliente e fica com 100% do valor.
         </div>
 
-        <p className="text-center text-slate-500 text-sm">
-          Dúvidas? Entre em contato: <strong>contato@trancosoresolve.com.br</strong>
+        <p className="text-center text-slate-500 text-sm mb-6">
+          Dúvidas? Entre em contato: <strong>contato@tocaexperience.com.br</strong>
         </p>
+
+        {/* Gerenciar assinatura existente */}
+        {mySubscription && mySubscription.status === 'active' && (
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center">
+            <p className="text-sm text-slate-600 mb-1">
+              Sua assinatura está ativa
+              {mySubscription.next_billing_date && ` — próxima cobrança em ${new Date(mySubscription.next_billing_date + 'T00:00:00').toLocaleDateString('pt-BR')}`}.
+            </p>
+            <div className="flex justify-center mt-3">
+              <CancelSubscriptionButton accessUntil={mySubscription.next_billing_date} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

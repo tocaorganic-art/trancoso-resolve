@@ -30,27 +30,24 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
     e.preventDefault();
 
     if (!form.phone || form.phone.replace(/\D/g, '').length < 10) {
-      toast.error('Informe um telefone válido.');
+      toast.error('Informe um telefone/WhatsApp válido.');
       return;
     }
-    if (!form.birth_date) {
-      toast.error('Informe sua data de nascimento.');
-      return;
-    }
-
-    // Validar idade mínima 18 anos
-    const hoje = new Date();
-    const nasc = new Date(form.birth_date);
-    const idade = hoje.getFullYear() - nasc.getFullYear();
-    const mesPassou = hoje.getMonth() > nasc.getMonth() || (hoje.getMonth() === nasc.getMonth() && hoje.getDate() >= nasc.getDate());
-    if (idade < 18 || (idade === 18 && !mesPassou)) {
-      toast.error('É necessário ter pelo menos 18 anos.');
-      return;
+    if (form.birth_date) {
+      // Validar idade mínima 18 anos (apenas se preenchido)
+      const hoje = new Date();
+      const nasc = new Date(form.birth_date);
+      const idade = hoje.getFullYear() - nasc.getFullYear();
+      const mesPassou = hoje.getMonth() > nasc.getMonth() || (hoje.getMonth() === nasc.getMonth() && hoje.getDate() >= nasc.getDate());
+      if (idade < 18 || (idade === 18 && !mesPassou)) {
+        toast.error('É necessário ter pelo menos 18 anos.');
+        return;
+      }
     }
 
     mutation.mutate({
       phone: form.phone,
-      birth_date: form.birth_date,
+      ...(form.birth_date ? { birth_date: form.birth_date } : {}),
       profile_completed: true,
     });
   };
@@ -107,29 +104,29 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
             <Input value={user?.email || ''} disabled className="bg-slate-50 text-slate-500" />
           </div>
 
-          {/* Telefone */}
+          {/* Telefone / WhatsApp */}
           <div className="space-y-1">
-            <Label htmlFor="phone">Número de telefone <span className="text-red-500">*</span></Label>
+            <Label htmlFor="phone">WhatsApp <span className="text-red-500">*</span></Label>
             <Input
               id="phone"
               type="tel"
-              placeholder="(__) _____-____"
+              placeholder="(73) 99999-9999"
               value={form.phone}
               onChange={handlePhone}
               required
             />
+            <p className="text-xs text-slate-400">Usado para os prestadores entrarem em contato com você.</p>
           </div>
 
           {/* Data de nascimento */}
           <div className="space-y-1">
-            <Label htmlFor="birth_date">Data de nascimento <span className="text-red-500">*</span></Label>
+            <Label htmlFor="birth_date">Data de nascimento</Label>
             <Input
               id="birth_date"
               type="date"
               value={form.birth_date}
               onChange={(e) => setForm(f => ({ ...f, birth_date: e.target.value }))}
               max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-              required
             />
           </div>
 

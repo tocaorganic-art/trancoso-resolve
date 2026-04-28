@@ -23,10 +23,8 @@ Deno.serve(async (req) => {
       return Response.json({ ok: true, note: 'provider not found' });
     }
 
-    // Find provider's user account by matching name or created_by
-    // We'll search users by checking who created this ServiceProvider record
-    // The provider's email for notifications: try provider.email first, fallback to created_by
-    const providerEmail = provider.email;
+    // Email do prestador: tenta provider.email, fallback para created_by (email do dono do registro)
+    const providerEmail = provider.email || provider.created_by;
 
     if (!providerEmail) {
       console.log('No email for provider:', provider.full_name);

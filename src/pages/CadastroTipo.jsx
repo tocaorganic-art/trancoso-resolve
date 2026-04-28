@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Briefcase } from 'lucide-react';
 import { createPageUrl } from '@/utils';
+import { criarTrialPrestador } from '@/functions/criarTrialPrestador';
 
 export default function CadastroTipoPage() {
   const queryClient = useQueryClient();
@@ -17,13 +18,14 @@ export default function CadastroTipoPage() {
   const updateUserMutation = useMutation({
     mutationFn: (userType) => base44.auth.updateMe({ user_type: userType }),
     onSuccess: async (data) => {
-      // Invalida e recarrega os dados do usuário antes de redirecionar
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       await queryClient.refetchQueries({ queryKey: ['currentUser'] });
-      if (data.user_type === 'cliente') {
-        window.location.replace('/');
-      } else if (data.user_type === 'prestador') {
+      if (data.user_type === 'prestador') {
+        // Cria trial automaticamente (fire-and-forget, não bloqueia o redirect)
+        criarTrialPrestador({ user_email: data.email, user_name: data.full_name }).catch(() => {});
         window.location.replace('/Dashboard');
+      } else {
+        window.location.replace('/');
       }
     },
   });
