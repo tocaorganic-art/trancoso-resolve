@@ -66,47 +66,53 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose(); }}>
-      <DialogContent className="max-w-md p-0 overflow-hidden" onInteractOutside={handleClose}>
+      <DialogContent
+        className="max-w-[420px] w-[calc(100%-32px)] p-0 overflow-hidden rounded-2xl shadow-2xl border-0"
+        style={{ backdropFilter: 'blur(3px)' }}
+        onInteractOutside={handleClose}
+      >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-5 text-white relative">
+        <div className="px-5 py-5 text-white relative" style={{ background: 'linear-gradient(135deg, #00AEEF, #0072FF)' }}>
           <button
             onClick={handleClose}
-            className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors"
+            className="absolute top-3 right-3 bg-white/20 hover:bg-white/30 rounded-full p-1 transition-colors"
             aria-label="Fechar"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 text-white" />
           </button>
-          <div className="flex items-center gap-3 mb-1">
+          <div className="flex items-center gap-3 mb-3">
             <img
               src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
               alt="Logo"
-              className="h-8 w-8"
+              className="h-8 w-8 rounded"
             />
-            <span className="font-bold text-lg">Trancoso Resolve</span>
+            <span className="font-bold text-base">Trancoso Resolve</span>
           </div>
-          <h2 className="text-xl font-bold mt-2">Complete seu cadastro</h2>
-          <p className="text-blue-100 text-sm mt-1">
-            Preencha seus dados para acessar as ferramentas exclusivas Toca TrIA e Toca Vision.
+          <h2 className="text-xl font-bold leading-tight">Complete seu cadastro</h2>
+          <p className="text-white/90 text-sm mt-1 leading-snug">
+            Leva menos de 1 minuto e libera acesso às ferramentas exclusivas da Toca em Trancoso.
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-          {/* Nome (somente leitura — vem do login social) */}
+        <form onSubmit={handleSubmit} className="px-5 py-5 space-y-4 bg-white">
+          {/* Nome (somente leitura) */}
           <div className="space-y-1">
-            <Label>Nome completo</Label>
-            <Input value={user?.full_name || ''} disabled className="bg-slate-50 text-slate-500" />
+            <Label className="text-sm font-semibold text-slate-700">Nome completo</Label>
+            <Input value={user?.full_name || ''} disabled className="bg-slate-100 text-slate-500 border-slate-200 text-sm h-10" />
           </div>
 
           {/* E-mail (somente leitura) */}
           <div className="space-y-1">
-            <Label>Endereço de e-mail</Label>
-            <Input value={user?.email || ''} disabled className="bg-slate-50 text-slate-500" />
+            <Label className="text-sm font-semibold text-slate-700">Endereço de e-mail</Label>
+            <Input value={user?.email || ''} disabled className="bg-slate-100 text-slate-500 border-slate-200 text-sm h-10" />
           </div>
 
           {/* Telefone / WhatsApp */}
           <div className="space-y-1">
-            <Label htmlFor="phone">WhatsApp <span className="text-red-500">*</span></Label>
+            <Label htmlFor="phone" className="text-sm font-semibold text-slate-700">
+              WhatsApp <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="phone"
               type="tel"
@@ -114,36 +120,41 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
               value={form.phone}
               onChange={handlePhone}
               required
+              className="border-slate-300 text-sm h-10 focus:border-blue-500"
             />
-            <p className="text-xs text-slate-400">Usado para os prestadores entrarem em contato com você.</p>
+            <p className="text-xs text-slate-500 leading-snug">
+              Seu número nunca será exibido publicamente — usado apenas para conectar você ao prestador escolhido.
+            </p>
           </div>
 
           {/* Data de nascimento */}
           <div className="space-y-1">
-            <Label htmlFor="birth_date">Data de nascimento</Label>
+            <Label htmlFor="birth_date" className="text-sm font-semibold text-slate-700">Data de nascimento</Label>
             <Input
               id="birth_date"
               type="date"
               value={form.birth_date}
               onChange={(e) => setForm(f => ({ ...f, birth_date: e.target.value }))}
               max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+              className="border-slate-300 text-sm h-10"
             />
           </div>
 
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 font-bold h-11"
+            className="w-full font-bold h-12 rounded-full text-base mt-2"
+            style={{ background: 'linear-gradient(135deg, #00AEEF, #00C853)', border: 'none' }}
             disabled={mutation.isPending}
           >
             {mutation.isPending ? (
               <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Salvando...</>
             ) : (
-              <><CheckCircle className="w-4 h-4 mr-2" /> Concluir cadastro</>
+              <><CheckCircle className="w-4 h-4 mr-2" /> Concluir cadastro e continuar</>
             )}
           </Button>
 
-          <p className="text-xs text-slate-500 text-center">
-            Ao concluir seu cadastro, você terá acesso às ferramentas exclusivas da plataforma Trancoso Resolve.
+          <p className="text-xs text-slate-400 text-center leading-snug">
+            Ao concluir, você terá acesso às ferramentas exclusivas da plataforma Trancoso Resolve.
           </p>
         </form>
       </DialogContent>
