@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckCircle, MapPin, Star, Zap, Users } from "lucide-react";
+import { CheckCircle, MapPin, Star, Zap, Users, Heart, TrendingUp, Brain, Image } from "lucide-react";
 
 const CATEGORIES = [
   { emoji: "🧹", label: "Limpeza" },
@@ -169,6 +169,43 @@ export default function PreLancamento() {
           <div className="flex items-center gap-2">
             <Star className="w-4 h-4" />
             <span className="text-sm">Com IA integrada</span>
+          </div>
+        </div>
+
+        {/* Missão */}
+        <div className="mt-16 w-full max-w-3xl px-2">
+          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 md:p-10 text-left border border-white/20">
+            <div className="flex items-center gap-3 mb-4">
+              <Heart className="w-6 h-6 text-white" />
+              <h2 className="text-2xl font-bold text-white">Nossa Missão</h2>
+            </div>
+            <p className="text-white/90 text-base leading-relaxed mb-8">
+              Fortalecer a comunidade local por meio da criação de empregos e da facilitação do acesso a serviços de qualidade. Queremos garantir um impacto positivo e duradouro na vida de cada usuário.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white/10 rounded-2xl p-5 border border-white/15">
+                <TrendingUp className="w-8 h-8 text-yellow-300 mb-3" />
+                <h3 className="font-bold text-white mb-1">Dashboard Financeiro</h3>
+                <p className="text-white/75 text-sm leading-relaxed">
+                  Gerencie seus trabalhos <em>e</em> suas finanças pessoais diárias em um único lugar. Controle de dívidas com IA.
+                </p>
+              </div>
+              <div className="bg-white/10 rounded-2xl p-5 border border-white/15">
+                <Brain className="w-8 h-8 text-purple-300 mb-3" />
+                <h3 className="font-bold text-white mb-1">Inteligência Artificial</h3>
+                <p className="text-white/75 text-sm leading-relaxed">
+                  IA robusta para sugestões de gestão financeira, organização de agenda e recomendações personalizadas.
+                </p>
+              </div>
+              <div className="bg-white/10 rounded-2xl p-5 border border-white/15">
+                <Image className="w-8 h-8 text-green-300 mb-3" />
+                <h3 className="font-bold text-white mb-1">Geração de Imagens</h3>
+                <p className="text-white/75 text-sm leading-relaxed">
+                  Crie imagens personalizadas com IA para divulgar seus serviços e atrair mais clientes.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </main>
