@@ -12,6 +12,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import FilaVerificacaoPage from '@/pages/FilaVerificacao';
 import AdminPagamentosPage from '@/pages/AdminPagamentos';
+import PreLancamentoPage from '@/pages/PreLancamento';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -79,6 +80,7 @@ const AuthenticatedApp = () => {
             <AnimatedPage><AdminPagamentosPage /></AnimatedPage>
           </LayoutWrapper>
         } />
+        <Route path="/PreLancamento" element={<PreLancamentoPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatePresence>
