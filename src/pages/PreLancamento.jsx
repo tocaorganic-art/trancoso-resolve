@@ -1,49 +1,95 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckCircle, Heart, TrendingUp, Brain, ImageIcon, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, ShieldCheck, MapPin, Star, Users, Building2, Wrench } from "lucide-react";
 
-const MISSION_ITEMS = [
+const AUDIENCE = [
   {
-    icon: TrendingUp,
-    color: "text-amber-400",
-    title: "Dashboard Financeiro",
-    desc: "Gerencie trabalhos e finanças pessoais em um único lugar. Controle de dívidas com IA.",
+    icon: Users,
+    title: "Moradores",
+    desc: "Encontre rapidamente prestadores de confiança para manutenção, reformas, eventos, bem-estar e serviços do cotidiano — sempre priorizando quem é daqui.",
+    color: "bg-blue-50 border-blue-100",
+    iconColor: "text-blue-600",
   },
   {
-    icon: Brain,
-    color: "text-purple-400",
-    title: "Toca TrIA",
-    desc: "Inteligência artificial robusta para gestão financeira, agenda e recomendações personalizadas.",
+    icon: Building2,
+    title: "Empresários, pousadas e restaurantes",
+    desc: "Organize serviços para seus hóspedes e clientes, encontre fornecedores locais e tenha uma vitrine para divulgar sua marca dentro da comunidade.",
+    color: "bg-amber-50 border-amber-100",
+    iconColor: "text-amber-600",
   },
   {
-    icon: ImageIcon,
-    color: "text-emerald-400",
-    title: "Toca Vision",
-    desc: "Crie imagens profissionais com IA para divulgar seus serviços e atrair mais clientes.",
+    icon: Wrench,
+    title: "Prestadores e autônomos",
+    desc: "Mostre seu trabalho, conquiste novos clientes e construa reputação em uma plataforma que entende a realidade de Trancoso.",
+    color: "bg-emerald-50 border-emerald-100",
+    iconColor: "text-emerald-600",
   },
 ];
 
+const STRENGTHS = [
+  {
+    icon: MapPin,
+    title: "Prioridade para quem é daqui",
+    desc: "Prestadores e empresas de Trancoso têm destaque na busca, para que o dinheiro circule dentro do vilarejo.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Curadoria e verificação",
+    desc: "Cada profissional passa por checagem antes de aparecer na plataforma, protegendo a reputação dos bons prestadores.",
+  },
+  {
+    icon: Star,
+    title: "Reputação construída na comunidade",
+    desc: "Avaliações reais de clientes locais que ajudam os melhores profissionais a se destacarem.",
+  },
+];
+
+const TYPES = [
+  { value: "morador", label: "Morador" },
+  { value: "prestador", label: "Prestador / autônomo" },
+  { value: "empresario", label: "Empresário / pousada / restaurante" },
+  { value: "outro", label: "Outro" },
+];
+
 export default function PreLancamento() {
-  const [form, setForm] = useState({ email: "", name: "", type: "cliente" });
+  const [form, setForm] = useState({ name: "", email: "", whatsapp: "", type: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showMission, setShowMission] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [preType, setPreType] = useState(""); // "cliente" | "prestador"
+
+  const openForm = (type) => {
+    setPreType(type);
+    setForm((f) => ({
+      ...f,
+      type: type === "prestador" ? "prestador" : "",
+    }));
+    setShowForm(true);
+    setTimeout(() => {
+      document.getElementById("form-section")?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.email) return;
+    if (!form.email || !form.name || !form.type) {
+      setError("Preencha nome, e-mail e quem você é.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
       await base44.entities.LeadPreLancamento.create({
         email: form.email,
         name: form.name,
-        type: form.type,
+        whatsapp: form.whatsapp,
+        type: form.type === "prestador" || form.type === "autônomo" ? "prestador" : "cliente",
       });
       setSubmitted(true);
+      setShowForm(false);
     } catch {
       setError("Erro ao cadastrar. Tente novamente.");
     } finally {
@@ -52,229 +98,240 @@ export default function PreLancamento() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-950">
+    <div className="min-h-screen bg-white text-slate-900">
 
-      {/* ─── LADO ESQUERDO — Hero com imagem ─── */}
-      <div
-        className="relative lg:flex-1 min-h-[45vh] lg:min-h-screen flex flex-col justify-end"
+      {/* ── NAVBAR ── */}
+      <nav className="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-sm">
+        <div className="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <img
+              src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
+              alt="Trancoso Resolve"
+              className="h-8 w-8"
+            />
+            <span className="font-bold text-slate-900 text-base">Trancoso Resolve</span>
+          </div>
+          <button
+            onClick={() => openForm("cliente")}
+            className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            Quero participar →
+          </button>
+        </div>
+      </nav>
+
+      {/* ── HERO ── */}
+      <section
+        className="relative min-h-[92vh] flex items-end"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80')",
+            "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=85')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        {/* Overlay gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/70 to-slate-800/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-700/10" />
 
-        {/* Logo topo */}
-        <div className="absolute top-6 left-6 flex items-center gap-3 z-10">
-          <img
-            src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
-            alt="Trancoso Resolve"
-            className="h-9 w-9"
-          />
-          <span className="font-bold text-white text-lg tracking-wide">Trancoso Resolve</span>
-        </div>
-
-        {/* Texto hero */}
-        <div className="relative z-10 p-8 lg:p-12 pb-12">
-          <div className="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-5 uppercase tracking-widest">
-            ✦ Lançamento em breve
+        <div className="relative z-10 w-full max-w-3xl mx-auto px-6 pb-16 md:pb-20">
+          <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
+            ✦ Pré-lançamento
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
-            Sua Expertise<br />no Coração de<br />
-            <span className="text-amber-400">Trancoso</span>
+
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-[1.1] mb-5">
+            Trancoso Resolve
           </h1>
-          <p className="text-slate-300 text-base lg:text-lg leading-relaxed max-w-md">
-            Junte-se à rede exclusiva de profissionais que atende clientes de alto padrão em um dos destinos mais desejados do Brasil.
+          <p className="text-lg md:text-xl text-white/80 leading-relaxed mb-4 max-w-xl">
+            Conectando quem vive, trabalha e investe em Trancoso
+          </p>
+          <p className="text-base text-white/65 leading-relaxed mb-8 max-w-xl">
+            Uma plataforma feita por e para a comunidade. Aqui, moradores, pousadas, restaurantes e prestadores se encontram para resolver o dia a dia, fortalecer negócios e valorizar o que é local.
           </p>
 
-          {/* Selos */}
-          <div className="flex flex-wrap gap-3 mt-6">
-            {["Profissionais verificados", "IA integrada", "Trancoso, Bahia"].map((tag) => (
-              <span
-                key={tag}
-                className="bg-white/10 border border-white/20 text-white/80 text-xs px-3 py-1 rounded-full"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => openForm("cliente")}
+              className="flex-1 sm:flex-none px-6 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base transition-all shadow-lg shadow-blue-900/40"
+            >
+              Quero ser cliente
+            </button>
+            <button
+              onClick={() => openForm("prestador")}
+              className="flex-1 sm:flex-none px-6 py-4 rounded-2xl bg-white/10 border border-white/25 hover:bg-white/20 text-white font-bold text-base transition-all backdrop-blur-sm"
+            >
+              Sou prestador ou empresário
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-3 mt-8">
+            <span className="text-white/50 text-sm">Receba serviços de prestadores verificados da comunidade.</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ─── LADO DIREITO — Card de acesso ─── */}
-      <div className="lg:w-[460px] flex flex-col justify-center px-6 py-10 lg:px-12 bg-slate-950 lg:overflow-y-auto">
+      {/* ── PARA QUEM É ── */}
+      <section className="py-16 md:py-24 px-5 bg-slate-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 text-center mb-3">
+            Para quem é o Trancoso Resolve?
+          </h2>
+          <p className="text-slate-500 text-center mb-12 max-w-lg mx-auto">
+            Desenvolvido para atender toda a comunidade de Trancoso.
+          </p>
 
-        {submitted ? (
-          <div className="text-center py-8">
-            <CheckCircle className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">Você está na lista! 🎉</h2>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Avisaremos você assim que o Trancoso Resolve abrir.<br />Fique de olho no seu email.
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {AUDIENCE.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className={`rounded-2xl border p-6 ${item.color}`}>
+                  <Icon className={`w-8 h-8 mb-4 ${item.iconColor}`} />
+                  <h3 className="font-bold text-slate-900 text-lg mb-2">{item.title}</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              );
+            })}
           </div>
-        ) : (
-          <>
-            {/* ── Bloco Login ── */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-white mb-1">Entrar na minha conta</h2>
-              <p className="text-slate-400 text-sm mb-6">
-                Já faz parte da rede Trancoso Resolve? Entre para continuar.
+        </div>
+      </section>
+
+      {/* ── COMO FORTALECEMOS ── */}
+      <section className="py-16 md:py-24 px-5 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 text-center mb-12">
+            Como fortalecemos a comunidade
+          </h2>
+          <div className="space-y-6">
+            {STRENGTHS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className="flex gap-5 items-start p-5 rounded-2xl border border-slate-100 hover:border-blue-100 hover:bg-blue-50/40 transition-all">
+                  <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-1">{item.title}</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FORMULÁRIO DE PRÉ-LANÇAMENTO ── */}
+      <section id="form-section" className="py-16 md:py-24 px-5 bg-slate-900">
+        <div className="max-w-lg mx-auto">
+          {submitted ? (
+            <div className="text-center py-10">
+              <CheckCircle className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-2">Você está na lista! 🎉</h2>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Avisaremos você assim que o Trancoso Resolve abrir.<br />Fique de olho no seu e-mail.
               </p>
-
-              <p className="text-xs text-slate-500 uppercase tracking-widest mb-3 font-semibold">Entrar com</p>
-
-              <div className="space-y-2">
-                <button
-                  onClick={() => base44.auth.redirectToLogin()}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-medium hover:bg-white/10 transition-all"
-                >
-                  <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" />
-                  Continuar com Google
-                </button>
-                <button
-                  onClick={() => base44.auth.redirectToLogin()}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-medium hover:bg-white/10 transition-all"
-                >
-                  <img src="https://www.microsoft.com/favicon.ico" className="w-4 h-4" alt="Microsoft" />
-                  Continuar com Microsoft
-                </button>
-              </div>
-
-              <div className="flex items-center gap-3 my-5">
-                <div className="flex-1 h-px bg-white/10" />
-                <span className="text-slate-500 text-xs">ou entre com seu e-mail</span>
-                <div className="flex-1 h-px bg-white/10" />
-              </div>
-
-              <button
-                onClick={() => base44.auth.redirectToLogin()}
-                className="w-full py-3 rounded-xl border border-white/15 text-slate-300 text-sm font-medium hover:bg-white/5 transition-all"
-              >
-                Continuar com e-mail / senha
-              </button>
             </div>
+          ) : (
+            <>
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">
+                  ✦ Acesso antecipado
+                </div>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">
+                  Quero participar do pré-lançamento
+                </h2>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  Deixe seus dados para receber acesso antecipado, novidades e oportunidades exclusivas.
+                </p>
+              </div>
 
-            {/* Divisor */}
-            <div className="border-t border-white/10 mb-8" />
-
-            {/* ── Bloco Cadastro / acesso antecipado ── */}
-            <div>
-              <h2 className="text-xl font-bold text-white mb-1">Cadastro de Cliente ou Prestador</h2>
-              <p className="text-slate-400 text-sm mb-5">
-                Ainda não faz parte do Trancoso Resolve? Preencha seus dados e receba acesso antecipado às ferramentas exclusivas <strong className="text-white">Toca TrIA</strong> e <strong className="text-white">Toca Vision</strong>.
-              </p>
-
-              <form onSubmit={handleSubmit} className="space-y-3">
+              <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-3xl p-7 shadow-2xl">
                 <div>
-                  <label className="text-xs text-slate-400 mb-1 block">Nome completo</label>
+                  <label className="text-xs font-semibold text-slate-700 mb-1.5 block">Nome *</label>
                   <Input
-                    placeholder="Digite seu nome completo"
+                    placeholder="Seu nome completo"
                     value={form.name}
                     onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    className="h-11 bg-white/5 border-white/15 text-white placeholder:text-slate-500 focus:border-amber-400"
+                    required
+                    className="h-11 border-slate-200 text-slate-900 placeholder:text-slate-400"
                   />
                 </div>
+
                 <div>
-                  <label className="text-xs text-slate-400 mb-1 block">Endereço de e-mail *</label>
+                  <label className="text-xs font-semibold text-slate-700 mb-1.5 block">E-mail *</label>
                   <Input
                     type="email"
                     placeholder="seuemail@exemplo.com"
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                     required
-                    className="h-11 bg-white/5 border-white/15 text-white placeholder:text-slate-500 focus:border-amber-400"
+                    className="h-11 border-slate-200 text-slate-900 placeholder:text-slate-400"
                   />
                 </div>
 
-                {/* Tipo */}
                 <div>
-                  <label className="text-xs text-slate-400 mb-2 block">Quero me cadastrar como</label>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setForm((f) => ({ ...f, type: "cliente" }))}
-                      className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
-                        form.type === "cliente"
-                          ? "border-amber-400 bg-amber-400/10 text-amber-300"
-                          : "border-white/10 text-slate-500 hover:border-white/20"
-                      }`}
-                    >
-                      👤 Cliente
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setForm((f) => ({ ...f, type: "prestador" }))}
-                      className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
-                        form.type === "prestador"
-                          ? "border-emerald-400 bg-emerald-400/10 text-emerald-300"
-                          : "border-white/10 text-slate-500 hover:border-white/20"
-                      }`}
-                    >
-                      🔧 Prestador
-                    </button>
+                  <label className="text-xs font-semibold text-slate-700 mb-1.5 block">WhatsApp</label>
+                  <Input
+                    type="tel"
+                    placeholder="(__) _____-____"
+                    value={form.whatsapp}
+                    onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))}
+                    className="h-11 border-slate-200 text-slate-900 placeholder:text-slate-400"
+                  />
+                  <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+                    Usaremos este número apenas para conectar você com prestadores e clientes verificados. Seu contato não será exibido publicamente.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 mb-2 block">Quem é você? *</label>
+                  <div className="grid grid-cols-1 gap-2">
+                    {TYPES.map((t) => (
+                      <label
+                        key={t.value}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 cursor-pointer transition-all ${
+                          form.type === t.value
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-slate-200 hover:border-slate-300"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="type"
+                          value={t.value}
+                          checked={form.type === t.value}
+                          onChange={() => setForm((f) => ({ ...f, type: t.value }))}
+                          className="accent-blue-600"
+                        />
+                        <span className={`text-sm font-medium ${form.type === t.value ? "text-blue-700" : "text-slate-700"}`}>
+                          {t.label}
+                        </span>
+                      </label>
+                    ))}
                   </div>
                 </div>
 
-                {error && <p className="text-red-400 text-xs">{error}</p>}
+                {error && <p className="text-red-500 text-xs">{error}</p>}
 
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-12 font-bold text-base rounded-xl border-0 mt-1"
-                  style={{ background: "linear-gradient(135deg, #d97706, #b45309)" }}
+                  className="w-full h-12 font-bold text-base rounded-xl bg-blue-600 hover:bg-blue-700 text-white border-0"
                 >
-                  {loading ? "Cadastrando..." : "Concluir cadastro →"}
+                  {loading ? "Cadastrando..." : "Quero participar do pré-lançamento →"}
                 </Button>
 
-                <p className="text-xs text-slate-500 text-center pt-1">
-                  Sem spam. Apenas um email quando lançarmos. 🔒
+                <p className="text-xs text-slate-400 text-center leading-relaxed">
+                  Seus dados serão usados apenas para comunicação sobre a Trancoso Resolve e oportunidades em Trancoso. Sem spam.
                 </p>
               </form>
-            </div>
-          </>
-        )}
-
-        {/* ── Nossa Missão (expansível) ── */}
-        <div className="mt-10 border-t border-white/10 pt-6">
-          <button
-            onClick={() => setShowMission((v) => !v)}
-            className="flex items-center justify-between w-full text-left group"
-          >
-            <div className="flex items-center gap-2">
-              <Heart className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-semibold text-slate-300 group-hover:text-white transition-colors">Nossa Missão</span>
-            </div>
-            <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${showMission ? "rotate-180" : ""}`} />
-          </button>
-
-          {showMission && (
-            <div className="mt-4 space-y-3">
-              <p className="text-slate-400 text-xs leading-relaxed">
-                Fortalecer a comunidade local por meio da criação de empregos e da facilitação do acesso a serviços de qualidade — com tecnologia de ponta e IA.
-              </p>
-              {MISSION_ITEMS.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.title} className="flex gap-3 bg-white/5 rounded-xl p-3">
-                    <Icon className={`w-5 h-5 mt-0.5 shrink-0 ${item.color}`} />
-                    <div>
-                      <p className="text-xs font-semibold text-white">{item.title}</p>
-                      <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            </>
           )}
         </div>
+      </section>
 
-        <p className="text-center text-slate-600 text-xs mt-8">
-          © 2025 Trancoso Resolve · Trancoso, Bahia
-        </p>
-      </div>
+      {/* ── FOOTER ── */}
+      <footer className="bg-slate-950 py-6 text-center">
+        <p className="text-slate-600 text-xs">© 2025 Trancoso Resolve · Trancoso, Bahia · Todos os direitos reservados</p>
+      </footer>
     </div>
   );
 }
