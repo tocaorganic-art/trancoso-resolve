@@ -399,7 +399,7 @@ npm run build
 
 export default function DeployDashboard() {
   return (
-    <PermissionChecker requiredUserType="prestador">
+    <PermissionChecker requiredRole="admin">
       <DeployDashboardContent />
     </PermissionChecker>
   );

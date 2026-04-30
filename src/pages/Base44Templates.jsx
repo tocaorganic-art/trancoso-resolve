@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Copy, FileJson, FileText, Book } from 'lucide-react';
 import { toast } from 'sonner';
+import PermissionChecker from '@/components/auth/PermissionChecker';
 
 const COMMAND_TEMPLATE = `{
   "command_id": "BASE44_Command_Name_V1",
@@ -236,7 +237,7 @@ Página completa: \`/Base44ReportViewer\`
 **Email:** tony@base44.io  
 **Versão:** 1.0`;
 
-export default function Base44Templates() {
+function Base44TemplatesContent() {
   const [activeTab, setActiveTab] = useState('command');
 
   const copyToClipboard = (text, label) => {
@@ -401,5 +402,13 @@ export default function Base44Templates() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Base44Templates() {
+  return (
+    <PermissionChecker requiredRole="admin">
+      <Base44TemplatesContent />
+    </PermissionChecker>
   );
 }

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileJson, Eye } from 'lucide-react';
+import PermissionChecker from '@/components/auth/PermissionChecker';
 
 // Example report data
 const exampleReport = {
@@ -66,7 +67,7 @@ const exampleReport = {
   observacoes: 'Build executado com sucesso. Todos os testes passaram. Sistema operando em condições ideais.'
 };
 
-export default function Base44ReportViewer() {
+function Base44ReportViewerContent() {
   const [jsonInput, setJsonInput] = useState(JSON.stringify(exampleReport, null, 2));
   const [reportData, setReportData] = useState(exampleReport);
   const [error, setError] = useState(null);
@@ -131,5 +132,13 @@ export default function Base44ReportViewer() {
 
       <Base44ReportPreview reportData={reportData} />
     </div>
+  );
+}
+
+export default function Base44ReportViewer() {
+  return (
+    <PermissionChecker requiredRole="admin">
+      <Base44ReportViewerContent />
+    </PermissionChecker>
   );
 }
