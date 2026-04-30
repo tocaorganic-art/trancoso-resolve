@@ -1,46 +1,37 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, ShieldCheck, MapPin, Star, Users, Building2, Wrench } from "lucide-react";
 
 const AUDIENCE = [
   {
-    icon: Users,
+    emoji: "🏡",
     title: "Moradores",
     desc: "Encontre rapidamente prestadores de confiança para manutenção, reformas, eventos, bem-estar e serviços do cotidiano — sempre priorizando quem é daqui.",
-    color: "bg-blue-50 border-blue-100",
-    iconColor: "text-blue-600",
   },
   {
-    icon: Building2,
+    emoji: "🏨",
     title: "Empresários, pousadas e restaurantes",
     desc: "Organize serviços para seus hóspedes e clientes, encontre fornecedores locais e tenha uma vitrine para divulgar sua marca dentro da comunidade.",
-    color: "bg-amber-50 border-amber-100",
-    iconColor: "text-amber-600",
   },
   {
-    icon: Wrench,
+    emoji: "🔧",
     title: "Prestadores e autônomos",
     desc: "Mostre seu trabalho, conquiste novos clientes e construa reputação em uma plataforma que entende a realidade de Trancoso.",
-    color: "bg-emerald-50 border-emerald-100",
-    iconColor: "text-emerald-600",
   },
 ];
 
 const STRENGTHS = [
   {
-    icon: MapPin,
+    emoji: "📍",
     title: "Prioridade para quem é daqui",
     desc: "Prestadores e empresas de Trancoso têm destaque na busca, para que o dinheiro circule dentro do vilarejo.",
   },
   {
-    icon: ShieldCheck,
+    emoji: "✅",
     title: "Curadoria e verificação",
     desc: "Cada profissional passa por checagem antes de aparecer na plataforma, protegendo a reputação dos bons prestadores.",
   },
   {
-    icon: Star,
+    emoji: "⭐",
     title: "Reputação construída na comunidade",
     desc: "Avaliações reais de clientes locais que ajudam os melhores profissionais a se destacarem.",
   },
@@ -58,19 +49,9 @@ export default function PreLancamento() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [preType, setPreType] = useState(""); // "cliente" | "prestador"
 
-  const openForm = (type) => {
-    setPreType(type);
-    setForm((f) => ({
-      ...f,
-      type: type === "prestador" ? "prestador" : "",
-    }));
-    setShowForm(true);
-    setTimeout(() => {
-      document.getElementById("form-section")?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+  const scrollToForm = () => {
+    document.getElementById("pre-cadastro")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleSubmit = async (e) => {
@@ -86,10 +67,9 @@ export default function PreLancamento() {
         email: form.email,
         name: form.name,
         whatsapp: form.whatsapp,
-        type: form.type === "prestador" || form.type === "autônomo" ? "prestador" : "cliente",
+        type: form.type === "prestador" ? "prestador" : "cliente",
       });
       setSubmitted(true);
-      setShowForm(false);
     } catch {
       setError("Erro ao cadastrar. Tente novamente.");
     } finally {
@@ -98,228 +78,239 @@ export default function PreLancamento() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div style={{ fontFamily: "'Inter', sans-serif", background: "#F9FAFB", color: "#374151", lineHeight: "1.6" }}>
 
       {/* ── NAVBAR ── */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-sm">
-        <div className="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <img
-              src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
-              alt="Trancoso Resolve"
-              className="h-8 w-8"
-            />
-            <span className="font-bold text-slate-900 text-base">Trancoso Resolve</span>
-          </div>
-          <button
-            onClick={() => openForm("cliente")}
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-          >
-            Quero participar →
-          </button>
+      <nav style={{
+        position: "fixed", top: 0, left: 0, right: 0, height: 54,
+        background: "rgba(255,255,255,0.96)", backdropFilter: "blur(8px)",
+        borderBottom: "1px solid #e5e7eb", display: "flex", alignItems: "center",
+        justifyContent: "space-between", padding: "0 24px", zIndex: 100,
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <img
+            src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
+            alt="Trancoso Resolve" style={{ height: 28, width: 28 }}
+          />
+          <span style={{
+            fontSize: "1rem", fontWeight: 800,
+            background: "linear-gradient(135deg, #00AEEF, #0072FF)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            letterSpacing: "-0.3px",
+          }}>
+            Trancoso Resolve
+          </span>
         </div>
+        <span style={{
+          fontSize: "0.7rem", fontWeight: 600,
+          background: "linear-gradient(135deg, #00AEEF, #00C853)",
+          color: "white", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          border: "1px solid #00AEEF", padding: "3px 10px", borderRadius: 999,
+          letterSpacing: "0.5px",
+        }}>
+          PRÉ-LANÇAMENTO
+        </span>
       </nav>
 
       {/* ── HERO ── */}
-      <section
-        className="relative min-h-[92vh] flex items-end"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=85')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-700/10" />
+      <section style={{
+        minHeight: "100vh",
+        background: "linear-gradient(160deg, #0a1628 0%, #0f2a4a 50%, #0a1628 100%)",
+        display: "flex", flexDirection: "column", alignItems: "center",
+        justifyContent: "center", textAlign: "center",
+        padding: "100px 24px 60px", position: "relative", overflow: "hidden",
+      }}>
+        {/* Glow */}
+        <div style={{
+          position: "absolute", width: 600, height: 600,
+          background: "radial-gradient(circle, rgba(0,174,239,0.15) 0%, transparent 70%)",
+          top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none",
+        }} />
 
-        <div className="relative z-10 w-full max-w-3xl mx-auto px-6 pb-16 md:pb-20">
-          <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
-            ✦ Pré-lançamento
-          </div>
+        <p style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: 2, color: "#00AEEF", textTransform: "uppercase", marginBottom: 16 }}>
+          ✦ Em breve para Trancoso
+        </p>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-[1.1] mb-5">
-            Trancoso Resolve
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 leading-relaxed mb-4 max-w-xl">
+        <h1 style={{ fontSize: "clamp(2rem, 6vw, 3.5rem)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 8, letterSpacing: "-0.5px", maxWidth: 700 }}>
+          Trancoso Resolve<br />
+          <span style={{ background: "linear-gradient(135deg, #00AEEF, #00C853)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
             Conectando quem vive, trabalha e investe em Trancoso
-          </p>
-          <p className="text-base text-white/65 leading-relaxed mb-8 max-w-xl">
-            Uma plataforma feita por e para a comunidade. Aqui, moradores, pousadas, restaurantes e prestadores se encontram para resolver o dia a dia, fortalecer negócios e valorizar o que é local.
-          </p>
+          </span>
+        </h1>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={() => openForm("cliente")}
-              className="flex-1 sm:flex-none px-6 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base transition-all shadow-lg shadow-blue-900/40"
-            >
-              Quero ser cliente
-            </button>
-            <button
-              onClick={() => openForm("prestador")}
-              className="flex-1 sm:flex-none px-6 py-4 rounded-2xl bg-white/10 border border-white/25 hover:bg-white/20 text-white font-bold text-base transition-all backdrop-blur-sm"
-            >
-              Sou prestador ou empresário
-            </button>
-          </div>
+        <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.2rem)", color: "rgba(255,255,255,0.75)", maxWidth: 580, margin: "16px auto 36px", lineHeight: 1.65 }}>
+          Uma plataforma feita por e para a comunidade. Aqui, moradores, pousadas, restaurantes e prestadores se encontram para resolver o dia a dia, fortalecer negócios e valorizar o que é local.
+        </p>
 
-          <div className="flex flex-wrap gap-3 mt-8">
-            <span className="text-white/50 text-sm">Receba serviços de prestadores verificados da comunidade.</span>
-          </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginBottom: 48 }}>
+          <button onClick={scrollToForm} style={btnPrimary}>
+            Quero ser cliente
+          </button>
+          <button onClick={scrollToForm} style={btnSecondary}>
+            Sou prestador ou empresário
+          </button>
+        </div>
+
+        <div style={{ display: "flex", gap: 40, flexWrap: "wrap", justifyContent: "center", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 36 }}>
+          {[
+            { num: "100%", label: "Profissionais verificados" },
+            { num: "Local", label: "Foco na comunidade" },
+            { num: "IA", label: "Ferramentas inteligentes" },
+          ].map((s) => (
+            <div key={s.label} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#fff" }}>{s.num}</div>
+              <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.55)", marginTop: 2 }}>{s.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ── PARA QUEM É ── */}
-      <section className="py-16 md:py-24 px-5 bg-slate-50">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 text-center mb-3">
-            Para quem é o Trancoso Resolve?
-          </h2>
-          <p className="text-slate-500 text-center mb-12 max-w-lg mx-auto">
-            Desenvolvido para atender toda a comunidade de Trancoso.
-          </p>
+      <section style={{ padding: "80px 24px", maxWidth: 1100, margin: "0 auto" }}>
+        <p style={sectionLabel}>Para quem é</p>
+        <h2 style={sectionTitle}>O Trancoso Resolve é para toda a comunidade</h2>
+        <p style={sectionSub}>Desenvolvido para atender moradores, empresários e prestadores em um só lugar.</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {AUDIENCE.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.title} className={`rounded-2xl border p-6 ${item.color}`}>
-                  <Icon className={`w-8 h-8 mb-4 ${item.iconColor}`} />
-                  <h3 className="font-bold text-slate-900 text-lg mb-2">{item.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              );
-            })}
-          </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20, marginTop: 48 }}>
+          {AUDIENCE.map((item) => (
+            <div key={item.title} style={card}>
+              <div style={{ fontSize: "2rem", marginBottom: 16 }}>{item.emoji}</div>
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#111827", marginBottom: 10 }}>{item.title}</h3>
+              <p style={{ fontSize: "0.9rem", color: "#6B7280", lineHeight: 1.65 }}>{item.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ── COMO FORTALECEMOS ── */}
-      <section className="py-16 md:py-24 px-5 bg-white">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 text-center mb-12">
-            Como fortalecemos a comunidade
-          </h2>
-          <div className="space-y-6">
-            {STRENGTHS.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.title} className="flex gap-5 items-start p-5 rounded-2xl border border-slate-100 hover:border-blue-100 hover:bg-blue-50/40 transition-all">
-                  <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-slate-900 mb-1">{item.title}</h3>
-                    <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
-                  </div>
+      <section style={{ background: "linear-gradient(135deg, #0a1628, #0f2a4a)", padding: "80px 24px" }}>
+        <div style={{ maxWidth: 800, margin: "0 auto" }}>
+          <p style={{ ...sectionLabel, color: "#00AEEF" }}>Nosso compromisso</p>
+          <h2 style={{ ...sectionTitle, color: "#fff" }}>Como fortalecemos a comunidade</h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 48 }}>
+            {STRENGTHS.map((item) => (
+              <div key={item.title} style={{
+                display: "flex", gap: 20, alignItems: "flex-start",
+                background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 16, padding: 24,
+              }}>
+                <div style={{
+                  width: 48, height: 48, borderRadius: 12, flexShrink: 0,
+                  background: "rgba(0,174,239,0.15)", display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "1.3rem",
+                }}>
+                  {item.emoji}
                 </div>
-              );
-            })}
+                <div>
+                  <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#fff", marginBottom: 6 }}>{item.title}</h3>
+                  <p style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.65 }}>{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── FORMULÁRIO DE PRÉ-LANÇAMENTO ── */}
-      <section id="form-section" className="py-16 md:py-24 px-5 bg-slate-900">
-        <div className="max-w-lg mx-auto">
+      {/* ── FORMULÁRIO ── */}
+      <section id="pre-cadastro" style={{ padding: "80px 24px", background: "#F9FAFB" }}>
+        <div style={{ maxWidth: 540, margin: "0 auto" }}>
           {submitted ? (
-            <div className="text-center py-10">
-              <CheckCircle className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-white mb-2">Você está na lista! 🎉</h2>
-              <p className="text-slate-400 text-sm leading-relaxed">
+            <div style={{ textAlign: "center", padding: "60px 0" }}>
+              <div style={{ fontSize: "4rem", marginBottom: 16 }}>🎉</div>
+              <h2 style={{ fontSize: "1.75rem", fontWeight: 800, color: "#111827", marginBottom: 8 }}>Você está na lista!</h2>
+              <p style={{ color: "#6B7280", lineHeight: 1.65 }}>
                 Avisaremos você assim que o Trancoso Resolve abrir.<br />Fique de olho no seu e-mail.
               </p>
             </div>
           ) : (
             <>
-              <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">
-                  ✦ Acesso antecipado
-                </div>
-                <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">
-                  Quero participar do pré-lançamento
-                </h2>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  Deixe seus dados para receber acesso antecipado, novidades e oportunidades exclusivas.
-                </p>
-              </div>
+              <p style={sectionLabel}>Acesso antecipado</p>
+              <h2 style={{ ...sectionTitle, textAlign: "left" }}>Quero participar do pré-lançamento</h2>
+              <p style={{ color: "#6B7280", marginBottom: 32, lineHeight: 1.65 }}>
+                Deixe seus dados para receber acesso antecipado, novidades e oportunidades exclusivas.
+              </p>
 
-              <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-3xl p-7 shadow-2xl">
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 mb-1.5 block">Nome *</label>
-                  <Input
+                  <label style={labelStyle}>Nome *</label>
+                  <input
+                    style={inputStyle}
                     placeholder="Seu nome completo"
                     value={form.name}
                     onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                     required
-                    className="h-11 border-slate-200 text-slate-900 placeholder:text-slate-400"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 mb-1.5 block">E-mail *</label>
-                  <Input
+                  <label style={labelStyle}>E-mail *</label>
+                  <input
+                    style={inputStyle}
                     type="email"
                     placeholder="seuemail@exemplo.com"
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                     required
-                    className="h-11 border-slate-200 text-slate-900 placeholder:text-slate-400"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 mb-1.5 block">WhatsApp</label>
-                  <Input
+                  <label style={labelStyle}>WhatsApp</label>
+                  <input
+                    style={inputStyle}
                     type="tel"
                     placeholder="(__) _____-____"
                     value={form.whatsapp}
                     onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))}
-                    className="h-11 border-slate-200 text-slate-900 placeholder:text-slate-400"
                   />
-                  <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+                  <p style={{ fontSize: "0.75rem", color: "#9CA3AF", marginTop: 6 }}>
                     Usaremos este número apenas para conectar você com prestadores e clientes verificados. Seu contato não será exibido publicamente.
                   </p>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 mb-2 block">Quem é você? *</label>
-                  <div className="grid grid-cols-1 gap-2">
-                    {TYPES.map((t) => (
-                      <label
-                        key={t.value}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 cursor-pointer transition-all ${
-                          form.type === t.value
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-slate-200 hover:border-slate-300"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="type"
-                          value={t.value}
-                          checked={form.type === t.value}
-                          onChange={() => setForm((f) => ({ ...f, type: t.value }))}
-                          className="accent-blue-600"
-                        />
-                        <span className={`text-sm font-medium ${form.type === t.value ? "text-blue-700" : "text-slate-700"}`}>
-                          {t.label}
-                        </span>
-                      </label>
-                    ))}
+                  <label style={labelStyle}>Quem é você? *</label>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}>
+                    {TYPES.map((t) => {
+                      const selected = form.type === t.value;
+                      return (
+                        <label key={t.value} style={{
+                          display: "flex", alignItems: "center", gap: 12,
+                          padding: "12px 16px", borderRadius: 12, cursor: "pointer",
+                          border: `2px solid ${selected ? "#00AEEF" : "#E5E7EB"}`,
+                          background: selected ? "rgba(0,174,239,0.06)" : "#fff",
+                          transition: "all 0.15s",
+                        }}>
+                          <input
+                            type="radio"
+                            name="type"
+                            value={t.value}
+                            checked={selected}
+                            onChange={() => setForm((f) => ({ ...f, type: t.value }))}
+                            style={{ accentColor: "#00AEEF" }}
+                          />
+                          <span style={{ fontSize: "0.9rem", fontWeight: 500, color: selected ? "#0072FF" : "#374151" }}>
+                            {t.label}
+                          </span>
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {error && <p className="text-red-500 text-xs">{error}</p>}
+                {error && <p style={{ color: "#EF4444", fontSize: "0.8rem" }}>{error}</p>}
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full h-12 font-bold text-base rounded-xl bg-blue-600 hover:bg-blue-700 text-white border-0"
-                >
+                <button type="submit" disabled={loading} style={{
+                  ...btnPrimary,
+                  width: "100%", marginTop: 8, fontSize: "1rem",
+                  padding: "16px 24px", borderRadius: 14,
+                  opacity: loading ? 0.75 : 1,
+                }}>
                   {loading ? "Cadastrando..." : "Quero participar do pré-lançamento →"}
-                </Button>
+                </button>
 
-                <p className="text-xs text-slate-400 text-center leading-relaxed">
+                <p style={{ fontSize: "0.75rem", color: "#9CA3AF", textAlign: "center", lineHeight: 1.6 }}>
                   Seus dados serão usados apenas para comunicação sobre a Trancoso Resolve e oportunidades em Trancoso. Sem spam.
                 </p>
               </form>
@@ -329,9 +320,63 @@ export default function PreLancamento() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-slate-950 py-6 text-center">
-        <p className="text-slate-600 text-xs">© 2025 Trancoso Resolve · Trancoso, Bahia · Todos os direitos reservados</p>
+      <footer style={{ background: "#0a1628", padding: "24px", textAlign: "center" }}>
+        <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.8rem" }}>
+          © 2025 Trancoso Resolve · Trancoso, Bahia · Todos os direitos reservados
+        </p>
       </footer>
     </div>
   );
 }
+
+// ── Shared styles ──
+const btnPrimary = {
+  background: "linear-gradient(135deg, #00AEEF, #0072FF)",
+  color: "white", border: "none",
+  padding: "14px 28px", borderRadius: 999,
+  fontSize: "0.95rem", fontWeight: 600, cursor: "pointer",
+  boxShadow: "0 4px 20px rgba(0,114,255,0.35)",
+  transition: "opacity 0.2s",
+};
+
+const btnSecondary = {
+  background: "rgba(255,255,255,0.1)", color: "white",
+  border: "1.5px solid rgba(255,255,255,0.3)",
+  padding: "14px 28px", borderRadius: 999,
+  fontSize: "0.95rem", fontWeight: 600, cursor: "pointer",
+};
+
+const card = {
+  background: "#fff", borderRadius: 20,
+  border: "1px solid #F3F4F6", padding: 28,
+  boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
+  transition: "transform 0.2s, box-shadow 0.2s",
+};
+
+const sectionLabel = {
+  fontSize: "0.75rem", fontWeight: 700, letterSpacing: 2,
+  textTransform: "uppercase", color: "#00AEEF", textAlign: "center",
+  marginBottom: 12,
+};
+
+const sectionTitle = {
+  fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 800,
+  color: "#111827", lineHeight: 1.2, textAlign: "center", marginBottom: 12,
+};
+
+const sectionSub = {
+  textAlign: "center", color: "#6B7280", maxWidth: 520,
+  margin: "0 auto", lineHeight: 1.65,
+};
+
+const labelStyle = {
+  display: "block", fontSize: "0.8rem", fontWeight: 600,
+  color: "#374151", marginBottom: 6,
+};
+
+const inputStyle = {
+  width: "100%", padding: "12px 14px", borderRadius: 10,
+  border: "1.5px solid #E5E7EB", fontSize: "0.9rem",
+  color: "#111827", outline: "none",
+  background: "#fff", fontFamily: "'Inter', sans-serif",
+};
