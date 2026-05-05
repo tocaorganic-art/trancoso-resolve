@@ -6,6 +6,7 @@ import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, Clock, TrendingUp, Loader2 } from "lucide-react";
+import VerificacaoStatusBlock from "@/components/verificacao/VerificacaoStatusBlock";
 import FinancialDashboard from "../components/financial/FinancialDashboard";
 import AssistenteFinanceiro from "../components/financial/AssistenteFinanceiro";
 import GettingStartedGuide from "../components/dashboard/GettingStartedGuide";
@@ -65,6 +66,13 @@ function DashboardContent() {
     queryKey: ['allMySubscriptions', user?.email],
     queryFn: () => base44.entities.Subscription.filter({ user_email: user.email }),
     enabled: !!user,
+  });
+
+  const { data: providerProfile } = useQuery({
+    queryKey: ['myProviderProfile', user?.email],
+    queryFn: () => base44.entities.ServiceProvider.filter({ created_by: user.email }),
+    enabled: !!user,
+    select: (data) => data?.[0] || null,
   });
 
   const { data: serviceRequests, isLoading: isLoadingRequests } = useQuery({
@@ -147,6 +155,13 @@ function DashboardContent() {
           <Link to={createPageUrl("MeuPerfilPrestador")}>
             <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shrink-0">Completar</Button>
           </Link>
+        </div>
+      )}
+
+      {/* Bloco de status de verificação de antecedentes */}
+      {providerProfile && (
+        <div className="mb-6">
+          <VerificacaoStatusBlock status={providerProfile.status_verificacao || 'pendente'} />
         </div>
       )}
 

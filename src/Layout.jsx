@@ -127,6 +127,7 @@ export default function Layout({ children, currentPageName }) {
   { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
   ...(isAdmin ? [
     { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
+    { name: "Antecedentes", path: "/AdminAntecedentes", icon: ShieldCheck },
     { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
   ] : []),
   { name: "Ver Site", path: "/", icon: Globe, clearLogin: true }];

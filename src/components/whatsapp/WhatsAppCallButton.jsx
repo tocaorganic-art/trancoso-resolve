@@ -144,7 +144,7 @@ export default function WhatsAppCallButton({ provider, className = "", size = "d
     staleTime: 60000,
   });
 
-  const isProviderActive = !!subscription;
+  const isProviderActive = !!subscription && (provider?.status_verificacao === 'aprovado' || !provider?.status_verificacao);
 
   const handleCall = useCallback(async () => {
     if (!user) {
@@ -227,13 +227,21 @@ export default function WhatsAppCallButton({ provider, className = "", size = "d
             ? 'bg-green-500 hover:bg-green-600 text-white'
             : 'bg-slate-200 text-slate-400 cursor-not-allowed'
         } ${className}`}
-        title={!isProviderActive ? 'Prestador indisponível no momento' : ''}
+        title={
+          provider?.status_verificacao === 'reprovado' ? 'Prestador não verificado' :
+          provider?.status_verificacao === 'pendente' || provider?.status_verificacao === 'em_analise_manual' ? 'Prestador em verificação' :
+          !isProviderActive ? 'Prestador indisponível no momento' : ''
+        }
       >
         {loading || checkingSubscription ? (
           <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Conectando...</>
         ) : (
           <><MessageCircle className="w-4 h-4 mr-2" />
-            {isProviderActive ? 'Chamar no WhatsApp' : 'Prestador indisponível'}
+            {provider?.status_verificacao === 'pendente' || provider?.status_verificacao === 'em_analise_manual'
+              ? 'Em verificação'
+              : provider?.status_verificacao === 'reprovado'
+              ? 'Não disponível'
+              : isProviderActive ? 'Chamar no WhatsApp' : 'Prestador indisponível'}
           </>
         )}
       </Button>

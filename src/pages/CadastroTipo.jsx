@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, Briefcase } from 'lucide-react';
+import { User, Briefcase, Shield } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { criarTrialPrestador } from '@/functions/criarTrialPrestador';
+import { verificarAntecedentes } from '@/functions/verificarAntecedentes';
 
 export default function CadastroTipoPage() {
   const queryClient = useQueryClient();
+  const [autorizouVerificacao, setAutorizouVerificacao] = useState(false);
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -25,8 +27,16 @@ export default function CadastroTipoPage() {
         try {
           await criarTrialPrestador({ user_email: data.email, user_name: data.full_name });
         } catch (e) {
-          // fallback: grava flag no localStorage para o Dashboard ignorar paywall temporariamente
           localStorage.setItem('trial_pendente', 'true');
+        }
+        // Inicia verificação de antecedentes em background (não bloqueia o cadastro)
+        try {
+          const providers = await base44.entities.ServiceProvider.filter({ created_by: data.email });
+          if (providers && providers.length > 0) {
+            verificarAntecedentes({ service_provider_id: providers[0].id }).catch(() => {});
+          }
+        } catch (e) {
+          // Silencioso — verificação será retomada manualmente pelo admin
         }
         window.location.replace('/Dashboard');
       } else {
@@ -36,6 +46,10 @@ export default function CadastroTipoPage() {
   });
 
   const handleSelectType = (type) => {
+    if (type === 'prestador' && !autorizouVerificacao) {
+      alert('Para se cadastrar como prestador, você precisa autorizar a verificação de antecedentes criminais.');
+      return;
+    }
     updateUserMutation.mutate(type);
   };
 
@@ -86,6 +100,24 @@ export default function CadastroTipoPage() {
             </Card>
           </div>
           
+          {/* Checkbox LGPD para prestadores */}
+          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-left">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={autorizouVerificacao}
+                onChange={(e) => setAutorizouVerificacao(e.target.checked)}
+                className="mt-1 accent-blue-600 w-4 h-4 shrink-0"
+              />
+              <span className="text-xs text-slate-700 leading-relaxed">
+                <span className="font-semibold text-slate-800 flex items-center gap-1 mb-1">
+                  <Shield className="w-3 h-3 text-blue-600" /> Autorização de Verificação (obrigatória para prestadores)
+                </span>
+                Ao continuar como prestador, autorizo a Trancoso Resolve a realizar consultas de antecedentes criminais em bases oficiais (incluindo Polícia Federal e órgãos estaduais, via Infosimples), usando meus dados pessoais exclusivamente para fins de prevenção à fraude, validação cadastral e cumprimento de obrigações legais, em conformidade com a LGPD.
+              </span>
+            </label>
+          </div>
+
           {updateUserMutation.isPending && (
             <p className="mt-8 text-slate-500">Salvando sua escolha...</p>
           )}

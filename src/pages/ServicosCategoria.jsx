@@ -14,6 +14,7 @@ import ProvidersMap from "@/components/map/ProvidersMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
+import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
 
 const ProviderCard = ({ provider }) => (
     <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col">
@@ -32,6 +33,9 @@ const ProviderCard = ({ provider }) => (
                         </div>
                         {provider.verified && (
                             <VerificacaoBadge verified showLabel size="sm" />
+                        )}
+                        {provider.status_verificacao && provider.status_verificacao !== 'aprovado' && provider.status_verificacao !== 'reprovado' && (
+                            <BadgeEmVerificacao />
                         )}
                     </div>
                     <div className="flex items-center gap-2 mt-2">
@@ -194,6 +198,9 @@ export default function ServicosCategoriaPage() {
 
 
   const filteredProviders = useMemo(() => providers?.filter(provider => {
+    // Ocultar reprovados sempre
+    if (provider.status_verificacao === 'reprovado') return false;
+
     const matchesCategory = selectedCategory === 'Todos' || provider.occupation === selectedCategory;
     
     let matchesSearch = true;

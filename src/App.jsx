@@ -13,6 +13,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import FilaVerificacaoPage from '@/pages/FilaVerificacao';
 import AdminPagamentosPage from '@/pages/AdminPagamentos';
 import PreLancamentoPage from '@/pages/PreLancamento';
+import AdminAntecedentesPage from '@/pages/AdminAntecedentes';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -78,6 +79,11 @@ const AuthenticatedApp = () => {
         <Route path="/AdminPagamentos" element={
           <LayoutWrapper currentPageName="AdminPagamentos">
             <AnimatedPage><AdminPagamentosPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/AdminAntecedentes" element={
+          <LayoutWrapper currentPageName="AdminAntecedentes">
+            <AnimatedPage><AdminAntecedentesPage /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="/PreLancamento" element={<PreLancamentoPage />} />

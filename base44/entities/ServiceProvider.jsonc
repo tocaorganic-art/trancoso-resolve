@@ -1,0 +1,192 @@
+{
+  "name": "ServiceProvider",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Nome completo do prestador"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "URL da foto de perfil"
+    },
+    "occupation": {
+      "type": "string",
+      "enum": [
+        "Limpeza",
+        "Gar\u00e7om",
+        "Pedreiro",
+        "Jardinagem",
+        "Bab\u00e1",
+        "Eletricista",
+        "Encanador",
+        "Pintor",
+        "Cozinheiro",
+        "Outro"
+      ],
+      "description": "Ocupa\u00e7\u00e3o principal"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone de contato"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email"
+    },
+    "cpf": {
+      "type": "string",
+      "description": "CPF do prestador (necess\u00e1rio para verifica\u00e7\u00e3o de antecedentes)"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Biografia/descri\u00e7\u00e3o profissional"
+    },
+    "experience_years": {
+      "type": "integer",
+      "description": "Anos de experi\u00eancia"
+    },
+    "specialties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Especialidades e diferenciais"
+    },
+    "price_range": {
+      "type": "string",
+      "enum": [
+        "$",
+        "$$",
+        "$$$"
+      ],
+      "description": "Faixa de pre\u00e7o"
+    },
+    "rates": {
+      "type": "object",
+      "properties": {
+        "hourly": {
+          "type": "number"
+        },
+        "daily": {
+          "type": "number"
+        },
+        "per_project": {
+          "type": "number"
+        }
+      },
+      "description": "Valores de refer\u00eancia"
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        },
+        "coverage_radius_km": {
+          "type": "number"
+        }
+      }
+    },
+    "availability": {
+      "type": "string",
+      "enum": [
+        "Dispon\u00edvel",
+        "Ocupado",
+        "Indispon\u00edvel"
+      ],
+      "default": "Dispon\u00edvel"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "Avalia\u00e7\u00e3o m\u00e9dia"
+    },
+    "total_reviews": {
+      "type": "integer",
+      "default": 0,
+      "description": "Total de avalia\u00e7\u00f5es"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Prestador verificado pela plataforma"
+    },
+    "verification_document_url": {
+      "type": "string",
+      "description": "URL do documento para verifica\u00e7\u00e3o"
+    },
+    "portfolio_images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Imagens do portf\u00f3lio (antes/depois)"
+    },
+    "payment_methods": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Dinheiro",
+          "PIX",
+          "Cart\u00e3o de D\u00e9bito",
+          "Cart\u00e3o de Cr\u00e9dito"
+        ]
+      },
+      "description": "M\u00e9todos de pagamento aceitos"
+    },
+    "status_verificacao": {
+      "type": "string",
+      "enum": [
+        "pendente",
+        "aprovado",
+        "em_analise_manual",
+        "reprovado"
+      ],
+      "default": "pendente",
+      "description": "Status da verifica\u00e7\u00e3o de antecedentes criminais"
+    },
+    "relatorio_verificacao": {
+      "type": "string",
+      "description": "Resumo do resultado da verifica\u00e7\u00e3o de antecedentes"
+    },
+    "data_verificacao": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da \u00faltima verifica\u00e7\u00e3o conclu\u00edda"
+    },
+    "autorizou_verificacao": {
+      "type": "boolean",
+      "default": false,
+      "description": "Prestador autorizou a consulta de antecedentes criminais (LGPD)"
+    }
+  },
+  "required": [
+    "full_name",
+    "occupation"
+  ],
+  "rls": {
+    "read": true,
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
