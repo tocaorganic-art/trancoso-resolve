@@ -37,7 +37,28 @@
     },
     "cpf": {
       "type": "string",
-      "description": "CPF do prestador (necess\u00e1rio para verifica\u00e7\u00e3o de antecedentes)"
+      "description": "CPF do prestador (obrigat\u00f3rio para PF e MEI)"
+    },
+    "cnpj": {
+      "type": "string",
+      "description": "CNPJ (opcional, para MEI ou PJ)"
+    },
+    "tipo_pessoa": {
+      "type": "string",
+      "enum": [
+        "pf",
+        "pj"
+      ],
+      "default": "pf",
+      "description": "Tipo de pessoa: f\u00edsica (pf) ou jur\u00eddica/MEI (pj)"
+    },
+    "razao_social": {
+      "type": "string",
+      "description": "Raz\u00e3o social (para PJ/MEI)"
+    },
+    "nome_fantasia": {
+      "type": "string",
+      "description": "Nome fantasia (para PJ/MEI)"
     },
     "bio": {
       "type": "string",
@@ -177,6 +198,20 @@
       "type": "boolean",
       "default": false,
       "description": "Prestador autorizou a consulta de antecedentes criminais (LGPD)"
+    },
+    "status_verificacao_empresa": {
+      "type": "string",
+      "enum": [
+        "pendente",
+        "regular",
+        "em_risco"
+      ],
+      "default": "pendente",
+      "description": "Status da verifica\u00e7\u00e3o cadastral do CNPJ (Receita Federal) \u2014 uso futuro"
+    },
+    "relatorio_verificacao_empresa": {
+      "type": "string",
+      "description": "Relat\u00f3rio da situa\u00e7\u00e3o do CNPJ na Receita Federal \u2014 uso futuro"
     }
   },
   "required": [
