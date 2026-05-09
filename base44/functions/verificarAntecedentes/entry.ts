@@ -23,132 +23,171 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Prestador não encontrado' }, { status: 404 });
     }
 
-    if (!prestador.cpf || !prestador.full_name) {
-      // Sem CPF, marca como em_analise_manual
+    // Se não tiver CPF, marca para análise manual
+    if (!prestador.cpf) {
       await base44.asServiceRole.entities.ServiceProvider.update(service_provider_id, {
         status_verificacao: 'em_analise_manual',
-        relatorio_verificacao: 'CPF não cadastrado. Necessária análise manual para prosseguir com a verificação.',
+        relatorio_verificacao: 'CPF não informado. Verificação automática não pôde ser realizada. Necessária análise manual.',
         data_verificacao: new Date().toISOString(),
       });
+      console.log(`[verificarAntecedentes] CPF ausente para ${prestador.full_name} (${service_provider_id})`);
       return Response.json({ status: 'em_analise_manual', message: 'CPF não encontrado, análise manual necessária' });
     }
 
     const INFOSIMPLES_API_KEY = Deno.env.get('INFOSIMPLES_API_KEY');
+
+    if (!INFOSIMPLES_API_KEY) {
+      console.error('[verificarAntecedentes] INFOSIMPLES_API_KEY não configurada');
+      return Response.json({ error: 'INFOSIMPLES_API_KEY não configurada' }, { status: 500 });
+    }
 
     const headers = {
       'Authorization': `Token token=${INFOSIMPLES_API_KEY}`,
       'Content-Type': 'application/json',
     };
 
-    const body = {
-      cpf: prestador.cpf.replace(/\D/g, ''),
-      nome: prestador.full_name,
-    };
+    const cpfLimpo = prestador.cpf.replace(/\D/g, '');
+    const bodyBase = { cpf: cpfLimpo, nome: prestador.full_name };
+    const uf = prestador.location?.state || '';
+    const resultados = [];
 
-    // Consulta Polícia Federal (sempre)
-    let pfData = null;
-    let pfError = false;
+    // 1. Sempre: Polícia Federal
     try {
-      const pfResponse = await fetch(
+      const pfRes = await fetch(
         'https://api.infosimples.com/api/v2/consultas/antecedentes-criminais/policia-federal/emitir',
-        { method: 'POST', headers, body: JSON.stringify(body) }
+        { method: 'POST', headers, body: JSON.stringify(bodyBase) }
       );
-      pfData = await pfResponse.json();
-      console.log('PF response:', JSON.stringify({ code: pfData?.code, status: pfData?.data_status }));
-    } catch (e) {
-      console.error('Erro na consulta PF:', e.message);
-      pfError = true;
+      const pfData = await pfRes.json();
+      console.log(`[PF] code=${pfData?.code} status=${pfData?.data_status}`);
+      resultados.push({ fonte: 'Polícia Federal', data: pfData });
+    } catch (err) {
+      console.error('[PF] Erro:', err.message);
+      resultados.push({ fonte: 'Polícia Federal', erro: true, mensagem: err.message });
     }
 
-    // Consulta estadual (SP ou MG)
-    const uf = prestador.location?.state || prestador.uf || '';
-    let estadualData = null;
-    let estadualError = false;
-
+    // 2. SP
     if (uf === 'SP') {
       try {
-        const spResponse = await fetch(
+        const spRes = await fetch(
           'https://api.infosimples.com/api/v2/consultas/antecedentes-criminais/sp',
-          { method: 'POST', headers, body: JSON.stringify(body) }
+          { method: 'POST', headers, body: JSON.stringify(bodyBase) }
         );
-        estadualData = await spResponse.json();
-        console.log('SP response:', JSON.stringify({ code: estadualData?.code, status: estadualData?.data_status }));
-      } catch (e) {
-        console.error('Erro na consulta SP:', e.message);
-        estadualError = true;
-      }
-    } else if (uf === 'MG') {
-      try {
-        const mgResponse = await fetch(
-          'https://api.infosimples.com/api/v2/consultas/antecedentes-criminais/mg',
-          { method: 'POST', headers, body: JSON.stringify(body) }
-        );
-        estadualData = await mgResponse.json();
-        console.log('MG response:', JSON.stringify({ code: estadualData?.code, status: estadualData?.data_status }));
-      } catch (e) {
-        console.error('Erro na consulta MG:', e.message);
-        estadualError = true;
+        const spData = await spRes.json();
+        console.log(`[SP] code=${spData?.code} status=${spData?.data_status}`);
+        resultados.push({ fonte: 'SP', data: spData });
+      } catch (err) {
+        console.error('[SP] Erro:', err.message);
+        resultados.push({ fonte: 'SP', erro: true, mensagem: err.message });
       }
     }
 
-    // Classificação do resultado
+    // 3. MG
+    if (uf === 'MG') {
+      try {
+        const mgRes = await fetch(
+          'https://api.infosimples.com/api/v2/consultas/antecedentes-criminais/mg',
+          { method: 'POST', headers, body: JSON.stringify(bodyBase) }
+        );
+        const mgData = await mgRes.json();
+        console.log(`[MG] code=${mgData?.code} status=${mgData?.data_status}`);
+        resultados.push({ fonte: 'MG', data: mgData });
+      } catch (err) {
+        console.error('[MG] Erro:', err.message);
+        resultados.push({ fonte: 'MG', erro: true, mensagem: err.message });
+      }
+    }
+
+    // 4. CNPJ na Receita Federal (se houver)
+    if (prestador.cnpj) {
+      const cnpjLimpo = prestador.cnpj.replace(/\D/g, '');
+      try {
+        const receitaRes = await fetch(
+          'https://api.infosimples.com/api/v2/consultas/receita-federal/cnpj',
+          { method: 'POST', headers, body: JSON.stringify({ cnpj: cnpjLimpo }) }
+        );
+        const receitaData = await receitaRes.json();
+        console.log(`[CNPJ] code=${receitaData?.code} situacao=${receitaData?.data?.[0]?.situacao_cadastral}`);
+        resultados.push({ fonte: 'Receita Federal CNPJ', data: receitaData });
+
+        // Atualiza status da empresa separadamente
+        const situacao = receitaData?.data?.[0]?.situacao_cadastral;
+        const statusEmpresa = situacao === 'ATIVA' ? 'regular' : (situacao ? 'em_risco' : 'pendente');
+        const relatorioEmpresa = situacao
+          ? `Situação cadastral na Receita Federal: ${situacao}`
+          : 'Situação cadastral não encontrada.';
+        await base44.asServiceRole.entities.ServiceProvider.update(service_provider_id, {
+          status_verificacao_empresa: statusEmpresa,
+          relatorio_verificacao_empresa: relatorioEmpresa,
+        });
+      } catch (err) {
+        console.error('[CNPJ] Erro:', err.message);
+        resultados.push({ fonte: 'Receita Federal CNPJ', erro: true, mensagem: err.message });
+      }
+    }
+
+    // 5. Classificar resultado
+    const temErro = resultados.some(r => r.erro === true);
+
+    const temAntecedente = resultados.some(r => {
+      if (r.erro || !r.data) return false;
+      if (r.fonte === 'Receita Federal CNPJ') return false; // CNPJ não define antecedentes criminais
+      const item = r.data?.data?.[0];
+      if (!item) return false;
+      const txt = JSON.stringify(item).toLowerCase();
+      return (
+        item.nada_consta === false ||
+        item.possui_antecedentes === true ||
+        item.resultado === 'positivo' ||
+        item.condenacao === true ||
+        (txt.includes('condenação') && !txt.includes('nada consta')) ||
+        (txt.includes('antecedentes') && !txt.includes('nada consta') && !txt.includes('sem registro'))
+      );
+    });
+
+    const cnpjIrregular = resultados.some(r =>
+      r.fonte === 'Receita Federal CNPJ' &&
+      r.data?.data?.[0]?.situacao_cadastral &&
+      r.data.data[0].situacao_cadastral !== 'ATIVA'
+    );
+
     let status_verificacao = 'aprovado';
     let relatorio_verificacao = '';
 
-    const temAntecedentes = (data) => {
-      if (!data) return false;
-      if (data.code !== 200) return false;
-      const item = data.data?.[0];
-      if (!item) return false;
-      const texto = JSON.stringify(item).toLowerCase();
-      return texto.includes('condenação') || 
-             texto.includes('condenado') || 
-             texto.includes('antecedentes') && !texto.includes('nada consta') && !texto.includes('sem registro') ||
-             item.resultado === 'positivo' ||
-             item.condenacao === true;
-    };
-
-    const resultadoInconclusivo = (data, hasError) => {
-      if (hasError) return true;
-      if (!data) return false;
-      if (data.code !== 200) return true;
-      return false;
-    };
-
-    const pfTemAntecedentes = temAntecedentes(pfData);
-    const estadualTemAntecedentes = temAntecedentes(estadualData);
-    const pfInconclusivo = resultadoInconclusivo(pfData, pfError);
-    const estadualInconclusivo = resultadoInconclusivo(estadualData, estadualError);
-
-    if (pfTemAntecedentes || estadualTemAntecedentes) {
+    if (temAntecedente) {
       status_verificacao = 'reprovado';
       relatorio_verificacao = 'Foram encontrados registros de antecedentes criminais em bases oficiais. Perfil bloqueado para proteção da comunidade.';
-    } else if (pfInconclusivo || estadualInconclusivo) {
+    } else if (temErro || cnpjIrregular) {
       status_verificacao = 'em_analise_manual';
-      relatorio_verificacao = 'Resultado de antecedentes com inconsistências ou erro em uma das bases. Necessária análise manual.';
+      const motivos = [];
+      if (temErro) motivos.push('erro em uma das bases consultadas');
+      if (cnpjIrregular) motivos.push('CNPJ com situação irregular na Receita Federal');
+      relatorio_verificacao = `Verificação com inconsistências (${motivos.join(', ')}). Necessária análise manual pela equipe.`;
     } else {
       status_verificacao = 'aprovado';
-      const basesConsultadas = uf ? `Polícia Federal e bases estaduais (${uf})` : 'Polícia Federal';
-      relatorio_verificacao = `Nenhum antecedente criminal encontrado na ${basesConsultadas} consultadas.`;
+      const bases = ['Polícia Federal'];
+      if (uf === 'SP') bases.push('IIRGD-SP');
+      if (uf === 'MG') bases.push('PCMG');
+      relatorio_verificacao = `Nenhum antecedente criminal encontrado. Bases consultadas: ${bases.join(', ')}.`;
     }
 
-    // Atualiza o prestador
+    // 6. Atualiza prestador
     await base44.asServiceRole.entities.ServiceProvider.update(service_provider_id, {
       status_verificacao,
       relatorio_verificacao,
       data_verificacao: new Date().toISOString(),
     });
 
-    console.log(`Verificação concluída para ${prestador.full_name}: ${status_verificacao}`);
+    console.log(`[verificarAntecedentes] Concluído: ${prestador.full_name} → ${status_verificacao}`);
 
-    return Response.json({ 
-      status: status_verificacao, 
+    return Response.json({
+      status: status_verificacao,
       relatorio: relatorio_verificacao,
-      provider_id: service_provider_id 
+      provider_id: service_provider_id,
+      bases_consultadas: resultados.map(r => r.fonte),
     });
 
   } catch (error) {
-    console.error('Erro em verificarAntecedentes:', error.message);
+    console.error('[verificarAntecedentes] Erro geral:', error.message);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
