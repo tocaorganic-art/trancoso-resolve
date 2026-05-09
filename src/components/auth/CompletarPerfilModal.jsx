@@ -90,7 +90,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
           </div>
           <h2 className="text-xl font-bold leading-tight">Complete seu cadastro</h2>
           <p className="text-white/90 text-sm mt-1 leading-snug">
-            Leva menos de 1 minuto e libera acesso às ferramentas exclusivas da Toca em Trancoso.
+            Preencha seus dados para se conectar com prestadores verificados da comunidade de Trancoso.
           </p>
         </div>
 
@@ -123,7 +123,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
               className="border-slate-300 text-sm h-10 focus:border-blue-500"
             />
             <p className="text-xs text-slate-500 leading-snug">
-              Seu número nunca será exibido publicamente — usado apenas para conectar você ao prestador escolhido.
+              Usado apenas para conectar você com prestadores verificados. Seu número não será exibido publicamente.
             </p>
           </div>
 
@@ -154,7 +154,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
           </Button>
 
           <p className="text-xs text-slate-400 text-center leading-snug">
-            Ao concluir, você terá acesso às ferramentas exclusivas da plataforma Trancoso Resolve.
+            Ao concluir seu cadastro, você terá acesso às ferramentas exclusivas da plataforma Trancoso Resolve.
           </p>
         </form>
       </DialogContent>

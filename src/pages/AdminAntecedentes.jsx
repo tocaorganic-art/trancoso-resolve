@@ -30,6 +30,7 @@ function maskCPF(cpf) {
 export default function AdminAntecedentesPage() {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [filterStatus, setFilterStatus] = useState("todos");
 
   const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ["currentUser"],
@@ -92,17 +93,12 @@ export default function AdminAntecedentesPage() {
     );
   }
 
-  // Filtra apenas pendente, em_analise_manual e reprovado para ação
-  const pendingProviders = (providers || []).filter(
-    (p) => p.status_verificacao !== "aprovado"
-  );
-
-  const filtered = pendingProviders.filter((p) => {
-    if (!search.trim()) return true;
-    return (
+  const filtered = (providers || []).filter((p) => {
+    const matchStatus = filterStatus === "todos" || (p.status_verificacao || "pendente") === filterStatus;
+    const matchSearch = !search.trim() ||
       p.full_name?.toLowerCase().includes(search.toLowerCase()) ||
-      p.email?.toLowerCase().includes(search.toLowerCase())
-    );
+      p.email?.toLowerCase().includes(search.toLowerCase());
+    return matchStatus && matchSearch;
   });
 
   const counts = (providers || []).reduce((acc, p) => {
@@ -138,17 +134,34 @@ export default function AdminAntecedentesPage() {
         ))}
       </div>
 
-      {/* Search */}
+      {/* Search + Filter */}
       <Card className="mb-6">
         <CardContent className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input
-              placeholder="Buscar por nome ou e-mail..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-            />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Input
+                placeholder="Buscar por nome ou e-mail..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {["todos", "pendente", "em_analise_manual", "aprovado", "reprovado"].map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setFilterStatus(s)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                    filterStatus === s
+                      ? "bg-slate-800 text-white border-slate-800"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
+                  }`}
+                >
+                  {s === "todos" ? "Todos" : statusConfig[s]?.label || s}
+                </button>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -157,7 +170,7 @@ export default function AdminAntecedentesPage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base">
-            {filtered.length} prestador(es) aguardando ação
+            {filtered.length} prestador(es) encontrado(s)
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -175,6 +188,7 @@ export default function AdminAntecedentesPage() {
                   <tr className="border-b bg-slate-50">
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-6 py-3">Prestador</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden md:table-cell">CPF</th>
+                    <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">Tipo</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">UF</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3">Status</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden xl:table-cell">Relatório</th>
@@ -198,6 +212,11 @@ export default function AdminAntecedentesPage() {
                         </td>
                         <td className="px-4 py-4 hidden md:table-cell">
                           <span className="text-sm text-slate-600 font-mono">{maskCPF(p.cpf)}</span>
+                        </td>
+                        <td className="px-4 py-4 hidden lg:table-cell">
+                          <span className="text-xs font-medium uppercase text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+                            {p.tipo_pessoa === 'pj' ? 'PJ/MEI' : 'PF'}
+                          </span>
                         </td>
                         <td className="px-4 py-4 hidden lg:table-cell">
                           <span className="text-sm text-slate-600">{p.location?.state || "—"}</span>
