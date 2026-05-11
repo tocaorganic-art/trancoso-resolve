@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import ChatInterface from '@/components/chat/ChatInterface';
-import { Loader2, PlusCircle, MessageSquare, LogIn, Bot } from 'lucide-react';
+import PesquisaProfunda from '@/components/assistente/PesquisaProfunda';
+import { Loader2, PlusCircle, MessageSquare, LogIn, Bot, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -32,6 +33,7 @@ export default function AssistentevirtualPage() {
 
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [mobileView, setMobileView] = useState('list');
+  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'pesquisa'
 
   useEffect(() => {
     if (!activeConversationId && conversations && conversations.length > 0) {
@@ -94,37 +96,62 @@ export default function AssistentevirtualPage() {
 
   const SidebarContent = (
     <>
-      <div className="p-4 border-b border-slate-200 flex justify-between items-center shrink-0 bg-gradient-to-r from-blue-600 to-blue-700">
-        <div>
-          <h2 className="text-lg font-bold text-white">Toca TrIA</h2>
-          <p className="text-blue-200 text-xs">Assistente de IA em Trancoso</p>
-        </div>
-        <Button size="icon" variant="ghost" onClick={handleNewConversation} disabled={createConversationMutation.isPending} aria-label="Nova conversa" className="hover:bg-white/20 text-white">
-          {createConversationMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
-        </Button>
-      </div>
-      <div className="flex-1 overflow-y-auto">
-        {conversations && conversations.length > 0 ? (
-          <ul>
-            {conversations.map(convo => (
-              <li key={convo.id}
-                  className={`p-4 cursor-pointer border-l-4 transition-all hover:bg-slate-50 ${activeConversationId === convo.id ? 'bg-blue-50 border-blue-600' : 'border-transparent'}`}
-                  onClick={() => handleSelectConversation(convo.id)}>
-                  <p className="font-semibold text-slate-900 truncate text-sm mb-0.5">
-                    {format(new Date(convo.created_date), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}
-                  </p>
-                  <p className="text-xs text-slate-500 truncate">{convo.lastMessage || 'Nenhuma mensagem ainda'}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="p-6 text-center flex flex-col items-center justify-center h-full">
-            <Bot className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-            <p className="font-semibold text-slate-700 mb-1 text-sm">Nenhuma conversa ainda.</p>
-            <p className="text-xs text-slate-500">Toque em + para começar.</p>
+      <div className="p-4 border-b border-slate-200 shrink-0 bg-gradient-to-r from-blue-600 to-blue-700">
+        <div className="flex justify-between items-center mb-3">
+          <div>
+            <h2 className="text-lg font-bold text-white">Toca TrIA</h2>
+            <p className="text-blue-200 text-xs">Assistente de IA em Trancoso</p>
           </div>
-        )}
+          {activeTab === 'chat' && (
+            <Button size="icon" variant="ghost" onClick={handleNewConversation} disabled={createConversationMutation.isPending} aria-label="Nova conversa" className="hover:bg-white/20 text-white">
+              {createConversationMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
+            </Button>
+          )}
+        </div>
+        {/* Tabs */}
+        <div className="flex gap-1 bg-blue-700/50 rounded-lg p-1">
+          <button
+            onClick={() => setActiveTab('chat')}
+            className={`flex-1 flex items-center justify-center gap-1.5 text-xs font-medium py-1.5 rounded-md transition-colors ${activeTab === 'chat' ? 'bg-white text-blue-700' : 'text-blue-100 hover:text-white'}`}
+          >
+            <MessageSquare className="w-3.5 h-3.5" /> Chat
+          </button>
+          <button
+            onClick={() => setActiveTab('pesquisa')}
+            className={`flex-1 flex items-center justify-center gap-1.5 text-xs font-medium py-1.5 rounded-md transition-colors ${activeTab === 'pesquisa' ? 'bg-white text-purple-700' : 'text-blue-100 hover:text-white'}`}
+          >
+            <Search className="w-3.5 h-3.5" /> Pesquisa
+          </button>
+        </div>
       </div>
+      {activeTab === 'chat' ? (
+        <div className="flex-1 overflow-y-auto">
+          {conversations && conversations.length > 0 ? (
+            <ul>
+              {conversations.map(convo => (
+                <li key={convo.id}
+                    className={`p-4 cursor-pointer border-l-4 transition-all hover:bg-slate-50 ${activeConversationId === convo.id ? 'bg-blue-50 border-blue-600' : 'border-transparent'}`}
+                    onClick={() => handleSelectConversation(convo.id)}>
+                    <p className="font-semibold text-slate-900 truncate text-sm mb-0.5">
+                      {format(new Date(convo.created_date), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}
+                    </p>
+                    <p className="text-xs text-slate-500 truncate">{convo.lastMessage || 'Nenhuma mensagem ainda'}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="p-6 text-center flex flex-col items-center justify-center h-full">
+              <Bot className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+              <p className="font-semibold text-slate-700 mb-1 text-sm">Nenhuma conversa ainda.</p>
+              <p className="text-xs text-slate-500">Toque em + para começar.</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex-1 overflow-hidden">
+          <PesquisaProfunda />
+        </div>
+      )}
     </>
   );
 
@@ -181,7 +208,9 @@ export default function AssistentevirtualPage() {
         )}
       </div>
       <main className="hidden md:flex flex-1 flex-col overflow-hidden">
-        {activeConversationId ? (
+        {activeTab === 'pesquisa' ? (
+          <PesquisaProfunda />
+        ) : activeConversationId ? (
           <ChatInterface conversationId={activeConversationId} key={activeConversationId} />
         ) : EmptyChat}
       </main>
