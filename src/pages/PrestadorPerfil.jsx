@@ -227,7 +227,7 @@ export default function PrestadorPerfilPage() {
         {
           "@type": "BreadcrumbList",
           "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": `${window.location.origin}` },
             { "@type": "ListItem", "position": 2, "name": "Serviços", "item": `${window.location.origin}/ServicosCategoria` },
               { "@type": "ListItem", "position": 3, "name": provider.occupation, "item": `${window.location.origin}/ServicosCategoria?cat=${encodeURIComponent(provider.occupation)}` },
               { "@type": "ListItem", "position": 4, "name": provider.full_name, "item": `${window.location.origin}/PrestadorPerfil?id=${provider.id}` }
@@ -536,9 +536,9 @@ export default function PrestadorPerfilPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                 {provider.portfolio_images.map((img, index) => (
-                  <LazyImage key={index} src={img} alt={`Trabalho ${index + 1} do portfólio de ${provider.full_name}`} className="rounded-lg w-full h-40 object-cover" />
+                  <LazyImage key={index} src={img} alt={`Trabalho ${index + 1} do portfólio de ${provider.full_name}`} className="rounded-lg w-full h-32 sm:h-40 object-cover" />
                 ))}
               </div>
             </CardContent>
@@ -586,13 +586,13 @@ export default function PrestadorPerfilPage() {
           </CardHeader>
           <CardContent>
             {totalReviews > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b">
-                <div className="md:col-span-1 flex flex-col items-center justify-center text-center">
-                  <p className="text-5xl font-bold text-slate-800 mb-2">{averageRating > 0 ? averageRating.toFixed(1) : 'Novo'}</p>
-                  <StarRating rating={averageRating} size={20} /> {/* Ensure rating is a number */}
-                  <p className="text-sm text-slate-500 mt-1">Baseado em {totalReviews} avaliações</p>
-                </div>
-                <div className="md:col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b">
+                  <div className="sm:col-span-1 flex flex-col items-center justify-center text-center">
+                    <p className="text-4xl sm:text-5xl font-bold text-slate-800 mb-2">{averageRating > 0 ? averageRating.toFixed(1) : 'Novo'}</p>
+                    <StarRating rating={averageRating} size={20} /> {/* Ensure rating is a number */}
+                    <p className="text-xs sm:text-sm text-slate-500 mt-1">Baseado em {totalReviews} avaliações</p>
+                  </div>
+                  <div className="sm:col-span-2">
                   {[5, 4, 3, 2, 1].map(star => {
                     const count = ratingDistribution[star] || 0;
                     const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;

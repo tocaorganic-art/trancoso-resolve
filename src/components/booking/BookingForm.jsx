@@ -228,8 +228,8 @@ export default function BookingForm({ provider, services, user, onCancel }) {
                 )}
               </div>
 
-              <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-                <div className="col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t">
+                <div className="sm:col-span-2">
                   <Label>Rua / Avenida *</Label>
                   <Input
                     value={data.location.address}

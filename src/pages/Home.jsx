@@ -199,11 +199,11 @@ export default function HomePage() {
     // Canonical + OG URL da Home
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = 'https://www.trancosoresolve.com.br/';
+    canonical.href = `${window.location.origin}/`;
 
     let ogUrl = document.querySelector('meta[property="og:url"]');
     if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = 'https://www.trancosoresolve.com.br/';
+    ogUrl.content = `${window.location.origin}/`;
 
     // Schema Markup - LocalBusiness + WebSite + FAQPage
     const existingSchema = document.getElementById('schema-home');
@@ -218,7 +218,7 @@ export default function HomePage() {
           "@type": "LocalBusiness",
           "name": "Trancoso Resolve",
           "description": "Marketplace de serviços locais em Trancoso, Bahia. Profissionais verificados para limpeza, elétrica, jardinagem, cozinha, encanamento e muito mais.",
-          "url": "https://www.trancosoresolve.com.br",
+          "url": `${window.location.origin}`,
           "logo": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
           "image": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
           "address": {
@@ -244,11 +244,11 @@ export default function HomePage() {
         },
         {
           "@type": "WebSite",
-          "url": "https://www.trancosoresolve.com.br",
+          "url": `${window.location.origin}`,
           "name": "Trancoso Resolve",
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://www.trancosoresolve.com.br/ServicosCategoria?q={search_term_string}",
+            "target": `${window.location.origin}/ServicosCategoria?q={search_term_string}`,
             "query-input": "required name=search_term_string"
           }
         },
@@ -280,8 +280,8 @@ export default function HomePage() {
         {
           "@type": "BreadcrumbList",
           "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
-            { "@type": "ListItem", "position": 2, "name": "Serviços em Trancoso", "item": "https://www.trancosoresolve.com.br/ServicosCategoria" }
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": `${window.location.origin}` },
+            { "@type": "ListItem", "position": 2, "name": "Serviços em Trancoso", "item": `${window.location.origin}/ServicosCategoria` }
           ]
         }
       ]
@@ -516,7 +516,7 @@ export default function HomePage() {
             <p className="text-base md:text-lg text-slate-700 font-medium mt-2 leading-relaxed">Os favoritos da comunidade, com qualidade comprovada.</p>
           </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-6">
             {isLoadingProviders ? (
                 Array.from({ length: 6 }).map((_, i) => <ProviderSkeletonCard key={i} />)
             ) : isErrorProviders ? (
