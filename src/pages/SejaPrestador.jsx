@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, BarChart2, Users, Star } from 'lucide-react';
+import { CheckCircle, BarChart2, Users, Star, Bot, Camera } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Testimonials from '@/components/home/Testimonials';
@@ -15,17 +15,32 @@ const beneficios = [
   {
     icon: <Users className="w-8 h-8 text-blue-600" />,
     title: "Alcance Mais Clientes",
-    description: "Tenha seu perfil divulgado para turistas e moradores de Trancoso que buscam profissionais qualificados e de confiança."
+    description: "Tenha seu perfil divulgado para turistas e moradores de Trancoso que buscam profissionais qualificados e de confiança. Amplie sua base de forma eficiente e direcionada."
   },
   {
     icon: <BarChart2 className="w-8 h-8 text-green-600" />,
     title: "Gestão Simplificada",
-    description: "Painel completo para gerenciar agenda, confirmar serviços e acompanhar seu desempenho financeiro de forma fácil."
+    description: "Painel completo para gerenciar agenda, confirmar serviços e acompanhar seu desempenho financeiro de forma intuitiva. Otimize seu tempo e foque no seu trabalho."
   },
   {
     icon: <Star className="w-8 h-8 text-yellow-500" />,
     title: "Construa sua Reputação",
-    description: "Receba avaliações dos clientes e construa uma reputação sólida que atrai cada vez mais oportunidades de alto padrão."
+    description: "Receba avaliações transparentes dos clientes e construa uma reputação online sólida. A credibilidade conquistada atrai continuamente novas oportunidades de negócio."
+  },
+  {
+    icon: <Bot className="w-8 h-8 text-purple-600" />,
+    title: "Toca TrIA: Agente de IA 24h",
+    description: "Mais do que um assistente, o Toca TrIA automatiza agendamentos, responde a perguntas frequentes e qualifica leads — trabalhando por você enquanto você foca no serviço."
+  },
+  {
+    icon: <Camera className="w-8 h-8 text-cyan-600" />,
+    title: "Toca Vision: Imagens com IA",
+    description: "Crie posts, cardápios, logos e materiais visuais impactantes em minutos. Gere imagens exclusivas em alta qualidade, fortalecendo sua identidade visual sem custos adicionais."
+  },
+  {
+    icon: <CheckCircle className="w-8 h-8 text-emerald-600" />,
+    title: "Custo Zero de Marketing",
+    description: "Esqueça o gasto com anúncios e divulgação. Na Trancoso Resolve, seu perfil é exibido gratuitamente para quem já está procurando exatamente o que você oferece."
   }
 ];
 
@@ -57,9 +72,9 @@ export default function SejaPrestadorPage() {
       <section className="container mx-auto py-10 md:py-20 px-4 max-w-5xl">
         <div className="text-center mb-6 md:mb-12">
           <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Vantagens exclusivas</span>
-          <h2 className="text-xl md:text-3xl font-bold text-slate-800 mt-2">Por que ser um Parceiro Toca?</h2>
+          <h2 className="text-xl md:text-3xl font-bold text-slate-800 mt-2">Por que ser um Parceiro Trancoso Resolve?</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {beneficios.map((item, index) => (
             <Card key={index} className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="p-6 md:p-8">

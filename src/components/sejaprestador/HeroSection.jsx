@@ -22,7 +22,7 @@ export default function HeroSection() {
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/40 rounded-full px-4 py-1.5 mb-4">
             <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-            <span className="text-amber-200 text-sm font-medium">Programa de Parceiros Toca</span>
+            <span className="text-amber-200 text-sm font-medium">Programa de Parceiros Trancoso Resolve</span>
           </div>
 
           <h1 className="text-2xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4">

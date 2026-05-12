@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button';
 
 const items = [
   { label: 'Clientes de alto padrão', solo: false, toca: true },
-  { label: 'Marketing e divulgação global', solo: false, toca: true },
-  { label: 'Gestão de agenda integrada', solo: false, toca: true },
+  { label: 'Custo zero de marketing', solo: false, toca: true },
+  { label: 'Gestão de agenda integrada com IA', solo: false, toca: true },
   { label: 'Avaliações e reputação online', solo: false, toca: true },
-  { label: 'Suporte e assistência 24h', solo: false, toca: true },
+  { label: 'Agente de IA e suporte 24h', solo: false, toca: true },
   { label: 'Pagamento garantido e seguro', solo: false, toca: true },
   { label: 'Visibilidade em buscas locais', solo: 'Parcial', toca: true },
-  { label: 'Zero custo de marketing', solo: false, toca: true },
+  { label: 'Criação de imagens com IA (Toca Vision)', solo: false, toca: true },
 ];
 
 export default function TabelaComparativa() {
@@ -20,8 +20,8 @@ export default function TabelaComparativa() {
     <section className="py-10 md:py-16 bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="text-center mb-8 md:mb-12">
-          <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Por que escolher a Toca?</span>
-          <h2 className="text-xl md:text-3xl font-bold text-slate-900 mt-2 mb-3">Trabalhar Sozinho vs. Ser Parceiro Toca</h2>
+          <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Por que escolher o Trancoso Resolve?</span>
+          <h2 className="text-xl md:text-3xl font-bold text-slate-900 mt-2 mb-3">Trabalhar Sozinho vs. Ser Parceiro Trancoso Resolve</h2>
           <p className="text-slate-500 text-sm md:text-base">Veja a diferença que a nossa plataforma faz para o seu negócio.</p>
         </div>
 
@@ -31,7 +31,7 @@ export default function TabelaComparativa() {
             <div className="p-4 text-left pl-6 font-medium text-slate-300">Benefício</div>
             <div className="p-4 font-semibold text-slate-400">Por conta própria</div>
             <div className="p-4 font-bold text-cyan-400 bg-gradient-to-b from-blue-700 to-blue-800">
-              Parceiro Toca 🌴
+              Parceiro Trancoso Resolve 🌴
             </div>
           </div>
           {items.map((item, i) => (
@@ -80,7 +80,7 @@ export default function TabelaComparativa() {
                   )}
                 </div>
                 <div className="bg-blue-50 rounded-lg p-3 text-center border border-blue-100">
-                  <p className="text-xs text-blue-600 font-semibold mb-2">Parceiro Toca 🌴</p>
+                  <p className="text-xs text-blue-600 font-semibold mb-2">Parceiro Trancoso Resolve 🌴</p>
                   <Check className="w-5 h-5 text-blue-600 stroke-[2.5] mx-auto" />
                 </div>
               </div>
@@ -89,7 +89,7 @@ export default function TabelaComparativa() {
           <div className="pt-2">
             <Link to={createPageUrl('CadastroTipo')}>
               <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold h-12">
-                Quero ser Parceiro Toca 🌴
+                Quero ser Parceiro Trancoso Resolve 🌴
               </Button>
             </Link>
           </div>
