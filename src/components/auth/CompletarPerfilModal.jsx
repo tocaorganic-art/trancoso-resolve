@@ -67,12 +67,12 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
   return (
     <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose(); }}>
       <DialogContent
-        className="max-w-[420px] w-[calc(100%-32px)] p-0 overflow-hidden rounded-2xl shadow-2xl border-0"
+        className="max-w-[420px] w-[calc(100vw-32px)] md:w-[calc(100%-32px)] p-0 overflow-y-auto max-h-[95vh] rounded-2xl shadow-2xl border-0"
         style={{ backdropFilter: 'blur(3px)' }}
         onInteractOutside={handleClose}
       >
         {/* Header */}
-        <div className="px-5 py-5 text-white relative" style={{ background: 'linear-gradient(135deg, #00AEEF, #0072FF)' }}>
+        <div className="px-4 md:px-5 py-4 md:py-5 text-white relative sticky top-0 z-10" style={{ background: 'linear-gradient(135deg, #00AEEF, #0072FF)' }}>
           <button
             onClick={handleClose}
             className="absolute top-3 right-3 bg-white/20 hover:bg-white/30 rounded-full p-1 transition-colors"
@@ -95,22 +95,22 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="px-5 py-5 space-y-4 bg-white">
+        <form onSubmit={handleSubmit} className="px-4 md:px-5 py-4 md:py-5 space-y-3 md:space-y-4 bg-white">
           {/* Nome (somente leitura) */}
           <div className="space-y-1">
-            <Label className="text-sm font-semibold text-slate-700">Nome completo</Label>
-            <Input value={user?.full_name || ''} disabled className="bg-slate-100 text-slate-500 border-slate-200 text-sm h-10" />
+            <Label className="text-xs md:text-sm font-semibold text-slate-700">Nome completo</Label>
+            <Input value={user?.full_name || ''} disabled className="bg-slate-100 text-slate-500 border-slate-200 text-xs md:text-sm h-9 md:h-10" />
           </div>
 
           {/* E-mail (somente leitura) */}
           <div className="space-y-1">
-            <Label className="text-sm font-semibold text-slate-700">Endereço de e-mail</Label>
-            <Input value={user?.email || ''} disabled className="bg-slate-100 text-slate-500 border-slate-200 text-sm h-10" />
+            <Label className="text-xs md:text-sm font-semibold text-slate-700">Endereço de e-mail</Label>
+            <Input value={user?.email || ''} disabled className="bg-slate-100 text-slate-500 border-slate-200 text-xs md:text-sm h-9 md:h-10" />
           </div>
 
           {/* Telefone / WhatsApp */}
           <div className="space-y-1">
-            <Label htmlFor="phone" className="text-sm font-semibold text-slate-700">
+            <Label htmlFor="phone" className="text-xs md:text-sm font-semibold text-slate-700">
               WhatsApp <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -120,41 +120,41 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
               value={form.phone}
               onChange={handlePhone}
               required
-              className="border-slate-300 text-sm h-10 focus:border-blue-500"
+              className="border-slate-300 text-xs md:text-sm h-9 md:h-10 focus:border-blue-500"
             />
-            <p className="text-xs text-slate-500 leading-snug">
+            <p className="text-xs text-slate-500 leading-tight">
               Usado apenas para conectar você com prestadores verificados. Seu número não será exibido publicamente.
             </p>
           </div>
 
           {/* Data de nascimento */}
           <div className="space-y-1">
-            <Label htmlFor="birth_date" className="text-sm font-semibold text-slate-700">Data de nascimento</Label>
+            <Label htmlFor="birth_date" className="text-xs md:text-sm font-semibold text-slate-700">Data de nascimento</Label>
             <Input
               id="birth_date"
               type="date"
               value={form.birth_date}
               onChange={(e) => setForm(f => ({ ...f, birth_date: e.target.value }))}
               max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-              className="border-slate-300 text-sm h-10"
+              className="border-slate-300 text-xs md:text-sm h-9 md:h-10"
             />
           </div>
 
           <Button
             type="submit"
-            className="w-full font-bold h-12 rounded-full text-base mt-2"
+            className="w-full font-bold h-10 md:h-12 rounded-full text-sm md:text-base mt-1 md:mt-2"
             style={{ background: 'linear-gradient(135deg, #00AEEF, #00C853)', border: 'none' }}
             disabled={mutation.isPending}
           >
             {mutation.isPending ? (
               <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Salvando...</>
             ) : (
-              <><CheckCircle className="w-4 h-4 mr-2" /> Concluir cadastro e continuar</>
+              <><CheckCircle className="w-4 h-4 mr-2" /> Concluir cadastro</>
             )}
           </Button>
 
-          <p className="text-xs text-slate-400 text-center leading-snug">
-            Ao concluir seu cadastro, você terá acesso às ferramentas exclusivas da plataforma Trancoso Resolve.
+          <p className="text-xs text-slate-400 text-center leading-tight">
+            Ao concluir seu cadastro, você terá acesso às ferramentas exclusivas da plataforma.
           </p>
         </form>
       </DialogContent>
