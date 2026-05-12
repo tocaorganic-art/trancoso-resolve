@@ -42,6 +42,7 @@ export default function PrestadorPerfilPage() {
   const [requestData, setRequestData] = useState({
     client_name: "",
     client_phone: "",
+    client_email: "",
     service_id: "",
     date: undefined,
     time: "",
@@ -393,6 +394,10 @@ export default function PrestadorPerfilPage() {
                         <Label htmlFor="client_phone">Telefone *</Label>
                         <Input id="client_phone" type="tel" value={requestData.client_phone} onChange={(e) => setRequestData({...requestData, client_phone: formatPhoneNumber(e.target.value)})} placeholder="(XX) XXXXX-XXXX" maxLength={15} aria-required="true" />
                       </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="client_email">Seu E-mail (para confirmação)</Label>
+                      <Input id="client_email" type="email" value={requestData.client_email} onChange={(e) => setRequestData({...requestData, client_email: e.target.value})} placeholder="seu@email.com" aria-label="E-mail para receber confirmação do agendamento" />
                     </div>
 
                     <div>
