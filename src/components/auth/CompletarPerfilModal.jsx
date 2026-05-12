@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -71,6 +71,8 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
         style={{ backdropFilter: 'blur(3px)' }}
         onInteractOutside={handleClose}
       >
+        <DialogTitle className="sr-only">Complete seu cadastro</DialogTitle>
+        <DialogDescription className="sr-only">Preencha seus dados para se conectar com prestadores verificados da comunidade de Trancoso.</DialogDescription>
         {/* Header */}
         <div className="px-4 md:px-5 py-4 md:py-5 text-white relative sticky top-0 z-10" style={{ background: 'linear-gradient(135deg, #00AEEF, #0072FF)' }}>
           <button
