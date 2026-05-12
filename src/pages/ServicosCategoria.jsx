@@ -261,9 +261,40 @@ export default function ServicosCategoriaPage() {
     };
   }, [providers, selectedCategory, searchQuery, aiFilteredProviderIds]);
 
+  // Sinônimos para melhorar buscas
+  const categoryAliases = {
+    'faxina': 'Limpeza',
+    'faxineira': 'Limpeza',
+    'diarista': 'Limpeza',
+    'limpeza-domestica': 'Limpeza',
+    'limpar': 'Limpeza',
+    'eletricista': 'Eletricista',
+    'eletrico': 'Eletricista',
+    'luz': 'Eletricista',
+    'encanador': 'Encanador',
+    'encanamento': 'Encanador',
+    'vazamento': 'Encanador',
+    'tubulacao': 'Encanador',
+    'jardim': 'Jardinagem',
+    'jardinagem': 'Jardinagem',
+    'grama': 'Jardinagem',
+    'poda': 'Jardinagem',
+    'cozinha': 'Cozinheiro',
+    'cozinheiro': 'Cozinheiro',
+    'chef': 'Cozinheiro',
+    'comida': 'Cozinheiro',
+  };
+
+  const resolveSearchCategory = (query) => {
+    const normalized = query.toLowerCase().trim();
+    return categoryAliases[normalized] || null;
+  };
+
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (searchQuery.trim() === '') {
+      const normalizedQuery = searchQuery.trim();
+      
+      if (normalizedQuery === '') {
         setAiFilteredProviderIds(null);
         return;
       }
@@ -276,31 +307,53 @@ export default function ServicosCategoriaPage() {
       const performSearch = async () => {
         setIsSearching(true);
         try {
+          // Tentar resolver via sinônimo primeiro
+          const resolvedCategory = resolveSearchCategory(normalizedQuery);
+          
+          if (resolvedCategory) {
+            // Se encontrou categoria, filtrar prestadores dessa ocupação
+            const matchingIds = providers
+              .filter(p => p.occupation === resolvedCategory)
+              .map(p => p.id);
+            setAiFilteredProviderIds(matchingIds);
+            setIsSearching(false);
+            return;
+          }
+
+          // Senão, usar IA para busca semântica
           const providerContext = providers.map(p => ({
             id: p.id,
             name: p.full_name,
             occupation: p.occupation,
-            bio: p.bio,
-            specialties: p.specialties,
+            bio: p.bio || '',
+            specialties: p.specialties || [],
           }));
 
           const result = await base44.integrations.Core.InvokeLLM({
-            prompt: `Baseado na busca do usuário "${searchQuery}", analise a lista de prestadores e retorne os IDs dos mais relevantes. Entenda a intenção, não apenas palavras-chave. Exemplo: se a busca for "consertar vazamento", priorize "Encanador". Contexto: ${JSON.stringify(providerContext)}`,
+            prompt: `Baseado na busca do usuário "${normalizedQuery}", analise a lista de prestadores e retorne APENAS os IDs dos mais relevantes. Procure por correspondência semântica. Se não encontrar correspondência, retorne array vazio. Exemplo: "consertar vazamento" → Encanador. Contexto: ${JSON.stringify(providerContext.slice(0, 50))}`,
             response_json_schema: {
               type: "object",
               properties: {
                 relevant_provider_ids: {
                   type: "array",
                   items: { type: "string" },
+                  description: "IDs dos prestadores relevantes"
                 }
               },
               required: ["relevant_provider_ids"]
             }
           });
           
-          setAiFilteredProviderIds(result?.relevant_provider_ids || []);
+          const ids = result?.relevant_provider_ids;
+          if (Array.isArray(ids)) {
+            setAiFilteredProviderIds(ids);
+          } else {
+            console.warn('AI search returned invalid format:', result);
+            setAiFilteredProviderIds([]);
+          }
         } catch (error) {
-          console.error("AI search failed:", error);
+          console.error("Search error:", error);
+          // Em caso de erro, retorna array vazio (não resultado de erro)
           setAiFilteredProviderIds([]);
         } finally {
           setIsSearching(false);
@@ -365,14 +418,20 @@ export default function ServicosCategoriaPage() {
     
     if (filteredProviders.length === 0) {
         const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '';
+        const hasSearchQuery = searchQuery.trim() !== '';
+        
         return (
           <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
             <div className="w-16 h-16 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
               <Search className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-xl font-semibold text-slate-700 mb-2">Nenhum Profissional Encontrado</h3>
+            <h3 className="text-xl font-semibold text-slate-700 mb-2">
+              {hasSearchQuery ? 'Nenhum Profissional Encontrado' : 'Nenhum Profissional Encontrado'}
+            </h3>
             <p className="text-slate-500 max-w-md mx-auto mb-6">
-              {hasActiveFilters 
+              {hasSearchQuery
+                ? `Não encontramos profissionais para "${searchQuery}". Tente uma busca diferente ou use as categorias.`
+                : hasActiveFilters 
                 ? "Não encontramos profissionais com os filtros selecionados. Experimente ajustar sua busca."
                 : "Ainda não há profissionais cadastrados nesta categoria."}
             </p>
