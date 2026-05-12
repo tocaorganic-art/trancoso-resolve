@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, BarChart2, Users, Star, Bot, Camera } from 'lucide-react';
@@ -63,6 +63,57 @@ const steps = [
 ];
 
 export default function SejaPrestadorPage() {
+  useEffect(() => {
+    document.title = "Seja um Prestador de Serviços em Trancoso — Trancoso Resolve";
+
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = "Cadastre-se como prestador de serviços em Trancoso Resolve. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.";
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = 'https://www.trancosoresolve.com.br/SejaPrestador';
+
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = 'https://www.trancosoresolve.com.br/SejaPrestador';
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
+    ogTitle.content = 'Seja um Prestador de Serviços em Trancoso — Trancoso Resolve';
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
+    ogDesc.content = 'Cadastre-se como prestador de serviços em Trancoso Resolve. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.';
+
+    const schemaId = 'schema-seja-prestador';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "name": "Seja um Parceiro Trancoso Resolve",
+          "url": "https://www.trancosoresolve.com.br/SejaPrestador",
+          "description": "Cadastre-se como prestador de serviços verificado em Trancoso e comece a receber novos clientes pela plataforma."
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 2, "name": "Seja um Prestador", "item": "https://www.trancosoresolve.com.br/SejaPrestador" }
+          ]
+        }
+      ]
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, []);
+
   return (
     <div className="bg-slate-50">
       {/* Hero */}
@@ -120,6 +171,25 @@ export default function SejaPrestadorPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* Links internos de suporte */}
+      <section className="container mx-auto px-4 max-w-3xl pb-4">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border text-center">
+          <p className="text-slate-700 font-medium mb-3">Quer saber mais antes de se cadastrar?</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to={createPageUrl("ComoFunciona")}>
+              <Button variant="outline" className="w-full sm:w-auto gap-2">
+                Como funciona a plataforma?
+              </Button>
+            </Link>
+            <Link to={createPageUrl("ServicosCategoria")}>
+              <Button variant="outline" className="w-full sm:w-auto gap-2">
+                Ver prestadores já cadastrados
+              </Button>
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* CTA Final */}

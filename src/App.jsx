@@ -15,6 +15,7 @@ import AdminPagamentosPage from '@/pages/AdminPagamentos';
 import PreLancamentoPage from '@/pages/PreLancamento';
 import AdminAntecedentesPage from '@/pages/AdminAntecedentes';
 import ServicoLandingPage from '@/pages/ServicoLanding';
+import SolicitacaoConfirmadaPage from '@/pages/SolicitacaoConfirmada';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -91,6 +92,11 @@ const AuthenticatedApp = () => {
         <Route path="/ServicoLanding" element={
           <LayoutWrapper currentPageName="ServicoLanding">
             <AnimatedPage><ServicoLandingPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/SolicitacaoConfirmada" element={
+          <LayoutWrapper currentPageName="SolicitacaoConfirmada">
+            <AnimatedPage><SolicitacaoConfirmadaPage /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="*" element={<PageNotFound />} />

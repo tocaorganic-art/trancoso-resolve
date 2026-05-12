@@ -160,6 +160,36 @@ export default function ComoFuncionaPage() {
           </div>
         </section>
 
+        {/* Link Building Interno — Categorias populares */}
+        <section className="mb-16 bg-white rounded-2xl p-8 shadow-sm border">
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Serviços Mais Procurados em Trancoso</h2>
+          <p className="text-slate-600 mb-6">Navegue pelas categorias e encontre o profissional ideal para cada necessidade:</p>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { slug: 'limpeza-trancoso', label: '🧹 Limpeza em Trancoso' },
+              { slug: 'eletricista-trancoso', label: '⚡ Eletricista em Trancoso' },
+              { slug: 'encanador-trancoso', label: '🔧 Encanador em Trancoso' },
+              { slug: 'jardinagem-trancoso', label: '🌿 Jardineiro em Trancoso' },
+              { slug: 'cozinheiro-trancoso', label: '👨‍🍳 Cozinheiro em Trancoso' },
+              { slug: 'pedreiro-trancoso', label: '🏗️ Pedreiro em Trancoso' },
+              { slug: 'pintor-trancoso', label: '🖌️ Pintor em Trancoso' },
+              { slug: 'baba-trancoso', label: '👶 Babá em Trancoso' },
+              { slug: 'garcom-trancoso', label: '🍽️ Garçom em Trancoso' },
+            ].map(item => (
+              <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
+                <span className="inline-block bg-slate-100 hover:bg-cyan-50 hover:text-cyan-700 border border-slate-200 hover:border-cyan-200 rounded-full px-4 py-2 text-sm font-medium text-slate-700 transition-colors cursor-pointer">
+                  {item.label}
+                </span>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-4 pt-4 border-t border-slate-100">
+            <Link to={createPageUrl("ServicosCategoria")} className="text-sm text-cyan-600 hover:underline font-medium">
+              Ver todos os profissionais verificados em Trancoso →
+            </Link>
+          </div>
+        </section>
+
         {/* FAQ */}
         <section className="mb-16">
            <h2 className="text-3xl font-bold text-center mb-10 text-slate-800">Dúvidas Frequentes sobre Contratar em Trancoso</h2>

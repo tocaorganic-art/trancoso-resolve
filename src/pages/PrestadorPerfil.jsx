@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ import { ptBR } from "date-fns/locale";
 import LazyImage from "@/components/ui/LazyImage";
 import {
   ArrowLeft, Star, MapPin, Award, Clock,
-  DollarSign, CheckCircle, Calendar as CalendarIcon, Images, PartyPopper, ChevronRight, Check
+  DollarSign, CheckCircle, Calendar as CalendarIcon, Images, ChevronRight, Check
 } from "lucide-react";
 import { toast } from "sonner";
 import StarRating from "@/components/reviews/StarRating";
@@ -30,6 +30,7 @@ import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 export default function PrestadorPerfilPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const providerId = urlParams.get('id');
+  const navigate = useNavigate();
 
   const { data: user, isSuccess: isUserLoaded } = useQuery({
     queryKey: ['currentUser'],
@@ -37,7 +38,6 @@ export default function PrestadorPerfilPage() {
   });
 
   const [showRequestForm, setShowRequestForm] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
   const [step, setStep] = useState(1);
   const [requestData, setRequestData] = useState({
     client_name: "",
@@ -77,19 +77,7 @@ export default function PrestadorPerfilPage() {
   const createRequestMutation = useMutation({
     mutationFn: (data) => base44.entities.ServiceRequest.create(data),
     onSuccess: () => {
-      toast.success("Solicitação enviada com sucesso! O prestador entrará em contato.");
-      setShowRequestForm(false);
-      setBookingSuccess(true);
-      setStep(1); // Reset step for next booking
-      setRequestData({
-        client_name: "",
-        client_phone: "",
-        service_id: "",
-        date: undefined,
-        time: "",
-        message: "",
-        location: { address: '', number: '', complement: '', reference: '', lat: null, lng: null },
-      });
+      navigate('/SolicitacaoConfirmada');
     },
   });
 
@@ -358,7 +346,6 @@ export default function PrestadorPerfilPage() {
                   base44.auth.redirectToLogin(window.location.href);
                 } else {
                   setShowRequestForm(true);
-                  setBookingSuccess(false);
                   setStep(1);
                 }
               }}
@@ -377,7 +364,7 @@ export default function PrestadorPerfilPage() {
         </Card>
 
         {/* Request Form with Calendar */}
-        {showRequestForm && !bookingSuccess && (
+        {showRequestForm && (
           <Card className="border-none shadow-xl mb-8">
             <CardHeader className="bg-gradient-to-r from-cyan-50 to-blue-50">
               <CardTitle>Agendar com {provider.full_name.split(' ')[0]}</CardTitle>
@@ -522,23 +509,6 @@ export default function PrestadorPerfilPage() {
               </form>
             </CardContent>
           </Card>
-        )}
-
-        {/* Booking Success Confirmation */}
-        {bookingSuccess && (
-            <Card className="border-none shadow-xl mb-8 bg-gradient-to-br from-green-50 to-cyan-50">
-                <CardContent className="p-8 text-center">
-                    <PartyPopper className="w-16 h-16 text-green-600 mx-auto mb-4" aria-hidden="true" />
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Solicitação Enviada!</h2>
-                    <p className="text-slate-700 mb-6">O prestador foi notificado e entrará em contato em breve para confirmar o agendamento. Você pode acompanhar o status na página "Meus Pedidos".</p>
-                    <div className="flex gap-4 justify-center">
-                        <Link to={createPageUrl("MeusPedidos")}>
-                            <Button aria-label="Ver meus pedidos">Ver Meus Pedidos</Button>
-                        </Link>
-                        <Button variant="outline" onClick={() => setBookingSuccess(false)} aria-label="Fechar mensagem de sucesso">Fechar</Button>
-                    </div>
-                </CardContent>
-            </Card>
         )}
 
         {/* Portfolio */}

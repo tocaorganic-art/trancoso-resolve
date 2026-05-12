@@ -153,6 +153,32 @@ export default function SegurancaPage() {
 
       </div>
 
+      {/* Link Building Interno */}
+      <div className="container mx-auto px-4 mt-12">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border">
+          <h2 className="text-lg font-bold text-slate-900 mb-3">Profissionais Verificados por Categoria</h2>
+          <p className="text-sm text-slate-600 mb-4">Todos os prestadores abaixo passaram pela nossa verificação de antecedentes:</p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {[
+              { slug: 'limpeza-trancoso', label: 'Diarista verificada' },
+              { slug: 'eletricista-trancoso', label: 'Eletricista verificado' },
+              { slug: 'encanador-trancoso', label: 'Encanador verificado' },
+              { slug: 'jardinagem-trancoso', label: 'Jardineiro verificado' },
+              { slug: 'cozinheiro-trancoso', label: 'Cozinheiro verificado' },
+            ].map(item => (
+              <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
+                <span className="inline-flex items-center gap-1 bg-green-50 hover:bg-green-100 border border-green-200 rounded-full px-3 py-1.5 text-xs font-medium text-green-800 transition-colors cursor-pointer">
+                  ✅ {item.label}
+                </span>
+              </Link>
+            ))}
+          </div>
+          <Link to={createPageUrl("ServicosCategoria")} className="text-sm text-cyan-600 hover:underline font-medium">
+            Ver todos os profissionais verificados →
+          </Link>
+        </div>
+      </div>
+
       {/* CTA Final */}
       <div className="container mx-auto px-4 mt-16 mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-900 mb-3">Contrate com Confiança em Trancoso</h2>

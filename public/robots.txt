@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Bloquear rotas administrativas/privadas
+Disallow: /FilaVerificacao
+Disallow: /AdminPagamentos
+Disallow: /AdminAntecedentes
+Disallow: /AdminAssinaturas
+Disallow: /AdminControleFinanceiro
+Disallow: /AdminUserManagement
+Disallow: /DeployDashboard
+Disallow: /Dashboard
+Disallow: /Financeiro
+Disallow: /MinhaAgenda
+Disallow: /MeusServicos
+Disallow: /MeuPerfilPrestador
+
+Sitemap: https://www.trancosoresolve.com.br/api/functions/sitemap

@@ -19,6 +19,7 @@ const servicoConfig = {
     description: "Contrate diaristas e faxineiras verificadas em Trancoso, Bahia. Serviço de limpeza residencial e de pousadas com profissionais avaliados pela comunidade.",
     occupation: "Limpeza",
     keywords: "diarista Trancoso, faxineira Trancoso, limpeza doméstica Trancoso, serviço limpeza Trancoso BA",
+    ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/inigQzgVMUPeKrkL.png",
     faq: [
       { q: "Quanto custa uma diarista em Trancoso?", a: "O valor de uma diarista em Trancoso varia entre R$ 120 e R$ 300 por diária, dependendo do tamanho do imóvel e dos serviços inclusos. Consulte os perfis para ver os preços de cada profissional." },
       { q: "Os profissionais são verificados?", a: "Sim, todos os prestadores passam por verificação de identidade e consulta de antecedentes antes de aparecerem na plataforma." },
@@ -33,6 +34,7 @@ const servicoConfig = {
     description: "Eletricistas qualificados em Trancoso para instalações, manutenção e emergências. Profissionais verificados com avaliações de clientes reais.",
     occupation: "Eletricista",
     keywords: "eletricista Trancoso, serviço elétrico Trancoso, instalação elétrica Trancoso BA",
+    ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/loNdoqfPbYrpiZUY.png",
     faq: [
       { q: "Tem eletricista disponível para emergências em Trancoso?", a: "Sim, vários eletricistas em nosso cadastro atendem com urgência. Verifique a disponibilidade no perfil de cada profissional." },
       { q: "Qual o custo médio de um serviço elétrico em Trancoso?", a: "O valor varia conforme a complexidade. Instalações simples costumam partir de R$ 150, enquanto serviços mais complexos podem custar mais. Solicite orçamento diretamente com o profissional." },
@@ -46,6 +48,7 @@ const servicoConfig = {
     description: "Encanadores especializados em Trancoso para reparos, entupimentos e instalações hidráulicas. Atendimento rápido com profissionais verificados.",
     occupation: "Encanador",
     keywords: "encanador Trancoso, hidráulico Trancoso, conserto vazamento Trancoso BA",
+    ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/SzIYzgzmeNbfcRvv.png",
     faq: [
       { q: "Como contratar um encanador urgente em Trancoso?", a: "Acesse a lista de encanadores disponíveis, verifique o status 'Disponível' no perfil e entre em contato diretamente pelo WhatsApp." },
       { q: "Encanadores atendem em vilarejos próximos a Trancoso?", a: "Muitos profissionais informam o raio de atendimento no perfil. Consulte a localização e cobertura de cada um." },
@@ -59,6 +62,7 @@ const servicoConfig = {
     description: "Jardineiros especializados em plantas tropicais em Trancoso. Manutenção de jardins, poda, paisagismo para residências, pousadas e villas na Bahia.",
     occupation: "Jardinagem",
     keywords: "jardineiro Trancoso, jardinagem Trancoso, paisagismo Trancoso BA, manutenção jardim Trancoso",
+    ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/MmnYpPgxNHhyniba.png",
     faq: [
       { q: "Tem jardineiro especializado em plantas nativas da Bahia em Trancoso?", a: "Sim, nossos profissionais têm experiência com plantas tropicais e nativas do litoral sul da Bahia, ideais para o clima de Trancoso." },
       { q: "Com que frequência devo contratar um jardineiro em Trancoso?", a: "No clima tropical de Trancoso, recomenda-se manutenção quinzenal ou mensal. Verifique os planos disponíveis com cada profissional." },
@@ -72,6 +76,7 @@ const servicoConfig = {
     description: "Chefs e cozinheiros particulares em Trancoso para jantares, eventos e diárias. Gastronomia baiana autêntica com frutos do mar para sua villa ou pousada.",
     occupation: "Cozinheiro",
     keywords: "cozinheiro Trancoso, chef particular Trancoso, jantar villa Trancoso, gastronomia Trancoso BA",
+    ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/XKIqXQfxYpLpcnsh.png",
     faq: [
       { q: "Posso contratar um chef para um jantar privativo na minha villa em Trancoso?", a: "Sim! Temos chefs especializados em jantares privativos, com menus personalizados de frutos do mar e culinária baiana." },
       { q: "Os cozinheiros atendem a eventos e festas em Trancoso?", a: "Sim, muitos profissionais atendem eventos, casamentos e celebrações. Consulte disponibilidade com antecedência." },
@@ -85,6 +90,7 @@ const servicoConfig = {
     description: "Pedreiros experientes em Trancoso para reformas, construção e manutenção. Profissionais verificados para obras residenciais e comerciais na Bahia.",
     occupation: "Pedreiro",
     keywords: "pedreiro Trancoso, reforma Trancoso, construção Trancoso BA, manutenção Trancoso",
+    ogImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "Tem pedreiro para reformas pequenas em Trancoso?", a: "Sim, atendemos desde reparos pontuais até reformas completas. Os profissionais detalham os tipos de serviço nos perfis." },
     ],
@@ -97,6 +103,7 @@ const servicoConfig = {
     description: "Pintores profissionais em Trancoso para pintura residencial, comercial e decorativa. Acabamento de qualidade para villas, pousadas e imóveis na Bahia.",
     occupation: "Pintor",
     keywords: "pintor Trancoso, pintura residencial Trancoso, pintura comercial Trancoso BA",
+    ogImage: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "Qual o custo de pintura por metro quadrado em Trancoso?", a: "O valor médio varia conforme o tipo de tinta e superfície. Consulte diretamente com o profissional para orçamento personalizado." },
     ],
@@ -109,6 +116,7 @@ const servicoConfig = {
     description: "Babás verificadas em Trancoso para cuidados de crianças durante viagens, hospedagem ou eventos. Profissionais com referências e experiência comprovada.",
     occupation: "Babá",
     keywords: "babá Trancoso, cuidadora criança Trancoso, babysitter Trancoso BA",
+    ogImage: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "As babás em Trancoso têm verificação de antecedentes?", a: "Sim, todos os prestadores passam por consulta de antecedentes criminais e verificação de identidade antes de ser listados na plataforma." },
     ],
@@ -121,6 +129,7 @@ const servicoConfig = {
     description: "Garçons profissionais em Trancoso para eventos, jantares e celebrações. Equipe treinada e uniformizada para elevar o padrão do seu evento na Bahia.",
     occupation: "Garçom",
     keywords: "garçom Trancoso, garçom eventos Trancoso, serviço evento Trancoso BA",
+    ogImage: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "Posso contratar vários garçons para um evento grande em Trancoso?", a: "Sim. Informe o tamanho do evento ao profissional para adequar a equipe necessária." },
     ],
@@ -207,6 +216,13 @@ export default function ServicoLandingPage() {
     let ogDesc = document.querySelector('meta[property="og:description"]');
     if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
     ogDesc.content = config.description;
+
+    // OG:Image por categoria
+    if (config.ogImage) {
+      let ogImage = document.querySelector('meta[property="og:image"]');
+      if (!ogImage) { ogImage = document.createElement('meta'); ogImage.setAttribute('property', 'og:image'); document.head.appendChild(ogImage); }
+      ogImage.content = config.ogImage;
+    }
 
     // Schema Markup
     const schemaId = 'schema-servico-landing';

@@ -255,9 +255,33 @@ export default function HomePage() {
         {
           "@type": "FAQPage",
           "mainEntity": [
-            { "@type": "Question", "name": "Como contratar um profissional em Trancoso?", "acceptedAnswer": { "@type": "Answer", "text": "Acesse o Trancoso Resolve, busque pelo serviço desejado, escolha o profissional com base nas avaliações e envie sua solicitação em poucos cliques." } },
-            { "@type": "Question", "name": "Os profissionais são verificados?", "acceptedAnswer": { "@type": "Answer", "text": "Sim! Todos os prestadores passam por verificação de identidade e consulta de antecedentes criminais antes de exibir o selo Verificado em seus perfis." } },
-            { "@type": "Question", "name": "Qual é o custo para contratar via Trancoso Resolve?", "acceptedAnswer": { "@type": "Answer", "text": "Para clientes, a plataforma é completamente gratuita. Você navega, compara e solicita serviços sem custo algum." } }
+            {
+              "@type": "Question",
+              "name": "Como encontrar prestadores de serviços em Trancoso?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Na Trancoso Resolve você encontra prestadores verificados de limpeza, elétrica, jardinagem, garçom, pedreiro, encanador, pintor, cozinheiro e babá. Todos passam por verificação de antecedentes criminais antes de serem listados." }
+            },
+            {
+              "@type": "Question",
+              "name": "Quanto custa contratar um prestador pelo Trancoso Resolve?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Para clientes, o acesso à plataforma é gratuito. Você encontra o prestador, entra em contato e negocia diretamente com ele, sem comissão ou taxa da plataforma." }
+            },
+            {
+              "@type": "Question",
+              "name": "Os prestadores são verificados e confiáveis?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Sim. Todos os prestadores passam por verificação de antecedentes criminais em bases oficiais (Polícia Federal e órgãos estaduais) antes de aparecerem nas buscas. Apenas prestadores aprovados recebem o Selo Verificado." }
+            },
+            {
+              "@type": "Question",
+              "name": "O Trancoso Resolve atende villas e pousadas?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Sim. A plataforma é ideal para gestores de villas, pousadas e empreendimentos em Trancoso que precisam de prestadores de serviços pontuais ou recorrentes com confiança e rapidez." }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 2, "name": "Serviços em Trancoso", "item": "https://www.trancosoresolve.com.br/ServicosCategoria" }
           ]
         }
       ]
