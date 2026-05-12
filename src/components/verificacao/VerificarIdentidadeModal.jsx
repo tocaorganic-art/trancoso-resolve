@@ -20,6 +20,13 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
   
   const isPF = user?.tipo_pessoa === 'pf';
 
+  // Mapear tipo de documento para tipo de verificação
+  const getVerificationType = (docType) => {
+    if (['CNH', 'RG'].includes(docType)) return 'identity';
+    if (['CNPJ', 'MEI'].includes(docType)) return 'documents';
+    return 'identity';
+  };
+
   const handleFileChange = (e) => {
     const f = e.target.files[0];
     if (!f) return;
@@ -41,12 +48,10 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
 
       // 2. Criar registro de verificação
       const verificacao = await base44.entities.Verificacao.create({
-        user_email: user.email,
-        user_name: user.full_name,
-        document_url: file_url,
-        document_type: documentType,
-        status: "Em Análise",
-        submission_date: new Date().toISOString(),
+        provider_id: user.id,
+        verification_type: getVerificationType(documentType),
+        status: "pending",
+        description: `Documento ${documentType} enviado para verificação`,
       });
 
       setStep("analyzing");
