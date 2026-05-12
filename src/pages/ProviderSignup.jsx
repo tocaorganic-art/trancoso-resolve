@@ -163,6 +163,7 @@ function ProfessionalInfoStep({ data, onChange }) {
     'Encanador',
     'Pintor',
     'Cozinheiro',
+    'Outros',
   ];
 
   const handleChange = (field, value) => {
@@ -184,34 +185,36 @@ function ProfessionalInfoStep({ data, onChange }) {
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-white mb-6">Informações Profissionais</h2>
 
-      <div>
-        <label className="block text-sm font-bold text-white mb-2">
-          Ocupação Principal <span className="text-red-500">*</span>
-        </label>
-        <select
-          value={data.primaryCategory || ''}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value === 'Outros') {
-              handleChange('primaryCategory', value);
-            } else {
-              handleChange('primaryCategory', value);
-              handleChange('customCategory', '');
-            }
-          }}
-          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none text-sm"
-        >
-          <option value="">Selecione uma categoria</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+      <div className="space-y-3">
+        <div>
+          <label className="block text-sm font-bold text-white mb-2">
+            Ocupação Principal <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={data.primaryCategory || ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === 'Outros') {
+                handleChange('primaryCategory', value);
+              } else {
+                handleChange('primaryCategory', value);
+                handleChange('customCategory', '');
+              }
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none text-sm"
+          >
+            <option value="">Selecione uma categoria</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Input para categoria customizada quando "Outros" é selecionado */}
         {data.primaryCategory === 'Outros' && (
-          <div className="mt-4 space-y-3 p-4 bg-cyan-500/10 border border-cyan-500 rounded-lg">
+          <div className="space-y-2 p-4 bg-cyan-500/10 border border-cyan-500 rounded-lg">
             <label className="block text-sm font-bold text-white">
               Qual é sua profissão ou negócio? <span className="text-red-500">*</span>
             </label>
