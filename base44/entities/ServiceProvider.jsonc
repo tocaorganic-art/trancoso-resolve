@@ -10,6 +10,14 @@
       "type": "string",
       "description": "URL da foto de perfil"
     },
+    "cover_photo_url": {
+      "type": "string",
+      "description": "URL da foto de capa do perfil (16:9, alta qualidade)"
+    },
+    "full_body_photo_url": {
+      "type": "string",
+      "description": "URL da foto de corpo inteiro do prestador para verifica\u00e7\u00e3o de identidade"
+    },
     "occupation": {
       "type": "string",
       "enum": [
@@ -207,11 +215,11 @@
         "em_risco"
       ],
       "default": "pendente",
-      "description": "Status da verifica\u00e7\u00e3o cadastral do CNPJ na Receita Federal (reservado para uso futuro)"
+      "description": "Status da verifica\u00e7\u00e3o cadastral do CNPJ na Receita Federal"
     },
     "relatorio_verificacao_empresa": {
       "type": "string",
-      "description": "Relat\u00f3rio da verifica\u00e7\u00e3o do CNPJ (reservado para uso futuro)"
+      "description": "Relat\u00f3rio da verifica\u00e7\u00e3o do CNPJ"
     }
   },
   "required": [
