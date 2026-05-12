@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Zap, Users, Star, Percent } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Zap, Users, Star, Percent, ArrowRight, Shield, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import LazyImage from '@/components/ui/LazyImage';
@@ -8,52 +8,56 @@ import LazyImage from '@/components/ui/LazyImage';
 const banners = [
   {
     id: 1,
-    badge: null,
-    title: "Trancoso Resolve",
-    highlight: "Serviços com Confiança",
-    subtitle: "Conectando você aos melhores profissionais verificados de Trancoso. Rápido, seguro e transparente.",
-    cta: "Explorar Profissionais",
+    badge: "✨ Platform Número 1 em Trancoso",
+    title: "Conecte-se aos Melhores",
+    highlight: "Profissionais Verificados",
+    subtitle: "Serviços confiáveis, avaliações reais e profissionais de verdade. Encontre exatamente quem você precisa em Trancoso.",
+    cta: "Começar Agora",
     ctaLink: "/ServicosCategoria",
-    bgColor: "linear-gradient(135deg, #0A81D1 0%, #0D8A6F 100%)",
-    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    Icon: Star,
+    bgColor: "linear-gradient(135deg, #0A81D1 0%, #0061FF 50%, #0D8A6F 100%)",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    Icon: Shield,
+    accent: "from-blue-400 to-cyan-300",
   },
   {
     id: 2,
-    badge: "🔥 Oferta de Lançamento — 100 Vagas!",
-    title: "R$ 29,90/mês",
-    highlight: "0% de Comissão.",
-    subtitle: "Primeiros 100 prestadores pagam apenas R$ 29,90/mês e ficam com 100% do que ganham. Sem taxas por serviço, sem surpresas.",
-    cta: "Garantir Minha Vaga",
+    badge: "🚀 PROMOÇÃO EXCLUSIVA — Últimas 47 vagas!",
+    title: "R$ 29,90",
+    highlight: "Primeiro Mês + 0% de Comissão",
+    subtitle: "Primeiros prestadores de Trancoso ganham grande desconto. Fique com 100% de cada serviço. Sem pegadinhas.",
+    cta: "Garantir Vaga Agora",
     ctaLink: "/Planos",
-    bgColor: "linear-gradient(135deg, #F9A825 0%, #F95738 100%)",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    bgColor: "linear-gradient(135deg, #F95738 0%, #FF6B35 50%, #FFB627 100%)",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: Zap,
     spots: true,
+    accent: "from-orange-300 to-yellow-300",
   },
   {
     id: 3,
-    badge: null,
-    title: "Mensalidade Fixa.",
-    highlight: "Comissão Zero.",
-    subtitle: "Assine por R$ 49,90/mês e fique com 100% de tudo que você ganhar. Sem desconto por serviço, sem surpresas no final do mês.",
-    cta: "Ver Planos",
+    badge: "💰 Plano Estável",
+    title: "R$ 49,90/mês",
+    highlight: "Sem Surpresas. 100% Seus.",
+    subtitle: "Mensal fixo, sem comissões escondidas. Quanto mais você ganha, mais você fica com tudo. Transparência total.",
+    cta: "Ver Todos os Planos",
     ctaLink: "/Planos",
-    bgColor: "linear-gradient(135deg, #0D8A6F 0%, #2D3047 100%)",
-    image: "https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    Icon: Percent,
+    bgColor: "linear-gradient(135deg, #0D8A6F 0%, #1DB584 50%, #2D3047 100%)",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    Icon: TrendingUp,
+    accent: "from-emerald-300 to-green-300",
   },
   {
     id: 4,
-    badge: null,
-    title: "Profissionais Verificados",
-    highlight: "em Trancoso",
-    subtitle: "Faxina, eletricista, jardinagem, cozinheiro e muito mais — tudo num só lugar, com avaliações reais e confiança garantida.",
-    cta: "Ver Todos os Serviços",
+    badge: "🎯 Diversidade de Serviços",
+    title: "Faxina, Eletricista,",
+    highlight: "Cozinheiro, Jardinagem...",
+    subtitle: "8+ categorias de serviços profissionais. Se existe serviço em Trancoso, está aqui. Todos verificados, todos avaliados.",
+    cta: "Explorar Categorias",
     ctaLink: "/ServicosCategoria",
-    bgColor: "linear-gradient(135deg, #1A2B3C 0%, #0A81D1 100%)",
-    image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    bgColor: "linear-gradient(135deg, #1A2B3C 0%, #0A81D1 50%, #0061FF 100%)",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: Users,
+    accent: "from-blue-300 to-indigo-300",
   }
 ];
 
@@ -84,61 +88,80 @@ export default function PromotionalBanner() {
             style={{ background: banner.bgColor }}
           >
             {/* Background image */}
-            <div className="absolute right-0 top-0 h-full w-full md:w-3/5">
-              <LazyImage
-                src={banner.image}
-                alt={banner.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+             <div className="absolute right-0 top-0 h-full w-full md:w-3/5">
+               <LazyImage
+                 src={banner.image}
+                 alt={banner.title}
+                 className="w-full h-full object-cover opacity-40"
+               />
+             </div>
 
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
+             {/* Animated gradient overlay */}
+             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/65 to-transparent" />
+
+             {/* Dynamic accent gradient */}
+             <div className={`absolute -right-20 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-20 bg-gradient-to-r ${banner.accent}`} />
 
             {/* Content */}
             <div className="relative h-full flex items-center z-20 px-5 md:px-12">
-              <div className="text-white max-w-xs md:max-w-md">
-                
-                {/* Badge de escassez */}
+              <div className="text-white max-w-xs md:max-w-lg space-y-2 md:space-y-3">
+
+                {/* Badge — Agressivo e Destacado */}
                 {banner.badge && (
-                  <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-3 py-1 mb-3 md:mb-4">
-                    <span className="text-xs md:text-sm font-semibold text-yellow-300 drop-shadow">{banner.badge}</span>
+                  <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/40 rounded-full px-4 py-2 md:px-5 md:py-2.5 mb-1 md:mb-2 transform transition-all hover:bg-white/25 hover:border-white/60">
+                    <span className="text-xs md:text-sm font-bold text-white drop-shadow-lg tracking-wide">{banner.badge}</span>
                   </div>
                 )}
 
-                {/* Título */}
-                <h2 className="text-xl md:text-4xl font-bold leading-tight drop-shadow-md">
-                  {banner.title}{" "}
-                  <span className="text-yellow-300">{banner.highlight}</span>
-                </h2>
+                {/* Título Principal — Bold e Impactante */}
+                <div>
+                  <h2 className="text-2xl md:text-5xl font-black leading-[1.15] drop-shadow-lg tracking-tight">
+                    {banner.title}
+                  </h2>
+                  <div className={`text-2xl md:text-5xl font-black leading-[1.15] drop-shadow-lg bg-gradient-to-r ${banner.accent} bg-clip-text text-transparent tracking-tight`}>
+                    {banner.highlight}
+                  </div>
+                </div>
 
-                {/* Subtítulo */}
-                <p className="text-xs md:text-base opacity-90 mt-1.5 md:mt-3 mb-3 md:mb-6 leading-relaxed drop-shadow-sm line-clamp-2 md:line-clamp-3">
+                {/* Subtítulo — Descritivo */}
+                <p className="text-sm md:text-lg opacity-95 mt-2 md:mt-4 leading-relaxed drop-shadow-md font-medium">
                   {banner.subtitle}
                 </p>
 
-                {/* Contador de vagas (apenas no banner de oferta) */}
+                {/* Contador de vagas — Urgência Visual */}
                 {banner.spots && (
-                  <div className="flex items-center gap-2 mb-3 md:mb-4">
-                    <div className="flex gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <div key={i} className={cn("w-2 h-2 md:w-3 md:h-3 rounded-full", i < 3 ? "bg-red-400" : "bg-white/40")} />
+                  <div className="flex items-center gap-3 mt-3 md:mt-4 pt-2">
+                    <div className="flex gap-1.5">
+                      {[...Array(10)].map((_, i) => (
+                        <div 
+                          key={i} 
+                          className={cn(
+                            "w-1.5 h-1.5 md:w-2 md:h-2 rounded-full transition-all",
+                            i < 5 ? "bg-red-400 animate-pulse" : "bg-white/30"
+                          )} 
+                        />
                       ))}
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-yellow-200">Apenas 100 vagas promocionais</span>
+                    <span className="text-xs md:text-sm font-bold text-orange-200 animate-pulse">⚡ 47 vagas restantes!</span>
                   </div>
                 )}
 
-                {/* CTA Button */}
-                <Link to={banner.ctaLink}>
-                  <Button
-                    size="sm"
-                    className="bg-white text-slate-900 hover:bg-yellow-100 font-bold shadow-xl md:text-base md:px-6 md:h-11 transition-transform hover:scale-105"
-                  >
-                    {Icon && <Icon className="w-4 h-4 mr-1.5 shrink-0" />}
-                    {banner.cta}
-                  </Button>
-                </Link>
+                {/* CTA Button — Agressivo */}
+                <div className="pt-2 md:pt-4">
+                  <Link to={banner.ctaLink}>
+                    <Button
+                      size="lg"
+                      className="bg-white text-slate-900 hover:bg-orange-100 font-black shadow-2xl text-sm md:text-base md:px-8 md:h-14 transition-all hover:scale-110 hover:shadow-orange-500/50 active:scale-95 relative group overflow-hidden"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {Icon && <Icon className="w-5 h-5 md:w-6 md:h-6" />}
+                        {banner.cta}
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 opacity-0 group-hover:opacity-20 transition-opacity" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
