@@ -188,8 +188,7 @@ export default function AdminAntecedentesPage() {
                   <tr className="border-b bg-slate-50">
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-6 py-3">Prestador</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden md:table-cell">CPF</th>
-                    <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">Tipo Pessoa</th>
-                    <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">Verificação</th>
+                    <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">Tipo</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">UF</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3">Status</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden xl:table-cell">Relatório</th>
@@ -221,12 +220,9 @@ export default function AdminAntecedentesPage() {
                            <div>
                              <p className="text-sm font-medium text-slate-900">{p.full_name}</p>
                              <p className="text-xs text-slate-500">{p.email || "—"}</p>
-                             {p.tipo_pessoa === 'pf' && !p.full_body_photo_url && (
-                                 <span className="text-xs text-amber-600 font-medium">⚠ Sem foto corporal</span>
-                               )}
-                               {(p.tipo_pessoa === 'mei' || p.tipo_pessoa === 'pj') && (p.tem_ponto_fisico_em_trancoso || p.has_storefront) && !p.verification_cnpj_url && (
-                                 <span className="text-xs text-purple-600 font-medium">⚠ Sem doc. CNPJ/MEI</span>
-                               )}
+                             {!p.full_body_photo_url && (
+                               <span className="text-xs text-amber-600 font-medium">⚠ Sem foto corporal</span>
+                             )}
                            </div>
                          </div>
                         </td>
@@ -235,18 +231,7 @@ export default function AdminAntecedentesPage() {
                         </td>
                         <td className="px-4 py-4 hidden lg:table-cell">
                           <span className="text-xs font-medium uppercase text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
-                            {p.tipo_pessoa === 'pj' ? 'PJ' : p.tipo_pessoa === 'mei' ? 'MEI' : 'PF'}
-                          </span>
-                        </td>
-                        <td className="px-4 py-4 hidden lg:table-cell">
-                          <span className={`text-xs font-medium uppercase px-2 py-0.5 rounded ${
-                            (p.tipo_pessoa === 'mei' || p.tipo_pessoa === 'pj') && (p.tem_ponto_fisico_em_trancoso || p.has_storefront)
-                              ? 'bg-purple-100 text-purple-700'
-                              : 'bg-blue-100 text-blue-700'
-                          }`}>
-                            {(p.tipo_pessoa === 'mei' || p.tipo_pessoa === 'pj') && (p.tem_ponto_fisico_em_trancoso || p.has_storefront)
-                              ? 'Empresa + CNPJ'
-                              : 'Identidade PF'}
+                            {p.tipo_pessoa === 'pj' ? 'PJ/MEI' : 'PF'}
                           </span>
                         </td>
                         <td className="px-4 py-4 hidden lg:table-cell">

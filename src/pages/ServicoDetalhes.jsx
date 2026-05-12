@@ -1,245 +1,200 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, MapPin, Phone, Mail, Calendar } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import ServiceGallery from '@/components/ServiceGallery';
-import ReviewsList from '@/components/ReviewsList';
-import BookingForm from '@/components/BookingForm';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import LazyImage from "@/components/ui/LazyImage";
+import { ArrowLeft, Star, Clock, AlertCircle, Loader2, CalendarIcon } from "lucide-react";
+import BookingForm from "@/components/booking/BookingForm";
+import StartChatButton from "@/components/chat/StartChatButton";
 
-// Mock data - substituir com dados reais da API
-const MOCK_SERVICE = {
-  id: '1',
-  title: 'Limpeza Residencial Premium',
-  category: 'Limpeza',
-  price: 250,
-  provider: {
-    id: 'prov_1',
-    name: 'Maria Silva',
-    phone: '(11) 99999-9999',
-    email: 'maria@exemplo.com',
-    photo: 'https://ui-avatars.com/api/?name=Maria+Silva&size=200',
-    bio: 'Profissional com 10 anos de experiência em limpeza residencial e comercial.',
-    location: 'Zona Norte - São Paulo',
-    verified: true,
-  },
-  images: [
-    'https://images.unsplash.com/photo-1584567694244-14fbdf83bd30?w=800',
-    'https://images.unsplash.com/photo-1583432495088-6acae5bc1234?w=800',
-    'https://images.unsplash.com/photo-1585575889809-05e5411a4ad0?w=800',
-  ],
-  description: `Serviço completo de limpeza residencial com uso de produtos ecológicos de alta qualidade. 
-  Inclui:
-  • Limpeza de pisos (varrer, passar pano e encerar)
-  • Limpeza de móveis e superfícies
-  • Limpeza de cozinha (geladeira, fogão, bancada)
-  • Limpeza de banheiros completa
-  • Organização de ambientes
-  
-  Duração: 4-6 horas
-  Material: fornecido pela profissional
-  
-  Agende sua limpeza e tenha uma casa impecável!`,
-  averageRating: 4.8,
-  totalReviews: 45,
-  reviews: [
-    {
-      name: 'Ana Costa',
-      rating: 5,
-      comment: 'Excelente serviço! Maria foi muito atenciosa e deixou minha casa brilhando.',
-      date: '2024-05-10',
+export default function ServicoDetalhesPage() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const serviceId = urlParams.get('id');
+  const [showBooking, setShowBooking] = useState(false);
+
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: service, isLoading, error } = useQuery({
+    queryKey: ['serviceListing', serviceId],
+    queryFn: async () => {
+      const services = await base44.entities.ServiceListing.filter({ id: serviceId });
+      return services?.[0];
     },
-    {
-      name: 'Roberto Santos',
-      rating: 5,
-      comment: 'Pontual, profissional e muito eficiente. Recomendo!',
-      date: '2024-05-08',
+    enabled: !!serviceId,
+  });
+
+  const { data: provider } = useQuery({
+    queryKey: ['serviceProvider', service?.provider_id],
+    queryFn: async () => {
+      const providers = await base44.entities.ServiceProvider.filter({ id: service.provider_id });
+      return providers?.[0];
     },
-    {
-      name: 'Juliana Oliveira',
-      rating: 4,
-      comment: 'Muito bom, apenas uma pequena observação sobre um detalhe.',
-      date: '2024-05-05',
-    },
-  ],
-  availability: {
-    monday: { available: true, start: '08:00', end: '18:00' },
-    tuesday: { available: true, start: '08:00', end: '18:00' },
-    wednesday: { available: true, start: '08:00', end: '18:00' },
-    thursday: { available: true, start: '08:00', end: '18:00' },
-    friday: { available: true, start: '08:00', end: '18:00' },
-    saturday: { available: true, start: '09:00', end: '14:00' },
-    sunday: { available: false },
-  },
-};
+    enabled: !!service?.provider_id,
+  });
 
-export default function ServicoDetalhes() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [service, setService] = React.useState(MOCK_SERVICE);
+  const { data: providerServices } = useQuery({
+    queryKey: ['providerServices', service?.provider_id],
+    queryFn: () => base44.entities.ServiceListing.filter({ provider_id: service.provider_id, active: true }),
+    enabled: !!service?.provider_id,
+    initialData: [],
+  });
 
-  useEffect(() => {
-    document.title = `${service.title} - Trancoso Resolve`;
-    window.scrollTo(0, 0);
-  }, [service.title]);
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
+        <p className="text-slate-600">Carregando detalhes do serviço...</p>
+      </div>
+    );
+  }
 
-  const handleBooking = async (formData) => {
-    console.log('Booking submitted:', formData);
-    // Integrar com API/backend aqui
-    return new Promise((resolve) => setTimeout(resolve, 1000));
-  };
+  if (error || !service) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="p-8 text-center">
+            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-red-900 mb-2">Serviço Não Encontrado</h2>
+            <p className="text-red-700 mb-6">O serviço que você está procurando não existe ou foi removido.</p>
+            <Link to={createPageUrl("Home")}>
+              <Button>Voltar ao Início</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const imageSrc = service.images?.[0] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
-      {/* Header com Voltar */}
-      <div className="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-          aria-label="Voltar"
-        >
-          <ArrowLeft className="w-5 h-5 text-slate-900" />
-        </button>
-        <h1 className="font-bold text-slate-900 flex-1 truncate text-sm">{service.title}</h1>
+    <div className="min-h-screen bg-slate-50">
+      <div className="relative h-48 md:h-72 bg-gradient-to-r from-cyan-500 to-blue-600 overflow-hidden">
+        <img
+          src={imageSrc}
+          alt={`Imagem de capa do serviço: ${service.title}`}
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+          onError={e => { e.target.style.display = 'none'; }}
+        />
       </div>
 
-      {/* Conteúdo Principal */}
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-8">
-        {/* Breadcrumb */}
-        <div className="text-sm text-gray-600 flex gap-2">
-          <button onClick={() => navigate('/')} className="hover:text-blue-600">
-            Início
-          </button>
-          <span>/</span>
-          <button onClick={() => navigate('/search')} className="hover:text-blue-600">
-            Serviços
-          </button>
-          <span>/</span>
-          <span className="text-gray-900 font-semibold truncate">{service.title}</span>
-        </div>
+      <div className="container mx-auto max-w-4xl px-4 -mt-32 pb-12">
+        <Link to={createPageUrl("ServicosCategoria", `?cat=${service.category}`)}>
+          <Button variant="ghost" className="text-white hover:bg-white/20 mb-4 bg-black/30 backdrop-blur-sm">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
+          </Button>
+        </Link>
 
-        {/* Galeria */}
-        <ServiceGallery images={service.images} />
-
-        {/* Info Básica */}
-        <Card className="border-slate-200">
-          <CardContent className="pt-6 space-y-4">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 mb-2">{service.title}</h1>
-              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-                <span className="bg-cyan-100 text-cyan-900 px-3 py-1 rounded-full font-semibold">
-                  {service.category}
-                </span>
+        <Card className="border-none shadow-2xl mb-8">
+          <CardContent className="p-8">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-slate-900 mb-2">{service.title}</h1>
+                <Badge className="bg-cyan-100 text-cyan-800">{service.category}</Badge>
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-bold text-cyan-600">R$ {service.price.toFixed(2)}</p>
+                <p className="text-sm text-slate-500">por {service.price_unit || 'serviço'}</p>
               </div>
             </div>
 
-            <div className="flex justify-between items-baseline py-3 border-y border-slate-200">
-              <span className="text-gray-600 font-semibold">Valor:</span>
-              <span className="text-2xl font-bold text-slate-900">
-                R$ {service.price.toFixed(2)}
-              </span>
+            {service.duration_estimate && (
+              <div className="flex items-center gap-2 text-slate-600 mb-4">
+                <Clock className="w-5 h-5" />
+                <span>Duração estimada: {service.duration_estimate}</span>
+              </div>
+            )}
+
+            <div className="prose prose-slate max-w-none mb-6">
+              <h3 className="text-xl font-semibold mb-3">O que está incluso:</h3>
+              <p className="text-slate-700 whitespace-pre-line">{service.description}</p>
+
+              {service.not_included && (
+                <>
+                  <h3 className="text-xl font-semibold mb-3 mt-6">O que NÃO está incluso:</h3>
+                  <p className="text-slate-700 whitespace-pre-line">{service.not_included}</p>
+                </>
+              )}
             </div>
 
-            {/* Info do Profissional */}
-            <div className="flex gap-4 items-start pt-2">
-              <img
-                src={service.provider.photo}
-                alt={service.provider.name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-slate-900"
-              />
-              <div className="flex-1">
-                <p className="font-bold text-slate-900 text-lg">{service.provider.name}</p>
-                <p className="text-sm text-gray-600">{service.provider.bio}</p>
-                {service.provider.verified && (
-                  <p className="text-xs text-green-600 font-bold mt-1">✓ Profissional Verificado</p>
+            {service.images && service.images.length > 1 && (
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold mb-4">Galeria</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {service.images.map((img, idx) => (
+                    <LazyImage key={idx} src={img} alt={`${service.title} - imagem ${idx + 1}`} className="w-full h-40 object-cover rounded-lg" />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {provider && (
+              <div className="border-t pt-6 mt-6">
+                <h3 className="text-xl font-semibold mb-4">Prestador</h3>
+                <div className="flex items-center gap-4 mb-4">
+                  <LazyImage
+                    src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
+                    alt={`Foto de ${provider.full_name}`}
+                    className="w-16 h-16 rounded-full object-cover"
+                  />
+                  <div className="flex-1">
+                    <p className="font-semibold text-lg">{provider.full_name}</p>
+                    <p className="text-sm text-slate-600">{provider.occupation}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                      <span className="text-sm font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
+                      {provider.total_reviews > 0 && <span className="text-xs text-slate-500">({provider.total_reviews} avaliações)</span>}
+                    </div>
+                  </div>
+                  <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
+                    <Button variant="outline" size="sm">Ver Perfil</Button>
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* CTA Buttons */}
+            {!showBooking && (
+              <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                {user && provider ? (
+                  <>
+                    <Button
+                      size="lg"
+                      className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
+                      onClick={() => setShowBooking(true)}
+                    >
+                      <CalendarIcon className="w-5 h-5 mr-2" />
+                      Agendar Agora
+                    </Button>
+                    <StartChatButton provider={provider} size="lg" className="flex-1" />
+                  </>
+                ) : (
+                  <Button size="lg" className="w-full" onClick={() => base44.auth.redirectToLogin()}>
+                    Faça login para agendar
+                  </Button>
                 )}
               </div>
-            </div>
-
-            {/* Contato */}
-            <div className="space-y-2 pt-4 border-t border-slate-200">
-              <div className="flex gap-3 items-center text-sm">
-                <MapPin className="w-4 h-4 text-slate-600" />
-                <span className="text-gray-700 font-medium">{service.provider.location}</span>
-              </div>
-              <div className="flex gap-3 items-center text-sm">
-                <Phone className="w-4 h-4 text-slate-600" />
-                <a href={`tel:${service.provider.phone}`} className="text-blue-600 hover:underline">
-                  {service.provider.phone}
-                </a>
-              </div>
-              <div className="flex gap-3 items-center text-sm">
-                <Mail className="w-4 h-4 text-slate-600" />
-                <a href={`mailto:${service.provider.email}`} className="text-blue-600 hover:underline">
-                  {service.provider.email}
-                </a>
-              </div>
-            </div>
+            )}
           </CardContent>
         </Card>
 
-        {/* Descrição Detalhada */}
-        <Card className="border-slate-200">
-          <CardContent className="pt-6 space-y-4">
-            <h2 className="text-lg font-bold text-slate-900">Sobre o Serviço</h2>
-            <p className="text-gray-700 whitespace-pre-line text-sm leading-relaxed">
-              {service.description}
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Disponibilidade */}
-        <Card className="border-slate-200">
-          <CardContent className="pt-6 space-y-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              Disponibilidade
-            </h2>
-            <div className="grid grid-cols-2 gap-3">
-              {Object.entries(service.availability).map(([day, info]) => (
-                <div
-                  key={day}
-                  className={`p-3 rounded-lg text-sm font-semibold ${
-                    info.available
-                      ? 'bg-green-50 text-green-900 border border-green-200'
-                      : 'bg-gray-50 text-gray-500 border border-gray-200'
-                  }`}
-                >
-                  <p className="capitalize">{day}</p>
-                  {info.available && (
-                    <p className="text-xs opacity-75">
-                      {info.start} - {info.end}
-                    </p>
-                  )}
-                  {!info.available && <p className="text-xs opacity-75">Indisponível</p>}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Reviews */}
-        <Card className="border-slate-200">
-          <CardContent className="pt-6 space-y-4">
-            <h2 className="text-lg font-bold text-slate-900">Avaliações</h2>
-            <ReviewsList
-              reviews={service.reviews}
-              averageRating={service.averageRating}
-              totalReviews={service.totalReviews}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Formulário de Agendamento */}
-        <Card className="border-slate-200 sticky bottom-20 md:relative md:bottom-auto">
-          <CardContent className="pt-6 space-y-4">
-            <h2 className="text-lg font-bold text-slate-900">Agende Agora</h2>
-            <BookingForm
-              serviceName={service.title}
-              providerName={service.provider.name}
-              onSubmit={handleBooking}
-            />
-          </CardContent>
-        </Card>
+        {/* Booking Form inline */}
+        {showBooking && provider && (
+          <BookingForm
+            provider={provider}
+            services={providerServices}
+            user={user}
+            onCancel={() => setShowBooking(false)}
+          />
+        )}
       </div>
     </div>
   );

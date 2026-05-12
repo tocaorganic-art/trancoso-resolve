@@ -19,7 +19,7 @@ import PermissionChecker from "../components/auth/PermissionChecker";
 import AccountDeletionDialog from '@/components/account/AccountDeletionDialog';
 
 const occupations = ["Limpeza", "Garçom", "Pedreiro", "Jardinagem", "Babá", "Eletricista", "Encanador", "Pintor", "Cozinheiro", "Outro"];
-const priceRanges = ["$", "$$", "$$$", "a consultar"];
+const priceRanges = ["$", "$$", "$$$"];
 const paymentMethods = ["Dinheiro", "PIX", "Cartão de Débito", "Cartão de Crédito"];
 
 const formatCpf = (value) => {
@@ -310,16 +310,8 @@ function MeuPerfilPrestadorContent() {
       newErrors.bio = `Biografia muito curta. Escreva pelo menos 50 caracteres (você digitou ${formData.bio.length}).`;
     }
     
-    if (!formData.price_range || !formData.price_range.trim()) {
-      newErrors.price_range = 'Faixa de preço é obrigatória.';
-    }
-    
     if (!formData.rates?.hourly && !formData.rates?.daily) {
       newErrors.rates = 'Informe pelo menos um valor (por hora ou por dia) para seus serviços.';
-    }
-    
-    if (!formData.payment_methods || formData.payment_methods.length === 0) {
-      newErrors.payment_methods = 'Selecione pelo menos um método de pagamento.';
     }
     
     setErrors(newErrors);
@@ -638,15 +630,14 @@ function MeuPerfilPrestadorContent() {
               <h3 className="text-lg font-semibold border-b pb-2">Preços e Pagamento</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <Label htmlFor="price_range">Faixa de Preço <span className="text-red-500">*</span></Label>
-                    <Select value={formData.price_range || ''} onValueChange={(value) => handleInputChange('price_range', value)}>
-                      <SelectTrigger className={errors.price_range ? 'border-red-500' : ''}><SelectValue placeholder="Selecione uma faixa" /></SelectTrigger>
-                      <SelectContent>
-                        {priceRanges.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    {errors.price_range && <p className="text-xs text-red-500 mt-1">{errors.price_range}</p>}
-                  </div>
+                  <Label htmlFor="price_range">Faixa de Preço</Label>
+                  <Select value={formData.price_range} onValueChange={(value) => handleInputChange('price_range', value)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {priceRanges.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div>
                   <Label htmlFor="hourly_rate">Valor por Hora (R$)</Label>
                   <Input 
@@ -671,7 +662,7 @@ function MeuPerfilPrestadorContent() {
               {errors.rates && <p className="text-xs text-red-500 mt-1">{errors.rates}</p>}
               
               <div>
-                <Label>Métodos de Pagamento Aceitos <span className="text-red-500">*</span></Label>
+                <Label>Métodos de Pagamento Aceitos</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {paymentMethods.map(method => (
                     <Button 
@@ -690,7 +681,6 @@ function MeuPerfilPrestadorContent() {
                     </Button>
                   ))}
                 </div>
-                {errors.payment_methods && <p className="text-xs text-red-500 mt-1">{errors.payment_methods}</p>}
               </div>
             </div>
 

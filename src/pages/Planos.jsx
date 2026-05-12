@@ -184,9 +184,6 @@ export default function PlanosPage() {
   // Detectar modo
   const empresaComPonto = isEmpresaComPontoFisico(myProvider);
   const prestadorMode = isPrestadorMode(myProvider);
-  
-  // Modo para lojistas (exibir sempre, não condicional)
-  const showLojistas = true;
 
   const handleCheckout = async (plan) => {
     if (window.self !== window.top) {
@@ -212,70 +209,14 @@ export default function PlanosPage() {
     <div className="bg-slate-50 min-h-screen py-16">
       <div className="container mx-auto max-w-4xl px-4">
 
-        {/* ─── PLANOS PARA LOJISTAS ────────────────────────────── */}
-        {showLojistas && (
-          <>
-            <div className="text-center mb-10">
-              <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 mb-2">Para Negócios Locais</p>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
-                Planos para Lojistas
-              </h1>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Lojas, restaurantes, pousadas, bares, beach clubs, clínicas e demais negócios com ponto físico em Trancoso.
-              </p>
-            </div>
-
-            {isPromoAtivaEmpresa && (
-              <div className="mb-6 text-center">
-                <span className="inline-block bg-amber-50 border border-amber-300 text-amber-800 text-sm font-semibold rounded-full px-4 py-1.5">
-                  🎉 Restam <strong>{vagasEmpresa}</strong> {vagasEmpresa === 1 ? 'vaga' : 'vagas'} no preço de lançamento!
-                </span>
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              <PlanCard
-                badge={isPromoAtivaEmpresa ? "Lançamento" : null}
-                badgeColor="bg-amber-400 text-amber-900"
-                headerColor={isPromoAtivaEmpresa ? "bg-gradient-to-br from-amber-500 to-orange-500" : "bg-slate-400"}
-                icon={<Building2 className="w-10 h-10 mx-auto opacity-90" />}
-                name="Plano Lançamento"
-                price="59,90"
-                subtitle="Preço promocional para os 50 primeiros"
-                benefits={BENEFICIOS_LANCAMENTO_EMPRESA}
-                ctaLabel="Garantir plano de lançamento — R$ 59,90/mês"
-                ctaNote="Válido apenas para os 50 primeiros lojistas cadastrados."
-                onCta={() => handleCheckout('empresa_lancamento')}
-                loading={loadingPlan === 'empresa_lancamento'}
-                disabled={!isPromoAtivaEmpresa}
-                highlighted={true}
-              />
-              <PlanCard
-                headerColor="bg-gradient-to-br from-blue-600 to-cyan-500"
-                icon={<Check className="w-10 h-10 mx-auto opacity-90" />}
-                name="Plano Regular"
-                price="89,90"
-                subtitle="Após encerramento do lançamento"
-                benefits={BENEFICIOS_REGULAR_EMPRESA}
-                ctaLabel="Assinar Plano Regular — R$ 89,90/mês"
-                onCta={() => handleCheckout('empresa_regular')}
-                loading={loadingPlan === 'empresa_regular'}
-                highlighted={false}
-              />
-            </div>
-
-            <hr className="my-12" />
-          </>
-        )}
-
         {/* Aviso para empresa com ponto físico */}
         {empresaComPonto && (
-          <div className="mb-8 bg-blue-50 border-2 border-blue-300 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center gap-4">
-            <Building2 className="w-10 h-10 text-blue-600 shrink-0" />
+          <div className="mb-8 bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center gap-4">
+            <Building2 className="w-10 h-10 text-amber-600 shrink-0" />
             <div className="flex-1">
-              <h3 className="font-bold text-blue-900 text-lg mb-1">Você é um lojista com CNPJ e ponto físico em Trancoso</h3>
-              <p className="text-blue-800 text-sm">
-                Veja acima os <strong>Planos para Lojistas</strong> — a solução ideal para sua loja, restaurante, pousada ou negócio local em Trancoso.
+              <h3 className="font-bold text-amber-900 text-lg mb-1">Você é uma empresa com CNPJ e ponto físico em Trancoso</h3>
+              <p className="text-amber-800 text-sm">
+                Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong>Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.
               </p>
             </div>
           </div>
@@ -332,7 +273,62 @@ export default function PlanosPage() {
           </>
         )}
 
+        {/* ─── PLANOS DE EMPRESA ────────────────────────────────── */}
+        {!prestadorMode && (
+          <>
+            <div className="text-center mb-10">
+              <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 mb-2">Planos para Empresas em Trancoso</p>
+              <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
+                Sua vitrine digital oficial em Trancoso
+              </h1>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-2">
+                Seja encontrado por moradores, hóspedes e empresários em poucos cliques. Sem comissão sobre seus serviços.
+              </p>
+              <p className="text-sm text-slate-500 max-w-2xl mx-auto">
+                A Trancoso Resolve conecta o seu negócio a quem precisa de você agora. Lojas, restaurantes, pousadas, clínicas e negócios locais com perfil verificado, visibilidade constante e ferramentas de inteligência artificial de última geração.
+              </p>
+            </div>
 
+            {isPromoAtivaEmpresa && (
+              <div className="mb-6 text-center">
+                <span className="inline-block bg-amber-50 border border-amber-300 text-amber-800 text-sm font-semibold rounded-full px-4 py-1.5">
+                  🎉 Restam <strong>{vagasEmpresa}</strong> {vagasEmpresa === 1 ? 'vaga' : 'vagas'} no preço de lançamento para empresas!
+                </span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+              <PlanCard
+                badge={isPromoAtivaEmpresa ? "Lançamento · Empresas" : null}
+                badgeColor="bg-amber-400 text-amber-900"
+                headerColor={isPromoAtivaEmpresa ? "bg-gradient-to-br from-amber-500 to-orange-500" : "bg-slate-400"}
+                icon={<Building2 className="w-10 h-10 mx-auto opacity-90" />}
+                name="Plano Empresas – Lançamento"
+                price="59,90"
+                subtitle="Preço promocional para as 50 primeiras empresas"
+                benefits={BENEFICIOS_LANCAMENTO_EMPRESA}
+                ctaLabel="Garantir plano de lançamento — R$ 59,90/mês"
+                ctaNote="Válido apenas para as 50 primeiras empresas cadastradas."
+                onCta={() => handleCheckout('empresa_lancamento')}
+                loading={loadingPlan === 'empresa_lancamento'}
+                disabled={!isPromoAtivaEmpresa}
+                highlighted={true}
+              />
+              <PlanCard
+                headerColor="bg-gradient-to-br from-blue-600 to-cyan-500"
+                icon={<Check className="w-10 h-10 mx-auto opacity-90" />}
+                name="Plano Empresas – Regular"
+                price="89,90"
+                subtitle="Para empresas após o encerramento do plano de lançamento"
+                benefits={BENEFICIOS_REGULAR_EMPRESA}
+                ctaLabel="Assinar Plano Empresas — R$ 89,90/mês"
+                onCta={() => handleCheckout('empresa_regular')}
+                loading={loadingPlan === 'empresa_regular'}
+                highlighted={false}
+              />
+            </div>
+          </>
+        )}
 
         {/* Info transparência */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800 text-center mb-6">

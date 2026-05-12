@@ -14,19 +14,6 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  // Determinar se é empresa com loja física
-  const isBusinessWithStorefront = (user?.tipo_pessoa === 'mei' || user?.tipo_pessoa === 'pj') && 
-    (user?.tem_ponto_fisico_em_trancoso || user?.has_storefront);
-  
-  const isPF = user?.tipo_pessoa === 'pf';
-
-  // Mapear tipo de documento para tipo de verificação
-  const getVerificationType = (docType) => {
-    if (['CNH', 'RG'].includes(docType)) return 'identity';
-    if (['CNPJ', 'MEI'].includes(docType)) return 'documents';
-    return 'identity';
-  };
-
   const handleFileChange = (e) => {
     const f = e.target.files[0];
     if (!f) return;
@@ -48,10 +35,12 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
 
       // 2. Criar registro de verificação
       const verificacao = await base44.entities.Verificacao.create({
-        provider_id: user.id,
-        verification_type: getVerificationType(documentType),
-        status: "pending",
-        description: `Documento ${documentType} enviado para verificação`,
+        user_email: user.email,
+        user_name: user.full_name,
+        document_url: file_url,
+        document_type: documentType,
+        status: "Em Análise",
+        submission_date: new Date().toISOString(),
       });
 
       setStep("analyzing");
@@ -86,12 +75,10 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-blue-500" />
-            {isBusinessWithStorefront ? 'Verificar Identidade da Empresa' : 'Verificar Identidade'}
+            Verificar Identidade
           </DialogTitle>
           <DialogDescription>
-            {isBusinessWithStorefront 
-              ? 'Envie uma foto do documento do responsável (CNH ou RG) e do documento da empresa (CNPJ ou MEI) para receber o selo de identidade verificada.'
-              : 'Envie uma foto do seu documento (CNH ou RG) para receber o selo de identidade verificada.'}
+            Envie uma foto do seu documento (CNH ou RG) para receber o selo de identidade verificada.
           </DialogDescription>
         </DialogHeader>
 
@@ -115,22 +102,11 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
               <Label>Tipo de Documento</Label>
               <Select value={documentType} onValueChange={setDocumentType} disabled={step !== "form"}>
                 <SelectTrigger>
-                  <SelectValue placeholder={isBusinessWithStorefront ? "Selecione documento" : "Selecione CNH ou RG"} />
+                  <SelectValue placeholder="Selecione CNH ou RG" />
                 </SelectTrigger>
                 <SelectContent>
-                  {isPF || !isBusinessWithStorefront ? (
-                    <>
-                      <SelectItem value="CNH">CNH – Carteira de Habilitação</SelectItem>
-                      <SelectItem value="RG">RG – Carteira de Identidade</SelectItem>
-                    </>
-                  ) : (
-                    <>
-                      <SelectItem value="CNH">CNH – Carteira de Habilitação (Responsável)</SelectItem>
-                      <SelectItem value="RG">RG – Carteira de Identidade (Responsável)</SelectItem>
-                      <SelectItem value="CNPJ">CNPJ – Cartão CNPJ</SelectItem>
-                      <SelectItem value="MEI">MEI – Certificado de Condição de MEI</SelectItem>
-                    </>
-                  )}
+                  <SelectItem value="CNH">CNH – Carteira de Habilitação</SelectItem>
+                  <SelectItem value="RG">RG – Carteira de Identidade</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -176,11 +152,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
               <ul className="text-xs text-amber-700 space-y-0.5 list-disc list-inside">
                 <li>Certifique-se de que o documento está completamente visível</li>
                 <li>Boa iluminação, sem reflexos ou sombras</li>
-                <li>
-                  {(documentType === 'CNPJ' || documentType === 'MEI')
-                    ? 'Foco nítido — todas as informações (razão social, CNPJ/MEI e datas) devem ser legíveis'
-                    : 'Foco nítido — todas as informações devem ser legíveis'}
-                </li>
+                <li>Foco nítido — todas as informações devem ser legíveis</li>
               </ul>
             </div>
 
