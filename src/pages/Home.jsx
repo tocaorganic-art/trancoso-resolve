@@ -196,7 +196,16 @@ export default function HomePage() {
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
     meta.content = "Contrate diaristas, eletricistas, encanadores, jardineiros e mais em Trancoso, BA. Profissionais verificados com avaliações reais. Orçamento grátis.";
 
-    // Schema Markup - LocalBusiness + Service
+    // Canonical + OG URL da Home
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = 'https://www.trancosoresolve.com.br/';
+
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = 'https://www.trancosoresolve.com.br/';
+
+    // Schema Markup - LocalBusiness + WebSite + FAQPage
     const existingSchema = document.getElementById('schema-home');
     if (existingSchema) existingSchema.remove();
     const schema = document.createElement('script');
@@ -204,32 +213,54 @@ export default function HomePage() {
     schema.type = 'application/ld+json';
     schema.text = JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Trancoso Resolve",
-      "description": "Marketplace de serviços locais em Trancoso, Bahia. Profissionais verificados para limpeza, elétrica, jardinagem, cozinha, encanamento e muito mais.",
-      "url": "https://www.trancosoresolve.com.br",
-      "logo": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
-      "image": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Trancoso",
-        "addressRegion": "BA",
-        "addressCountry": "BR"
-      },
-      "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
-      "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Serviços em Trancoso",
-        "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diarista em Trancoso" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Eletricista em Trancoso" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Encanador em Trancoso" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Jardinagem em Trancoso" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cozinheiro em Trancoso" } }
-        ]
-      },
-      "sameAs": ["https://www.trancosoresolve.com.br"]
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "name": "Trancoso Resolve",
+          "description": "Marketplace de serviços locais em Trancoso, Bahia. Profissionais verificados para limpeza, elétrica, jardinagem, cozinha, encanamento e muito mais.",
+          "url": "https://www.trancosoresolve.com.br",
+          "logo": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
+          "image": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Trancoso",
+            "addressRegion": "BA",
+            "addressCountry": "BR"
+          },
+          "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
+          "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Serviços em Trancoso",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diarista em Trancoso" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Eletricista em Trancoso" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Encanador em Trancoso" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Jardinagem em Trancoso" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cozinheiro em Trancoso" } }
+            ]
+          },
+          "sameAs": ["https://www.trancosoresolve.com.br"]
+        },
+        {
+          "@type": "WebSite",
+          "url": "https://www.trancosoresolve.com.br",
+          "name": "Trancoso Resolve",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.trancosoresolve.com.br/ServicosCategoria?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "Como contratar um profissional em Trancoso?", "acceptedAnswer": { "@type": "Answer", "text": "Acesse o Trancoso Resolve, busque pelo serviço desejado, escolha o profissional com base nas avaliações e envie sua solicitação em poucos cliques." } },
+            { "@type": "Question", "name": "Os profissionais são verificados?", "acceptedAnswer": { "@type": "Answer", "text": "Sim! Todos os prestadores passam por verificação de identidade e consulta de antecedentes criminais antes de exibir o selo Verificado em seus perfis." } },
+            { "@type": "Question", "name": "Qual é o custo para contratar via Trancoso Resolve?", "acceptedAnswer": { "@type": "Answer", "text": "Para clientes, a plataforma é completamente gratuita. Você navega, compara e solicita serviços sem custo algum." } }
+          ]
+        }
+      ]
     });
     document.head.appendChild(schema);
     return () => { const s = document.getElementById('schema-home'); if (s) s.remove(); };

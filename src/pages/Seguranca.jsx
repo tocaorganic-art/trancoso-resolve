@@ -24,6 +24,24 @@ export default function SegurancaPage() {
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
     meta.content = "Todos os prestadores do Trancoso Resolve passam por verificação de identidade e consulta de antecedentes criminais. Sua segurança é nossa prioridade.";
 
+    // Canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = 'https://www.trancosoresolve.com.br/Seguranca';
+
+    // OG tags
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = 'https://www.trancosoresolve.com.br/Seguranca';
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
+    ogTitle.content = 'Segurança em Trancoso Resolve — Prestadores Verificados e Proteção de Dados';
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
+    ogDesc.content = 'Todos os prestadores do Trancoso Resolve passam por verificação de identidade e consulta de antecedentes criminais. Sua segurança é nossa prioridade.';
+
     const schemaId = 'schema-seguranca';
     const existing = document.getElementById(schemaId);
     if (existing) existing.remove();
@@ -35,12 +53,12 @@ export default function SegurancaPage() {
       "@type": "WebPage",
       "name": "Segurança — Trancoso Resolve",
       "description": "Saiba como garantimos a segurança de clientes e prestadores em Trancoso. Verificação de identidade, antecedentes criminais, avaliações e proteção LGPD.",
-      "url": "https://trancosoresolve.com.br/Seguranca",
+      "url": "https://www.trancosoresolve.com.br/Seguranca",
       "breadcrumb": {
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://trancosoresolve.com.br" },
-          { "@type": "ListItem", "position": 2, "name": "Segurança", "item": "https://trancosoresolve.com.br/Seguranca" }
+          { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+          { "@type": "ListItem", "position": 2, "name": "Segurança", "item": "https://www.trancosoresolve.com.br/Seguranca" }
         ]
       },
       "mainEntity": {

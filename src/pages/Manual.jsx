@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, User, Briefcase, Wrench } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -77,9 +78,55 @@ const ManualContent = ({ title, items }) => (
   </Card>
 );
 
+function ManualSEO() {
+  useEffect(() => {
+    document.title = "Manual e FAQ — Trancoso Resolve | Guia Completo da Plataforma";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = "Manual completo do Trancoso Resolve. Tire dúvidas sobre como contratar, cadastrar serviços, verificação de prestadores e muito mais.";
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = 'https://www.trancosoresolve.com.br/Manual';
+
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = 'https://www.trancosoresolve.com.br/Manual';
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
+    ogTitle.content = 'Manual e FAQ — Trancoso Resolve | Guia Completo da Plataforma';
+
+    const schemaId = 'schema-manual';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    const allFaqs = [
+      ...faqContent.geral.items,
+      ...faqContent.clientes.items,
+      ...faqContent.prestadores.items,
+    ];
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": allFaqs.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": { "@type": "Answer", "text": item.answer }
+      }))
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, []);
+  return null;
+}
+
 export default function ManualPage() {
   return (
     <div className="container mx-auto py-8 px-4">
+      <ManualSEO />
       <div className="flex items-center gap-4 mb-8">
         <BookOpen className="w-10 h-10 text-blue-600" />
         <div>

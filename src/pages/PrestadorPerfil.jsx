@@ -158,6 +158,30 @@ export default function PrestadorPerfilPage() {
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
     meta.content = `${provider.full_name}, ${provider.occupation} verificado em Trancoso, Bahia. ${provider.rating ? `Avaliação ${provider.rating.toFixed(1)}/5 estrelas.` : 'Novo profissional.'} ${provider.bio ? provider.bio.slice(0, 100) + '...' : 'Contrate agora!'}`;
 
+    // Canonical dinâmico por prestador
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}`;
+
+    // OG tags dinâmicas por prestador
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}`;
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
+    ogTitle.content = `${provider.full_name} — ${provider.occupation} em Trancoso, BA | Trancoso Resolve`;
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
+    ogDesc.content = `${provider.full_name}, ${provider.occupation} verificado em Trancoso, Bahia. ${provider.rating ? `Avaliação ${provider.rating.toFixed(1)}/5 estrelas.` : 'Novo profissional.'} ${provider.bio ? provider.bio.slice(0, 100) + '...' : 'Contrate agora!'}`;
+
+    if (provider.photo_url) {
+      let ogImage = document.querySelector('meta[property="og:image"]');
+      if (!ogImage) { ogImage = document.createElement('meta'); ogImage.setAttribute('property', 'og:image'); document.head.appendChild(ogImage); }
+      ogImage.content = provider.photo_url;
+    }
+
     const schemaId = 'schema-prestador';
     const existing = document.getElementById(schemaId);
     if (existing) existing.remove();
@@ -169,7 +193,7 @@ export default function PrestadorPerfilPage() {
       "@graph": [
         {
           "@type": "Person",
-          "@id": `https://trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}#person`,
+          "@id": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}#person`,
           "name": provider.full_name,
           "jobTitle": provider.occupation,
           "image": provider.photo_url || undefined,
@@ -187,20 +211,27 @@ export default function PrestadorPerfilPage() {
             "bestRating": 5,
             "worstRating": 1
           } : undefined,
-          "url": `https://trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}`,
+          "review": reviews?.slice(0, 5).map(r => ({
+            "@type": "Review",
+            "author": { "@type": "Person", "name": r.reviewer_name || "Cliente" },
+            "reviewRating": { "@type": "Rating", "ratingValue": r.rating, "bestRating": 5 },
+            "reviewBody": r.comment || undefined,
+            "datePublished": r.created_date ? r.created_date.slice(0, 10) : undefined
+          })).filter(r => r.reviewBody),
+          "url": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}`,
           "worksFor": {
             "@type": "Organization",
             "name": "Trancoso Resolve",
-            "url": "https://trancosoresolve.com.br"
+            "url": "https://www.trancosoresolve.com.br"
           }
         },
         {
           "@type": "BreadcrumbList",
           "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://trancosoresolve.com.br" },
-            { "@type": "ListItem", "position": 2, "name": "Serviços", "item": "https://trancosoresolve.com.br/ServicosCategoria" },
-            { "@type": "ListItem", "position": 3, "name": provider.occupation, "item": `https://trancosoresolve.com.br/ServicosCategoria?cat=${encodeURIComponent(provider.occupation)}` },
-            { "@type": "ListItem", "position": 4, "name": provider.full_name, "item": `https://trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}` }
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 2, "name": "Serviços", "item": "https://www.trancosoresolve.com.br/ServicosCategoria" },
+            { "@type": "ListItem", "position": 3, "name": provider.occupation, "item": `https://www.trancosoresolve.com.br/ServicosCategoria?cat=${encodeURIComponent(provider.occupation)}` },
+            { "@type": "ListItem", "position": 4, "name": provider.full_name, "item": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}` }
           ]
         }
       ]
