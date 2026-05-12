@@ -42,6 +42,16 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
   const [motivo, setMotivo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { data: provider } = useQuery({
+    queryKey: ['providerForVerificacao', verificacao?.user_email],
+    queryFn: async () => {
+      if (!verificacao?.user_email) return null;
+      const results = await base44.entities.ServiceProvider.filter({ email: verificacao.user_email });
+      return results[0] || null;
+    },
+    enabled: !!verificacao?.user_email && isOpen,
+  });
+
   const handleAction = async (action) => {
     if (action === "rejeitar" && !motivo.trim()) {
       toast.error("Informe o motivo da rejeição.");
@@ -61,7 +71,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Eye className="w-5 h-5 text-slate-500" />
@@ -69,7 +79,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 py-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 py-2">
           {/* Imagem do documento */}
           <div className="space-y-2">
             <Label className="text-xs text-slate-500 uppercase tracking-wide">Documento Enviado</Label>
@@ -80,6 +90,32 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
                 className="w-full object-contain max-h-64"
               />
             </div>
+          </div>
+
+          {/* Fotos do prestador para confronto visual */}
+          <div className="space-y-2">
+            <Label className="text-xs text-slate-500 uppercase tracking-wide">Fotos do Prestador</Label>
+            {provider ? (
+              <div className="flex gap-2 flex-wrap">
+                {provider.full_body_photo_url && (
+                  <div className="space-y-1">
+                    <p className="text-xs text-slate-500">Corpo inteiro</p>
+                    <img src={provider.full_body_photo_url} alt="Foto de corpo inteiro" className="h-44 rounded-lg object-cover border" />
+                  </div>
+                )}
+                {provider.photo_url && (
+                  <div className="space-y-1">
+                    <p className="text-xs text-slate-500">Perfil</p>
+                    <img src={provider.photo_url} alt="Foto de perfil" className="h-44 w-28 rounded-lg object-cover border" />
+                  </div>
+                )}
+                {!provider.full_body_photo_url && !provider.photo_url && (
+                  <p className="text-sm text-slate-400 italic">Nenhuma foto enviada ainda.</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400 italic">Carregando...</p>
+            )}
           </div>
 
           {/* Detalhes */}

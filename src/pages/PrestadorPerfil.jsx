@@ -169,13 +169,15 @@ export default function PrestadorPerfilPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="relative h-48 bg-gradient-to-r from-cyan-500 to-blue-600">
+      {/* Header — usa foto de capa do prestador se disponível */}
+      <div className="relative h-56 bg-gradient-to-r from-cyan-500 to-blue-600">
         <LazyImage
-          src="https://images.unsplash.com/photo-1541599360-14863869b657?q=80&w=1964&auto=format&fit=crop"
-          alt="Imagem de fundo abstrata"
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          src={provider.cover_photo_url || "https://images.unsplash.com/photo-1541599360-14863869b657?q=80&w=1964&auto=format&fit=crop"}
+          alt={provider.cover_photo_url ? `Foto de capa de ${provider.full_name}` : "Imagem de fundo abstrata"}
+          className={`absolute inset-0 w-full h-full object-cover ${provider.cover_photo_url ? 'opacity-80' : 'opacity-20'}`}
         />
+        {/* Overlay gradiente na parte inferior para legibilidade */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
       </div>
 
       <div className="container mx-auto max-w-4xl px-4 -mt-24 pb-12">

@@ -17,13 +17,25 @@ import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
 
 const ProviderCard = ({ provider }) => (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col">
-        <CardContent className="p-6 flex flex-col flex-grow">
+    <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col overflow-hidden">
+        {/* Foto de Capa */}
+        <div className="relative h-32 bg-gradient-to-r from-cyan-400 to-blue-500 shrink-0">
+            {provider.cover_photo_url ? (
+                <LazyImage
+                    src={provider.cover_photo_url}
+                    alt={`Foto de capa de ${provider.full_name}`}
+                    className="w-full h-full object-cover"
+                />
+            ) : null}
+            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/30 to-transparent" />
+        </div>
+
+        <CardContent className="p-6 flex flex-col flex-grow -mt-10 relative">
             <div className="flex items-start gap-4 mb-4">
                 <LazyImage
                     src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
                     alt={`Foto de perfil de ${provider.full_name}`}
-                    className="w-20 h-20 rounded-full object-cover"
+                    className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md shrink-0"
                 />
                 <div className="flex-1">
                     <div className="flex items-start justify-between">

@@ -165,6 +165,28 @@ Deno.serve(async (req) => {
       }
     }
 
+    if (event.type === 'invoice.paid') {
+      const invoice = event.data.object;
+      const subId = invoice.subscription;
+      if (subId) {
+        const existing = await base44.asServiceRole.entities.Subscription.filter({
+          stripe_subscription_id: subId
+        });
+        if (existing.length > 0) {
+          // Atualiza próxima data de cobrança a cada renovação
+          const stripeSub = await stripe.subscriptions.retrieve(subId);
+          const nextBilling = stripeSub?.current_period_end
+            ? new Date(stripeSub.current_period_end * 1000).toISOString().split('T')[0]
+            : null;
+          await base44.asServiceRole.entities.Subscription.update(existing[0].id, {
+            status: 'active',
+            next_billing_date: nextBilling,
+          });
+          console.log('Subscription renewed, next billing:', nextBilling);
+        }
+      }
+    }
+
     if (event.type === 'invoice.payment_failed') {
       const invoice = event.data.object;
       const subId = invoice.subscription;

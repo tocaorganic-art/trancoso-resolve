@@ -26,9 +26,11 @@ const paymentMethods = ["Dinheiro", "PIX", "Cartão de Débito", "Cartão de Cr�
 const ProfileCompleteness = ({ formData }) => {
     // Define checks and their weights for profile completeness
     const completenessChecks = {
-        photo_url: { weight: 15, label: 'Adicionar uma foto de perfil' },
+        photo_url: { weight: 10, label: 'Adicionar uma foto de perfil' },
+        cover_photo_url: { weight: 10, label: 'Enviar foto de capa (16:9)' },
+        full_body_photo_url: { weight: 10, label: 'Enviar foto de corpo inteiro (verificação)' },
         phone: { weight: 10, label: 'Informar um telefone de contato' },
-        bio: { weight: 15, label: 'Escrever uma biografia (Sobre mim)' },
+        bio: { weight: 10, label: 'Escrever uma biografia (Sobre mim)' },
         experience_years: { weight: 10, label: 'Informar seus anos de experiência' },
         specialties: { weight: 10, label: 'Listar suas especialidades' },
         rates: { weight: 10, label: 'Definir um valor (por hora ou dia)' },

@@ -207,8 +207,24 @@ export default function AdminAntecedentesPage() {
                     return (
                       <tr key={p.id} className="hover:bg-slate-50 transition-colors">
                         <td className="px-6 py-4">
-                          <p className="text-sm font-medium text-slate-900">{p.full_name}</p>
-                          <p className="text-xs text-slate-500">{p.email || "—"}</p>
+                         <div className="flex items-center gap-3">
+                           {p.full_body_photo_url ? (
+                             <img src={p.full_body_photo_url} alt={p.full_name} className="w-10 h-14 rounded object-cover border shrink-0" />
+                           ) : p.photo_url ? (
+                             <img src={p.photo_url} alt={p.full_name} className="w-10 h-10 rounded-full object-cover border shrink-0" />
+                           ) : (
+                             <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
+                               <span className="text-slate-400 text-xs font-bold">{p.full_name?.charAt(0)}</span>
+                             </div>
+                           )}
+                           <div>
+                             <p className="text-sm font-medium text-slate-900">{p.full_name}</p>
+                             <p className="text-xs text-slate-500">{p.email || "—"}</p>
+                             {!p.full_body_photo_url && (
+                               <span className="text-xs text-amber-600 font-medium">⚠ Sem foto corporal</span>
+                             )}
+                           </div>
+                         </div>
                         </td>
                         <td className="px-4 py-4 hidden md:table-cell">
                           <span className="text-sm text-slate-600 font-mono">{maskCPF(p.cpf)}</span>
