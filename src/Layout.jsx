@@ -124,7 +124,7 @@ export default function Layout({ children, currentPageName }) {
   { name: "Financeiro", path: createPageUrl("Financeiro"), icon: TrendingUp },
   { name: "Planos", path: createPageUrl("Planos"), icon: CreditCard },
   { name: "Manual", path: createPageUrl("Manual"), icon: FileText },
-  { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
+  ...(isAdmin ? [{ name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket }] : []),
   ...(isAdmin ? [
     { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
     { name: "Antecedentes", path: "/AdminAntecedentes", icon: ShieldCheck },
