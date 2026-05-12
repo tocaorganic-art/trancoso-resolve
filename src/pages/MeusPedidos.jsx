@@ -100,8 +100,8 @@ export default function MeusPedidosPage() {
   });
 
   const { data: requests, isLoading: isLoadingRequests } = useQuery({
-    queryKey: ['myServiceRequests', user?.id],
-    queryFn: () => base44.entities.ServiceRequest.filter({ client_id: user.id }, '-date'),
+    queryKey: ['myServiceRequests', user?.email],
+    queryFn: () => base44.entities.ServiceRequest.filter({}, '-date'),
     enabled: !!user,
     initialData: [],
   });

@@ -78,9 +78,11 @@ export default function BookingForm({ provider, services, user, onCancel }) {
     e.preventDefault();
     if (!data.location.lat || !data.location.lng) return toast.error("Selecione uma localização no mapa.");
     if (!data.location.address.trim()) return toast.error("Preencha a rua/avenida.");
+    if (!user?.id || !user?.email) return toast.error("Erro: usuário não autenticado. Faça login novamente.");
     mutation.mutate({
       ...data,
-      client_id: user?.id,
+      client_id: user.id,
+      client_email: user.email,
       provider_id: provider.id,
       date: data.date ? format(data.date, "yyyy-MM-dd") : null,
       time: data.time || null,

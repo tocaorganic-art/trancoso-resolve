@@ -150,8 +150,8 @@ export default function ServicoDetalhesPage() {
                     <p className="text-sm text-slate-600">{provider.occupation}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                      <span className="text-sm font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
-                      {provider.total_reviews > 0 && <span className="text-xs text-slate-500">({provider.total_reviews} avaliações)</span>}
+                      <span className="text-sm font-medium">{provider?.rating && provider.rating > 0 ? provider.rating.toFixed(1) : 'Novo'}</span>
+                      {provider?.total_reviews && provider.total_reviews > 0 && <span className="text-xs text-slate-500">({provider.total_reviews} avaliações)</span>}
                     </div>
                   </div>
                   <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
