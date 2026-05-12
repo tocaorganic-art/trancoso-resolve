@@ -26,17 +26,17 @@ export default function TabelaComparativa() {
         </div>
 
         {/* Desktop Table */}
-        <div className="hidden md:block bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-3 bg-slate-800 text-white text-center">
-            <div className="p-4 text-left pl-6 font-medium text-slate-300">Benefício</div>
-            <div className="p-4 font-semibold text-slate-400">Por conta própria</div>
-            <div className="p-4 font-bold text-cyan-400 bg-gradient-to-b from-blue-700 to-blue-800">
-              Parceiro Trancoso Resolve 🌴
-            </div>
-          </div>
+         <div className="hidden md:block bg-white rounded-2xl shadow-xl overflow-hidden">
+           <div className="grid grid-cols-3 bg-slate-900 text-white text-center">
+             <div className="p-4 text-left pl-6 font-bold text-slate-100">Benefício</div>
+             <div className="p-4 font-bold text-slate-300">Por conta própria</div>
+             <div className="p-4 font-bold text-white bg-gradient-to-b from-cyan-600 to-blue-700">
+               Parceiro Trancoso Resolve 🌴
+             </div>
+           </div>
           {items.map((item, i) => (
             <div key={i} className={`grid grid-cols-3 text-center border-b border-slate-100 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-              <div className="p-4 pl-6 text-left text-sm font-medium text-slate-700">{item.label}</div>
+              <div className="p-4 pl-6 text-left text-sm font-semibold text-slate-800">{item.label}</div>
               <div className="p-4 flex items-center justify-center">
                 {item.solo === true ? (
                   <Check className="w-5 h-5 text-green-500" />

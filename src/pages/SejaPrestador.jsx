@@ -119,24 +119,24 @@ export default function SejaPrestadorPage() {
       {/* Hero */}
       <HeroSection />
 
-      {/* Benefícios */}
-      <section className="container mx-auto py-10 md:py-20 px-4 max-w-5xl">
-        <div className="text-center mb-6 md:mb-12">
-          <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Vantagens exclusivas</span>
-          <h2 className="text-xl md:text-3xl font-bold text-slate-800 mt-2">Por que ser um Parceiro Trancoso Resolve?</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {beneficios.map((item, index) => (
-            <Card key={index} className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-6 md:p-8">
-                <div className="w-14 h-14 md:w-16 md:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      {/* Benefícios - Dark Cards com Alto Contraste */}
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-10 md:py-20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-6 md:mb-12">
+            <span className="text-sm font-semibold text-cyan-400 uppercase tracking-widest">Vantagens exclusivas</span>
+            <h2 className="text-xl md:text-3xl font-bold text-white mt-2">Por que ser um Parceiro Trancoso Resolve?</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            {beneficios.map((item, index) => (
+              <div key={index} className="group bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 border border-slate-700 hover:border-cyan-500/50 shadow-lg hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300">
+                <div className="w-14 h-14 md:w-16 md:h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-cyan-500/20 transition-colors">
                   {item.icon}
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-sm md:text-base text-slate-600">{item.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
+                <p className="text-sm md:text-base text-slate-300 leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
