@@ -211,21 +211,26 @@ function ProfessionalInfoStep({ data, onChange }) {
 
         {/* Input para categoria customizada quando "Outros" é selecionado */}
         {data.primaryCategory === 'Outros' && (
-          <div className="mt-3 space-y-2">
+          <div className="mt-4 space-y-3 p-4 bg-cyan-500/10 border border-cyan-500 rounded-lg">
             <label className="block text-sm font-bold text-white">
-              Digite sua categoria <span className="text-red-500">*</span>
+              Qual é sua profissão ou negócio? <span className="text-red-500">*</span>
             </label>
             <Input
               type="text"
               value={data.customCategory || ''}
               onChange={(e) => handleChange('customCategory', e.target.value)}
-              placeholder="Ex: Eletricista de Manutenção, Consultor..."
-              maxLength={50}
-              className="bg-slate-800 border-slate-700 text-white focus:border-cyan-500"
+              placeholder="Ex: Personal Trainer, Consultor de TI, Loja de Souvenirs..."
+              maxLength={80}
+              className="bg-slate-800 border-slate-700 text-white focus:border-cyan-500 placeholder-slate-500"
             />
-            <p className="text-xs text-gray-400">
-              {(data.customCategory || '').length}/50 caracteres
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-cyan-300">
+                Descreva brevemente sua profissão para melhor indicação de serviços
+              </p>
+              <span className="text-xs text-gray-400">
+                {(data.customCategory || '').length}/80
+              </span>
+            </div>
           </div>
         )}
       </div>
