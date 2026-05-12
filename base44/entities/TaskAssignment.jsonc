@@ -105,7 +105,7 @@
           "created_by": "{{user.email}}"
         },
         {
-          "data.assigned_to": "{{user.id}}"
+          "data.assigned_to_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -120,7 +120,7 @@
           "created_by": "{{user.email}}"
         },
         {
-          "data.assigned_to": "{{user.id}}"
+          "data.assigned_to_email": "{{user.email}}"
         },
         {
           "user_condition": {
