@@ -294,7 +294,9 @@ function MeuPerfilPrestadorContent() {
       newErrors.cover_photo_url = 'Foto de capa é obrigatória.';
     }
 
-    if (!formData.full_body_photo_url || formData.full_body_photo_url.trim() === '') {
+    // Foto de corpo inteiro não é necessária para empresas com ponto físico
+    const isCompanyWithLocation = (formData.tipo_pessoa === 'mei' || formData.tipo_pessoa === 'pj') && formData.tem_ponto_fisico_em_trancoso;
+    if (!isCompanyWithLocation && (!formData.full_body_photo_url || formData.full_body_photo_url.trim() === '')) {
       newErrors.full_body_photo_url = 'Foto de corpo inteiro é obrigatória para verificação de identidade.';
     }
     
@@ -424,12 +426,13 @@ function MeuPerfilPrestadorContent() {
               {errors.cover_photo_url && <p className="text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.cover_photo_url}</p>}
             </div>
 
-            {/* Foto de Corpo Inteiro — Captura ao vivo */}
-            <div className="space-y-3">
-              <Label>
-                Foto de Corpo Inteiro <span className="text-red-500">*</span>
-                <span className="ml-2 text-xs font-normal text-slate-500">Captura ao vivo obrigatória — galeria não permitida</span>
-              </Label>
+            {/* Foto de Corpo Inteiro — Captura ao vivo (não obrigatória para empresas com ponto físico) */}
+             {!((formData.tipo_pessoa === 'mei' || formData.tipo_pessoa === 'pj') && formData.tem_ponto_fisico_em_trancoso) && (
+             <div className="space-y-3">
+               <Label>
+                 Foto de Corpo Inteiro <span className="text-red-500">*</span>
+                 <span className="ml-2 text-xs font-normal text-slate-500">Captura ao vivo obrigatória — galeria não permitida</span>
+               </Label>
               <div className="flex items-start gap-5 flex-wrap">
                 <div className={`relative w-44 h-60 rounded-xl overflow-hidden border-2 flex items-center justify-center bg-slate-100 ${errors.full_body_photo_url ? 'border-red-400' : 'border-slate-300'}`}>
                   {uploading.fullbody ? (
@@ -465,7 +468,8 @@ function MeuPerfilPrestadorContent() {
                   <AlertCircle className="w-3 h-3" />{errors.full_body_photo_url}
                 </p>
               )}
-            </div>
+              </div>
+              )}
 
             {/* Tipo de Pessoa / Dados Jurídicos */}
             <div className="space-y-4">

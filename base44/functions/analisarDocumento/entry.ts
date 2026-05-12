@@ -75,9 +75,13 @@ Compare o nome extraído com o nome cadastrado. Considere 100% de correspondênc
     console.log('[analisarDocumento] AI result:', JSON.stringify(aiResult));
 
     // Lógica de status:
-    // - 100% correspondência de nome + documento legível → "Aguardando Admin"
+    // - Para PF: 100% correspondência de nome + documento legível → "Aguardando Admin"
+    // - Para Empresa com ponto físico: apenas documento legível → "Aguardando Admin" (sem validação de nome)
     // - Divergência ou documento ilegível → "Pendente"
-    const nameMatches = aiResult.name_matches === true && aiResult.document_readable === true;
+    const isCompanyWithLocation = body.user_type === 'empresa' || (body.document_type === 'CNPJ' || body.document_type === 'MEI');
+    const nameMatches = isCompanyWithLocation 
+      ? aiResult.document_readable === true
+      : (aiResult.name_matches === true && aiResult.document_readable === true);
     const newStatus = nameMatches ? "Aguardando Admin" : "Pendente";
 
     let adminNotes = "";

@@ -126,7 +126,8 @@ export default function ServicosCategoriaPage() {
     queryKey: ['serviceProviders'],
     queryFn: async () => {
       try {
-        return await base44.entities.ServiceProvider.list('-rating');
+        const result = await base44.entities.ServiceProvider.list('-rating');
+        return Array.isArray(result) ? result : [];
       } catch (err) {
         console.error('ServiceProvider query error:', err);
         return [];

@@ -13,6 +13,8 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
   const [documentType, setDocumentType] = useState("");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [userType] = useState(user?.tipo_pessoa || 'pf');
+  const [hasPhysicalLocation] = useState(user?.tem_ponto_fisico_em_trancoso || false);
 
   const handleFileChange = (e) => {
     const f = e.target.files[0];
@@ -72,15 +74,17 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-blue-500" />
-            Verificar Identidade
-          </DialogTitle>
-          <DialogDescription>
-            Envie uma foto do seu documento (CNH ou RG) para receber o selo de identidade verificada.
-          </DialogDescription>
-        </DialogHeader>
+         <DialogHeader>
+           <DialogTitle className="flex items-center gap-2">
+             <ShieldCheck className="w-5 h-5 text-blue-500" />
+             {(userType === 'mei' || userType === 'pj') && hasPhysicalLocation ? 'Verificar Identidade da Empresa' : 'Verificar Identidade'}
+           </DialogTitle>
+           <DialogDescription>
+             {(userType === 'mei' || userType === 'pj') && hasPhysicalLocation
+               ? 'Envie uma foto do seu CNPJ ou documento MEI para receber o selo de empresa verificada.'
+               : 'Envie uma foto do seu documento (CNH ou RG) para receber o selo de identidade verificada.'}
+           </DialogDescription>
+         </DialogHeader>
 
         {step === "done" ? (
           <div className="flex flex-col items-center gap-4 py-6">
@@ -102,11 +106,24 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
               <Label>Tipo de Documento</Label>
               <Select value={documentType} onValueChange={setDocumentType} disabled={step !== "form"}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione CNH ou RG" />
+                  <SelectValue placeholder={
+                    (userType === 'mei' || userType === 'pj') && hasPhysicalLocation
+                      ? 'Selecione CNPJ ou MEI'
+                      : 'Selecione CNH ou RG'
+                  } />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="CNH">CNH – Carteira de Habilitação</SelectItem>
-                  <SelectItem value="RG">RG – Carteira de Identidade</SelectItem>
+                  {(userType === 'mei' || userType === 'pj') && hasPhysicalLocation ? (
+                    <>
+                      <SelectItem value="CNPJ">CNPJ – Registro da Empresa</SelectItem>
+                      <SelectItem value="MEI">MEI – Certificado de Registro</SelectItem>
+                    </>
+                  ) : (
+                    <>
+                      <SelectItem value="CNH">CNH – Carteira de Habilitação</SelectItem>
+                      <SelectItem value="RG">RG – Carteira de Identidade</SelectItem>
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>
