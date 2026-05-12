@@ -7,19 +7,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, User, Camera, AlertCircle, Video, Trash2, ImagePlus } from 'lucide-react';
+import { Loader2, User, Camera, AlertCircle, Video, ImagePlus } from 'lucide-react';
 import LiveCameraCapture from '@/components/perfil/LiveCameraCapture';
 import PortfolioGallery from '@/components/perfil/PortfolioGallery';
 import VerificacaoStatusCard from '@/components/verificacao/VerificacaoStatusCard';
 import VerificacaoBadge from '@/components/verificacao/VerificacaoBadge';
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import ServiceLocationMap from '@/components/map/ServiceLocationMap';
 import { Progress } from '@/components/ui/progress';
 import PermissionChecker from "../components/auth/PermissionChecker";
+import AccountDeletionDialog from '@/components/account/AccountDeletionDialog';
 
 const occupations = ["Limpeza", "Garçom", "Pedreiro", "Jardinagem", "Babá", "Eletricista", "Encanador", "Pintor", "Cozinheiro", "Outro"];
 const priceRanges = ["$", "$$", "$$$"];
@@ -82,31 +79,29 @@ const ProfileCompleteness = ({ formData }) => {
         }
     }
     
-    // Determine progress bar color based on score (not used in current Progress component, but good for custom styling)
     const progressColor = score > 80 ? 'bg-green-600' : score > 50 ? 'bg-yellow-500' : 'bg-red-600';
 
     return (
-        <Card className="mb-8 bg-slate-50 border-slate-200">
+        <Card className="mb-8 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700">
             <CardHeader>
-                <CardTitle className="text-lg">Força do Perfil</CardTitle>
-                 <CardDescription>Perfis completos recebem mais propostas. Siga as dicas para melhorar o seu.</CardDescription>
+                <CardTitle className="text-lg dark:text-slate-100">Força do Perfil</CardTitle>
+                 <CardDescription className="dark:text-slate-400">Perfis completos recebem mais propostas. Siga as dicas para melhorar o seu.</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center gap-4 mb-4">
-                    <Progress value={score} className="h-2 [&>*]:bg-green-500" /> {/* The `[&>*]:bg-green-500` sets the color for the progress indicator */}
-                    <span className="text-lg font-bold text-slate-700">{score}%</span>
+                    <Progress value={score} className="h-2 [&>*]:bg-green-500" />
+                    <span className="text-lg font-bold text-slate-700 dark:text-slate-200">{score}%</span>
                 </div>
                 {suggestions.length > 0 && (
                     <div>
-                        <h4 className="font-semibold text-sm mb-2 text-slate-800">Dicas para melhorar:</h4>
-                        <ul className="list-disc list-inside space-y-1 text-sm text-slate-600">
-                            {/* Display up to 3 suggestions */}
+                        <h4 className="font-semibold text-sm mb-2 text-slate-800 dark:text-slate-200">Dicas para melhorar:</h4>
+                        <ul className="list-disc list-inside space-y-1 text-sm text-slate-600 dark:text-slate-400">
                             {suggestions.slice(0, 3).map(suggestion => <li key={suggestion}>{suggestion}</li>)}
                         </ul>
                     </div>
                 )}
                  {suggestions.length === 0 && (
-                    <p className="text-sm text-green-700 font-medium">🎉 Ótimo trabalho! Seu perfil está excelente.</p>
+                    <p className="text-sm text-green-700 dark:text-green-400 font-medium">🎉 Ótimo trabalho! Seu perfil está excelente.</p>
                 )}
             </CardContent>
         </Card>
@@ -178,17 +173,7 @@ function MeuPerfilPrestadorContent() {
     }
   }, [provider, isLoadingProvider, user]);
 
-  const deleteAccountMutation = useMutation({
-    mutationFn: async () => {
-      if (provider?.id) {
-        await base44.entities.ServiceProvider.delete(provider.id);
-      }
-      await base44.auth.logout('/');
-    },
-    onError: (error) => {
-      toast.error('Erro ao excluir conta.', { description: error.message });
-    },
-  });
+
 
   const mutation = useMutation({
     mutationFn: (data) => {
@@ -359,20 +344,20 @@ function MeuPerfilPrestadorContent() {
       />
     )}
     <div className="container mx-auto max-w-4xl py-8">
-      <Card>
+      <Card className="dark:bg-slate-800 dark:border-slate-700">
         <CardHeader>
-          <CardTitle className="text-2xl">Meu Perfil de Prestador</CardTitle>
-          <CardDescription>Mantenha suas informações atualizadas para atrair mais clientes.</CardDescription>
+          <CardTitle className="text-2xl dark:text-slate-100">Meu Perfil de Prestador</CardTitle>
+          <CardDescription className="dark:text-slate-400">Mantenha suas informações atualizadas para atrair mais clientes.</CardDescription>
         </CardHeader>
         <CardContent>
           <ProfileCompleteness formData={formData} />
 
           {!provider && (
-             <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-blue-600 mt-1 shrink-0" />
+             <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 rounded-lg flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-1 shrink-0" />
                 <div>
-                    <h4 className="font-semibold text-blue-900">Complete seu perfil!</h4>
-                    <p className="text-sm text-blue-800">Seu perfil ainda não está visível para clientes. Preencha as informações abaixo e salve para começar a receber solicitações.</p>
+                    <h4 className="font-semibold text-blue-900 dark:text-blue-300">Complete seu perfil!</h4>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">Seu perfil ainda não está visível para clientes. Preencha as informações abaixo e salve para começar a receber solicitações.</p>
                 </div>
             </div>
           )}
@@ -709,35 +694,8 @@ function MeuPerfilPrestadorContent() {
             </div>
 
             {/* Ações */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button type="button" variant="destructive" className="select-none">
-                    <Trash2 className="w-4 h-4 mr-2 select-none" />
-                    Excluir Conta
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Esta ação é permanente. Seu perfil de prestador e todos os dados associados serão excluídos. Você será desconectado imediatamente.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className="select-none">Cancelar</AlertDialogCancel>
-                    <AlertDialogAction
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90 select-none"
-                      onClick={() => deleteAccountMutation.mutate()}
-                      disabled={deleteAccountMutation.isPending}
-                    >
-                      {deleteAccountMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                      Sim, excluir minha conta
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t dark:border-slate-700">
+              <AccountDeletionDialog providerId={provider?.id} userEmail={user?.email} />
               <Button type="submit" disabled={mutation.isPending || isUploading} className="select-none">
                 {(mutation.isPending || isUploading) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Salvar Perfil
