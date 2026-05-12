@@ -19,7 +19,7 @@ import PermissionChecker from "../components/auth/PermissionChecker";
 import AccountDeletionDialog from '@/components/account/AccountDeletionDialog';
 
 const occupations = ["Limpeza", "Garçom", "Pedreiro", "Jardinagem", "Babá", "Eletricista", "Encanador", "Pintor", "Cozinheiro", "Outro"];
-const priceRanges = ["$", "$$", "$$$"];
+const priceRanges = ["$", "$$", "$$$", "a consultar"];
 const paymentMethods = ["Dinheiro", "PIX", "Cartão de Débito", "Cartão de Crédito"];
 
 const formatCpf = (value) => {
