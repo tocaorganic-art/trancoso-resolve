@@ -445,9 +445,9 @@ export default function ProviderSignup() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-900 pb-20">
+    <div className="min-h-screen bg-slate-900 pb-20 relative">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-slate-800 border-b border-slate-700 px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 z-50 bg-slate-800 border-b border-slate-700 px-4 py-3 flex items-center gap-3">
         <button
           onClick={() => navigate(-1)}
           className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
@@ -459,15 +459,15 @@ export default function ProviderSignup() {
       </div>
 
       {/* Conteúdo */}
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto px-4 py-8 relative z-40">
         <StepIndicator currentStep={currentStep} totalSteps={4} />
 
-        <div className="bg-slate-800 rounded-lg p-6 border border-slate-700 mb-8">
+        <div className="bg-slate-800 rounded-lg p-6 border border-slate-700 mb-8 relative z-40">
           {steps[currentStep - 1]}
         </div>
 
         {/* Botões de Navegação */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 relative z-40">
           <Button
             onClick={() => setCurrentStep((prev) => Math.max(1, prev - 1))}
             disabled={currentStep === 1}
@@ -490,7 +490,7 @@ export default function ProviderSignup() {
         </div>
 
         {/* Mensagem de Rascunho */}
-        <p className="text-xs text-gray-500 text-center mt-4">
+        <p className="text-xs text-gray-500 text-center mt-4 relative z-40">
           Seu progresso é salvo automaticamente
         </p>
       </div>
