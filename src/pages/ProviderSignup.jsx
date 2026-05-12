@@ -266,6 +266,13 @@ function ProfessionalInfoStep({ data, onChange }) {
         <p className="text-xs text-gray-400 mt-1">{(data.bio || '').length}/500</p>
       </div>
 
+      <div className="bg-cyan-500/10 border border-cyan-500 rounded-lg p-4 mb-4 space-y-2">
+        <p className="text-sm font-bold text-cyan-100">📋 Regra de Preço</p>
+        <p className="text-xs text-cyan-50">
+          Informe pelo menos um valor (por hora ou por dia) para seus serviços. A plataforma usa estes valores para calcular orçamentos e exibir sua disponibilidade com precisão.
+        </p>
+      </div>
+
       <div>
         <label className="block text-sm font-bold text-white mb-2">
           Taxa por Hora (R$)
