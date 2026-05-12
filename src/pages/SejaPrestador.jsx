@@ -72,11 +72,11 @@ export default function SejaPrestadorPage() {
 
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = 'https://www.trancosoresolve.com.br/SejaPrestador';
+    canonical.href = `${window.location.origin}/SejaPrestador`;
 
     let ogUrl = document.querySelector('meta[property="og:url"]');
     if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = 'https://www.trancosoresolve.com.br/SejaPrestador';
+    ogUrl.content = `${window.location.origin}/SejaPrestador`;
 
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
@@ -98,14 +98,14 @@ export default function SejaPrestadorPage() {
         {
           "@type": "WebPage",
           "name": "Seja um Parceiro Trancoso Resolve",
-          "url": "https://www.trancosoresolve.com.br/SejaPrestador",
+          "url": `${window.location.origin}/SejaPrestador`,
           "description": "Cadastre-se como prestador de serviços verificado em Trancoso e comece a receber novos clientes pela plataforma."
         },
         {
           "@type": "BreadcrumbList",
           "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
-            { "@type": "ListItem", "position": 2, "name": "Seja um Prestador", "item": "https://www.trancosoresolve.com.br/SejaPrestador" }
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": `${window.location.origin}` },
+            { "@type": "ListItem", "position": 2, "name": "Seja um Prestador", "item": `${window.location.origin}/SejaPrestador` }
           ]
         }
       ]

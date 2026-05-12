@@ -27,12 +27,12 @@ export default function SegurancaPage() {
     // Canonical
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = 'https://www.trancosoresolve.com.br/Seguranca';
+    canonical.href = `${window.location.origin}/Seguranca`;
 
     // OG tags
     let ogUrl = document.querySelector('meta[property="og:url"]');
     if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = 'https://www.trancosoresolve.com.br/Seguranca';
+    ogUrl.content = `${window.location.origin}/Seguranca`;
 
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
@@ -53,12 +53,12 @@ export default function SegurancaPage() {
       "@type": "WebPage",
       "name": "Segurança — Trancoso Resolve",
       "description": "Saiba como garantimos a segurança de clientes e prestadores em Trancoso. Verificação de identidade, antecedentes criminais, avaliações e proteção LGPD.",
-      "url": "https://www.trancosoresolve.com.br/Seguranca",
+      "url": `${window.location.origin}/Seguranca`,
       "breadcrumb": {
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
-          { "@type": "ListItem", "position": 2, "name": "Segurança", "item": "https://www.trancosoresolve.com.br/Seguranca" }
+          { "@type": "ListItem", "position": 1, "name": "Início", "item": `${window.location.origin}` },
+          { "@type": "ListItem", "position": 2, "name": "Segurança", "item": `${window.location.origin}/Seguranca` }
         ]
       },
       "mainEntity": {

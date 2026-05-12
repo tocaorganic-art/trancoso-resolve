@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
@@ -10,6 +9,7 @@ import LazyImage from "@/components/ui/LazyImage";
 import { ArrowLeft, Star, Clock, AlertCircle, Loader2, CalendarIcon } from "lucide-react";
 import BookingForm from "@/components/booking/BookingForm";
 import StartChatButton from "@/components/chat/StartChatButton";
+import { useEffect, useState } from "react";
 
 export default function ServicoDetalhesPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -45,6 +45,93 @@ export default function ServicoDetalhesPage() {
     enabled: !!service?.provider_id,
     initialData: [],
   });
+
+  // SEO Setup
+  useEffect(() => {
+    if (!service) return;
+
+    const pageTitle = `${service.title} em Trancoso | ${provider?.full_name || 'Serviço'} — Trancoso Resolve`;
+    document.title = pageTitle;
+
+    // Meta description
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = `${service.title} com ${provider?.full_name || 'profissional verificado'}. R$ ${service.price.toFixed(2)} por ${service.price_unit}. Avaliações reais, agendamento seguro em Trancoso.`;
+
+    // Canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = `${window.location.origin}/ServicoDetalhes?id=${serviceId}`;
+
+    // OG tags
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = `${window.location.origin}/ServicoDetalhes?id=${serviceId}`;
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
+    ogTitle.content = pageTitle;
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
+    ogDesc.content = `${service.title} com ${provider?.full_name || 'profissional verificado'} em Trancoso.`;
+
+    let ogImage = document.querySelector('meta[property="og:image"]');
+    if (!ogImage) { ogImage = document.createElement('meta'); ogImage.setAttribute('property', 'og:image'); document.head.appendChild(ogImage); }
+    ogImage.content = service.images?.[0] || 'https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png';
+
+    // Schema markup
+    const schemaId = `schema-servico-${serviceId}`;
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Service",
+          "name": service.title,
+          "description": service.description,
+          "serviceType": service.category,
+          "provider": {
+            "@type": "Person",
+            "name": provider?.full_name || "Profissional",
+            "image": provider?.photo_url,
+            "rating": {
+              "@type": "AggregateRating",
+              "ratingValue": provider?.rating || 0,
+              "reviewCount": provider?.total_reviews || 0,
+              "bestRating": 5
+            }
+          },
+          "areaServed": {
+            "@type": "Place",
+            "name": "Trancoso, BA"
+          },
+          "priceRange": "$",
+          "offers": {
+            "@type": "Offer",
+            "price": service.price,
+            "priceCurrency": "BRL",
+            "availability": "InStock"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": `${window.location.origin}` },
+            { "@type": "ListItem", "position": 2, "name": "Serviços", "item": `${window.location.origin}/ServicosCategoria` },
+            { "@type": "ListItem", "position": 3, "name": service.category, "item": `${window.location.origin}/ServicosCategoria?cat=${encodeURIComponent(service.category)}` },
+            { "@type": "ListItem", "position": 4, "name": service.title, "item": `${window.location.origin}/ServicoDetalhes?id=${serviceId}` }
+          ]
+        }
+      ]
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, [service, provider, serviceId]);
 
   if (isLoading) {
     return (
@@ -94,21 +181,21 @@ export default function ServicoDetalhesPage() {
         </Link>
 
         <Card className="border-none shadow-2xl mb-8">
-          <CardContent className="p-8">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold text-slate-900 mb-2">{service.title}</h1>
+          <CardContent className="p-4 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2 break-words">{service.title}</h1>
                 <Badge className="bg-cyan-100 text-cyan-800">{service.category}</Badge>
               </div>
-              <div className="text-right">
-                <p className="text-3xl font-bold text-cyan-600">R$ {service.price.toFixed(2)}</p>
+              <div className="text-left sm:text-right shrink-0">
+                <p className="text-2xl sm:text-3xl font-bold text-cyan-600">R$ {service.price.toFixed(2)}</p>
                 <p className="text-sm text-slate-500">por {service.price_unit || 'serviço'}</p>
               </div>
             </div>
 
             {service.duration_estimate && (
               <div className="flex items-center gap-2 text-slate-600 mb-4">
-                <Clock className="w-5 h-5" />
+                <Clock className="w-5 h-5 shrink-0" />
                 <span>Duração estimada: {service.duration_estimate}</span>
               </div>
             )}
@@ -128,9 +215,9 @@ export default function ServicoDetalhesPage() {
             {service.images && service.images.length > 1 && (
               <div className="mb-8">
                 <h3 className="text-xl font-semibold mb-4">Galeria</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                   {service.images.map((img, idx) => (
-                    <LazyImage key={idx} src={img} alt={`${service.title} - imagem ${idx + 1}`} className="w-full h-40 object-cover rounded-lg" />
+                    <LazyImage key={idx} src={img} alt={`${service.title} - imagem ${idx + 1}`} className="w-full h-32 sm:h-40 object-cover rounded-lg" />
                   ))}
                 </div>
               </div>
@@ -139,14 +226,14 @@ export default function ServicoDetalhesPage() {
             {provider && (
               <div className="border-t pt-6 mt-6">
                 <h3 className="text-xl font-semibold mb-4">Prestador</h3>
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 flex-wrap sm:flex-nowrap">
                   <LazyImage
-                    src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
+                    src={provider.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.full_name)}&size=200`}
                     alt={`Foto de ${provider.full_name}`}
-                    className="w-16 h-16 rounded-full object-cover"
+                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover shrink-0"
                   />
-                  <div className="flex-1">
-                    <p className="font-semibold text-lg">{provider.full_name}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-base sm:text-lg truncate">{provider.full_name}</p>
                     <p className="text-sm text-slate-600">{provider.occupation}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <Star className="w-4 h-4 text-yellow-500 fill-current" />
@@ -154,14 +241,13 @@ export default function ServicoDetalhesPage() {
                       {provider?.total_reviews && provider.total_reviews > 0 && <span className="text-xs text-slate-500">({provider.total_reviews} avaliações)</span>}
                     </div>
                   </div>
-                  <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
+                  <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} className="shrink-0">
                     <Button variant="outline" size="sm">Ver Perfil</Button>
                   </Link>
                 </div>
               </div>
             )}
 
-            {/* CTA Buttons */}
             {!showBooking && (
               <div className="flex flex-col sm:flex-row gap-3 mt-6">
                 {user && provider ? (
@@ -186,7 +272,6 @@ export default function ServicoDetalhesPage() {
           </CardContent>
         </Card>
 
-        {/* Booking Form inline */}
         {showBooking && provider && (
           <BookingForm
             provider={provider}
