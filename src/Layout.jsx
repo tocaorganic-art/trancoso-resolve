@@ -177,26 +177,26 @@ export default function Layout({ children, currentPageName }) {
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-9 shrink-0" width="36" height="36" loading="eager" fetchpriority="high" />
-                <span className="font-bold text-sm md:text-lg text-slate-100 truncate hidden xs:inline sm:inline">Trancoso Resolve</span>
+                <span className="font-bold text-sm md:text-lg text-white truncate hidden xs:inline sm:inline drop-shadow-md">Trancoso Resolve</span>
               </Link>
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-8">
                 {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">
+                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">
                     <Image className="w-4 h-4" /> Toca Vision
                   </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">
+                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">
                     <MessageCircle className="w-4 h-4" /> Toca TrIA
                   </Link>
-                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">
+                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">
                     <MessageCircle className="w-4 h-4" /> Chat
                   </Link>
                 </>}
-                <Link to={createPageUrl("SejaPrestador")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Como funciona?</Link>
-                <Link to={createPageUrl("Seguranca")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Manual</Link>
+                <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Seja um prestador</Link>
+                <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Como funciona?</Link>
+                <Link to={createPageUrl("Seguranca")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Segurança</Link>
+                <Link to={createPageUrl("Manual")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Manual</Link>
               </div>
 
               <div className="flex items-center gap-2">
@@ -243,20 +243,20 @@ export default function Layout({ children, currentPageName }) {
             {mobileMenuOpen &&
             <div className="md:hidden mt-2 pb-4 space-y-2 px-4 bg-slate-700 rounded" data-testid="mobile-menu-content-public">
                 {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Toca Vision</span>
                   </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("Assistentevirtual")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Toca TrIA</span>
                   </Link>
-                  <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("Chat")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
                   </Link>
                 </>}
-                <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
-                <Link to={createPageUrl("Seguranca")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
+                <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
+                <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
+                <Link to={createPageUrl("Seguranca")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
+                <Link to={createPageUrl("Manual")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
               </div>
             }
           </nav>
@@ -285,17 +285,17 @@ export default function Layout({ children, currentPageName }) {
           <footer className="bg-slate-950 text-white py-8 mt-16 pb-safe" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
               <div className="flex justify-center gap-4 mb-4 flex-wrap">
-                <Link to={createPageUrl("About")} className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                <Link to={createPageUrl("About")} className="text-base font-medium text-slate-200 hover:text-white transition-colors">
                   Sobre
                 </Link>
-                <Link to={createPageUrl("Contact")} className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                <Link to={createPageUrl("Contact")} className="text-base font-medium text-slate-200 hover:text-white transition-colors">
                   Contato
                 </Link>
-                <Link to={createPageUrl("PoliticaPrivacidade")} className="text-sm text-slate-400 hover:text-slate-200 transition-colors" data-testid="footer-privacy-link">
+                <Link to={createPageUrl("PoliticaPrivacidade")} className="text-base font-medium text-slate-200 hover:text-white transition-colors" data-testid="footer-privacy-link">
                   Política de Privacidade
                 </Link>
               </div>
-              <p className="text-slate-400 text-sm">
+              <p className="text-slate-300 text-base font-medium">
                 © 2025 Trancoso Resolve • Plataforma de Serviços em Trancoso • Todos os direitos reservados
               </p>
             </div>

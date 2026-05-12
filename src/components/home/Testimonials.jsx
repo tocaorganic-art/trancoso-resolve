@@ -42,8 +42,8 @@ export default function Testimonials() {
     <section className="bg-slate-100 py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-slate-900">O que nossos usuários dizem</h2>
-          <p className="text-slate-600 mt-2">Histórias reais de quem usa e aprova a nossa plataforma.</p>
+          <h2 className="text-3xl font-bold text-slate-900 drop-shadow-sm">O que nossos usuários dizem</h2>
+          <p className="text-slate-700 mt-2 font-medium text-lg">Histórias reais de quem usa e aprova a nossa plataforma.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
@@ -51,13 +51,13 @@ export default function Testimonials() {
               <CardContent className="p-8 flex flex-col h-full">
                 <div className="flex-grow mb-4">
                   <StarRating rating={testimonial.rating} />
-                  <p className="text-slate-700 mt-4 italic">"{testimonial.comment}"</p>
+                  <p className="text-slate-800 mt-4 italic leading-relaxed text-base">"{testimonial.comment}"</p>
                 </div>
                 <div className="flex items-center mt-auto">
                   <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover mr-4" />
                   <div>
-                    <p className="font-semibold text-slate-900">{testimonial.name}</p>
-                    <p className="text-sm text-slate-500">{testimonial.role}</p>
+                    <p className="font-bold text-slate-900 text-base">{testimonial.name}</p>
+                    <p className="text-sm font-medium text-slate-700">{testimonial.role}</p>
                   </div>
                 </div>
               </CardContent>

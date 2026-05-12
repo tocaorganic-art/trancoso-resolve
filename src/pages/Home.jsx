@@ -347,6 +347,18 @@ export default function HomePage() {
 
   return (
     <div className="bg-slate-50 overflow-x-hidden">
+      <style>{`
+        @media (max-width: 768px) {
+          .service-card-title { font-size: 1.125rem !important; line-height: 1.4 !important; }
+          .service-card-desc { font-size: 0.9375rem !important; line-height: 1.6 !important; }
+          .provider-name { font-size: 1rem !important; font-weight: 700 !important; }
+          .provider-occupation { font-size: 0.875rem !important; }
+          .section-heading { font-size: 1.5rem !important; font-weight: 800 !important; }
+          .card-text { color: #1e293b !important; }
+          .card-text-dark { color: #f1f5f9 !important; }
+          h1, h2, h3 { text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        }
+      `}</style>
       {/* Pull-to-refresh indicator */}
       {pullDistance > 10 && (
         <div
@@ -366,10 +378,10 @@ export default function HomePage() {
       <div className="bg-white">
         <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-5 md:py-20 px-4 overflow-hidden">
           <div className="hero-content text-center lg:text-left">
-            <h1 className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-2">
+            <h1 className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-2 drop-shadow-sm">
               Trancoso Resolve: Encontre Profissionais Verificados em Trancoso
             </h1>
-            <p className="text-sm md:text-lg text-slate-600 mb-4">
+            <p className="text-base md:text-lg text-slate-700 mb-4 font-medium leading-relaxed">
               Diaristas, eletricistas, encanadores, cozinheiros e muito mais — todos verificados e prontos para atender.
             </p>
             
@@ -417,10 +429,10 @@ export default function HomePage() {
       {/* CTA Destacado */}
       <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-8 md:py-16 my-4 md:my-12">
       <div className="container mx-auto max-w-4xl px-4 text-center">
-        <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
+        <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg">
           Precisa de Ajuda? Encontre a Solução em Trancoso Agora!
         </h2>
-        <p className="text-base md:text-xl text-blue-100 mb-6">
+        <p className="text-base md:text-xl text-white font-medium mb-6 leading-relaxed">
           Profissionais verificados em Trancoso prontos para resolver.
         </p>
           <Link to={createPageUrl("ServicosCategoria")}>
@@ -459,7 +471,7 @@ export default function HomePage() {
         {/* Featured Services */}
         <section className="mb-10 md:mb-20">
           <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Descubra os Serviços Mais Procurados em Trancoso</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 drop-shadow-sm">Descubra os Serviços Mais Procurados em Trancoso</h2>
             <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
               <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700" aria-label="Ver todos os serviços">
                 Ver todos
@@ -500,8 +512,8 @@ export default function HomePage() {
         {/* Top Rated Providers */}
         <section className="mb-10 md:mb-20">
           <div className="text-center mb-4 md:mb-8">
-            <h2 className="text-xl md:text-3xl font-bold text-slate-900">Conheça os Profissionais Mais Bem Avaliados de Trancoso</h2>
-            <p className="text-sm md:text-base text-slate-600 mt-2">Os favoritos da comunidade, com qualidade comprovada.</p>
+            <h2 className="text-xl md:text-3xl font-bold text-slate-900 drop-shadow-sm">Conheça os Profissionais Mais Bem Avaliados de Trancoso</h2>
+            <p className="text-base md:text-lg text-slate-700 font-medium mt-2 leading-relaxed">Os favoritos da comunidade, com qualidade comprovada.</p>
           </div>
 
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6">
@@ -529,11 +541,11 @@ export default function HomePage() {
                             </div>
                           )}
                         </div>
-                        <p className="font-semibold text-sm text-slate-900 mb-1">{provider.full_name}</p>
-                        <p className="text-xs text-slate-600 mb-2">{provider.occupation}</p>
+                        <p className="font-bold text-base text-slate-900 mb-1 leading-tight">{provider.full_name}</p>
+                        <p className="text-sm text-slate-700 font-medium mb-2">{provider.occupation}</p>
                         <div className="flex items-center justify-center gap-1">
-                          <Star className="w-3 h-3 text-yellow-500 fill-current" aria-hidden="true" />
-                          <span className="text-sm font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
+                          <Star className="w-4 h-4 text-yellow-500 fill-current" aria-hidden="true" />
+                          <span className="text-base font-bold text-slate-900">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
                           <span className="sr-only">estrelas</span>
                         </div>
                       </CardContent>
@@ -560,8 +572,8 @@ export default function HomePage() {
         {/* Landing Pages por Serviço - SEO Local */}
         <section className="mb-10 md:mb-20">
           <div className="text-center mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Serviços Mais Buscados em Trancoso</h2>
-            <p className="text-sm text-slate-500 mt-1">Guias completos com profissionais verificados para cada categoria</p>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 drop-shadow-sm">Serviços Mais Buscados em Trancoso</h2>
+            <p className="text-base text-slate-700 font-medium mt-1">Guias completos com profissionais verificados para cada categoria</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {[
@@ -578,8 +590,8 @@ export default function HomePage() {
               <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
                 <div className="bg-white rounded-xl p-3 text-center shadow-sm hover:shadow-md transition-shadow border border-slate-100 hover:border-cyan-200 cursor-pointer group">
                   <span className="text-2xl block mb-1" aria-hidden="true">{item.emoji}</span>
-                  <span className="text-xs font-semibold text-slate-700 group-hover:text-cyan-700">{item.label}</span>
-                  <span className="block text-xs text-slate-400 mt-0.5">em Trancoso</span>
+                  <span className="text-sm font-bold text-slate-800 group-hover:text-cyan-700">{item.label}</span>
+                  <span className="block text-xs font-medium text-slate-600 mt-0.5">em Trancoso</span>
                 </div>
               </Link>
             ))}
@@ -593,8 +605,8 @@ export default function HomePage() {
         <Card className="border-none bg-gradient-to-r from-orange-400 to-amber-500 text-white shadow-2xl mt-10 md:mt-20">
           <CardContent className="p-6 md:p-8 text-center">
             <Zap className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3" />
-            <h3 className="text-xl md:text-2xl font-bold mb-2">Serviço Urgente? Contrate Agora em Trancoso!</h3>
-            <p className="text-orange-50 mb-5 text-sm md:text-base">
+            <h3 className="text-xl md:text-2xl font-bold mb-2 drop-shadow-md">Serviço Urgente? Contrate Agora em Trancoso!</h3>
+            <p className="text-white mb-5 text-base md:text-lg font-medium">
               Precisa de um serviço com urgência? Entre em contato e encontraremos alguém disponível agora.
             </p>
             <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-orange-50 font-semibold" data-testid="home-ajuda-urgente-button" aria-label="Solicitar serviço urgente agora">

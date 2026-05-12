@@ -41,8 +41,8 @@ export default function BottomNav() {
               isActive ? "text-blue-600" : "text-slate-500 hover:text-slate-800"
             )}
           >
-            <Icon className={cn("w-5 h-5 select-none", isActive && "stroke-blue-600")} />
-            <span>{label}</span>
+            <Icon className={cn("w-6 h-6 select-none", isActive && "stroke-blue-600")} />
+            <span className="text-sm font-semibold">{label}</span>
           </Link>
         );
       })}
