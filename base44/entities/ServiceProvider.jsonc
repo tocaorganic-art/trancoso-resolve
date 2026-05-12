@@ -66,6 +66,11 @@
       "default": false,
       "description": "Indica se a empresa/MEI possui ponto f\u00edsico em Trancoso (loja, restaurante, pousada, etc.)"
     },
+    "has_storefront": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indica se \u00e9 loja f\u00edsica / ponto comercial aberto ao p\u00fablico (sin\u00f4nimo para tem_ponto_fisico_em_trancoso)"
+    },
     "razao_social": {
       "type": "string",
       "description": "Raz\u00e3o social (para PJ/MEI)"
@@ -168,6 +173,10 @@
       "type": "string",
       "description": "URL do documento para verifica\u00e7\u00e3o"
     },
+    "verification_cnpj_url": {
+      "type": "string",
+      "description": "URL do documento CNPJ/MEI para verifica\u00e7\u00e3o (para empresas)"
+    },
     "portfolio_images": {
       "type": "array",
       "items": {
@@ -226,6 +235,14 @@
     "relatorio_verificacao_empresa": {
       "type": "string",
       "description": "Relat\u00f3rio da verifica\u00e7\u00e3o do CNPJ"
+    },
+    "tipo_verificacao": {
+      "type": "string",
+      "enum": [
+        "pf_identidade",
+        "empresa_responsavel_cnpj"
+      ],
+      "description": "Tipo de verifica\u00e7\u00e3o: PF com identidade ou Empresa com respons\u00e1vel + CNPJ/MEI"
     }
   },
   "required": [
