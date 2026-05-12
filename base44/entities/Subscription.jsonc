@@ -80,11 +80,6 @@
     "status"
   ],
   "rls": {
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
     "read": {
       "$or": [
         {
@@ -97,12 +92,7 @@
         }
       ]
     },
-    "update": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "delete": {
+    "write": {
       "user_condition": {
         "role": "admin"
       }

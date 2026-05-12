@@ -10,6 +10,10 @@
       "type": "string",
       "description": "Email do remetente"
     },
+    "recipient_email": {
+      "type": "string",
+      "description": "Email do destinat\u00e1rio"
+    },
     "sender_name": {
       "type": "string",
       "description": "Nome do remetente"
@@ -35,51 +39,30 @@
   "required": [
     "conversation_id",
     "sender_email",
+    "recipient_email",
     "content",
     "sender_role"
   ],
   "rls": {
-    "create": {
-      "$or": [
-        {
-          "data.sender_email": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
-    },
     "read": {
       "$or": [
         {
-          "data.participant_ids": {
-            "$in": [
-              "{{user.email}}"
-            ]
-          }
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
-    },
-    "update": {
-      "$or": [
-        {
           "data.sender_email": "{{user.email}}"
         },
         {
+          "data.recipient_email": "{{user.email}}"
+        },
+        {
           "user_condition": {
             "role": "admin"
           }
         }
       ]
     },
-    "delete": {
+    "create": {
+      "data.sender_email": "{{user.email}}"
+    },
+    "write": {
       "$or": [
         {
           "data.sender_email": "{{user.email}}"

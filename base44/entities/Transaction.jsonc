@@ -96,18 +96,6 @@
     "date"
   ],
   "rls": {
-    "create": {
-      "$or": [
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
-    },
     "read": {
       "$or": [
         {
@@ -120,19 +108,7 @@
         }
       ]
     },
-    "update": {
-      "$or": [
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
-    },
-    "delete": {
+    "write": {
       "$or": [
         {
           "created_by": "{{user.email}}"

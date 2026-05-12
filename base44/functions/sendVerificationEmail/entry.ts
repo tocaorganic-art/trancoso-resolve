@@ -3,11 +3,40 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+    
+    // Verificação de autenticação
+    const user = await base44.auth.me();
+    if (!user) {
+      return Response.json({ error: "Não autorizado. Faça login para continuar." }, { status: 401 });
+    }
+
     const body = await req.json();
     const { email, user_name, verification_code, action = 'verify_email' } = body;
 
+    // Garantir que o e-mail de destino pertence ao usuário logado
+    if (user.email !== email) {
+      return Response.json({ error: "Operação não permitida. Você só pode enviar e-mails para seu próprio endereço." }, { status: 403 });
+    }
+
     if (!email || !verification_code) {
       return Response.json({ error: 'Email and verification_code required' }, { status: 400 });
+    }
+
+    // Rate limiting básico: máximo de 3 tentativas por hora
+    const rateLimitKey = `email_rate_limit:${user.email}`;
+    const lastAttemptTime = localStorage?.getItem(rateLimitKey);
+    const now = Date.now();
+    const attempts = JSON.parse(localStorage?.getItem(`${rateLimitKey}:attempts`) || '[]');
+    const recentAttempts = attempts.filter(t => now - t < 3600000); // Últimas 1 hora
+    
+    if (recentAttempts.length >= 3) {
+      return Response.json({ error: "Muitas tentativas. Tente novamente em uma hora." }, { status: 429 });
+    }
+
+    // Registrar tentativa
+    recentAttempts.push(now);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(`${rateLimitKey}:attempts`, JSON.stringify(recentAttempts));
     }
 
     // Email templates

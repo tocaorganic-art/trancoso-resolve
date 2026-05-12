@@ -6,7 +6,34 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Method not allowed' }, { status: 405 });
     }
 
+    const base44 = createClientFromRequest(req);
+    
+    // Verificação de autenticação
+    const user = await base44.auth.me();
+    if (!user) {
+      return Response.json({ error: "Não autorizado." }, { status: 401 });
+    }
+
     const errorData = await req.json();
+
+    // Limitar tamanho do payload (máximo 2KB)
+    const payloadSize = JSON.stringify(errorData).length;
+    if (payloadSize > 2048) {
+      return Response.json({ error: "Payload muito grande. Máximo 2KB por entrada." }, { status: 413 });
+    }
+
+    // Rate limiting básico: máximo de 10 logs por minuto por usuário
+    const rateLimitKey = `log_rate_limit:${user.email}`;
+    const logTimesKey = `${rateLimitKey}:times`;
+    const now = Date.now();
+    
+    // Simular rate limiting (em produção, usar Redis ou similar)
+    const logTimes = JSON.parse(Deno.env.get(logTimesKey) || '[]');
+    const recentLogs = logTimes.filter(t => now - t < 60000); // Últimos 60 segundos
+    
+    if (recentLogs.length >= 10) {
+      return Response.json({ error: "Muitos logs enviados. Tente novamente em 60 segundos." }, { status: 429 });
+    }
 
     // Log error with structured format
     console.error('CLIENT_ERROR', {
@@ -14,7 +41,8 @@ Deno.serve(async (req) => {
       message: errorData.message,
       context: errorData.context,
       url: errorData.url,
-      userAgent: errorData.userAgent?.substring(0, 200) // Truncate for size
+      userAgent: errorData.userAgent?.substring(0, 200), // Truncate for size
+      user_email: user.email
     });
 
     // In production, you could:

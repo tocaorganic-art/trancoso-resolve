@@ -4,6 +4,13 @@ const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
 
 Deno.serve(async (req) => {
   try {
+    // Verificação de autenticação obrigatória
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.error("Unauthorized: missing or invalid auth header");
+      return Response.json({ error: "Não autorizado. Faça login para continuar." }, { status: 401 });
+    }
+
     const { price_id, plan_name, success_url, cancel_url } = await req.json();
 
     if (!price_id) {

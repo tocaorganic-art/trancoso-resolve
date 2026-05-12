@@ -10,19 +10,30 @@ Deno.serve(async (req) => {
     // 2. Chamada via automação entity (event, data)
     let verificacao_id, document_url, document_type, user_full_name;
 
+    let user = null;
+    
     if (body.event && body.data) {
-      // Chamada via automação
+      // Chamada via automação — sempre permitida
       const verificacao = body.data;
       verificacao_id = body.event.entity_id;
       document_url = verificacao.document_url;
       document_type = verificacao.document_type;
       user_full_name = verificacao.user_name;
     } else {
-      // Chamada direta do modal (requer autenticação)
-      const user = await base44.auth.me();
+      // Chamada direta do modal (requer autenticação e permissão)
+      user = await base44.auth.me();
       if (!user) {
         return Response.json({ error: 'Unauthorized' }, { status: 401 });
       }
+
+      // Apenas admin ou o próprio prestador pode acionar
+      const isAdmin = user.role === 'admin';
+      const isOwner = user.id === body.prestador_id;
+
+      if (!isAdmin && !isOwner) {
+        return Response.json({ error: "Sem permissão para esta operação." }, { status: 403 });
+      }
+
       verificacao_id = body.verificacao_id;
       document_url = body.document_url;
       document_type = body.document_type;
