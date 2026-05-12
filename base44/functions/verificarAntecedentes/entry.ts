@@ -97,7 +97,30 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 4. CNPJ na Receita Federal (se houver)
+    // 4. CEIS e CNEP no Portal da Transparência (apenas para PJ com ponto físico)
+    if (prestador.tipo_pessoa === 'pj' && prestador.tem_ponto_fisico_em_trancoso && prestador.cnpj) {
+      const cnpjLimpo = prestador.cnpj.replace(/\D/g, '');
+      try {
+        const ceisRes = await fetch(
+          `https://api.portaldatransparencia.gov.br/api-de-dados/ceis?cnpjSancionado=${cnpjLimpo}&pagina=1`,
+          { headers: { 'Accept': 'application/json', 'chave-api-dados': 'demo' } }
+        );
+        if (ceisRes.ok) {
+          const ceisData = await ceisRes.json();
+          if (ceisData && ceisData.length > 0) {
+            resultados.push({ fonte: 'CEIS (Portal Transparência)', data: ceisData, temRegistro: true });
+            console.log(`[CEIS] Registros encontrados para CNPJ ${cnpjLimpo}: ${ceisData.length}`);
+          } else {
+            resultados.push({ fonte: 'CEIS (Portal Transparência)', data: [], temRegistro: false });
+          }
+        }
+      } catch (err) {
+        console.error('[CEIS] Erro:', err.message);
+        resultados.push({ fonte: 'CEIS (Portal Transparência)', erro: true, mensagem: err.message });
+      }
+    }
+
+    // 4b. CNPJ na Receita Federal (se houver)
     if (prestador.cnpj) {
       const cnpjLimpo = prestador.cnpj.replace(/\D/g, '');
       try {
@@ -130,7 +153,8 @@ Deno.serve(async (req) => {
 
     const temAntecedente = resultados.some(r => {
       if (r.erro || !r.data) return false;
-      if (r.fonte === 'Receita Federal CNPJ') return false; // CNPJ não define antecedentes criminais
+      if (r.fonte === 'Receita Federal CNPJ') return false;
+      if (r.fonte === 'CEIS (Portal Transparência)') return r.temRegistro === true;
       const item = r.data?.data?.[0];
       if (!item) return false;
       const txt = JSON.stringify(item).toLowerCase();

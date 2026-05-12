@@ -3,14 +3,42 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, Briefcase, Shield } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { User, Briefcase, Shield, Building2, ChevronRight, Loader2 } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { criarTrialPrestador } from '@/functions/criarTrialPrestador';
 import { verificarAntecedentes } from '@/functions/verificarAntecedentes';
 
+const formatCpf = (v) => {
+  const d = v.replace(/\D/g, '').substring(0, 11);
+  if (d.length > 9) return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`;
+  if (d.length > 6) return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6)}`;
+  if (d.length > 3) return `${d.slice(0,3)}.${d.slice(3)}`;
+  return d;
+};
+
+const formatCnpj = (v) => {
+  const d = v.replace(/\D/g, '').substring(0, 14);
+  if (d.length > 12) return `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5,8)}/${d.slice(8,12)}-${d.slice(12)}`;
+  if (d.length > 8) return `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5,8)}/${d.slice(8)}`;
+  if (d.length > 5) return `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5)}`;
+  if (d.length > 2) return `${d.slice(0,2)}.${d.slice(2)}`;
+  return d;
+};
+
+// step: 'tipo_conta' | 'tipo_pessoa' | 'processando'
 export default function CadastroTipoPage() {
   const queryClient = useQueryClient();
+  const [step, setStep] = useState('tipo_conta');
   const [autorizouVerificacao, setAutorizouVerificacao] = useState(false);
+  const [tipoPessoa, setTipoPessoa] = useState('pf');
+  const [cpf, setCpf] = useState('');
+  const [cnpj, setCnpj] = useState('');
+  const [temPontoFisico, setTemPontoFisico] = useState(false);
+  const [razaoSocial, setRazaoSocial] = useState('');
+  const [nomFantasia, setNomeFantasia] = useState('');
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -23,20 +51,28 @@ export default function CadastroTipoPage() {
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       await queryClient.refetchQueries({ queryKey: ['currentUser'] });
       if (data.user_type === 'prestador') {
-        // Cria trial — aguarda para garantir que exista antes de entrar no Dashboard
         try {
           await criarTrialPrestador({ user_email: data.email, user_name: data.full_name });
-        } catch (e) {
+        } catch {
           localStorage.setItem('trial_pendente', 'true');
         }
-        // Inicia verificação de antecedentes em background (não bloqueia o cadastro)
+        // Salva tipo de pessoa no ServiceProvider em background
         try {
           const providers = await base44.entities.ServiceProvider.filter({ created_by: data.email });
+          const providerData = {
+            tipo_pessoa: tipoPessoa,
+            cpf: cpf.replace(/\D/g, ''),
+            cnpj: cnpj.replace(/\D/g, '') || undefined,
+            tem_ponto_fisico_em_trancoso: temPontoFisico,
+            razao_social: razaoSocial || undefined,
+            nome_fantasia: nomFantasia || undefined,
+          };
           if (providers && providers.length > 0) {
+            await base44.entities.ServiceProvider.update(providers[0].id, providerData);
             verificarAntecedentes({ service_provider_id: providers[0].id }).catch(() => {});
           }
-        } catch (e) {
-          // Silencioso — verificação será retomada manualmente pelo admin
+        } catch {
+          // Silencioso
         }
         window.location.replace('/Dashboard');
       } else {
@@ -45,82 +81,171 @@ export default function CadastroTipoPage() {
     },
   });
 
-  const handleSelectType = (type) => {
-    if (type === 'prestador' && !autorizouVerificacao) {
-      alert('Para se cadastrar como prestador, você precisa autorizar a verificação de antecedentes criminais.');
+  const handleClienteClick = () => updateUserMutation.mutate('cliente');
+
+  const handlePrestadorSubmit = () => {
+    if (!autorizouVerificacao) {
+      alert('Autorize a verificação de antecedentes para continuar como prestador.');
       return;
     }
-    updateUserMutation.mutate(type);
+    if (!cpf || cpf.replace(/\D/g,'').length < 11) {
+      alert('Informe um CPF válido.');
+      return;
+    }
+    if ((tipoPessoa === 'mei' || tipoPessoa === 'pj') && cnpj.replace(/\D/g,'').length < 14) {
+      alert('Informe um CNPJ válido.');
+      return;
+    }
+    setStep('processando');
+    updateUserMutation.mutate('prestador');
   };
 
-  if (isLoading) {
-    return <div className="text-center py-12">Carregando...</div>;
+  if (isLoading || step === 'processando') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-cyan-100">
+        <div className="text-center">
+          <Loader2 className="w-10 h-10 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-slate-600">Configurando sua conta...</p>
+        </div>
+      </div>
+    );
   }
-  
-  // Não redireciona automaticamente — permite trocar o tipo
+
+  // ─── Step 1: Tipo de conta (cliente ou prestador) ───
+  if (step === 'tipo_conta') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-cyan-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl text-center shadow-2xl border-none">
+          <CardContent className="p-10">
+            <h1 className="text-3xl font-bold text-slate-900 mb-4">
+              {user?.user_type && user.user_type !== 'indefinido' ? 'Alterar tipo de conta' : 'Bem-vindo(a) ao Trancoso Resolve!'}
+            </h1>
+            <p className="text-slate-600 mb-10 text-lg">Para começar, nos diga como você gostaria de usar a plataforma.</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <Card
+                className="border-2 border-transparent hover:border-cyan-500 hover:shadow-lg transition-all cursor-pointer"
+                onClick={handleClienteClick}
+              >
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <User className="w-8 h-8 text-cyan-700" />
+                  </div>
+                  <h2 className="text-xl font-semibold mb-2">Sou Cliente</h2>
+                  <p className="text-slate-500">Quero encontrar e contratar os melhores serviços em Trancoso.</p>
+                </CardContent>
+              </Card>
+
+              <Card
+                className="border-2 border-transparent hover:border-orange-500 hover:shadow-lg transition-all cursor-pointer"
+                onClick={() => setStep('tipo_pessoa')}
+              >
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Briefcase className="w-8 h-8 text-orange-700" />
+                  </div>
+                  <h2 className="text-xl font-semibold mb-2">Sou Prestador / Empresa</h2>
+                  <p className="text-slate-500">Quero oferecer serviços ou cadastrar meu negócio em Trancoso.</p>
+                  <div className="mt-3 flex items-center justify-center gap-1 text-orange-600 text-sm font-medium">
+                    Continuar <ChevronRight className="w-4 h-4" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {updateUserMutation.isPending && <p className="mt-8 text-slate-500">Salvando sua escolha...</p>}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // ─── Step 2: Tipo de pessoa + dados jurídicos ───
+  const isEmpresaComPonto = (tipoPessoa === 'mei' || tipoPessoa === 'pj') && temPontoFisico;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-cyan-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl text-center shadow-2xl border-none">
-        <CardContent className="p-10">
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">
-            {user?.user_type && user.user_type !== 'indefinido' ? 'Alterar tipo de conta' : 'Bem-vindo(a) ao Trancoso Resolve!'}
-          </h1>
-          <p className="text-slate-600 mb-10 text-lg">
-            {user?.user_type && user.user_type !== 'indefinido'
-              ? `Você está usando como ${user.user_type === 'cliente' ? 'Cliente' : 'Prestador'}. Deseja trocar?`
-              : 'Para começar, nos diga como você gostaria de usar a plataforma.'}
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card 
-              className="border-2 border-transparent hover:border-cyan-500 hover:shadow-lg transition-all cursor-pointer"
-              onClick={() => handleSelectType('cliente')}
-            >
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="w-8 h-8 text-cyan-700" />
-                </div>
-                <h2 className="text-xl font-semibold mb-2">Sou Cliente</h2>
-                <p className="text-slate-500">Quero encontrar e contratar os melhores serviços em Trancoso.</p>
-              </CardContent>
-            </Card>
+      <Card className="w-full max-w-2xl shadow-2xl border-none">
+        <CardContent className="p-8 md:p-10">
+          <button onClick={() => setStep('tipo_conta')} className="text-sm text-slate-500 hover:text-slate-700 mb-6 flex items-center gap-1">
+            ← Voltar
+          </button>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">Dados do seu cadastro</h1>
+          <p className="text-slate-600 mb-6 text-sm">Essas informações são necessárias para verificação e definição do plano correto.</p>
 
-            <Card 
-              className="border-2 border-transparent hover:border-orange-500 hover:shadow-lg transition-all cursor-pointer"
-              onClick={() => handleSelectType('prestador')}
-            >
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Briefcase className="w-8 h-8 text-orange-700" />
+          <div className="space-y-4">
+            <div>
+              <Label>Tipo de pessoa <span className="text-red-500">*</span></Label>
+              <Select value={tipoPessoa} onValueChange={setTipoPessoa}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pf">Pessoa Física (CPF)</SelectItem>
+                  <SelectItem value="mei">MEI – Microempreendedor Individual</SelectItem>
+                  <SelectItem value="pj">Empresa / PJ (CNPJ)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="cpf_cad">CPF do responsável <span className="text-red-500">*</span></Label>
+              <Input id="cpf_cad" placeholder="000.000.000-00" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))} />
+            </div>
+
+            {(tipoPessoa === 'mei' || tipoPessoa === 'pj') && (
+              <>
+                <div>
+                  <Label htmlFor="cnpj_cad">CNPJ <span className="text-red-500">*</span></Label>
+                  <Input id="cnpj_cad" placeholder="00.000.000/0000-00" value={cnpj} onChange={(e) => setCnpj(formatCnpj(e.target.value))} />
                 </div>
-                <h2 className="text-xl font-semibold mb-2">Sou Prestador</h2>
-                <p className="text-slate-500">Quero oferecer meus serviços e encontrar novos clientes.</p>
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Checkbox LGPD para prestadores */}
-          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-left">
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={autorizouVerificacao}
-                onChange={(e) => setAutorizouVerificacao(e.target.checked)}
-                className="mt-1 accent-blue-600 w-4 h-4 shrink-0"
-              />
-              <span className="text-xs text-slate-700 leading-relaxed">
-                <span className="font-semibold text-slate-800 flex items-center gap-1 mb-1">
-                  <Shield className="w-3 h-3 text-blue-600" /> Autorização de Verificação (obrigatória para prestadores)
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <Label>Razão Social</Label>
+                    <Input placeholder="Opcional" value={razaoSocial} onChange={(e) => setRazaoSocial(e.target.value)} />
+                  </div>
+                  <div>
+                    <Label>Nome Fantasia</Label>
+                    <Input placeholder="Opcional" value={nomFantasia} onChange={(e) => setNomeFantasia(e.target.value)} />
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                  <input type="checkbox" id="ponto_fisico_cad" checked={temPontoFisico} onChange={(e) => setTemPontoFisico(e.target.checked)} className="mt-0.5 accent-amber-600 w-4 h-4 shrink-0" />
+                  <label htmlFor="ponto_fisico_cad" className="text-sm text-slate-700 cursor-pointer">
+                    <span className="font-semibold block mb-0.5">Possuo ponto físico em Trancoso</span>
+                    Loja, restaurante, pousada, bar, beach club, clínica ou estabelecimento físico.
+                  </label>
+                </div>
+              </>
+            )}
+
+            {/* Aviso de redirecionamento para empresa */}
+            {isEmpresaComPonto && (
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
+                <Building2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-blue-900 mb-1">Detectamos que você é uma empresa com ponto físico em Trancoso.</p>
+                  <p className="text-xs text-blue-800">Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong>Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.</p>
+                </div>
+              </div>
+            )}
+
+            {/* LGPD */}
+            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-left">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" checked={autorizouVerificacao} onChange={(e) => setAutorizouVerificacao(e.target.checked)} className="mt-1 accent-blue-600 w-4 h-4 shrink-0" />
+                <span className="text-xs text-slate-700 leading-relaxed">
+                  <span className="font-semibold text-slate-800 flex items-center gap-1 mb-1">
+                    <Shield className="w-3 h-3 text-blue-600" /> Autorização de Verificação (obrigatória)
+                  </span>
+                  Autorizo a Trancoso Resolve a realizar consultas de antecedentes criminais e, quando aplicável, verificação de CNPJ na Receita Federal, usando meus dados exclusivamente para fins de validação cadastral, em conformidade com a LGPD.
                 </span>
-                Ao continuar como prestador, autorizo a Trancoso Resolve a realizar consultas de antecedentes criminais em bases oficiais (incluindo Polícia Federal e órgãos estaduais, via Infosimples), usando meus dados pessoais exclusivamente para fins de prevenção à fraude, validação cadastral e cumprimento de obrigações legais, em conformidade com a LGPD.
-              </span>
-            </label>
-          </div>
+              </label>
+            </div>
 
-          {updateUserMutation.isPending && (
-            <p className="mt-8 text-slate-500">Salvando sua escolha...</p>
-          )}
+            <Button className="w-full" onClick={handlePrestadorSubmit} disabled={updateUserMutation.isPending}>
+              {updateUserMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              {isEmpresaComPonto ? 'Continuar com Plano Empresas' : 'Cadastrar como Prestador'}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

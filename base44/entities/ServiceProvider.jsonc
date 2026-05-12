@@ -47,18 +47,24 @@
       "type": "string",
       "enum": [
         "pf",
+        "mei",
         "pj"
       ],
       "default": "pf",
-      "description": "Tipo de pessoa: PF (pessoa f\u00edsica) ou PJ (empresa/MEI)"
+      "description": "Tipo de pessoa: PF (pessoa f\u00edsica), MEI ou PJ (empresa/CNPJ)"
     },
     "cpf": {
       "type": "string",
-      "description": "CPF do prestador (obrigat\u00f3rio para PF e MEI)"
+      "description": "CPF do prestador ou respons\u00e1vel (obrigat\u00f3rio para todos, inclusive MEI e PJ)"
     },
     "cnpj": {
       "type": "string",
-      "description": "CNPJ da empresa ou MEI (opcional)"
+      "description": "CNPJ da empresa ou MEI (obrigat\u00f3rio para mei e pj)"
+    },
+    "tem_ponto_fisico_em_trancoso": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indica se a empresa/MEI possui ponto f\u00edsico em Trancoso (loja, restaurante, pousada, etc.)"
     },
     "razao_social": {
       "type": "string",

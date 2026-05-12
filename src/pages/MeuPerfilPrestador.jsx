@@ -23,6 +23,23 @@ const occupations = ["Limpeza", "Garçom", "Pedreiro", "Jardinagem", "Babá", "E
 const priceRanges = ["$", "$$", "$$$"];
 const paymentMethods = ["Dinheiro", "PIX", "Cartão de Débito", "Cartão de Crédito"];
 
+const formatCpf = (value) => {
+  const digits = value.replace(/\D/g, '').substring(0, 11);
+  if (digits.length > 9) return `${digits.slice(0,3)}.${digits.slice(3,6)}.${digits.slice(6,9)}-${digits.slice(9)}`;
+  if (digits.length > 6) return `${digits.slice(0,3)}.${digits.slice(3,6)}.${digits.slice(6)}`;
+  if (digits.length > 3) return `${digits.slice(0,3)}.${digits.slice(3)}`;
+  return digits;
+};
+
+const formatCnpj = (value) => {
+  const digits = value.replace(/\D/g, '').substring(0, 14);
+  if (digits.length > 12) return `${digits.slice(0,2)}.${digits.slice(2,5)}.${digits.slice(5,8)}/${digits.slice(8,12)}-${digits.slice(12)}`;
+  if (digits.length > 8) return `${digits.slice(0,2)}.${digits.slice(2,5)}.${digits.slice(5,8)}/${digits.slice(8)}`;
+  if (digits.length > 5) return `${digits.slice(0,2)}.${digits.slice(2,5)}.${digits.slice(5)}`;
+  if (digits.length > 2) return `${digits.slice(0,2)}.${digits.slice(2)}`;
+  return digits;
+};
+
 const ProfileCompleteness = ({ formData }) => {
     // Define checks and their weights for profile completeness
     const completenessChecks = {
@@ -148,6 +165,12 @@ function MeuPerfilPrestadorContent() {
         verification_document_url: '',
         cover_photo_url: '',
         full_body_photo_url: '',
+        tipo_pessoa: 'pf',
+        cpf: '',
+        cnpj: '',
+        tem_ponto_fisico_em_trancoso: false,
+        razao_social: '',
+        nome_fantasia: '',
       });
     }
   }, [provider, isLoadingProvider, user]);
@@ -434,6 +457,71 @@ function MeuPerfilPrestadorContent() {
                 {uploading.fullbody && <div className="absolute inset-0 bg-white/70 flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-blue-600" /></div>}
               </div>
               {errors.full_body_photo_url && <p className="text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.full_body_photo_url}</p>}
+            </div>
+
+            {/* Tipo de Pessoa / Dados Jurídicos */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold border-b pb-2">Tipo de Cadastro</h3>
+              <div>
+                <Label>Tipo de Pessoa <span className="text-red-500">*</span></Label>
+                <Select value={formData.tipo_pessoa || 'pf'} onValueChange={(v) => handleInputChange('tipo_pessoa', v)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pf">Pessoa Física (CPF)</SelectItem>
+                    <SelectItem value="mei">MEI – Microempreendedor Individual</SelectItem>
+                    <SelectItem value="pj">Empresa / PJ (CNPJ)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="cpf">CPF do responsável <span className="text-red-500">*</span></Label>
+                  <Input
+                    id="cpf"
+                    placeholder="000.000.000-00"
+                    value={formatCpf(formData.cpf || '')}
+                    onChange={(e) => handleInputChange('cpf', formatCpf(e.target.value))}
+                  />
+                </div>
+                {(formData.tipo_pessoa === 'mei' || formData.tipo_pessoa === 'pj') && (
+                  <div>
+                    <Label htmlFor="cnpj">CNPJ <span className="text-red-500">*</span></Label>
+                    <Input
+                      id="cnpj"
+                      placeholder="00.000.000/0000-00"
+                      value={formatCnpj(formData.cnpj || '')}
+                      onChange={(e) => handleInputChange('cnpj', formatCnpj(e.target.value))}
+                    />
+                  </div>
+                )}
+              </div>
+              {(formData.tipo_pessoa === 'mei' || formData.tipo_pessoa === 'pj') && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="razao_social">Razão Social</Label>
+                      <Input id="razao_social" value={formData.razao_social || ''} onChange={(e) => handleInputChange('razao_social', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label htmlFor="nome_fantasia">Nome Fantasia</Label>
+                      <Input id="nome_fantasia" value={formData.nome_fantasia || ''} onChange={(e) => handleInputChange('nome_fantasia', e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <input
+                      type="checkbox"
+                      id="tem_ponto_fisico"
+                      checked={!!formData.tem_ponto_fisico_em_trancoso}
+                      onChange={(e) => handleInputChange('tem_ponto_fisico_em_trancoso', e.target.checked)}
+                      className="mt-0.5 accent-amber-600 w-4 h-4 shrink-0"
+                    />
+                    <label htmlFor="tem_ponto_fisico" className="text-sm text-slate-700 cursor-pointer">
+                      <span className="font-semibold block mb-0.5">Possuo ponto físico em Trancoso</span>
+                      Marque se você tem uma loja, restaurante, pousada, bar, beach club, clínica ou estabelecimento físico em Trancoso. Isso determina o plano correto para o seu negócio.
+                    </label>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Informações Profissionais */}

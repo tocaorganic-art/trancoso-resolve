@@ -4,8 +4,10 @@ import Stripe from 'npm:stripe@14.21.0';
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
 
 const PRICE_IDS = {
-  lancamento: 'price_1TOr0zRX4Ldl6df5OfyF3iCW',
-  regular: 'price_1TOr0zRX4Ldl6df5Bc6wSto5',
+  lancamento: 'price_1TOr0zRX4Ldl6df5OfyF3iCW',        // Prestador Lançamento R$29,90
+  regular: 'price_1TOr0zRX4Ldl6df5Bc6wSto5',            // Prestador Regular R$49,90
+  empresa_lancamento: 'price_1TW72nRX4Ldl6df5BRv0aDRu', // Empresa Lançamento R$59,90
+  empresa_regular: 'price_1TW72qRX4Ldl6df5Aw7ZXhdn',    // Empresa Regular R$89,90
 };
 
 Deno.serve(async (req) => {
