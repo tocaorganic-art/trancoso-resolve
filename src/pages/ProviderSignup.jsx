@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const StepIndicator = ({ currentStep, totalSteps }) => (
@@ -155,13 +155,14 @@ function PersonalInfoStep({ data, onChange, onValidate }) {
 function ProfessionalInfoStep({ data, onChange }) {
   const categories = [
     'Limpeza',
+    'Garçom',
+    'Pedreiro',
+    'Jardinagem',
+    'Babá',
     'Eletricista',
     'Encanador',
-    'Jardinagem',
-    'Cozinheiro',
-    'Pedreiro',
     'Pintor',
-    'Babá',
+    'Cozinheiro',
   ];
 
   const handleChange = (field, value) => {
@@ -177,6 +178,8 @@ function ProfessionalInfoStep({ data, onChange }) {
     }
   };
 
+  const isOthersSelected = (data.categories || []).includes('Outros');
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-white mb-6">Informações Profissionais</h2>
@@ -185,7 +188,7 @@ function ProfessionalInfoStep({ data, onChange }) {
         <label className="block text-sm font-bold text-white mb-2">
           Categorias de Serviço <span className="text-red-500">*</span>
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mb-3">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -200,6 +203,49 @@ function ProfessionalInfoStep({ data, onChange }) {
             </button>
           ))}
         </div>
+
+        {/* Botão Outros */}
+        <button
+          onClick={() => {
+            const selected = data.categories || [];
+            if (selected.includes('Outros')) {
+              onChange({
+                ...data,
+                categories: selected.filter((c) => c !== 'Outros'),
+                customCategory: '',
+              });
+            } else {
+              onChange({ ...data, categories: [...selected, 'Outros'] });
+            }
+          }}
+          className={`w-full p-3 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+            isOthersSelected
+              ? 'bg-cyan-500 text-white border border-cyan-600'
+              : 'bg-slate-800 text-gray-300 border border-slate-700 hover:border-slate-600'
+          }`}
+        >
+          <span>+</span> Outros
+        </button>
+
+        {/* Input para categoria customizada */}
+        {isOthersSelected && (
+          <div className="mt-3 space-y-2">
+            <label className="block text-sm font-bold text-white">
+              Digite sua categoria <span className="text-red-500">*</span>
+            </label>
+            <Input
+              type="text"
+              value={data.customCategory || ''}
+              onChange={(e) => handleChange('customCategory', e.target.value)}
+              placeholder="Ex: Eletricista de Manutenção, Consultor..."
+              maxLength={50}
+              className="bg-slate-800 border-slate-700 text-white focus:border-cyan-500"
+            />
+            <p className="text-xs text-gray-400">
+              {(data.customCategory || '').length}/50 caracteres
+            </p>
+          </div>
+        )}
       </div>
 
       <div>
@@ -228,6 +274,14 @@ function ProfessionalInfoStep({ data, onChange }) {
           className="bg-slate-800 border-slate-700 text-white focus:border-cyan-500"
         />
       </div>
+
+      {/* Validação de categoria customizada */}
+      {isOthersSelected && !data.customCategory?.trim() && (
+        <div className="flex gap-2 items-center p-3 bg-red-500/10 border border-red-500 rounded-lg text-red-500 text-sm">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          Descreva sua categoria de serviço
+        </div>
+      )}
     </div>
   );
 }

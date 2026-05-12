@@ -66,7 +66,7 @@ export default function Search() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const categories = ['Limpeza', 'Eletricista', 'Encanador', 'Jardinagem', 'Cozinheiro', 'Pedreiro', 'Pintor', 'Babá'];
+  const categories = ['Limpeza', 'Garçom', 'Pedreiro', 'Jardinagem', 'Babá', 'Eletricista', 'Encanador', 'Pintor', 'Cozinheiro', 'Outros'];
 
   // Debounced search
   useEffect(() => {
