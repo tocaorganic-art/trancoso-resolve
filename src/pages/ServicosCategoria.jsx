@@ -165,32 +165,49 @@ export default function ServicosCategoriaPage() {
     const schema = document.createElement('script');
     schema.id = schemaId;
     schema.type = 'application/ld+json';
+
+    const itemListElement = (filteredProviders || []).slice(0, 10).map((p, i) => {
+      const item = {
+        "@type": "Person",
+        "name": p.full_name,
+        "jobTitle": p.occupation,
+        "description": p.bio || `${p.occupation} verificado em Trancoso, Bahia`,
+        "url": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${p.id}`
+      };
+      if (p.photo_url) item.image = p.photo_url;
+      if (p.rating && p.total_reviews > 0) {
+        item.aggregateRating = {
+          "@type": "AggregateRating",
+          "ratingValue": p.rating,
+          "reviewCount": p.total_reviews,
+          "bestRating": 5,
+          "worstRating": 1
+        };
+      }
+      return { "@type": "ListItem", "position": i + 1, "item": item };
+    });
+
     schema.text = JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": cat ? `${cat} em Trancoso` : "Serviços em Trancoso",
-      "description": cat
-        ? `Lista de profissionais de ${cat} verificados em Trancoso, Bahia`
-        : "Todos os serviços disponíveis em Trancoso, Bahia",
-      "url": pageUrl,
-      "numberOfItems": filteredProviders?.length || 0,
-      "itemListElement": (filteredProviders || []).slice(0, 10).map((p, i) => ({
-        "@type": "ListItem",
-        "position": i + 1,
-        "item": {
-          "@type": "Person",
-          "name": p.full_name,
-          "jobTitle": p.occupation,
-          "url": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${p.id}`,
-          "image": p.photo_url || undefined,
-          "aggregateRating": p.rating && p.total_reviews > 0 ? {
-            "@type": "AggregateRating",
-            "ratingValue": p.rating,
-            "reviewCount": p.total_reviews,
-            "bestRating": 5
-          } : undefined
+      "@graph": [
+        {
+          "@type": "ItemList",
+          "name": cat ? `${cat} em Trancoso` : "Profissionais de Serviços em Trancoso",
+          "description": cat
+            ? `Lista de profissionais de ${cat} verificados em Trancoso, Bahia`
+            : "Todos os profissionais de serviços disponíveis em Trancoso, Bahia",
+          "url": pageUrl,
+          "numberOfItems": filteredProviders?.length || 0,
+          "itemListElement": itemListElement
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 2, "name": cat ? `${cat} em Trancoso` : "Serviços em Trancoso", "item": pageUrl }
+          ]
         }
-      }))
+      ]
     });
     document.head.appendChild(schema);
     return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };

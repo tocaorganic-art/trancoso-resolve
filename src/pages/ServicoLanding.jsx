@@ -233,32 +233,45 @@ export default function ServicoLandingPage() {
     schema.type = 'application/ld+json';
     schema.text = JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "Service",
-      "name": config.h1,
-      "description": config.description,
-      "provider": {
-        "@type": "LocalBusiness",
-        "name": "Trancoso Resolve",
-        "url": "https://www.trancosoresolve.com.br",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Trancoso",
-          "addressRegion": "BA",
-          "addressCountry": "BR"
+      "@graph": [
+        {
+          "@type": "Service",
+          "name": config.h1,
+          "description": config.description,
+          "url": `https://www.trancosoresolve.com.br/ServicoLanding?slug=${slug}`,
+          "provider": {
+            "@type": "LocalBusiness",
+            "name": "Trancoso Resolve",
+            "url": "https://www.trancosoresolve.com.br",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Trancoso",
+              "addressRegion": "BA",
+              "addressCountry": "BR"
+            }
+          },
+          "areaServed": {
+            "@type": "Place",
+            "name": "Trancoso, Bahia, Brasil"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": config.faq.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": { "@type": "Answer", "text": item.a }
+          }))
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 2, "name": "Serviços", "item": "https://www.trancosoresolve.com.br/ServicosCategoria" },
+            { "@type": "ListItem", "position": 3, "name": config.occupation, "item": `https://www.trancosoresolve.com.br/ServicoLanding?slug=${slug}` }
+          ]
         }
-      },
-      "areaServed": {
-        "@type": "Place",
-        "name": "Trancoso, Bahia, Brasil"
-      },
-      "mainEntityOfPage": {
-        "@type": "FAQPage",
-        "mainEntity": config.faq.map(item => ({
-          "@type": "Question",
-          "name": item.q,
-          "acceptedAnswer": { "@type": "Answer", "text": item.a }
-        }))
-      }
+      ]
     });
     document.head.appendChild(schema);
 

@@ -48,12 +48,32 @@ export default function ComoFuncionaPage() {
     schema.type = 'application/ld+json';
     schema.text = JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        { "@type": "Question", "name": "Como o pagamento é feito?", "acceptedAnswer": { "@type": "Answer", "text": "O pagamento é combinado e realizado diretamente entre o cliente e o prestador. A plataforma facilita o contato e agendamento, e em breve teremos opções de pagamento integradas." } },
-        { "@type": "Question", "name": "O que acontece se eu tiver um problema com o serviço?", "acceptedAnswer": { "@type": "Answer", "text": "Recomendamos que você entre em contato com o prestador para resolver. Se não for possível, nossa equipe de suporte pode mediar a situação. A avaliação após o serviço também é uma ferramenta importante." } },
-        { "@type": "Question", "name": "Como sei que um prestador é de confiança?", "acceptedAnswer": { "@type": "Answer", "text": "Procure por prestadores com o selo Verificado. Leia também as avaliações e comentários de outros clientes, que são um ótimo termômetro da qualidade do serviço." } },
-        { "@type": "Question", "name": "Como contratar um serviço em Trancoso?", "acceptedAnswer": { "@type": "Answer", "text": "1. Encontre o serviço navegando por categorias ou usando a busca inteligente. 2. Escolha o profissional e envie sua solicitação. 3. Aguarde a confirmação e problema resolvido!" } }
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "name": "Como Funciona o Trancoso Resolve",
+          "description": "Entenda como contratar profissionais em Trancoso em 3 passos simples. Busque, agende e resolve — com profissionais verificados e avaliados pela comunidade.",
+          "url": "https://www.trancosoresolve.com.br/ComoFunciona"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 2, "name": "Como Funciona", "item": "https://www.trancosoresolve.com.br/ComoFunciona" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "Como contratar um serviço em Trancoso?", "acceptedAnswer": { "@type": "Answer", "text": "Acesse o Trancoso Resolve, navegue pelas categorias ou use a busca inteligente, escolha o profissional, envie sua solicitação e aguarde a confirmação. É simples e rápido." } },
+            { "@type": "Question", "name": "Como o pagamento é feito?", "acceptedAnswer": { "@type": "Answer", "text": "O pagamento é combinado e realizado diretamente entre o cliente e o prestador. A plataforma facilita o contato e agendamento, e em breve teremos opções de pagamento integradas." } },
+            { "@type": "Question", "name": "O que acontece se eu tiver um problema com o serviço?", "acceptedAnswer": { "@type": "Answer", "text": "Recomendamos que você entre em contato com o prestador para resolver. Se não for possível, nossa equipe de suporte pode mediar a situação. A avaliação após o serviço também é uma ferramenta importante." } },
+            { "@type": "Question", "name": "Como sei que um prestador é de confiança?", "acceptedAnswer": { "@type": "Answer", "text": "Procure por prestadores com o selo Verificado. Leia também as avaliações e comentários de outros clientes, que são um ótimo termômetro da qualidade do serviço." } },
+            { "@type": "Question", "name": "Quanto custa usar o Trancoso Resolve para contratar?", "acceptedAnswer": { "@type": "Answer", "text": "Para clientes, a plataforma é totalmente gratuita. Você navega, compara e contrata sem pagar nada à plataforma. O valor é negociado diretamente com o prestador." } },
+            { "@type": "Question", "name": "Posso contratar serviços para uma villa ou pousada em Trancoso?", "acceptedAnswer": { "@type": "Answer", "text": "Sim! Muitos prestadores têm experiência em pousadas, villas e imóveis de temporada. Ao solicitar o serviço, informe o endereço e detalhes do local para facilitar o atendimento." } },
+            { "@type": "Question", "name": "Como me cadastrar como prestador de serviços em Trancoso?", "acceptedAnswer": { "@type": "Answer", "text": "Acesse a página 'Seja um Prestador', crie sua conta, preencha seu perfil com serviços, fotos e preços. Após a verificação de antecedentes, seu perfil fica visível para os clientes." } }
+          ]
+        }
       ]
     });
     document.head.appendChild(schema);
@@ -61,6 +81,10 @@ export default function ComoFuncionaPage() {
   }, []);
 
   const faqs = [
+    {
+      q: "Como contratar um serviço em Trancoso?",
+      a: "Acesse o Trancoso Resolve, navegue pelas categorias ou use a busca inteligente, escolha o profissional, envie sua solicitação e aguarde a confirmação. É simples e rápido."
+    },
     {
       q: "Como o pagamento é feito?",
       a: "O pagamento é combinado e realizado diretamente entre o cliente e o prestador. A plataforma facilita o contato e agendamento, e em breve teremos opções de pagamento integradas."
@@ -80,6 +104,10 @@ export default function ComoFuncionaPage() {
     {
       q: "Posso contratar serviços para uma villa ou pousada em Trancoso?",
       a: "Sim! Muitos prestadores têm experiência em pousadas, villas e imóveis de temporada. Ao solicitar o serviço, informe o endereço e detalhes do local para facilitar o atendimento."
+    },
+    {
+      q: "Como me cadastrar como prestador de serviços em Trancoso?",
+      a: "Acesse a página 'Seja um Prestador', crie sua conta, preencha seu perfil com serviços, fotos e preços. Após a verificação de antecedentes, seu perfil fica visível para os clientes."
     },
   ];
 

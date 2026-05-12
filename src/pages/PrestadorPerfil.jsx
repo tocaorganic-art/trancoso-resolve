@@ -176,43 +176,53 @@ export default function PrestadorPerfilPage() {
     const schema = document.createElement('script');
     schema.id = schemaId;
     schema.type = 'application/ld+json';
+    const personSchema = {
+      "@type": "Person",
+      "@id": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}#person`,
+      "name": provider.full_name,
+      "jobTitle": provider.occupation,
+      "url": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}`,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": provider.location?.city || "Trancoso",
+        "addressRegion": "BA",
+        "addressCountry": "BR"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Trancoso Resolve",
+        "url": "https://www.trancosoresolve.com.br"
+      }
+    };
+    if (provider.photo_url) personSchema.image = provider.photo_url;
+    if (provider.bio) personSchema.description = provider.bio;
+    if (provider.rating && provider.total_reviews > 0) {
+      personSchema.aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": provider.rating,
+        "reviewCount": provider.total_reviews,
+        "bestRating": 5,
+        "worstRating": 1
+      };
+    }
+    const validReviews = (reviews || []).slice(0, 5).filter(r => r.comment);
+    if (validReviews.length > 0) {
+      personSchema.review = validReviews.map(r => {
+        const rev = {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": r.reviewer_name || "Cliente" },
+          "reviewRating": { "@type": "Rating", "ratingValue": r.rating, "bestRating": 5 },
+          "reviewBody": r.comment
+        };
+        if (r.created_date) rev.datePublished = r.created_date.slice(0, 10);
+        return rev;
+      });
+    }
+
     schema.text = JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
-        {
-          "@type": "Person",
-          "@id": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}#person`,
-          "name": provider.full_name,
-          "jobTitle": provider.occupation,
-          "image": provider.photo_url || undefined,
-          "description": provider.bio || undefined,
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": provider.location?.city || "Trancoso",
-            "addressRegion": "BA",
-            "addressCountry": "BR"
-          },
-          "aggregateRating": provider.rating && provider.total_reviews > 0 ? {
-            "@type": "AggregateRating",
-            "ratingValue": provider.rating,
-            "reviewCount": provider.total_reviews,
-            "bestRating": 5,
-            "worstRating": 1
-          } : undefined,
-          "review": reviews?.slice(0, 5).map(r => ({
-            "@type": "Review",
-            "author": { "@type": "Person", "name": r.reviewer_name || "Cliente" },
-            "reviewRating": { "@type": "Rating", "ratingValue": r.rating, "bestRating": 5 },
-            "reviewBody": r.comment || undefined,
-            "datePublished": r.created_date ? r.created_date.slice(0, 10) : undefined
-          })).filter(r => r.reviewBody),
-          "url": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}`,
-          "worksFor": {
-            "@type": "Organization",
-            "name": "Trancoso Resolve",
-            "url": "https://www.trancosoresolve.com.br"
-          }
-        },
+        personSchema,
         {
           "@type": "BreadcrumbList",
           "itemListElement": [
@@ -226,7 +236,7 @@ export default function PrestadorPerfilPage() {
     });
     document.head.appendChild(schema);
     return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
-  }, [provider]);
+  }, [provider, reviews]);
 
   if (isLoading) {
     return <div className="container mx-auto px-4 py-8">Carregando...</div>;
