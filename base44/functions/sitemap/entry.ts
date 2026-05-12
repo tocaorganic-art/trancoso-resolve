@@ -50,10 +50,19 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    const [providers, services] = await Promise.all([
-      base44.asServiceRole.entities.ServiceProvider.list('-updated_date', 200),
-      base44.asServiceRole.entities.ServiceListing.filter({ active: true }, '-updated_date', 500),
-    ]);
+    // Usa service role para não precisar de auth do usuário
+    let providers = [];
+    let services = [];
+    
+    try {
+      [providers, services] = await Promise.all([
+        base44.asServiceRole.entities.ServiceProvider.list('-updated_date', 200),
+        base44.asServiceRole.entities.ServiceListing.filter({ active: true }, '-updated_date', 500),
+      ]);
+    } catch (dataError) {
+      console.warn('Could not fetch provider/service data for sitemap:', dataError.message);
+      // Continua sem dados dinâmicos
+    }
 
     const today = new Date().toISOString().split('T')[0];
     const urls = [];
