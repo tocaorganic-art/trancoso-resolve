@@ -5,7 +5,7 @@ import {
   Home, Calendar, Briefcase, UserCog,
   TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft } from
 "lucide-react";
-import ThemeToggle from "./components/ThemeToggle";
+
 import RoutePreloader from "./components/optimization/RoutePreloader";
 import ImagePreloader from "./components/optimization/ImagePreloader";
 import PerformanceMonitor from "./components/optimization/PerformanceMonitor";
@@ -282,7 +282,7 @@ export default function Layout({ children, currentPageName }) {
 
           <main id="main-content" className="pb-16 md:pb-0 pt-12 md:pt-0">{children}</main>
 
-          <footer className="bg-slate-900 dark:bg-slate-950 text-white py-8 mt-16 pb-safe" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
+          <footer className="bg-slate-950 text-white py-8 mt-16 pb-safe" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
               <div className="flex justify-center gap-4 mb-4">
                 <Link to={createPageUrl("PoliticaPrivacidade")} className="text-sm text-slate-400 hover:text-slate-200 transition-colors" data-testid="footer-privacy-link">
@@ -317,7 +317,7 @@ export default function Layout({ children, currentPageName }) {
       <PageViewTracker />
       <AccessLogger />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-colors">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 transition-colors">
         <style>{`
           :focus-visible {
             outline: 3px solid #38bdf8 !important;
@@ -333,12 +333,12 @@ export default function Layout({ children, currentPageName }) {
           @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
         `}</style>
 
-        <nav className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
+        <nav className="bg-slate-800 shadow-sm sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/607538b94_generated_image.png" alt="Trancoso Resolve Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-800 dark:text-slate-200">Trancoso Resolve</span>
+                <span className="font-bold text-xl text-slate-100">Trancoso Resolve</span>
               </Link>
 
               <div className="hidden lg:flex items-center gap-2">
@@ -351,8 +351,8 @@ export default function Layout({ children, currentPageName }) {
                       onClick={() => item.clearLogin && sessionStorage.removeItem('loginTimestamp')}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                       isActive(item.path) ?
-                      'bg-blue-600 text-white dark:bg-blue-500' :
-                      'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`
+                      'bg-blue-500 text-white' :
+                      'text-slate-300 hover:bg-slate-700'}`
                       }
                       data-testid={`admin-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
                       
@@ -361,11 +361,9 @@ export default function Layout({ children, currentPageName }) {
                     </Link>);
 
                 })}
-                <ThemeToggle />
               </div>
 
               <div className="lg:hidden flex items-center gap-2">
-                <ThemeToggle />
                 <Button
                   variant="ghost"
                   size="icon"
@@ -388,10 +386,10 @@ export default function Layout({ children, currentPageName }) {
                   to={item.path}
                   onClick={() => { setMobileMenuOpen(false); item.clearLogin && sessionStorage.removeItem('loginTimestamp'); }}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
-                  isActive(item.path) ?
-                  'bg-blue-600 text-white' :
-                  'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`
-                  }
+                   isActive(item.path) ?
+                   'bg-blue-500 text-white' :
+                   'text-slate-300 hover:bg-slate-700'}`
+                   }
                   data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
                     
                       <Icon className="w-4 h-4" />
