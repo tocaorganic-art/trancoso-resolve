@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import Stripe from 'npm:stripe@14.21.0';
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
@@ -8,7 +8,12 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Verifica autenticação de automação (chamada interna)
+    // Verifica autenticação: apenas admin ou chamada interna (automação)
+    const user = await base44.auth.me().catch(() => null);
+    if (user && user.role !== 'admin') {
+      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+    }
+
     const body = await req.json().catch(() => ({}));
     const now = new Date().toISOString();
 
