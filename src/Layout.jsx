@@ -284,7 +284,13 @@ export default function Layout({ children, currentPageName }) {
 
           <footer className="bg-slate-950 text-white py-8 mt-16 pb-safe" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
-              <div className="flex justify-center gap-4 mb-4">
+              <div className="flex justify-center gap-4 mb-4 flex-wrap">
+                <Link to={createPageUrl("About")} className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                  Sobre
+                </Link>
+                <Link to={createPageUrl("Contact")} className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                  Contato
+                </Link>
                 <Link to={createPageUrl("PoliticaPrivacidade")} className="text-sm text-slate-400 hover:text-slate-200 transition-colors" data-testid="footer-privacy-link">
                   Política de Privacidade
                 </Link>
