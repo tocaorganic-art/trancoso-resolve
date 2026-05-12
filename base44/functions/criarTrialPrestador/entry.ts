@@ -8,18 +8,29 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const payload = await req.json();
 
-    // Suporta chamada direta ({ user_email }) ou por automação de entity ({ event, data })
-    let userEmail = payload.user_email;
-    let userName = payload.user_name || '';
+    // Suporta: (1) automação de entity ({ event, data }) ou (2) chamada admin
+    let userEmail = '';
+    let userName = '';
 
-    if (!userEmail && payload.data) {
-      // Chamada de automação de entity
+    if (payload.data) {
+      // Chamada de automação de entity — confiável porque é interna
       const userData = payload.data;
       if (userData.user_type !== 'prestador') {
         return Response.json({ ok: true, note: 'user_type != prestador, ignorado' });
       }
       userEmail = userData.email;
       userName = userData.full_name || '';
+    } else {
+      // SEGURANÇA: Chamada direta requer admin
+      const user = await base44.auth.me();
+      if (!user) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      if (user.role !== 'admin') {
+        return Response.json({ error: 'Forbidden: admin only' }, { status: 403 });
+      }
+      userEmail = payload.user_email;
+      userName = payload.user_name || '';
     }
 
     if (!userEmail) {

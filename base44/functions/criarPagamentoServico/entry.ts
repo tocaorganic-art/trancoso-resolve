@@ -6,12 +6,22 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const body = await req.json();
-    const { request_id, amount_brl, service_date, provider_id, client_email } = body;
+    const user = await base44.auth.me();
 
-    if (!request_id || !amount_brl || !provider_id || !client_email) {
-      return Response.json({ error: 'Campos obrigatórios: request_id, amount_brl, provider_id, client_email' }, { status: 400 });
+    // SEGURANÇA: Verifica autenticação do usuário
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const body = await req.json();
+    const { request_id, amount_brl, service_date, provider_id } = body;
+
+    if (!request_id || !amount_brl || !provider_id) {
+      return Response.json({ error: 'Campos obrigatórios: request_id, amount_brl, provider_id' }, { status: 400 });
+    }
+
+    // SEGURANÇA: Usa email do usuário autenticado, não do body
+    const clientEmail = user.email;
 
     const amountCents = Math.round(amount_brl * 100);
     const platformFee = Math.round(amountCents * 0.20);
@@ -61,7 +71,7 @@ Deno.serve(async (req) => {
     const payment = await base44.asServiceRole.entities.Payment.create({
       request_id,
       provider_id,
-      client_email,
+      client_email: clientEmail,
       provider_stripe_account_id: providerAccount?.stripe_account_id || null,
       amount_total: amountCents,
       amount_provider: providerAmount,

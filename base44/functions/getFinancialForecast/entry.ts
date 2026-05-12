@@ -55,10 +55,21 @@ Deno.serve(async (req) => {
 
     try {
         const base44 = createClientFromRequest(req);
-        // Usando asServiceRole para ter uma visão geral de todas as transações
-        const allTransactions = await base44.asServiceRole.entities.Transaction.list();
+        const user = await base44.auth.me();
+
+        // SEGURANÇA: Verifica autenticação
+        if (!user) {
+            return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                status: 401,
+            });
+        }
+
+        // SEGURANÇA: Filtra apenas transações do usuário (admin vê todas)
+        const query = user.role === 'admin' ? {} : { created_by: user.email };
+        const userTransactions = await base44.entities.Transaction.filter(query);
         
-        const forecast = generateForecast(allTransactions);
+        const forecast = generateForecast(userTransactions);
 
         return new Response(JSON.stringify(forecast), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },

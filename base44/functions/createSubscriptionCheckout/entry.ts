@@ -13,12 +13,22 @@ const PRICE_IDS = {
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const { plan, success_url, cancel_url, user_email } = await req.json();
+    const user = await base44.auth.me();
+
+    // SEGURANÇA: Verifica autenticação do usuário
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { plan, success_url, cancel_url } = await req.json();
 
     const priceId = PRICE_IDS[plan];
     if (!priceId) {
       return Response.json({ error: 'Plano inválido' }, { status: 400 });
     }
+
+    // SEGURANÇA: Usa email do usuário autenticado, não do body
+    const customerEmail = user.email;
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -26,10 +36,11 @@ Deno.serve(async (req) => {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: success_url || 'https://trancosoresolve.base44.app/Dashboard?checkout=success',
       cancel_url: cancel_url || 'https://trancosoresolve.base44.app/Planos?checkout=cancelled',
-      customer_email: user_email || undefined,
+      customer_email: customerEmail,
       metadata: {
         base44_app_id: Deno.env.get('BASE44_APP_ID'),
         plan,
+        user_email: customerEmail,
       },
       locale: 'pt-BR',
     });

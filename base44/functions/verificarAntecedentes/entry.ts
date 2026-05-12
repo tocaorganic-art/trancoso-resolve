@@ -15,6 +15,16 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'service_provider_id é obrigatório' }, { status: 400 });
     }
 
+    // SEGURANÇA: Verifica se o usuário autenticado é admin ou o próprio prestador
+    const userRole = user?.role;
+    const userId = user?.id;
+    const isAdmin = userRole === 'admin';
+    const isOwnProvider = userId === service_provider_id;
+
+    if (!isAdmin && !isOwnProvider) {
+      return Response.json({ error: 'Sem permissão para verificar este prestador' }, { status: 403 });
+    }
+
     // Busca o prestador
     const providers = await base44.asServiceRole.entities.ServiceProvider.filter({});
     const prestador = providers.find(p => p.id === service_provider_id);
@@ -98,12 +108,13 @@ Deno.serve(async (req) => {
     }
 
     // 4. CEIS e CNEP no Portal da Transparência (apenas para PJ com ponto físico)
+    // Nota: Portal da Transparência é público, não requer chave de API
     if (prestador.tipo_pessoa === 'pj' && prestador.tem_ponto_fisico_em_trancoso && prestador.cnpj) {
       const cnpjLimpo = prestador.cnpj.replace(/\D/g, '');
       try {
         const ceisRes = await fetch(
           `https://api.portaldatransparencia.gov.br/api-de-dados/ceis?cnpjSancionado=${cnpjLimpo}&pagina=1`,
-          { headers: { 'Accept': 'application/json', 'chave-api-dados': 'demo' } }
+          { headers: { 'Accept': 'application/json' } }
         );
         if (ceisRes.ok) {
           const ceisData = await ceisRes.json();

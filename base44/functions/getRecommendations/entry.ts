@@ -40,19 +40,31 @@ Deno.serve(async (req) => {
     }
 
     try {
-        const base44 = createClientFromRequest(req);
-        const { userId } = await req.json();
+         const base44 = createClientFromRequest(req);
+         const user = await base44.auth.me();
 
-        if (!userId) {
-            // Fallback para usuários não logados: retorna serviços em destaque
-            const featured = await base44.asServiceRole.entities.ServiceListing.filter({ featured: true }, '', 3);
-            return new Response(JSON.stringify(featured), {
-                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-                status: 200,
-            });
-        }
-        
-        const recommendations = await getSimpleRecommendations(base44.asServiceRole, userId);
+         if (!user) {
+             // Fallback para usuários não logados: retorna serviços em destaque
+             const featured = await base44.asServiceRole.entities.ServiceListing.filter({ featured: true }, '', 3);
+             return new Response(JSON.stringify(featured), {
+                 headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                 status: 200,
+             });
+         }
+
+         // SEGURANÇA: Valida se userId pertence ao usuário autenticado ou se é admin
+         const { userId } = await req.json();
+         const isAdmin = user.role === 'admin';
+         if (!isAdmin && userId !== user.id) {
+             return new Response(JSON.stringify({ error: 'Forbidden: acesso negado' }), {
+                 headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                 status: 403,
+             });
+         }
+
+         // SEGURANÇA: Usa o userId autenticado, não o do body
+         const safeUserId = user.id;
+         const recommendations = await getSimpleRecommendations(base44, safeUserId);
         
         return new Response(JSON.stringify(recommendations), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
