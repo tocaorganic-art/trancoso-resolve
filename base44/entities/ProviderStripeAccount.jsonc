@@ -4,56 +4,57 @@
   "properties": {
     "provider_id": {
       "type": "string",
-      "description": "ID do ServiceProvider"
-    },
-    "provider_email": {
-      "type": "string",
-      "description": "Email do prestador"
+      "description": "ID do prestador"
     },
     "stripe_account_id": {
       "type": "string",
-      "description": "Stripe Connect Account ID (acct_xxxxx)"
+      "description": "ID da conta Stripe do prestador"
     },
-    "onboarding_url": {
-      "type": "string",
-      "description": "URL de onboarding gerada pelo Stripe"
+    "stripe_connect_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se Stripe Connect est\u00e1 habilitado"
     },
-    "onboarding_status": {
-      "type": "string",
-      "enum": [
-        "pending",
-        "in_progress",
-        "complete",
-        "restricted"
-      ],
-      "default": "pending",
-      "description": "Status do onboarding Stripe"
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se o onboarding foi conclu\u00eddo"
     },
     "charges_enabled": {
       "type": "boolean",
       "default": false,
-      "description": "Se a conta pode receber pagamentos"
+      "description": "Se cobran\u00e7as est\u00e3o habilitadas"
     },
     "payouts_enabled": {
       "type": "boolean",
       "default": false,
-      "description": "Se a conta pode receber saques"
+      "description": "Se pagamentos/saques est\u00e3o habilitados"
     },
-    "details_submitted": {
-      "type": "boolean",
-      "default": false,
-      "description": "Se o prestador submeteu seus dados"
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data de cria\u00e7\u00e3o da conta"
+    },
+    "last_updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "\u00daltima atualiza\u00e7\u00e3o da conta"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Notas ou descri\u00e7\u00e3o sobre a conta Stripe"
     }
   },
   "required": [
     "provider_id",
-    "provider_email"
+    "stripe_account_id"
   ],
   "rls": {
-    "read": {
+    "create": {
       "$or": [
         {
-          "provider_email": "{{user.email}}"
+          "created_by": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -62,10 +63,34 @@
         }
       ]
     },
-    "write": {
+    "read": {
       "$or": [
         {
-          "provider_email": "{{user.email}}"
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
         },
         {
           "user_condition": {
