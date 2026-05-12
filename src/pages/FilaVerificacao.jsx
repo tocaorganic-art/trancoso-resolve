@@ -16,7 +16,7 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
-import { adminVerificacao } from "@/functions/adminVerificacao";
+// Chamado via SDK: base44.functions.invoke('adminVerificacao', {})
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
 const statusConfig = {
@@ -234,7 +234,7 @@ export default function FilaVerificacaoPage() {
 
   const handleAction = async (id, action, motivo) => {
     try {
-      await adminVerificacao({ verificacao_id: id, action, motivo });
+      await base44.functions.invoke('adminVerificacao', { verificacao_id: id, action, motivo });
       toast.success(action === "aprovar" ? "✅ Identidade aprovada!" : "❌ Verificação rejeitada.");
       queryClient.invalidateQueries({ queryKey: ["todasVerificacoes"] });
     } catch (error) {
