@@ -343,16 +343,6 @@ export default function HomePage() {
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 6) || [];
     
-  // Mapa de sinônimos para categorias (evita erros 404)
-  const categoryMap = {
-    'Faxina': 'Limpeza',
-    'Limpeza': 'Limpeza',
-    'Eletricista': 'Eletricista',
-    'Passeio Turístico': 'Passeios',
-    'Transporte': 'Transporte',
-    'Massagem': 'Bem-estar'
-  };
-
   const popularServices = ["Faxina", "Eletricista", "Passeio Turístico", "Transporte", "Massagem"];
 
   return (
@@ -415,14 +405,11 @@ export default function HomePage() {
             <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap">
               <span className="text-sm font-medium text-slate-700">Popular:</span>
               <div className="flex gap-2 flex-wrap justify-center lg:justify-start">
-                {popularServices.map(service => {
-                  const mappedCategory = categoryMap[service] || service;
-                  return (
-                    <Link key={service} to={createPageUrl("ServicosCategoria", `?cat=${encodeURIComponent(mappedCategory)}`)}>
+                {popularServices.map(service => (
+                    <Link key={service} to={createPageUrl("ServicosCategoria", `?cat=${service}`)}>
                         <Badge variant="outline" className="cursor-pointer hover:bg-[var(--secondary)] hover:border-[var(--secondary)] bg-white border-slate-200 rounded-full text-xs py-1 px-2">{service}</Badge>
                     </Link>
-                  );
-                })}
+                ))}
               </div>
             </div>
           </div>

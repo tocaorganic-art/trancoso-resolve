@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import LazyImage from "@/components/ui/LazyImage";
 import ProvidersMap from "@/components/map/ProvidersMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X, RefreshCw } from "lucide-react";
+import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
 
@@ -107,39 +107,9 @@ const slugMap = {
   'Garçom': 'garcom-trancoso',
 };
 
-// Sinônimos para resolver consultas similares
-const categorySynonyms = {
-  'faxina': 'Limpeza',
-  'limpeza': 'Limpeza',
-  'limpeza-domestica': 'Limpeza',
-  'diarista': 'Limpeza',
-  'faxineira': 'Limpeza',
-  'eletricista': 'Eletricista',
-  'eletricista-trancoso': 'Eletricista',
-  'encanador': 'Encanador',
-  'jardinagem': 'Jardinagem',
-  'cozinheiro': 'Cozinheiro',
-  'pedreiro': 'Pedreiro',
-  'pintor': 'Pintor',
-  'baba': 'Babá',
-  'garcom': 'Garçom',
-  'passeio': 'Passeios',
-  'passeio-turistico': 'Passeios',
-  'bem-estar': 'Bem-estar',
-  'massagem': 'Bem-estar',
-  'transporte': 'Transporte',
-};
-
-const resolveCategoryName = (input) => {
-  if (!input) return 'Todos';
-  const normalized = input.toLowerCase().replace(/\s+/g, '-');
-  return categorySynonyms[normalized] || input;
-};
-
 export default function ServicosCategoriaPage() {
   const urlParams = useMemo(() => new URLSearchParams(window.location.search), []);
-  const rawCategory = urlParams.get('cat') || 'Todos';
-  const [selectedCategory, setSelectedCategory] = useState(resolveCategoryName(rawCategory));
+  const [selectedCategory, setSelectedCategory] = useState(urlParams.get('cat') || 'Todos');
   const [searchQuery, setSearchQuery] = useState(urlParams.get('q') || '');
   
   const [priceFilter, setPriceFilter] = useState("all");
@@ -429,18 +399,10 @@ export default function ServicosCategoriaPage() {
 
     if (isErrorProviders) {
         return (
-            <div className="col-span-full text-center py-16 bg-red-50 rounded-lg border border-red-200">
+            <div className="text-center py-16 bg-red-50 rounded-lg">
                 <AlertCircle className="w-10 h-10 mx-auto text-red-500 mb-4" />
                 <h3 className="text-xl font-semibold text-red-800">Erro ao Carregar</h3>
-                <p className="text-red-600 mt-2 mb-4">Não foi possível buscar os profissionais. Por favor, tente novamente mais tarde.</p>
-                <Button 
-                  variant="outline"
-                  onClick={() => window.location.reload()}
-                  className="gap-2"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  Recarregar
-                </Button>
+                <p className="text-red-600 mt-2">Não foi possível buscar os profissionais. Por favor, tente novamente mais tarde.</p>
             </div>
         );
     }
