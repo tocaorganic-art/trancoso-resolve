@@ -76,9 +76,9 @@ function DashboardContent() {
   });
 
   const { data: serviceRequests, isLoading: isLoadingRequests } = useQuery({
-    queryKey: ['serviceRequests', user?.id],
-    queryFn: () => base44.entities.ServiceRequest.filter({ provider_id: user?.id }, '-created_date'),
-    enabled: !!user,
+    queryKey: ['serviceRequests', providerProfile?.id],
+    queryFn: () => base44.entities.ServiceRequest.filter({ provider_id: providerProfile?.id }, '-created_date'),
+    enabled: !!providerProfile?.id,
   });
 
   const { data: transactions, isLoading: isLoadingTransactions } = useQuery({
