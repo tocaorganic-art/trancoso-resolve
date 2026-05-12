@@ -66,10 +66,10 @@ export default function AssistentevirtualPage() {
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Bot className="w-8 h-8 text-blue-600" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Toca TrIA</h1>
-          <p className="text-slate-600 mb-2 text-sm font-medium">Seu assistente de IA em Trancoso</p>
-          <p className="text-slate-500 text-sm mb-6">
-            Para usar a <strong>Toca TrIA</strong>, é necessário ter cadastro e estar logado como prestador ou cliente.
+          <h1 className="text-2xl font-bold text-slate-900 mb-1">Toca TrIA</h1>
+          <p className="text-blue-500 text-xs font-semibold uppercase tracking-wide mb-2">Agente de IA Autônomo</p>
+          <p className="text-slate-500 text-sm mb-4">
+            A Toca TrIA <strong>executa tarefas sozinha</strong>: pesquisa na web, monta roteiros, responde clientes e analisa dados — tudo de forma autônoma, em tempo real, para quem vive e trabalha em Trancoso.
           </p>
           <Button
             className="w-full bg-blue-600 hover:bg-blue-700 mb-3"
@@ -162,7 +162,15 @@ export default function AssistentevirtualPage() {
           <Bot className="w-10 h-10 text-blue-600" />
         </div>
         <h3 className="text-2xl font-bold text-slate-800 mb-1">Toca TrIA</h3>
-        <p className="text-slate-500 mb-6 text-sm max-w-xs mx-auto">Converse com a IA para tirar dúvidas, planejar experiências e resolver o dia a dia em Trancoso.</p>
+        <p className="text-slate-500 mb-1 text-xs font-semibold uppercase tracking-wide text-blue-500">Agente de IA Autônomo</p>
+        <p className="text-slate-500 mb-3 text-sm max-w-sm mx-auto">
+          A Toca TrIA vai além do chat: ela <strong>executa tarefas de forma autônoma</strong> — pesquisa na web em tempo real, analisa dados, monta roteiros, rascunha respostas a clientes e resolve o seu dia a dia em Trancoso sem que você precise fazer nada manualmente.
+        </p>
+        <div className="flex flex-wrap justify-center gap-2 mb-5 max-w-sm mx-auto text-xs">
+          {["🌐 Pesquisa na web", "📋 Monta roteiros", "💬 Responde clientes", "📊 Analisa dados", "🗺️ Sugere passeios"].map(tag => (
+            <span key={tag} className="bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-3 py-1">{tag}</span>
+          ))}
+        </div>
         <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto mb-6">
           {SUGGESTED_QUESTIONS.map((q) => (
             <button
