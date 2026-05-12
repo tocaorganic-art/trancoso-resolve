@@ -32,6 +32,7 @@ import SupportChat from "./components/support/SupportChat";
 import FeedbackCollector from "./components/feedback/FeedbackCollector";
 import BottomNav from "./components/BottomNav";
 import CompletarPerfilModal from "./components/auth/CompletarPerfilModal";
+import PWAPrompt from "./components/optimization/PWAPrompt";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
@@ -308,6 +309,7 @@ export default function Layout({ children, currentPageName }) {
         <BottomNav />
         <SupportChat />
         <FeedbackCollector />
+        <PWAPrompt />
         <CompletarPerfilModal user={user} open={precisaCompletarPerfil} onClose={() => setPerfilModalFechado(true)} />
       </ErrorBoundary>);
 
@@ -418,6 +420,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
       <SupportChat />
       <FeedbackCollector />
+      <PWAPrompt />
     </ErrorBoundary>);
 
 }

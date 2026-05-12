@@ -2,11 +2,15 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '@/App.jsx'
 import '@/index.css'
+import SentryInit from '@/components/optimization/SentryInit'
+import PerformanceOptimizer from '@/components/optimization/PerformanceOptimizer'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
-  <App />
-  // </React.StrictMode>,
+  <>
+    <SentryInit />
+    <PerformanceOptimizer />
+    <App />
+  </>
 )
 
 if (import.meta.hot) {
@@ -17,6 +21,3 @@ if (import.meta.hot) {
     window.parent?.postMessage({ type: 'sandbox:afterUpdate' }, '*');
   });
 }
-
-
-
