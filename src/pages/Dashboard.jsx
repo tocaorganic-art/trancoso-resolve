@@ -83,8 +83,9 @@ function DashboardContent() {
 
   const { data: transactions, isLoading: isLoadingTransactions } = useQuery({
     queryKey: ['transactions', user?.email],
-    queryFn: () => base44.entities.Transaction.filter({ created_by: user.email }),
+    queryFn: () => base44.entities.Transaction.filter({}, '-created_date'),
     enabled: !!user,
+    initialData: [],
   });
 
   // Grava flag de checkout no localStorage por 5 min (para reload/refetch)

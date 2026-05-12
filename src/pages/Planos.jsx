@@ -142,7 +142,7 @@ export default function PlanosPage() {
     queryKey: ['myProvider', user?.email],
     queryFn: async () => {
       if (!user?.email) return null;
-      const res = await base44.entities.ServiceProvider.filter({ email: user.email });
+      const res = await base44.entities.ServiceProvider.filter({ created_by: user.email });
       return res?.[0] || null;
     },
     enabled: !!user,

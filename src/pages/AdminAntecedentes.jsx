@@ -39,7 +39,7 @@ export default function AdminAntecedentesPage() {
 
   const { data: providers, isLoading } = useQuery({
     queryKey: ["allProviders"],
-    queryFn: () => base44.entities.ServiceProvider.list(),
+    queryFn: () => base44.entities.ServiceProvider.list('-created_date', 200),
     enabled: !!user && user.role === "admin",
     staleTime: 0,
   });

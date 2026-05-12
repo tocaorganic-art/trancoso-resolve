@@ -101,16 +101,13 @@
     "date"
   ],
   "rls": {
-    "create": {
-      "created_by": "{{user.email}}"
-    },
     "read": {
       "$or": [
         {
           "created_by": "{{user.email}}"
         },
         {
-          "data.provider_id": "{{user.id}}"
+          "data.client_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -119,29 +116,8 @@
         }
       ]
     },
-    "update": {
-      "$or": [
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
-    },
-    "delete": {
-      "$or": [
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
+    "write": {
+      "created_by": "{{user.email}}"
     }
   }
 }

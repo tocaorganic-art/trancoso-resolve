@@ -22,9 +22,8 @@ export default function AdminPagamentosPage() {
 
   const { data: payments, isLoading } = useQuery({
     queryKey: ['allPayments'],
-    queryFn: () => base44.asServiceRole
-      ? base44.entities.Payment.list('-created_date', 200)
-      : Promise.resolve([]),
+    queryFn: () => base44.entities.Payment.list('-created_date', 200),
+    enabled: !!user && user.role === 'admin',
     initialData: [],
     staleTime: 0,
   });
