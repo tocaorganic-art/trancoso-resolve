@@ -153,15 +153,16 @@ export default function Layout({ children, currentPageName }) {
         <PageViewTracker />
         <AccessLogger />
 
-        <div className="min-h-screen bg-[var(--background)] overflow-x-hidden">
+        <div className="min-h-screen bg-slate-900 overflow-x-hidden">
           <style>{`
             :root {
               --primary: #0A81D1;
               --secondary: #F4D35E;
               --accent: #0D8A6F;
-              --text-dark: #333333;
+              --text-dark: #f1f5f9;
               --text-light: #FFFFFF;
-              --background: #F8F9FA;
+              --background: #0f172a;
+              color-scheme: dark;
             }
             :focus-visible {
               outline: 3px solid #38bdf8 !important;
@@ -172,37 +173,37 @@ export default function Layout({ children, currentPageName }) {
             }
           `}</style>
 
-          <nav className="bg-white dark:bg-slate-800 shadow-md dark:shadow-slate-900 sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
+          <nav className="bg-slate-800 shadow-slate-900 sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-9 shrink-0" width="36" height="36" loading="eager" fetchpriority="high" />
-                <span className="font-bold text-sm md:text-lg text-slate-800 dark:text-slate-100 truncate hidden xs:inline sm:inline">Trancoso Resolve</span>
+                <span className="font-bold text-sm md:text-lg text-slate-100 truncate hidden xs:inline sm:inline">Trancoso Resolve</span>
               </Link>
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-8">
                 {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 transition-colors">
+                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">
                     <Image className="w-4 h-4" /> Toca Vision
                   </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 transition-colors">
+                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">
                     <MessageCircle className="w-4 h-4" /> Toca TrIA
                   </Link>
-                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 transition-colors">
+                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">
                     <MessageCircle className="w-4 h-4" /> Chat
                   </Link>
                 </>}
-                <Link to={createPageUrl("SejaPrestador")} className="text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 transition-colors">Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 transition-colors">Como funciona?</Link>
-                <Link to={createPageUrl("Seguranca")} className="text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 transition-colors">Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 transition-colors">Manual</Link>
+                <Link to={createPageUrl("SejaPrestador")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Seja um prestador</Link>
+                <Link to={createPageUrl("ComoFunciona")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Como funciona?</Link>
+                <Link to={createPageUrl("Seguranca")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Segurança</Link>
+                <Link to={createPageUrl("Manual")} className="text-sm font-medium text-slate-100 hover:text-blue-400 transition-colors">Manual</Link>
               </div>
 
               <div className="flex items-center gap-2">
                 {user ?
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="flex items-center gap-2 text-[var(--text-dark)] dark:text-slate-200" data-testid="user-menu-trigger">
+                      <Button variant="ghost" className="flex items-center gap-2 text-slate-100" data-testid="user-menu-trigger">
                         <User className="w-5 h-5" />
                         <span>{user.full_name || user.email}</span>
                       </Button>
@@ -240,37 +241,37 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Mobile Navigation */}
             {mobileMenuOpen &&
-            <div className="md:hidden mt-2 pb-4 space-y-2 px-4 dark:bg-slate-700 rounded" data-testid="mobile-menu-content-public">
+            <div className="md:hidden mt-2 pb-4 space-y-2 px-4 bg-slate-700 rounded" data-testid="mobile-menu-content-public">
                 {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Toca Vision</span>
                   </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("Assistentevirtual")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Toca TrIA</span>
                   </Link>
-                  <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("Chat")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
                   </Link>
                 </>}
-                <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="block text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
-                <Link to={createPageUrl("Seguranca")} className="block text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="block text-sm font-medium text-[var(--text-dark)] dark:text-slate-200 hover:text-[var(--primary)] dark:hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
+                <Link to={createPageUrl("SejaPrestador")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
+                <Link to={createPageUrl("ComoFunciona")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
+                <Link to={createPageUrl("Seguranca")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
+                <Link to={createPageUrl("Manual")} className="block text-sm font-medium text-slate-100 hover:text-blue-400 py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
               </div>
             }
           </nav>
 
           {/* Mobile-only top bar: logo on root, back button on sub-pages */}
-          <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
+          <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-800 border-b border-slate-700 flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
             {isRoot ? (
               <Link to="/" className="flex items-center gap-2">
                 <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve" className="h-8 w-8" />
-                <span className="font-bold text-sm text-slate-800 dark:text-slate-100">Trancoso Resolve</span>
+                <span className="font-bold text-sm text-slate-100">Trancoso Resolve</span>
               </Link>
             ) : (
               <button
                 onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-slate-700 dark:text-slate-200 min-w-[44px] min-h-[44px] -ml-1"
+                className="flex items-center gap-2 text-slate-100 min-w-[44px] min-h-[44px] -ml-1"
                 aria-label="Voltar"
               >
                 <ArrowLeft className="w-5 h-5" />

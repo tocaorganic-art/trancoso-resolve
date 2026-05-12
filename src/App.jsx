@@ -4,6 +4,8 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import VisualEditAgent from '@/lib/VisualEditAgent'
 import NavigationTracker from '@/lib/NavigationTracker'
+import AndroidBackHandler from '@/components/android/AndroidBackHandler'
+import AndroidBottomTabsPreserver from '@/components/android/AndroidBottomTabsPreserver'
 import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
@@ -113,6 +115,8 @@ function App() {
         <QueryClientProvider client={queryClientInstance}>
           <Router>
             <NavigationTracker />
+            <AndroidBackHandler />
+            <AndroidBottomTabsPreserver />
             <AuthenticatedApp />
           </Router>
           <Toaster />

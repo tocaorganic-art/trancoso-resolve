@@ -190,12 +190,23 @@ button:focus-visible {
   * {
     @apply border-border outline-ring/50;
   }
+  
+  /* Force Dark Mode for Android - 100% compliance */
+  html {
+    color-scheme: dark;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-slate-900 text-slate-100;
     overflow-x: hidden;
     overscroll-behavior: none;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  
+  /* Dark mode overrides for all components */
+  body, body * {
+    color-scheme: dark;
   }
 }
 
@@ -220,4 +231,29 @@ button, a, nav, [role="button"], [role="tab"],
 p, span, h1, h2, h3, h4, h5, h6, li, td, th, label, input, textarea {
   -webkit-user-select: text;
   user-select: text;
+}
+
+/* Android-specific Dark Mode enforcement */
+@media (prefers-color-scheme: dark) {
+  * {
+    background-color: var(--tw-bg-slate-900, #0f172a) !important;
+    color: var(--tw-text-slate-100, #f1f5f9) !important;
+    border-color: var(--tw-border-slate-700, #374151) !important;
+  }
+  
+  /* Exceptions for images, videos */
+  img, video, canvas, svg {
+    background-color: transparent !important;
+  }
+  
+  /* Input fields */
+  input, textarea, select {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  
+  input::placeholder, textarea::placeholder {
+    color: #94a3b8 !important;
+  }
 }
