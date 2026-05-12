@@ -129,7 +129,7 @@ const ServiceCard = ({ service, provider }) => {
     const description = service.description || categoryDescriptionMap[service.category] || 'Serviço profissional de qualidade em Trancoso.';
 
     return (
-        <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group flex flex-col bg-white">
+        <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group flex flex-col bg-slate-900">
             <div className="aspect-video w-full overflow-hidden bg-slate-200">
                 {imageSrc ? (
                     <LazyImage
@@ -143,32 +143,32 @@ const ServiceCard = ({ service, provider }) => {
                     </div>
                 )}
             </div>
-            <CardContent className="p-5 flex flex-col flex-grow">
+            <CardContent className="p-5 flex flex-col flex-grow bg-slate-900">
                 <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-bold text-lg text-slate-900 service-card-title">{service.title}</h3>
-                    <Badge className="bg-cyan-100 text-cyan-900 font-semibold shrink-0 ml-2 text-xs">{service.category}</Badge>
+                    <h3 className="font-bold text-lg text-white service-card-title">{service.title}</h3>
+                    <Badge className="bg-cyan-400 text-slate-900 font-bold shrink-0 ml-2 text-xs">{service.category}</Badge>
                 </div>
 
                 {provider && (
-                    <p className="text-sm text-slate-700 font-semibold mb-3">{provider.full_name}</p>
+                    <p className="text-base text-gray-100 font-bold mb-3">{provider.full_name}</p>
                 )}
 
-                <p className="text-base text-slate-700 mb-4 line-clamp-2 flex-grow leading-relaxed service-card-desc font-medium">{description}</p>
+                <p className="text-base text-gray-300 mb-4 line-clamp-2 flex-grow leading-relaxed service-card-desc font-semibold">{description}</p>
 
                 <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="text-sm font-bold text-slate-900">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span className="text-base font-bold text-yellow-300">
                             {provider?.rating ? provider.rating.toFixed(1) : 'Novo'}
                         </span>
                     </div>
                     <div className="text-right">
-                        <p className="text-lg font-bold text-cyan-700">
+                        <p className="text-lg font-bold text-cyan-300">
                             R$ {service.price.toFixed(2)}
                         </p>
-                        <p className="text-xs text-slate-600 font-medium">por {service.price_unit || 'serviço'}</p>
+                        <p className="text-sm text-gray-300 font-semibold">por {service.price_unit || 'serviço'}</p>
                         {provider?.total_reviews > 0 && (
-                            <span className="text-xs text-slate-600 font-medium">({provider.total_reviews} avaliações)</span>
+                            <span className="text-sm text-gray-300 font-semibold">({provider.total_reviews} avaliações)</span>
                         )}
                     </div>
                 </div>
@@ -348,33 +348,65 @@ export default function HomePage() {
   return (
     <div className="bg-slate-50 overflow-x-hidden">
       <style>{`
-        /* CONTRASTE WCAG AA/AAA - FORÇADO */
-        .card { background-color: #ffffff !important; }
+        /* ========== CONTRASTE WCAG AAA FORÇADO - GLOBAL ========== */
         
-        /* Cartões de Serviços */
-        [class*="card"] h3 { color: #0f172a !important; font-weight: 800 !important; font-size: 1.15rem !important; }
-        [class*="card"] p { color: #334155 !important; font-weight: 500 !important; line-height: 1.6 !important; }
+        /* Todos os textos em cards de serviço */
+        .service-card-title { 
+          color: #ffffff !important; 
+          font-weight: 800 !important; 
+          font-size: 1.125rem !important; 
+          line-height: 1.4 !important; 
+          text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+        }
         
-        /* Cartões de Profissionais */
-        .provider-card { background-color: #1e293b !important; }
-        .provider-card p { color: #ffffff !important; font-weight: 600 !important; }
-        .provider-name { color: #ffffff !important; font-weight: 800 !important; font-size: 1.05rem !important; }
-        .provider-occupation { color: #e2e8f0 !important; font-weight: 600 !important; font-size: 0.95rem !important; }
-        .provider-rating { color: #fbbf24 !important; font-weight: 800 !important; font-size: 1rem !important; }
+        .service-card-desc { 
+          color: #f1f5f9 !important; 
+          font-weight: 600 !important; 
+          line-height: 1.7 !important; 
+          font-size: 1rem !important;
+        }
         
-        /* Textos em fundos escuros */
-        .dark-bg-text { color: #ffffff !important; }
-        .dark-bg-label { color: #e2e8f0 !important; font-weight: 600 !important; }
+        /* Nomes de provedores em cards brancos */
+        [class*="CardContent"] p {
+          color: #ffffff !important;
+          font-weight: 700 !important;
+        }
+        
+        /* Cartões de Profissionais - fundo escuro */
+        .provider-card { 
+          background-color: #1e293b !important; 
+        }
+        
+        .provider-name { 
+          color: #ffffff !important; 
+          font-weight: 800 !important; 
+          font-size: 1.05rem !important; 
+          text-shadow: 0 1px 3px rgba(0,0,0,0.4) !important;
+        }
+        
+        .provider-occupation { 
+          color: #e2e8f0 !important; 
+          font-weight: 600 !important; 
+          font-size: 0.95rem !important;
+        }
+        
+        .provider-rating { 
+          color: #fbbf24 !important; 
+          font-weight: 800 !important; 
+          font-size: 1rem !important;
+        }
+        
+        /* Override - preços e textos secundários */
+        span, p { 
+          color: #ffffff !important;
+        }
         
         @media (max-width: 768px) {
-          .service-card-title { font-size: 1.125rem !important; line-height: 1.5 !important; color: #0f172a !important; font-weight: 800 !important; }
-          .service-card-desc { font-size: 1rem !important; line-height: 1.7 !important; color: #334155 !important; font-weight: 500 !important; }
-          .provider-name { font-size: 1.05rem !important; font-weight: 800 !important; color: #ffffff !important; }
-          .provider-occupation { font-size: 0.95rem !important; color: #e2e8f0 !important; font-weight: 600 !important; }
-          .section-heading { font-size: 1.5rem !important; font-weight: 800 !important; color: #0f172a !important; }
-          h1, h2, h3 { text-shadow: 0 1px 3px rgba(0,0,0,0.15) !important; }
-          h1, h2 { color: #0f172a !important; font-weight: 800 !important; }
-          p { line-height: 1.6 !important; }
+          h1, h2, h3, h4, h5, h6 { 
+            color: #ffffff !important; 
+            font-weight: 800 !important; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+          }
         }
       `}</style>
       {/* Pull-to-refresh indicator */}
