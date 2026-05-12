@@ -14,6 +14,10 @@
       "type": "string",
       "description": "ID do funcion\u00e1rio"
     },
+    "assigned_to_email": {
+      "type": "string",
+      "description": "Email do funcion\u00e1rio para RLS"
+    },
     "priority": {
       "type": "string",
       "enum": [
@@ -84,6 +88,7 @@
   "required": [
     "title",
     "assigned_to",
+    "assigned_to_email",
     "due_date"
   ],
   "rls": {
