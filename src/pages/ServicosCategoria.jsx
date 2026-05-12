@@ -95,6 +95,18 @@ const ProviderCard = ({ provider }) => (
     </Card>
 );
 
+const slugMap = {
+  'Limpeza': 'limpeza-trancoso',
+  'Eletricista': 'eletricista-trancoso',
+  'Encanador': 'encanador-trancoso',
+  'Jardinagem': 'jardinagem-trancoso',
+  'Cozinheiro': 'cozinheiro-trancoso',
+  'Pedreiro': 'pedreiro-trancoso',
+  'Pintor': 'pintor-trancoso',
+  'Babá': 'baba-trancoso',
+  'Garçom': 'garcom-trancoso',
+};
+
 export default function ServicosCategoriaPage() {
   const urlParams = useMemo(() => new URLSearchParams(window.location.search), []);
   const [selectedCategory, setSelectedCategory] = useState(urlParams.get('cat') || 'Todos');
@@ -108,6 +120,39 @@ export default function ServicosCategoriaPage() {
   const [aiFilteredProviderIds, setAiFilteredProviderIds] = useState(null);
   const [viewMode, setViewMode] = useState('list');
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const cat = selectedCategory !== 'Todos' ? selectedCategory : null;
+    const title = cat
+      ? `${cat} em Trancoso, BA — Profissionais Verificados | Trancoso Resolve`
+      : 'Todos os Serviços em Trancoso, BA | Trancoso Resolve';
+    document.title = title;
+
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = cat
+      ? `Encontre profissionais de ${cat} em Trancoso, Bahia. Verificados, avaliados pela comunidade. Solicite orçamento grátis.`
+      : 'Navegue por todos os serviços disponíveis em Trancoso, BA. Profissionais verificados para limpeza, elétrica, encanamento, jardinagem e muito mais.';
+
+    const schemaId = 'schema-categoria';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": cat ? `${cat} em Trancoso` : "Serviços em Trancoso",
+      "description": cat
+        ? `Lista de profissionais de ${cat} verificados em Trancoso, Bahia`
+        : "Todos os serviços disponíveis em Trancoso, Bahia",
+      "url": `https://www.trancosoresolve.com.br/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`,
+      "numberOfItems": filteredProviders?.length || 0,
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, [selectedCategory, filteredProviders?.length]);
 
   const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
     queryKey: ['serviceProviders'],
@@ -338,13 +383,20 @@ export default function ServicosCategoriaPage() {
           </Link>
           
           <h1 className="text-3xl font-bold mb-2">
-            {selectedCategory === 'Todos' ? 'Todos os Serviços' : selectedCategory}
+            {selectedCategory === 'Todos' ? 'Serviços em Trancoso, BA' : `${selectedCategory} em Trancoso, BA`}
           </h1>
           <p className="text-blue-100">
             {isLoadingProviders ? "Carregando..." :
              (isSearching ? "Buscando com IA..." :
-             `${filteredProviders.length} profissionais encontrados`)}
+             `${filteredProviders.length} profissiona${filteredProviders.length !== 1 ? 'is' : 'l'} encontrado${filteredProviders.length !== 1 ? 's' : ''}`)}
           </p>
+          {selectedCategory !== 'Todos' && slugMap[selectedCategory] && (
+            <Link to={`/ServicoLanding?slug=${slugMap[selectedCategory]}`} className="inline-block mt-3">
+              <span className="text-xs bg-white/20 hover:bg-white/30 text-white rounded-full px-3 py-1 transition-colors">
+                📄 Guia completo de {selectedCategory} em Trancoso →
+              </span>
+            </Link>
+          )}
         </div>
       </div>
 

@@ -502,6 +502,35 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Landing Pages por Serviço - SEO Local */}
+        <section className="mb-10 md:mb-20">
+          <div className="text-center mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Serviços Mais Buscados em Trancoso</h2>
+            <p className="text-sm text-slate-500 mt-1">Guias completos com profissionais verificados para cada categoria</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {[
+              { slug: 'limpeza-trancoso', label: 'Diarista', emoji: '🧹' },
+              { slug: 'eletricista-trancoso', label: 'Eletricista', emoji: '⚡' },
+              { slug: 'encanador-trancoso', label: 'Encanador', emoji: '🔧' },
+              { slug: 'jardinagem-trancoso', label: 'Jardineiro', emoji: '🌿' },
+              { slug: 'cozinheiro-trancoso', label: 'Cozinheiro', emoji: '👨‍🍳' },
+              { slug: 'pedreiro-trancoso', label: 'Pedreiro', emoji: '🏗️' },
+              { slug: 'pintor-trancoso', label: 'Pintor', emoji: '🖌️' },
+              { slug: 'baba-trancoso', label: 'Babá', emoji: '👶' },
+              { slug: 'garcom-trancoso', label: 'Garçom', emoji: '🍽️' },
+            ].map(item => (
+              <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
+                <div className="bg-white rounded-xl p-3 text-center shadow-sm hover:shadow-md transition-shadow border border-slate-100 hover:border-cyan-200 cursor-pointer group">
+                  <span className="text-2xl block mb-1" aria-hidden="true">{item.emoji}</span>
+                  <span className="text-xs font-semibold text-slate-700 group-hover:text-cyan-700">{item.label}</span>
+                  <span className="block text-xs text-slate-400 mt-0.5">em Trancoso</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* Testimonials Section */}
         <Testimonials />
 

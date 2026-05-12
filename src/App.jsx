@@ -14,6 +14,7 @@ import FilaVerificacaoPage from '@/pages/FilaVerificacao';
 import AdminPagamentosPage from '@/pages/AdminPagamentos';
 import PreLancamentoPage from '@/pages/PreLancamento';
 import AdminAntecedentesPage from '@/pages/AdminAntecedentes';
+import ServicoLandingPage from '@/pages/ServicoLanding';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -87,6 +88,11 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         } />
         <Route path="/PreLancamento" element={<PreLancamentoPage />} />
+        <Route path="/ServicoLanding" element={
+          <LayoutWrapper currentPageName="ServicoLanding">
+            <AnimatedPage><ServicoLandingPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatePresence>
