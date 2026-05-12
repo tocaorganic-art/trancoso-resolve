@@ -189,7 +189,50 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Trancoso Resolve - Serviços Confiáveis em Trancoso";
+    document.title = "Trancoso Resolve: Encontre Profissionais Verificados em Trancoso, Bahia";
+
+    // Meta description otimizada
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = "Contrate diaristas, eletricistas, encanadores, jardineiros e mais em Trancoso, BA. Profissionais verificados com avaliações reais. Orçamento grátis.";
+
+    // Schema Markup - LocalBusiness + Service
+    const existingSchema = document.getElementById('schema-home');
+    if (existingSchema) existingSchema.remove();
+    const schema = document.createElement('script');
+    schema.id = 'schema-home';
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Trancoso Resolve",
+      "description": "Marketplace de serviços locais em Trancoso, Bahia. Profissionais verificados para limpeza, elétrica, jardinagem, cozinha, encanamento e muito mais.",
+      "url": "https://www.trancosoresolve.com.br",
+      "logo": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
+      "image": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Trancoso",
+        "addressRegion": "BA",
+        "addressCountry": "BR"
+      },
+      "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
+      "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Serviços em Trancoso",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diarista em Trancoso" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Eletricista em Trancoso" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Encanador em Trancoso" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Jardinagem em Trancoso" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cozinheiro em Trancoso" } }
+        ]
+      },
+      "sameAs": ["https://www.trancosoresolve.com.br"]
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById('schema-home'); if (s) s.remove(); };
   }, []);
 
   const handleRefresh = useCallback(async () => {
@@ -269,10 +312,10 @@ export default function HomePage() {
         <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-5 md:py-20 px-4 overflow-hidden">
           <div className="hero-content text-center lg:text-left">
             <h1 className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-2">
-              Trancoso Resolve
+              Trancoso Resolve: Encontre Profissionais Verificados em Trancoso
             </h1>
             <p className="text-sm md:text-lg text-slate-600 mb-4">
-              Profissionais verificados que resolvem seus problemas em Trancoso.
+              Diaristas, eletricistas, encanadores, cozinheiros e muito mais — todos verificados e prontos para atender.
             </p>
             
             <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0">
@@ -320,7 +363,7 @@ export default function HomePage() {
       <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-8 md:py-16 my-4 md:my-12">
       <div className="container mx-auto max-w-4xl px-4 text-center">
         <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
-          Pronto para resolver seu problema?
+          Precisa de Ajuda? Encontre a Solução em Trancoso Agora!
         </h2>
         <p className="text-base md:text-xl text-blue-100 mb-6">
           Profissionais verificados em Trancoso prontos para resolver.
@@ -361,7 +404,7 @@ export default function HomePage() {
         {/* Featured Services */}
         <section className="mb-10 md:mb-20">
           <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Serviços em Destaque</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Descubra os Serviços Mais Procurados em Trancoso</h2>
             <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
               <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700" aria-label="Ver todos os serviços">
                 Ver todos
@@ -402,7 +445,7 @@ export default function HomePage() {
         {/* Top Rated Providers */}
         <section className="mb-10 md:mb-20">
           <div className="text-center mb-4 md:mb-8">
-            <h2 className="text-xl md:text-3xl font-bold text-slate-900">Profissionais Bem Avaliados</h2>
+            <h2 className="text-xl md:text-3xl font-bold text-slate-900">Conheça os Profissionais Mais Bem Avaliados de Trancoso</h2>
             <p className="text-sm md:text-base text-slate-600 mt-2">Os favoritos da comunidade, com qualidade comprovada.</p>
           </div>
 
@@ -466,7 +509,7 @@ export default function HomePage() {
         <Card className="border-none bg-gradient-to-r from-orange-400 to-amber-500 text-white shadow-2xl mt-10 md:mt-20">
           <CardContent className="p-6 md:p-8 text-center">
             <Zap className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3" />
-            <h3 className="text-xl md:text-2xl font-bold mb-2">Preciso de Ajuda Urgente!</h3>
+            <h3 className="text-xl md:text-2xl font-bold mb-2">Serviço Urgente? Contrate Agora em Trancoso!</h3>
             <p className="text-orange-50 mb-5 text-sm md:text-base">
               Precisa de um serviço com urgência? Entre em contato e encontraremos alguém disponível agora.
             </p>
