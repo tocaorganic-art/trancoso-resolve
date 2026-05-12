@@ -20,6 +20,7 @@ import ServicoLandingPage from '@/pages/ServicoLanding';
 import SolicitacaoConfirmadaPage from '@/pages/SolicitacaoConfirmada';
 import AboutPage from '@/pages/About';
 import ContactPage from '@/pages/Contact';
+import AssistenteVirtualPage from '@/pages/AssistenteVirtual';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -115,6 +116,11 @@ const AuthenticatedApp = () => {
         <Route path="/Contact" element={
           <LayoutWrapper currentPageName="Contact">
             <AnimatedPage><ContactPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/AssistenteVirtual" element={
+          <LayoutWrapper currentPageName="AssistenteVirtual">
+            <AnimatedPage><AssistenteVirtualPage /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="*" element={<PageNotFound />} />
