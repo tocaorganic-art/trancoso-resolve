@@ -2,71 +2,64 @@
   "name": "Verificacao",
   "type": "object",
   "properties": {
-    "user_email": {
+    "provider_id": {
       "type": "string",
-      "format": "email",
-      "description": "Email do usu\u00e1rio que enviou o documento"
+      "description": "ID do prestador"
     },
-    "user_name": {
-      "type": "string",
-      "description": "Nome do usu\u00e1rio no momento do envio"
-    },
-    "document_url": {
-      "type": "string",
-      "description": "URL da imagem do documento enviado"
-    },
-    "document_type": {
+    "verification_type": {
       "type": "string",
       "enum": [
-        "CNH",
-        "RG"
+        "identity",
+        "background_check",
+        "documents",
+        "other"
       ],
-      "description": "Tipo de documento enviado"
+      "description": "Tipo de verifica\u00e7\u00e3o"
     },
     "status": {
       "type": "string",
       "enum": [
-        "Pendente",
-        "Em An\u00e1lise",
-        "Aguardando Admin",
-        "Verificado",
-        "Rejeitado"
+        "pending",
+        "in_progress",
+        "approved",
+        "rejected",
+        "expired"
       ],
-      "default": "Em An\u00e1lise",
+      "default": "pending",
       "description": "Status da verifica\u00e7\u00e3o"
     },
-    "submission_date": {
+    "result": {
+      "type": "string",
+      "description": "Resultado da verifica\u00e7\u00e3o"
+    },
+    "verified_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Data e hora do envio"
+      "description": "Data e hora da verifica\u00e7\u00e3o"
     },
-    "admin_notes": {
+    "expires_at": {
       "type": "string",
-      "description": "Observa\u00e7\u00f5es do admin ou da IA"
+      "format": "date-time",
+      "description": "Data de expira\u00e7\u00e3o da verifica\u00e7\u00e3o"
     },
-    "ai_extracted_name": {
+    "description": {
       "type": "string",
-      "description": "Nome extra\u00eddo pela IA do documento"
-    },
-    "ai_extracted_dob": {
-      "type": "string",
-      "description": "Data de nascimento extra\u00edda pela IA"
-    },
-    "ai_confidence": {
-      "type": "number",
-      "description": "Confian\u00e7a da an\u00e1lise da IA (0-1)"
+      "maxLength": 1000,
+      "description": "Descri\u00e7\u00e3o detalhada ou notas da verifica\u00e7\u00e3o"
     }
   },
   "required": [
-    "user_email",
-    "document_url",
-    "document_type"
+    "provider_id",
+    "verification_type"
   ],
   "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {
-          "user_email": "{{user.email}}"
+          "created_by": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -75,17 +68,15 @@
         }
       ]
     },
-    "write": {
-      "$or": [
-        {
-          "user_email": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
     }
   }
 }
