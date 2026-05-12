@@ -7,7 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, User, Camera, Trash2, PlusCircle, AlertCircle, ImagePlus, PersonStanding } from 'lucide-react';
+import { Loader2, User, Camera, AlertCircle, Video, Trash2, ImagePlus } from 'lucide-react';
+import LiveCameraCapture from '@/components/perfil/LiveCameraCapture';
+import PortfolioGallery from '@/components/perfil/PortfolioGallery';
 import VerificacaoStatusCard from '@/components/verificacao/VerificacaoStatusCard';
 import VerificacaoBadge from '@/components/verificacao/VerificacaoBadge';
 import {
@@ -130,7 +132,8 @@ function MeuPerfilPrestadorContent() {
   });
 
   const [formData, setFormData] = useState(null);
-  const [uploading, setUploading] = useState({ profile: false, portfolio: false, document: false, cover: false, fullbody: false });
+  const [uploading, setUploading] = useState({ profile: false, document: false, cover: false });
+  const [showLiveCamera, setShowLiveCamera] = useState(false);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -271,12 +274,10 @@ function MeuPerfilPrestadorContent() {
         handleInputChange('cover_photo_url', file_url);
       } else if (type === 'fullbody') {
         handleInputChange('full_body_photo_url', file_url);
-      } else if (type === 'portfolio') {
-        handleInputChange('portfolio_images', [...(formData.portfolio_images || []), file_url]);
       } else if (type === 'document') {
         handleInputChange('verification_document_url', file_url);
       }
-      toast.success(`Upload de ${type} concluído!`);
+      toast.success('Upload concluído!');
     } catch (error) {
       toast.error('Erro no upload.', { description: error.message });
     } finally {
@@ -284,10 +285,9 @@ function MeuPerfilPrestadorContent() {
     }
   };
 
-  const removePortfolioImage = (index) => {
-    const updatedImages = [...formData.portfolio_images];
-    updatedImages.splice(index, 1);
-    handleInputChange('portfolio_images', updatedImages);
+  const handleLiveCameraCapture = async (file) => {
+    setShowLiveCamera(false);
+    await handleFileUpload(file, 'fullbody');
   };
 
   const validateForm = () => {
@@ -351,6 +351,13 @@ function MeuPerfilPrestadorContent() {
   }
 
   return (
+    <>
+    {showLiveCamera && (
+      <LiveCameraCapture
+        onCapture={handleLiveCameraCapture}
+        onClose={() => setShowLiveCamera(false)}
+      />
+    )}
     <div className="container mx-auto max-w-4xl py-8">
       <Card>
         <CardHeader>
@@ -432,31 +439,47 @@ function MeuPerfilPrestadorContent() {
               {errors.cover_photo_url && <p className="text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.cover_photo_url}</p>}
             </div>
 
-            {/* Foto de Corpo Inteiro */}
-            <div className="space-y-2">
+            {/* Foto de Corpo Inteiro — Captura ao vivo */}
+            <div className="space-y-3">
               <Label>
                 Foto de Corpo Inteiro <span className="text-red-500">*</span>
-                <span className="ml-2 text-xs font-normal text-slate-500">Para verificação de identidade · fundo neutro · boa iluminação · máx. 5MB</span>
+                <span className="ml-2 text-xs font-normal text-slate-500">Captura ao vivo obrigatória — galeria não permitida</span>
               </Label>
-              <div className={`relative w-48 h-64 rounded-xl overflow-hidden border-2 border-dashed flex items-center justify-center bg-slate-100 ${errors.full_body_photo_url ? 'border-red-400' : 'border-slate-300'}`}>
-                {formData.full_body_photo_url ? (
-                  <>
-                    <img src={formData.full_body_photo_url} alt="Foto de corpo inteiro" className="w-full h-full object-cover" />
-                    <label htmlFor="fullbody-upload" className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
-                      <span className="text-white text-xs font-medium flex items-center gap-1"><Camera className="w-3 h-3" /> Alterar</span>
-                    </label>
-                  </>
-                ) : (
-                  <label htmlFor="fullbody-upload" className="flex flex-col items-center gap-2 cursor-pointer text-slate-500 hover:text-slate-700 w-full h-full justify-center px-4 text-center">
-                    <PersonStanding className="w-10 h-10" />
-                    <span className="text-xs font-medium">Foto de corpo inteiro</span>
-                  </label>
-                )}
-                <input id="fullbody-upload" type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
-                  onChange={(e) => { if (e.target.files[0] && e.target.files[0].size <= 5 * 1024 * 1024) handleFileUpload(e.target.files[0], 'fullbody'); else toast.error('Arquivo muito grande. Máximo 5MB.'); }} />
-                {uploading.fullbody && <div className="absolute inset-0 bg-white/70 flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-blue-600" /></div>}
+              <div className="flex items-start gap-5 flex-wrap">
+                <div className={`relative w-44 h-60 rounded-xl overflow-hidden border-2 flex items-center justify-center bg-slate-100 ${errors.full_body_photo_url ? 'border-red-400' : 'border-slate-300'}`}>
+                  {uploading.fullbody ? (
+                    <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                  ) : formData.full_body_photo_url ? (
+                    <img src={formData.full_body_photo_url} alt="Corpo inteiro" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-center text-slate-400 px-3">
+                      <span className="text-4xl block mb-2">🧍</span>
+                      <span className="text-xs">Sem foto</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col gap-3 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowLiveCamera(true)}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
+                  >
+                    <Video className="w-4 h-4" />
+                    {formData.full_body_photo_url ? 'Refazer foto ao vivo' : 'Capturar foto ao vivo'}
+                  </button>
+                  <div className="text-xs text-slate-500 space-y-1 max-w-xs">
+                    <p className="font-medium text-slate-700">Requisitos:</p>
+                    <p>📷 Somente captura pela câmera</p>
+                    <p>🧍 Corpo inteiro visível</p>
+                    <p>💡 Boa iluminação, fundo neutro</p>
+                  </div>
+                </div>
               </div>
-              {errors.full_body_photo_url && <p className="text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.full_body_photo_url}</p>}
+              {errors.full_body_photo_url && (
+                <p className="text-xs text-red-500 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />{errors.full_body_photo_url}
+                </p>
+              )}
             </div>
 
             {/* Tipo de Pessoa / Dados Jurídicos */}
@@ -609,23 +632,12 @@ function MeuPerfilPrestadorContent() {
             </div>
 
             {/* Portfólio */}
-            <div>
-              <Label>Portfólio de Trabalhos (fotos de antes/depois)</Label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-                {(formData.portfolio_images || []).map((img, index) => (
-                  <div key={index} className="relative group">
-                    <img src={img} alt={`Portfolio ${index}`} className="w-full h-32 rounded-lg object-cover" />
-                    <button type="button" onClick={() => removePortfolioImage(index)} className="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-                <label htmlFor="portfolio-upload" className="w-full h-32 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50">
-                  <PlusCircle className="w-8 h-8 text-slate-400 mb-1" />
-                  <span className="text-sm text-slate-500">Adicionar foto</span>
-                  <input id="portfolio-upload" type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e.target.files[0], 'portfolio')} />
-                </label>
-              </div>
+            <div className="space-y-2">
+              <Label>Portfólio de Trabalhos</Label>
+              <PortfolioGallery
+                images={formData.portfolio_images || []}
+                onChange={(imgs) => handleInputChange('portfolio_images', imgs)}
+              />
             </div>
 
             {/* Preços e Pagamento */}
@@ -735,6 +747,7 @@ function MeuPerfilPrestadorContent() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }
 
