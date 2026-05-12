@@ -102,16 +102,7 @@
   ],
   "rls": {
     "create": {
-      "$or": [
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
+      "created_by": "{{user.email}}"
     },
     "read": {
       "$or": [
@@ -132,9 +123,6 @@
       "$or": [
         {
           "created_by": "{{user.email}}"
-        },
-        {
-          "data.provider_id": "{{user.id}}"
         },
         {
           "user_condition": {
