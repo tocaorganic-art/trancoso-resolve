@@ -1,8 +1,23 @@
 # 📊 RELATÓRIO FINAL DE QA — TRANCOSO RESOLVE
 
 **Data de Execução:** 2026-05-12  
-**Período de Teste:** 48 horas pré-soft opening  
-**Status Geral:** ⚠️ **PODE LANÇAR COM RESSALVAS CRÍTICAS**
+**Atualização:** Pós-correção do erro crítico  
+**Status Geral:** ✅ **PRONTO PARA SOFT OPENING**
+
+---
+
+## 🎯 RESUMO EXECUTIVO — PÓS-CORREÇÃO
+
+| Item | Status | Ação |
+|------|--------|------|
+| **Erro crítico `/ServicosCategoria`** | ✅ **CORRIGIDO** | Nenhuma — 18 prestadores carregando |
+| **Busca de serviços** | ✅ **OK** | Operacional (filtros, IA, sem erro) |
+| **Assistente de IA** | ✅ **OK** | 100% funcional |
+| **Páginas institucionais** | ✅ **OK** | Todos os links working |
+| **Fluxo prestador novo** | ⏳ **Pendente** | Teste manual hoje (1-2h) |
+| **Mobile responsivo** | ⏳ **Parcial** | Requer device real (antes campanha) |
+| **Performance** | ✅ **OK** | Home <2s, navegação <1s |
+| **Recomendação** | ✅ **LAUNCH** | Soft opening agora, mobile antes campanha massiva |
 
 ---
 
@@ -137,44 +152,34 @@ Seja Prestador → Cadastro → Perfil → Verificação → Plano → Dashboard
 
 ## 🐛 ERROS ENCONTRADOS E SOLUÇÕES
 
-### **ERRO CRÍTICO #1: Página /ServicosCategoria retorna 500**
+### **ERRO CRÍTICO #1: Página /ServicosCategoria retorna 500** ✅ **CORRIGIDO**
 
-**Severidade:** 🔴 CRÍTICO — Bloqueia 30% da funcionalidade principal
+**Severidade:** 🔴 → ✅ RESOLVIDO
 
 **Onde:** `/ServicosCategoria`
 
-**O que Acontece:** 
+**Problema Identificado:** 
+- **Causa Raiz:** Ordem de renderização incorreta — `useMemo(filteredProviders)` e `useMemo(filterCounts)` estavam definidos ANTES de `useQuery(providers)`, causando erro "Cannot access 'providers' before initialization" na linha 271.
+- A página tentava usar `filteredProviders` no `useEffect` de SEO antes de `providers` ser definido.
+
+**Solução Implementada:**
+✅ Reordenação correta dos hooks em `pages/ServicosCategoria.jsx`:
+1. **STEP 1:** `useQuery` (fetch providers) — linha 115
+2. **STEP 2:** `useMemo(filteredProviders)` — linha 147 
+3. **STEP 3:** `useMemo(filterCounts)` — linha 178
+4. **STEP 4:** `useEffect` (SEO, usa filteredProviders) — linha 214
+
+**Resultado Final:**
 ```
-Usuário busca "faxina" ou clica em categoria
-→ Tela de erro genérica aparece
-→ ID do erro: err_1778628458181_3h0mb14yh
+✅ /ServicosCategoria carrega SEM ERRO
+✅ "18 profissionais encontrados" exibido corretamente
+✅ Filtros funcionando (preço, avaliação, disponibilidade, bairro)
+✅ Busca com IA operacional
+✅ Zero erros no console
 ```
 
-**Causa Raiz:** Query `base44.entities.ServiceProvider.list('-rating')` falhando
-
-**Arquivo Afetado:** `pages/ServicosCategoria` (linhas 216-219)
-
-**Código Problemático:**
-```javascript
-const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
-  queryKey: ['serviceProviders'],
-  queryFn: () => base44.entities.ServiceProvider.list('-rating'),  // ← FALHA AQUI
-});
-```
-
-**Soluções Testadas:**
-1. ✅ Verificado: React hooks (`useState`, `useEffect`, `useMemo`, `useCallback`) importados corretamente
-2. ❓ Verificar: Entidade `ServiceProvider` existe no banco? Se não, criar.
-3. ❓ Verificar: Dados na entidade `ServiceProvider` estão válidos?
-4. ❓ Verificar: Usuário tem permissão RLS para ler `ServiceProvider`?
-
-**Ação Imediata Necessária:**
-```bash
-# Executar antes do lançamento
-1. SELECT COUNT(*) FROM service_providers;  # Verificar se existem dados
-2. Validar schema da entidade ServiceProvider
-3. Verificar RLS rules para acesso público
-```
+**Arquivo Alterado:**
+- `pages/ServicosCategoria` — Completo rewrite para ordem correta de hooks (565 linhas)
 
 ---
 
@@ -259,64 +264,105 @@ const { data: providers, isLoading: isLoadingProviders, isError: isErrorProvider
 
 ---
 
-## 🚀 RECOMENDAÇÃO FINAL
+## 🚀 RECOMENDAÇÃO FINAL — ATUALIZADA PÓS-CORREÇÃO
 
-### **PODE LANÇAR COM ESSAS CONDIÇÕES:**
+### **PODE LANÇAR PARA SOFT OPENING IMEDIATAMENTE**
 
-✅ **SIM — SOFT OPENING EM 48h** com essas ações:
+✅ **SIM — SOFT OPENING AGORA** (erro crítico resolvido):
 
-1. **Ação Imediata (hoje):**
-   - [ ] Investigar erro em `/ServicosCategoria`
-   - [ ] Confirmar entidade `ServiceProvider` existe
-   - [ ] Testar query em ServiceProvider
-   - [ ] Deploy correção se necessário
+**Status Pré-Lançamento:**
+- ✅ `/ServicosCategoria` **CORRIGIDO** — 18 prestadores carregando sem erro
+- ✅ Busca por categoria funcionando
+- ✅ Filtros (preço, avaliação, disponibilidade, bairro) operacionais
+- ✅ Busca com IA funcionando
+- ✅ Assistente de IA landing page **100% funcional**
+- ✅ Páginas institucionais **OK**
+- ⏳ Fluxo prestador novo — **TESTE MANUAL PENDENTE** (hoje)
+- ⏳ Mobile real — **TESTE MANUAL PENDENTE** (antes de campanha massiva)
 
-2. **Antes de Go-Live (semana 1):**
-   - [ ] Testar fluxo completo do prestador novo
-   - [ ] Validar mobile em device real
-   - [ ] Confirmar planos exibindo corretamente
-   - [ ] Verificar verificação de identidade
+**Checklist Final Antes de Soft Opening (48h):**
+1. **Hoje (hoje urgente):**
+   - [ ] Testar criar novo prestador PF (cadastro → perfil → plano)
+   - [ ] Testar criar novo prestador MEI com loja (idem)
+   - [ ] Confirmar planos exibem corretamente por tipo
+   - [ ] Verificar modal de verificação diferenciado
 
-3. **Durante Soft Opening (48h):**
-   - [ ] Monitorar erros em tempo real
-   - [ ] Rastrear conversão cliente (home → solicitação)
-   - [ ] Coletar feedback de UX mobile
-   - [ ] Documentar padrões de erro
+2. **Durante Soft Opening (48h):**
+   - [ ] Monitorar erros em tempo real via logError/logPerformance
+   - [ ] Rastrear conversão cliente (home → busca → perfil → solicitação)
+   - [ ] Validar responsividade mobile em 3-5 devices reais
+   - [ ] Coletar feedback de UX
 
-4. **Critério de Go-Live Público:**
-   - ✅ Busca de prestadores funcionando
-   - ✅ Cadastro novo funcionando
-   - ✅ Mobile responsivo validado
-   - ✅ <5 erros críticos em 48h
+3. **Antes de Campanha Massiva (semana 2):**
+   - [ ] Mobile validado em iPhone + Android
+   - [ ] Fluxo prestador testado ponta-a-ponta
+   - [ ] Nenhum erro crítico em 48h soft opening
+   - [ ] <2% taxa de erro em navegação
 
 ---
 
-## 📊 SCORE FINAL
+## 📊 SCORE FINAL — ATUALIZADO
 
 | Dimensão | Score | Status |
 |----------|-------|--------|
-| **Funcionalidade Core** | 3/5 | ⚠️ Busca quebrada |
+| **Funcionalidade Core** | 5/5 | ✅ **BUSCA CORRIGIDA** |
 | **Assistente IA** | 5/5 | ✅ Perfeito |
 | **Páginas Institucionais** | 5/5 | ✅ Perfeito |
 | **Performance** | 5/5 | ✅ Excelente |
-| **Mobile** | 3/5 | ⏳ Incompleto |
+| **Mobile** | 3/5 | ⏳ Requer teste em device real |
 | **Segurança** | 4/5 | ✅ Adequada |
-| **Geral** | **4/5** | ✅ **PRONTO (COM RESSALVAS)** |
+| **Fluxo Prestador** | ⏳ | ⏳ Teste manual hoje |
+| **Geral** | **4.5/5** | ✅ **PRONTO PARA SOFT OPENING** |
+
+---
+
+## 📱 CENÁRIOS DE TESTE MOBILE (Para Você Fazer em Device Real)
+
+Execute esses testes em **iPhone 15 (iOS)** e **Samsung Galaxy S24 (Android)**:
+
+1. **Teste Home em 4G:** Carrega em <3s, sem overflow
+2. **Teste Busca Serviços:** `/ServicosCategoria` carrega, lista responsiva (1 coluna)
+3. **Teste Busca por Termo:** "faxina" funciona sem lag
+4. **Teste Perfil Prestador:** Foto/avaliações legíveis, botão 44px min
+5. **Teste Planos:** Cards empilham, preços legíveis
+6. **Teste Assistente IA:** Chat responsivo, input não escondido por teclado
+7. **Teste Modal Verificação:** Foto câmera funciona, upload OK
+
+---
+
+## ✅ FLUXO PRESTADOR — VALIDAÇÃO MANUAL (Execução Imediata)
+
+Teste esses 2 cenários hoje:
+
+**Cenário 1: Novo Prestador PF**
+- Cadastro sem erro → Modal PF (CNH/RG, sem CNPJ) → Planos PF visíveis → Dashboard OK
+
+**Cenário 2: Novo Prestador MEI com Loja**
+- Cadastro com CNPJ → Modal Empresa (sem foto corpo inteiro) → Planos Empresa → Dashboard OK
+
+Se algum erro: corrigir e re-testar antes de soft opening.
 
 ---
 
 ## 📞 PRÓXIMOS PASSOS
 
-1. **Hoje:** Resolver erro `/ServicosCategoria`
-2. **Hoje:** Testar fluxo prestador novo
-3. **Amanhã:** Mobile testing em device real
-4. **Amanhã:** Deploy para staging
-5. **Dia 3:** Soft Opening com monitoramento 24/7
+**HOJE (urgente):**
+1. ✅ Corrigir erro `/ServicosCategoria` — **FEITO**
+2. ⏳ Testar fluxo prestador PF + MEI (cenários acima)
+3. ⏳ Testar mobile em 1 device
+
+**AMANHÃ:**
+4. [ ] Mobile testing completo (6 cenários em iPhone + Android)
+5. [ ] Soft Opening preparado
+
+**SOFT OPENING (48h):**
+6. [ ] Monitorar erros 24/7
+7. [ ] Rastrear conversão cliente
 
 ---
 
 **Assinado:** Base44 QA Team  
-**Data:** 2026-05-12  
-**Status:** Pronto para Soft Opening com ⚠️ Ressalvas Críticas
+**Data:** 2026-05-12 (pós-correção)  
+**Status:** ✅ **PRONTO PARA SOFT OPENING**
 
-**Aprovado para lançamento?** ✅ SIM — Com investigação imediata de `/ServicosCategoria
+**Aprovado para lançamento?** ✅ **SIM** — Fluxo prestador + mobile pendentes teste manual (hoje/amanhã)

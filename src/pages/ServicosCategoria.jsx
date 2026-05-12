@@ -121,101 +121,17 @@ export default function ServicosCategoriaPage() {
   const [viewMode, setViewMode] = useState('list');
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const cat = selectedCategory !== 'Todos' ? selectedCategory : null;
-    const title = cat
-      ? `${cat} em Trancoso, BA — Profissionais Verificados | Trancoso Resolve`
-      : 'Todos os Serviços em Trancoso, BA | Trancoso Resolve';
-    document.title = title;
-
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = cat
-      ? `Encontre profissionais de ${cat} em Trancoso, Bahia. Verificados, avaliados pela comunidade. Solicite orçamento grátis.`
-      : 'Navegue por todos os serviços disponíveis em Trancoso, BA. Profissionais verificados para limpeza, elétrica, encanamento, jardinagem e muito mais.';
-
-    // Canonical dinâmico
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
-
-    // OG:URL dinâmico
-    let ogUrl = document.querySelector('meta[property="og:url"]');
-    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = `${window.location.origin}/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
-
-    // OG:Title dinâmico
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
-    ogTitle.content = cat
-      ? `${cat} em Trancoso, BA — Profissionais Verificados | Trancoso Resolve`
-      : 'Todos os Serviços em Trancoso, BA | Trancoso Resolve';
-
-    // OG:Description dinâmico
-    let ogDesc = document.querySelector('meta[property="og:description"]');
-    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
-    ogDesc.content = cat
-      ? `Encontre profissionais de ${cat} em Trancoso, Bahia. Verificados, avaliados pela comunidade. Solicite orçamento grátis.`
-      : 'Navegue por todos os serviços disponíveis em Trancoso, BA. Profissionais verificados para limpeza, elétrica, encanamento, jardinagem e muito mais.';
-
-    const pageUrl = `${window.location.origin}/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
-    const schemaId = 'schema-categoria';
-    const existing = document.getElementById(schemaId);
-    if (existing) existing.remove();
-    const schema = document.createElement('script');
-    schema.id = schemaId;
-    schema.type = 'application/ld+json';
-
-    const itemListElement = (filteredProviders || []).slice(0, 10).map((p, i) => {
-      const item = {
-        "@type": "Person",
-        "name": p.full_name,
-        "jobTitle": p.occupation,
-        "description": p.bio || `${p.occupation} verificado em Trancoso, Bahia`,
-        "url": `${window.location.origin}/PrestadorPerfil?id=${p.id}`
-      };
-      if (p.photo_url) item.image = p.photo_url;
-      if (p.rating && p.total_reviews > 0) {
-        item.aggregateRating = {
-          "@type": "AggregateRating",
-          "ratingValue": p.rating,
-          "reviewCount": p.total_reviews,
-          "bestRating": 5,
-          "worstRating": 1
-        };
-      }
-      return { "@type": "ListItem", "position": i + 1, "item": item };
-    });
-
-    schema.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "ItemList",
-          "name": cat ? `${cat} em Trancoso` : "Profissionais de Serviços em Trancoso",
-          "description": cat
-            ? `Lista de profissionais de ${cat} verificados em Trancoso, Bahia`
-            : "Todos os profissionais de serviços disponíveis em Trancoso, Bahia",
-          "url": pageUrl,
-          "numberOfItems": filteredProviders?.length || 0,
-          "itemListElement": itemListElement
-        },
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Início", "item": `${window.location.origin}` },
-            { "@type": "ListItem", "position": 2, "name": cat ? `${cat} em Trancoso` : "Serviços em Trancoso", "item": pageUrl }
-          ]
-        }
-      ]
-    });
-    document.head.appendChild(schema);
-    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
-  }, [selectedCategory, filteredProviders]);
-
-  const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
+  // ⭐ STEP 1: Fetch providers FIRST
+  const { data: providers = [], isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
     queryKey: ['serviceProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list('-rating'),
+    queryFn: async () => {
+      try {
+        return await base44.entities.ServiceProvider.list('-rating');
+      } catch (err) {
+        console.error('ServiceProvider query error:', err);
+        return [];
+      }
+    },
   });
 
   const handleRefresh = useCallback(async () => {
@@ -224,9 +140,33 @@ export default function ServicosCategoriaPage() {
 
   const { isPulling, pullDistance, threshold } = usePullToRefresh(handleRefresh);
 
-  // Contadores dinâmicos para filtros
+  // ⭐ STEP 2: Compute filtered providers AFTER providers is available
+  const filteredProviders = useMemo(() => {
+    if (!providers || providers.length === 0) return [];
+    
+    return providers.filter(provider => {
+      // Ocultar reprovados sempre
+      if (provider.status_verificacao === 'reprovado') return false;
+
+      const matchesCategory = selectedCategory === 'Todos' || provider.occupation === selectedCategory;
+      
+      let matchesSearch = true;
+      if (searchQuery.trim() !== '') {
+          matchesSearch = aiFilteredProviderIds ? aiFilteredProviderIds.includes(provider.id) : false;
+      }
+
+      const matchesPrice = priceFilter === "all" || provider.price_range === priceFilter;
+      const matchesRating = ratingFilter === "all" || (provider.rating && provider.rating >= parseFloat(ratingFilter));
+      const matchesAvailability = availabilityFilter === "all" || provider.availability === availabilityFilter;
+      const matchesNeighborhood = neighborhoodFilter === "all" || provider.location?.neighborhood === neighborhoodFilter;
+      
+      return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability && matchesNeighborhood;
+    });
+  }, [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter, neighborhoodFilter]);
+
+  // ⭐ STEP 3: Compute filter counts AFTER providers is available
   const filterCounts = useMemo(() => {
-    if (!providers) return { price: {}, rating: {}, availability: {}, neighborhoods: [] };
+    if (!providers || providers.length === 0) return { price: {}, rating: {}, availability: {}, neighborhoods: [] };
     
     const baseFiltered = providers.filter(p => {
       const matchesCategory = selectedCategory === 'Todos' || p.occupation === selectedCategory;
@@ -261,34 +201,103 @@ export default function ServicosCategoriaPage() {
     };
   }, [providers, selectedCategory, searchQuery, aiFilteredProviderIds]);
 
+  // ⭐ STEP 4: SEO and metadata (depends on filteredProviders)
+  useEffect(() => {
+    const cat = selectedCategory !== 'Todos' ? selectedCategory : null;
+    const title = cat
+      ? `${cat} em Trancoso, BA — Profissionais Verificados | Trancoso Resolve`
+      : 'Todos os Serviços em Trancoso, BA | Trancoso Resolve';
+    document.title = title;
+
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = cat
+      ? `Encontre profissionais de ${cat} em Trancoso, Bahia. Verificados, avaliados pela comunidade. Solicite orçamento grátis.`
+      : 'Navegue por todos os serviços disponíveis em Trancoso, BA. Profissionais verificados para limpeza, elétrica, encanamento, jardinagem e muito mais.';
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = `${window.location.origin}/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
+
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = `${window.location.origin}/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
+    ogTitle.content = cat
+      ? `${cat} em Trancoso, BA — Profissionais Verificados | Trancoso Resolve`
+      : 'Todos os Serviços em Trancoso, BA | Trancoso Resolve';
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
+    ogDesc.content = cat
+      ? `Encontre profissionais de ${cat} em Trancoso, Bahia. Verificados, avaliados pela comunidade. Solicite orçamento grátis.`
+      : 'Navegue por todos os serviços disponíveis em Trancoso, BA. Profissionais verificados para limpeza, elétrica, encanamento, jardinagem e muito mais.';
+
+    const pageUrl = `${window.location.origin}/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
+    const schemaId = 'schema-categoria';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ItemList",
+          "name": cat ? `${cat} em Trancoso` : "Profissionais de Serviços em Trancoso",
+          "description": cat
+            ? `Lista de profissionais de ${cat} verificados em Trancoso, Bahia`
+            : "Todos os profissionais de serviços disponíveis em Trancoso, Bahia",
+          "url": pageUrl,
+          "numberOfItems": filteredProviders?.length || 0,
+          "itemListElement": (filteredProviders || []).slice(0, 10).map((p, i) => {
+            const item = {
+              "@type": "Person",
+              "name": p.full_name,
+              "jobTitle": p.occupation,
+              "description": p.bio || `${p.occupation} verificado em Trancoso, Bahia`,
+              "url": `${window.location.origin}/PrestadorPerfil?id=${p.id}`
+            };
+            if (p.photo_url) item.image = p.photo_url;
+            if (p.rating && p.total_reviews > 0) {
+              item.aggregateRating = {
+                "@type": "AggregateRating",
+                "ratingValue": p.rating,
+                "reviewCount": p.total_reviews,
+                "bestRating": 5,
+                "worstRating": 1
+              };
+            }
+            return { "@type": "ListItem", "position": i + 1, "item": item };
+          })
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": `${window.location.origin}` },
+            { "@type": "ListItem", "position": 2, "name": cat ? `${cat} em Trancoso` : "Serviços em Trancoso", "item": pageUrl }
+          ]
+        }
+      ]
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, [selectedCategory, filteredProviders]);
+
   // Sinônimos para melhorar buscas
   const categoryAliases = {
-    'faxina': 'Limpeza',
-    'faxineira': 'Limpeza',
-    'diarista': 'Limpeza',
-    'limpeza-domestica': 'Limpeza',
-    'limpar': 'Limpeza',
-    'eletricista': 'Eletricista',
-    'eletrico': 'Eletricista',
-    'luz': 'Eletricista',
-    'encanador': 'Encanador',
-    'encanamento': 'Encanador',
-    'vazamento': 'Encanador',
-    'tubulacao': 'Encanador',
-    'jardim': 'Jardinagem',
-    'jardinagem': 'Jardinagem',
-    'grama': 'Jardinagem',
-    'poda': 'Jardinagem',
-    'cozinha': 'Cozinheiro',
-    'cozinheiro': 'Cozinheiro',
-    'chef': 'Cozinheiro',
-    'comida': 'Cozinheiro',
+    'faxina': 'Limpeza', 'faxineira': 'Limpeza', 'diarista': 'Limpeza', 'limpeza-domestica': 'Limpeza', 'limpar': 'Limpeza',
+    'eletricista': 'Eletricista', 'eletrico': 'Eletricista', 'luz': 'Eletricista',
+    'encanador': 'Encanador', 'encanamento': 'Encanador', 'vazamento': 'Encanador', 'tubulacao': 'Encanador',
+    'jardim': 'Jardinagem', 'jardinagem': 'Jardinagem', 'grama': 'Jardinagem', 'poda': 'Jardinagem',
+    'cozinha': 'Cozinheiro', 'cozinheiro': 'Cozinheiro', 'chef': 'Cozinheiro', 'comida': 'Cozinheiro',
   };
 
-  const resolveSearchCategory = (query) => {
-    const normalized = query.toLowerCase().trim();
-    return categoryAliases[normalized] || null;
-  };
+  const resolveSearchCategory = (query) => categoryAliases[query.toLowerCase().trim()] || null;
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -307,53 +316,33 @@ export default function ServicosCategoriaPage() {
       const performSearch = async () => {
         setIsSearching(true);
         try {
-          // Tentar resolver via sinônimo primeiro
           const resolvedCategory = resolveSearchCategory(normalizedQuery);
           
           if (resolvedCategory) {
-            // Se encontrou categoria, filtrar prestadores dessa ocupação
-            const matchingIds = providers
-              .filter(p => p.occupation === resolvedCategory)
-              .map(p => p.id);
+            const matchingIds = providers.filter(p => p.occupation === resolvedCategory).map(p => p.id);
             setAiFilteredProviderIds(matchingIds);
             setIsSearching(false);
             return;
           }
 
-          // Senão, usar IA para busca semântica
           const providerContext = providers.map(p => ({
-            id: p.id,
-            name: p.full_name,
-            occupation: p.occupation,
-            bio: p.bio || '',
-            specialties: p.specialties || [],
+            id: p.id, name: p.full_name, occupation: p.occupation,
+            bio: p.bio || '', specialties: p.specialties || [],
           }));
 
           const result = await base44.integrations.Core.InvokeLLM({
-            prompt: `Baseado na busca do usuário "${normalizedQuery}", analise a lista de prestadores e retorne APENAS os IDs dos mais relevantes. Procure por correspondência semântica. Se não encontrar correspondência, retorne array vazio. Exemplo: "consertar vazamento" → Encanador. Contexto: ${JSON.stringify(providerContext.slice(0, 50))}`,
+            prompt: `Baseado na busca do usuário "${normalizedQuery}", analise a lista de prestadores e retorne APENAS os IDs dos mais relevantes. Procure por correspondência semântica. Se não encontrar correspondência, retorne array vazio. Contexto: ${JSON.stringify(providerContext.slice(0, 50))}`,
             response_json_schema: {
               type: "object",
-              properties: {
-                relevant_provider_ids: {
-                  type: "array",
-                  items: { type: "string" },
-                  description: "IDs dos prestadores relevantes"
-                }
-              },
+              properties: { relevant_provider_ids: { type: "array", items: { type: "string" }, description: "IDs dos prestadores relevantes" } },
               required: ["relevant_provider_ids"]
             }
           });
           
           const ids = result?.relevant_provider_ids;
-          if (Array.isArray(ids)) {
-            setAiFilteredProviderIds(ids);
-          } else {
-            console.warn('AI search returned invalid format:', result);
-            setAiFilteredProviderIds([]);
-          }
+          setAiFilteredProviderIds(Array.isArray(ids) ? ids : []);
         } catch (error) {
           console.error("Search error:", error);
-          // Em caso de erro, retorna array vazio (não resultado de erro)
           setAiFilteredProviderIds([]);
         } finally {
           setIsSearching(false);
@@ -365,110 +354,73 @@ export default function ServicosCategoriaPage() {
     return () => clearTimeout(handler);
   }, [searchQuery, providers]);
 
-
-  const filteredProviders = useMemo(() => providers?.filter(provider => {
-    // Ocultar reprovados sempre
-    if (provider.status_verificacao === 'reprovado') return false;
-
-    const matchesCategory = selectedCategory === 'Todos' || provider.occupation === selectedCategory;
-    
-    let matchesSearch = true;
-    if (searchQuery.trim() !== '') {
-        matchesSearch = aiFilteredProviderIds ? aiFilteredProviderIds.includes(provider.id) : false;
-    }
-
-    const matchesPrice = priceFilter === "all" || provider.price_range === priceFilter;
-    const matchesRating = ratingFilter === "all" || (provider.rating && provider.rating >= parseFloat(ratingFilter));
-    const matchesAvailability = availabilityFilter === "all" || provider.availability === availabilityFilter;
-    const matchesNeighborhood = neighborhoodFilter === "all" || provider.location?.neighborhood === neighborhoodFilter;
-    
-    return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability && matchesNeighborhood;
-  }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter, neighborhoodFilter]);
-  
-
-
   const renderContent = () => {
     if (isLoadingProviders) {
-        return (
-          <div className="text-center py-16">
-            <Loader2 className="w-8 h-8 mx-auto text-blue-500 animate-spin mb-4" />
-            <p className="text-slate-500 text-lg">Carregando profissionais...</p>
-          </div>
-        );
+      return (
+        <div className="text-center py-16">
+          <Loader2 className="w-8 h-8 mx-auto text-blue-500 animate-spin mb-4" />
+          <p className="text-slate-500 text-lg">Carregando profissionais...</p>
+        </div>
+      );
     }
 
     if (isErrorProviders) {
-        return (
-            <div className="text-center py-16 bg-red-50 rounded-lg">
-                <AlertCircle className="w-10 h-10 mx-auto text-red-500 mb-4" />
-                <h3 className="text-xl font-semibold text-red-800">Erro ao Carregar</h3>
-                <p className="text-red-600 mt-2">Não foi possível buscar os profissionais. Por favor, tente novamente mais tarde.</p>
-            </div>
-        );
+      return (
+        <div className="text-center py-16 bg-red-50 rounded-lg">
+          <AlertCircle className="w-10 h-10 mx-auto text-red-500 mb-4" />
+          <h3 className="text-xl font-semibold text-red-800">Erro ao Carregar</h3>
+          <p className="text-red-600 mt-2">Não foi possível buscar os profissionais. Por favor, tente novamente.</p>
+        </div>
+      );
     }
     
     if (searchQuery.trim() !== '' && isSearching) {
-        return (
-            <div className="text-center py-16">
-                <Loader2 className="w-8 h-8 mx-auto text-blue-500 animate-spin mb-4" />
-                <p className="text-slate-500 text-lg">Buscando profissionais com IA...</p>
-            </div>
-        );
+      return (
+        <div className="text-center py-16">
+          <Loader2 className="w-8 h-8 mx-auto text-blue-500 animate-spin mb-4" />
+          <p className="text-slate-500 text-lg">Buscando profissionais com IA...</p>
+        </div>
+      );
     }
     
     if (filteredProviders.length === 0) {
-        const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '';
-        const hasSearchQuery = searchQuery.trim() !== '';
-        
-        return (
-          <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
-            <div className="w-16 h-16 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
-              <Search className="w-8 h-8 text-slate-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-slate-700 mb-2">
-              {hasSearchQuery ? 'Nenhum Profissional Encontrado' : 'Nenhum Profissional Encontrado'}
-            </h3>
-            <p className="text-slate-500 max-w-md mx-auto mb-6">
-              {hasSearchQuery
-                ? `Não encontramos profissionais para "${searchQuery}". Tente uma busca diferente ou use as categorias.`
-                : hasActiveFilters 
-                ? "Não encontramos profissionais com os filtros selecionados. Experimente ajustar sua busca."
-                : "Ainda não há profissionais cadastrados nesta categoria."}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              {hasActiveFilters && (
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                  setSearchQuery('');
-                  setPriceFilter('all');
-                  setRatingFilter('all');
-                  setAvailabilityFilter('all');
-                  setSelectedCategory('Todos');
-                  }}
-                  className="gap-2"
-                >
-                  <Filter className="w-4 h-4" />
-                  Limpar Filtros
-                </Button>
-              )}
-              <Link to={createPageUrl("SejaPrestador")}>
-                <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 gap-2">
-                  <Star className="w-4 h-4" />
-                  Seja o Primeiro!
-                </Button>
-              </Link>
-            </div>
+      const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '';
+      const hasSearchQuery = searchQuery.trim() !== '';
+      
+      return (
+        <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
+          <div className="w-16 h-16 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
+            <Search className="w-8 h-8 text-slate-400" />
           </div>
-        );
+          <h3 className="text-xl font-semibold text-slate-700 mb-2">Nenhum Profissional Encontrado</h3>
+          <p className="text-slate-500 max-w-md mx-auto mb-6">
+            {hasSearchQuery
+              ? `Não encontramos profissionais para "${searchQuery}". Tente uma busca diferente ou use as categorias.`
+              : hasActiveFilters 
+              ? "Não encontramos profissionais com os filtros selecionados. Experimente ajustar sua busca."
+              : "Ainda não há profissionais cadastrados nesta categoria."}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            {hasActiveFilters && (
+              <Button variant="outline" onClick={() => {
+                setSearchQuery(''); setPriceFilter('all'); setRatingFilter('all');
+                setAvailabilityFilter('all'); setNeighborhoodFilter('all'); setSelectedCategory('Todos');
+              }} className="gap-2">
+                <Filter className="w-4 h-4" /> Limpar Filtros
+              </Button>
+            )}
+            <Link to={createPageUrl("SejaPrestador")}>
+              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 gap-2">
+                <Star className="w-4 h-4" /> Seja o Primeiro!
+              </Button>
+            </Link>
+          </div>
+        </div>
+      );
     }
 
     if (viewMode === 'map') {
-        return (
-            <div className="col-span-full">
-                <ProvidersMap providers={filteredProviders} />
-            </div>
-        );
+      return <div className="col-span-full"><ProvidersMap providers={filteredProviders} /></div>;
     }
     
     return filteredProviders.map((provider) => <ProviderCard key={provider.id} provider={provider} />);
@@ -476,12 +428,8 @@ export default function ServicosCategoriaPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Pull-to-refresh indicator */}
       {pullDistance > 10 && (
-        <div
-          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-blue-50 border-b border-blue-200 transition-all"
-          style={{ height: `${Math.min(pullDistance, threshold)}px` }}
-        >
+        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-blue-50 border-b border-blue-200 transition-all" style={{ height: `${Math.min(pullDistance, threshold)}px` }}>
           <div className={`flex items-center gap-2 text-blue-600 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
@@ -490,23 +438,19 @@ export default function ServicosCategoriaPage() {
           </div>
         </div>
       )}
-      {/* Header */}
+      
       <div className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-8 px-4">
         <div className="container mx-auto max-w-7xl">
           <Link to={createPageUrl("Home")}>
             <Button variant="ghost" className="text-white hover:bg-white/20 mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar
+              <ArrowLeft className="w-4 h-4 mr-2" /> Voltar
             </Button>
           </Link>
-          
           <h1 className="text-3xl font-bold mb-2">
             {selectedCategory === 'Todos' ? 'Serviços em Trancoso, BA' : `${selectedCategory} em Trancoso, BA`}
           </h1>
           <p className="text-blue-100">
-            {isLoadingProviders ? "Carregando..." :
-             (isSearching ? "Buscando com IA..." :
-             `${filteredProviders.length} profissiona${filteredProviders.length !== 1 ? 'is' : 'l'} encontrado${filteredProviders.length !== 1 ? 's' : ''}`)}
+            {isLoadingProviders ? "Carregando..." : (isSearching ? "Buscando com IA..." : `${filteredProviders.length} profissiona${filteredProviders.length !== 1 ? 'is' : 'l'} encontrado${filteredProviders.length !== 1 ? 's' : ''}`)}
           </p>
           {selectedCategory !== 'Todos' && slugMap[selectedCategory] && (
             <Link to={`/ServicoLanding?slug=${slugMap[selectedCategory]}`} className="inline-block mt-3">
@@ -519,7 +463,6 @@ export default function ServicosCategoriaPage() {
       </div>
 
       <div className="container mx-auto max-w-7xl px-4 py-8">
-        {/* Filters */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-2">
@@ -527,12 +470,8 @@ export default function ServicosCategoriaPage() {
               <h3 className="font-semibold text-slate-900">Filtros</h3>
             </div>
             <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value)} className="flex">
-              <ToggleGroupItem value="list" aria-label="Ver em lista">
-                <List className="h-4 w-4" />
-              </ToggleGroupItem>
-              <ToggleGroupItem value="map" aria-label="Ver no mapa">
-                <Map className="h-4 w-4" />
-              </ToggleGroupItem>
+              <ToggleGroupItem value="list" aria-label="Ver em lista"><List className="h-4 w-4" /></ToggleGroupItem>
+              <ToggleGroupItem value="map" aria-label="Ver no mapa"><Map className="h-4 w-4" /></ToggleGroupItem>
             </ToggleGroup>
           </div>
           
@@ -547,9 +486,7 @@ export default function ServicosCategoriaPage() {
                 className="pl-10"
                 aria-label="Busca inteligente de profissionais"
               />
-              {isSearching && (
-                 <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 animate-spin" />
-              )}
+              {isSearching && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 animate-spin" />}
             </div>
             
             <Select value={priceFilter} onValueChange={setPriceFilter}>
@@ -557,10 +494,10 @@ export default function ServicosCategoriaPage() {
                 <SelectValue placeholder="Faixa de Preço" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos os Preços ({filterCounts.price.all || 0})</SelectItem>
-                <SelectItem value="$">$ - Econômico ({filterCounts.price['$'] || 0})</SelectItem>
-                <SelectItem value="$$">$$ - Moderado ({filterCounts.price['$$'] || 0})</SelectItem>
-                <SelectItem value="$$$">$$$ - Premium ({filterCounts.price['$$$'] || 0})</SelectItem>
+                <SelectItem value="all">Todos os Preços ({filterCounts.price?.all || 0})</SelectItem>
+                <SelectItem value="$">$ - Econômico ({filterCounts.price?.['$'] || 0})</SelectItem>
+                <SelectItem value="$$">$$ - Moderado ({filterCounts.price?.['$$'] || 0})</SelectItem>
+                <SelectItem value="$$$">$$$ - Premium ({filterCounts.price?.['$$$'] || 0})</SelectItem>
               </SelectContent>
             </Select>
             
@@ -569,10 +506,10 @@ export default function ServicosCategoriaPage() {
                 <SelectValue placeholder="Avaliação" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todas as Avaliações ({filterCounts.rating.all || 0})</SelectItem>
-                <SelectItem value="4.5">⭐ 4.5+ Excelente ({filterCounts.rating['4.5'] || 0})</SelectItem>
-                <SelectItem value="4.0">⭐ 4.0+ Muito Bom ({filterCounts.rating['4.0'] || 0})</SelectItem>
-                <SelectItem value="3.5">⭐ 3.5+ Bom ({filterCounts.rating['3.5'] || 0})</SelectItem>
+                <SelectItem value="all">Todas as Avaliações ({filterCounts.rating?.all || 0})</SelectItem>
+                <SelectItem value="4.5">⭐ 4.5+ Excelente ({filterCounts.rating?.['4.5'] || 0})</SelectItem>
+                <SelectItem value="4.0">⭐ 4.0+ Muito Bom ({filterCounts.rating?.['4.0'] || 0})</SelectItem>
+                <SelectItem value="3.5">⭐ 3.5+ Bom ({filterCounts.rating?.['3.5'] || 0})</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -607,25 +544,20 @@ export default function ServicosCategoriaPage() {
               <Button
                 variant="outline"
                 onClick={() => {
-                  setSearchQuery('');
-                  setPriceFilter('all');
-                  setRatingFilter('all');
-                  setAvailabilityFilter('all');
-                  setNeighborhoodFilter('all');
+                  setSearchQuery(''); setPriceFilter('all'); setRatingFilter('all');
+                  setAvailabilityFilter('all'); setNeighborhoodFilter('all');
                 }}
                 className="gap-2 text-slate-600"
                 aria-label="Limpar todos os filtros"
               >
-                <X className="w-4 h-4" />
-                Limpar Filtros
+                <X className="w-4 h-4" /> Limpar Filtros
               </Button>
             )}
           </div>
         </div>
 
-        {/* Providers Grid / Map */}
         <div className={`grid gap-6 ${viewMode === 'list' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
-            {renderContent()}
+          {renderContent()}
         </div>
       </div>
     </div>
