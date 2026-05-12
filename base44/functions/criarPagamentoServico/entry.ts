@@ -3,6 +3,19 @@ import Stripe from 'npm:stripe@14.21.0';
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
 
+// Logging helper
+function logStructured(action, data, level = 'info') {
+  const log = {
+    timestamp: new Date().toISOString(),
+    action,
+    level,
+    data,
+    environment: Deno.env.get('ENVIRONMENT') || 'production'
+  };
+  console.log(JSON.stringify(log));
+  return log;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -96,7 +109,13 @@ Deno.serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('[criarPagamento] Erro:', error.message);
+    logStructured('criarPagamento_error', {
+      errorMessage: error.message,
+      errorCode: error.code,
+      requestId: body.request_id,
+      userEmail: user?.email
+    }, 'error');
+    
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

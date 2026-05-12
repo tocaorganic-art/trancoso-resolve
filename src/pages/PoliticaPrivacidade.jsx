@@ -1,150 +1,94 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
-import { Shield, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 
-export default function PoliticaPrivacidadePage() {
+export default function PoliticaPrivacidade() {
+  useEffect(() => {
+    document.title = 'Política de Privacidade - Trancoso Resolve';
+    const meta = document.querySelector('meta[name="description"]') || 
+                 (() => { const m = document.createElement('meta'); m.name = 'description'; document.head.appendChild(m); return m; })();
+    meta.content = 'Política de Privacidade e Proteção de Dados da Trancoso Resolve. LGPD em conformidade.';
+  }, []);
+
   return (
-    <div className="bg-white py-12">
-      <div className="container mx-auto max-w-3xl px-4">
-        <Link to={createPageUrl("Home")}>
-            <Button variant="outline" className="mb-8">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar para a Home
-            </Button>
-        </Link>
-        <div className="mb-8 text-center">
-            <Shield className="w-16 h-16 mx-auto text-cyan-600 mb-4" />
-            <h1 className="text-4xl font-bold text-slate-900">Política de Privacidade</h1>
-            <p className="text-slate-500 mt-2">Última atualização: 16 de outubro de 2025</p>
-        </div>
+    <div className="min-h-screen bg-slate-900 text-white py-12 px-4">
+      <div className="container mx-auto max-w-4xl">
+        <h1 className="text-4xl font-bold mb-8">Política de Privacidade</h1>
 
-        <div className="prose prose-slate max-w-none lg:prose-lg">
-            <section>
-              <h2>1. Introdução</h2>
-              <p>
-                A Toca Experience ("nós", "nossos" ou "empresa") valoriza sua privacidade e se compromete 
-                a proteger seus dados pessoais. Esta Política de Privacidade descreve como coletamos, usamos 
-                e compartilhamos suas informações quando você utiliza nosso aplicativo MeAjudaToca 
-                ("aplicativo") e nossos serviços.
-              </p>
-              <p>
-                Ao utilizar nosso aplicativo, você concorda com a coleta e uso de informações de acordo 
-                com esta política. Processamos seus dados pessoais apenas para os fins descritos nesta 
-                política e de acordo com a Lei Geral de Proteção de Dados (LGPD) e outras leis de 
-                proteção de dados aplicáveis.
-              </p>
-            </section>
-            
-            <section>
-              <h2>2. Dados que Coletamos</h2>
-              <p>Podemos coletar os seguintes tipos de informações:</p>
-              
-              <h3>2.1 Informações que você nos fornece:</h3>
-              <ul>
-                <li>Informações de cadastro (nome, e-mail, telefone, endereço)</li>
-                <li>Informações de perfil para prestadores de serviço (experiência, especialidades)</li>
-                <li>Conteúdo que você gera (avaliações, comentários, fotos de serviços)</li>
-                <li>Informações de pagamento (processadas por gateways de pagamento seguros)</li>
-                <li>Comunicações com nosso suporte e outros usuários</li>
-              </ul>
-              
-              <h3>2.2 Informações coletadas automaticamente:</h3>
-              <ul>
-                <li>Dados de localização (com seu consentimento)</li>
-                <li>Informações do dispositivo (modelo, sistema operacional)</li>
-                <li>Dados de uso e interação com o aplicativo</li>
-                <li>Logs e registros de erros</li>
-              </ul>
-            </section>
-            
-            <section>
-              <h2>3. Como Usamos Seus Dados</h2>
-              <p>Utilizamos suas informações para:</p>
-              <ul>
-                <li>Fornecer, manter e melhorar nossos serviços</li>
-                <li>Processar agendamentos e pagamentos</li>
-                <li>Conectar clientes e prestadores de serviço</li>
-                <li>Personalizar sua experiência no aplicativo</li>
-                <li>Enviar comunicações sobre serviços, atualizações e promoções</li>
-                <li>Garantir a segurança da plataforma e prevenir fraudes</li>
-                <li>Cumprir obrigações legais e resolver disputas</li>
-              </ul>
-            </section>
-            
-            <section>
-              <h2>4. Compartilhamento de Dados</h2>
-              <p>Podemos compartilhar suas informações com:</p>
-              <ul>
-                <li>Outros usuários da plataforma (ex.: cliente e prestador em um agendamento)</li>
-                <li>Processadores de pagamento para viabilizar transações</li>
-                <li>Prestadores de serviços que nos ajudam a operar a plataforma</li>
-                <li>Autoridades quando legalmente exigido</li>
-              </ul>
-              <p>
-                Não vendemos ou alugamos seus dados pessoais para terceiros para fins de marketing.
-              </p>
-            </section>
-            
-            <section>
-              <h2>5. Seus Direitos</h2>
-              <p>De acordo com a LGPD, você tem os seguintes direitos:</p>
-              <ul>
-                <li>Acesso aos seus dados pessoais</li>
-                <li>Correção de dados incompletos ou incorretos</li>
-                <li>Eliminação de dados desnecessários ou excessivos</li>
-                <li>Portabilidade dos dados para outro serviço</li>
-                <li>Revogação do consentimento a qualquer momento</li>
-                <li>Informações sobre compartilhamento de dados</li>
-              </ul>
-              <p>
-                Para exercer seus direitos, entre em contato conosco pelo e-mail:
-                <a href="mailto:privacidade@tocaexperience.com"> privacidade@tocaexperience.com</a>
-              </p>
-            </section>
-            
-            <section>
-              <h2>6. Segurança de Dados</h2>
-              <p>
-                Implementamos medidas técnicas e organizacionais para proteger seus dados pessoais contra 
-                acesso não autorizado, alteração, divulgação ou destruição. Isso inclui criptografia, 
-                controles de acesso e auditorias regulares.
-              </p>
-            </section>
-            
-            <section>
-              <h2>7. Período de Retenção</h2>
-              <p>
-                Mantemos seus dados pessoais apenas pelo tempo necessário para os fins descritos nesta 
-                política ou conforme exigido por lei. Os critérios para determinar o período de retenção 
-                incluem obrigações legais e interesses legítimos do negócio.
-              </p>
-            </section>
-            
-            <section>
-              <h2>8. Alterações nesta Política</h2>
-              <p>
-                Podemos atualizar esta Política de Privacidade periodicamente. Notificaremos você 
-                sobre mudanças significativas através de um aviso no aplicativo ou por e-mail.
-              </p>
-            </section>
-            
-            <section>
-              <h2>9. Contato</h2>
-              <p>
-                Se você tiver dúvidas sobre esta Política de Privacidade ou quiser exercer seus direitos, 
-                entre em contato conosco:
-              </p>
-              <p>
-                <strong>Toca Experience</strong><br />
-                Encarregado de Dados (DPO): João Silva<br />
-                E-mail: <a href="mailto:dpo@tocaexperience.com">dpo@tocaexperience.com</a><br />
-                Endereço: Rua Principal, 123, Quadrado, Trancoso - BA<br />
-                Telefone: (73) 3333-4444
-              </p>
-            </section>
-        </div>
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">1. Introdução</h2>
+          <p>
+            A Trancoso Resolve ("Plataforma") respeita sua privacidade e está comprometida com a proteção de seus dados pessoais de acordo com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018).
+          </p>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">2. Dados Coletados</h2>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Informações de cadastro: nome, e-mail, telefone, endereço</li>
+            <li>Documentos de identificação (CPF, RG) para verificação</li>
+            <li>Dados de pagamento (via Stripe - nunca armazenados diretamente)</li>
+            <li>Dados de navegação e uso da plataforma (via Google Analytics)</li>
+            <li>Comunicações e mensagens entre usuários</li>
+          </ul>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">3. Finalidade do Tratamento</h2>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Criar e gerenciar sua conta</li>
+            <li>Processar pagamentos e assinaturas</li>
+            <li>Verificação de identidade (verificação de antecedentes)</li>
+            <li>Melhorar a experiência do usuário</li>
+            <li>Conformidade legal e combate ao abuso</li>
+          </ul>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">4. Armazenamento e Segurança</h2>
+          <p>
+            Seus dados são armazenados em servidores seguros com criptografia HTTPS em trânsito. Documentos de identificação são armazenados em buckets privados com acesso restrito. Mensagens de pagamento são processadas via Stripe e nunca armazenadas em nossos servidores.
+          </p>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">5. Direitos do Usuário (LGPD)</h2>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>Acesso:</strong> Direito de acessar seus dados pessoais</li>
+            <li><strong>Correção:</strong> Direito de corrigir dados imprecisos</li>
+            <li><strong>Exclusão:</strong> Direito ao "direito ao esquecimento"</li>
+            <li><strong>Portabilidade:</strong> Direito de receber dados em formato estruturado</li>
+            <li><strong>Revogação:</strong> Direito de revogar consentimento</li>
+          </ul>
+          <p className="mt-4">Para exercer esses direitos, contacte: <strong>privacidade@trancosoresolve.com</strong></p>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">6. Retenção de Dados</h2>
+          <p>
+            Mantemos seus dados enquanto sua conta estiver ativa. Após exclusão, dados são retidos conforme exigências legais (ex: 5 anos para registros financeiros).
+          </p>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">7. Cookies</h2>
+          <p>
+            Usamos cookies para análise de tráfego (Google Analytics) e funcionalidade da plataforma. Você pode aceitar ou rejeitar cookies no banner de consentimento exibido ao acessar o site.
+          </p>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">8. Alterações nesta Política</h2>
+          <p>
+            Podemos atualizar esta política periodicamente. A data da última atualização é mostrada abaixo.
+          </p>
+          <p className="text-sm text-slate-400">Última atualização: 12 de maio de 2026</p>
+        </section>
+
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-blue-400">9. Contato</h2>
+          <p>
+            Para dúvidas sobre privacidade: <strong>privacidade@trancosoresolve.com</strong>
+          </p>
+        </section>
       </div>
     </div>
   );
