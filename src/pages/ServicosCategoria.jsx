@@ -134,6 +134,31 @@ export default function ServicosCategoriaPage() {
       ? `Encontre profissionais de ${cat} em Trancoso, Bahia. Verificados, avaliados pela comunidade. Solicite orçamento grátis.`
       : 'Navegue por todos os serviços disponíveis em Trancoso, BA. Profissionais verificados para limpeza, elétrica, encanamento, jardinagem e muito mais.';
 
+    // Canonical dinâmico
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = `https://www.trancosoresolve.com.br/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
+
+    // OG:URL dinâmico
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = `https://www.trancosoresolve.com.br/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
+
+    // OG:Title dinâmico
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
+    ogTitle.content = cat
+      ? `${cat} em Trancoso, BA — Profissionais Verificados | Trancoso Resolve`
+      : 'Todos os Serviços em Trancoso, BA | Trancoso Resolve';
+
+    // OG:Description dinâmico
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
+    ogDesc.content = cat
+      ? `Encontre profissionais de ${cat} em Trancoso, Bahia. Verificados, avaliados pela comunidade. Solicite orçamento grátis.`
+      : 'Navegue por todos os serviços disponíveis em Trancoso, BA. Profissionais verificados para limpeza, elétrica, encanamento, jardinagem e muito mais.';
+
+    const pageUrl = `https://www.trancosoresolve.com.br/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`;
     const schemaId = 'schema-categoria';
     const existing = document.getElementById(schemaId);
     if (existing) existing.remove();
@@ -147,12 +172,29 @@ export default function ServicosCategoriaPage() {
       "description": cat
         ? `Lista de profissionais de ${cat} verificados em Trancoso, Bahia`
         : "Todos os serviços disponíveis em Trancoso, Bahia",
-      "url": `https://www.trancosoresolve.com.br/ServicosCategoria${cat ? `?cat=${encodeURIComponent(cat)}` : ''}`,
+      "url": pageUrl,
       "numberOfItems": filteredProviders?.length || 0,
+      "itemListElement": (filteredProviders || []).slice(0, 10).map((p, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "item": {
+          "@type": "Person",
+          "name": p.full_name,
+          "jobTitle": p.occupation,
+          "url": `https://www.trancosoresolve.com.br/PrestadorPerfil?id=${p.id}`,
+          "image": p.photo_url || undefined,
+          "aggregateRating": p.rating && p.total_reviews > 0 ? {
+            "@type": "AggregateRating",
+            "ratingValue": p.rating,
+            "reviewCount": p.total_reviews,
+            "bestRating": 5
+          } : undefined
+        }
+      }))
     });
     document.head.appendChild(schema);
     return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
-  }, [selectedCategory, filteredProviders?.length]);
+  }, [selectedCategory, filteredProviders]);
 
   const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
     queryKey: ['serviceProviders'],
