@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
@@ -147,6 +147,67 @@ export default function PrestadorPerfilPage() {
       time: requestData.time || null,
     });
   };
+
+  // SEO dinâmico por prestador
+  useEffect(() => {
+    if (!provider) return;
+    const title = `${provider.full_name} — ${provider.occupation} em Trancoso, BA | Trancoso Resolve`;
+    document.title = title;
+
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = `${provider.full_name}, ${provider.occupation} verificado em Trancoso, Bahia. ${provider.rating ? `Avaliação ${provider.rating.toFixed(1)}/5 estrelas.` : 'Novo profissional.'} ${provider.bio ? provider.bio.slice(0, 100) + '...' : 'Contrate agora!'}`;
+
+    const schemaId = 'schema-prestador';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": `https://trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}#person`,
+          "name": provider.full_name,
+          "jobTitle": provider.occupation,
+          "image": provider.photo_url || undefined,
+          "description": provider.bio || undefined,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": provider.location?.city || "Trancoso",
+            "addressRegion": "BA",
+            "addressCountry": "BR"
+          },
+          "aggregateRating": provider.rating && provider.total_reviews > 0 ? {
+            "@type": "AggregateRating",
+            "ratingValue": provider.rating,
+            "reviewCount": provider.total_reviews,
+            "bestRating": 5,
+            "worstRating": 1
+          } : undefined,
+          "url": `https://trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}`,
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Trancoso Resolve",
+            "url": "https://trancosoresolve.com.br"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://trancosoresolve.com.br" },
+            { "@type": "ListItem", "position": 2, "name": "Serviços", "item": "https://trancosoresolve.com.br/ServicosCategoria" },
+            { "@type": "ListItem", "position": 3, "name": provider.occupation, "item": `https://trancosoresolve.com.br/ServicosCategoria?cat=${encodeURIComponent(provider.occupation)}` },
+            { "@type": "ListItem", "position": 4, "name": provider.full_name, "item": `https://trancosoresolve.com.br/PrestadorPerfil?id=${provider.id}` }
+          ]
+        }
+      ]
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, [provider]);
 
   if (isLoading) {
     return <div className="container mx-auto px-4 py-8">Carregando...</div>;

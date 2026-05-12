@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldCheck, UserCheck, Star, Lock } from 'lucide-react';
+import { ShieldCheck, UserCheck, Star, Lock, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { createPageUrl } from '@/utils';
 
 const SecurityFeature = ({ icon, title, description }) => (
   <Card className="border-none shadow-lg text-center">
@@ -15,6 +18,46 @@ const SecurityFeature = ({ icon, title, description }) => (
 );
 
 export default function SegurancaPage() {
+  useEffect(() => {
+    document.title = "Segurança em Trancoso Resolve — Prestadores Verificados e Proteção de Dados";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = "Todos os prestadores do Trancoso Resolve passam por verificação de identidade e consulta de antecedentes criminais. Sua segurança é nossa prioridade.";
+
+    const schemaId = 'schema-seguranca';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Segurança — Trancoso Resolve",
+      "description": "Saiba como garantimos a segurança de clientes e prestadores em Trancoso. Verificação de identidade, antecedentes criminais, avaliações e proteção LGPD.",
+      "url": "https://trancosoresolve.com.br/Seguranca",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://trancosoresolve.com.br" },
+          { "@type": "ListItem", "position": 2, "name": "Segurança", "item": "https://trancosoresolve.com.br/Seguranca" }
+        ]
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Medidas de Segurança",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Perfis Verificados", "description": "Análise de documentos e verificação de identidade de todos os prestadores." },
+          { "@type": "ListItem", "position": 2, "name": "Consulta de Antecedentes", "description": "Prestadores passam por consulta de antecedentes criminais antes de serem listados." },
+          { "@type": "ListItem", "position": 3, "name": "Sistema de Avaliações", "description": "Avaliações reais de clientes após cada serviço para garantir qualidade." },
+          { "@type": "ListItem", "position": 4, "name": "Proteção LGPD", "description": "Dados pessoais protegidos seguindo todas as diretrizes da Lei Geral de Proteção de Dados." }
+        ]
+      }
+    });
+    document.head.appendChild(schema);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
+  }, []);
+
   return (
     <div className="bg-slate-50 py-16">
       <div className="container mx-auto px-4">
@@ -26,25 +69,50 @@ export default function SegurancaPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <SecurityFeature
             icon={<UserCheck className="w-8 h-8" />}
-            title="Perfis Verificados"
-            description="Prestadores com o selo 'Verificado' passaram por uma análise de documentos, garantindo que são quem dizem ser. Priorize sempre profissionais com este selo para mais tranquilidade."
+            title="Identidade Verificada"
+            description="Todos os prestadores passam por análise de documentos e verificação de identidade antes de aparecerem na plataforma."
+          />
+          <SecurityFeature
+            icon={<ShieldCheck className="w-8 h-8" />}
+            title="Antecedentes Criminais"
+            description="Consultamos antecedentes criminais de cada prestador com autorização expressa (LGPD), garantindo uma comunidade mais segura."
           />
           <SecurityFeature
             icon={<Star className="w-8 h-8" />}
-            title="Sistema de Avaliações"
-            description="Após cada serviço, clientes avaliam os prestadores. Esse sistema transparente ajuda você a escolher os profissionais mais bem qualificados e confiáveis da nossa comunidade."
+            title="Avaliações Reais"
+            description="Após cada serviço, clientes avaliam os prestadores. Feedbacks reais para você escolher com confiança."
           />
           <SecurityFeature
             icon={<Lock className="w-8 h-8" />}
-            title="Proteção de Dados (LGPD)"
-            description="Levamos sua privacidade a sério. Seus dados pessoais são protegidos e utilizados apenas para o funcionamento da plataforma, seguindo todas as diretrizes da Lei Geral de Proteção de Dados (LGPD)."
+            title="Proteção de Dados"
+            description="Seus dados são protegidos conforme a LGPD (Lei Geral de Proteção de Dados). Nunca vendemos ou compartilhamos seus dados com terceiros."
           />
         </div>
+
+        {/* Selos de confiança */}
+        <div className="mt-12 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8">
+          <h2 className="text-xl font-bold text-center text-green-900 mb-6">O que significa o Selo Verificado?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { icon: <CheckCircle className="w-5 h-5 text-green-600" />, title: "Documento Confirmado", desc: "RG ou CPF conferido e autêntico." },
+              { icon: <CheckCircle className="w-5 h-5 text-green-600" />, title: "Sem Antecedentes", desc: "Consulta de antecedentes limpa." },
+              { icon: <CheckCircle className="w-5 h-5 text-green-600" />, title: "Aprovado pela Equipe", desc: "Análise manual pela equipe Trancoso Resolve." },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                {item.icon}
+                <div>
+                  <p className="font-semibold text-green-900 text-sm">{item.title}</p>
+                  <p className="text-green-700 text-xs mt-0.5">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
         
-        <Card className="mt-16 bg-white border-none shadow-xl">
+        <Card className="mt-10 bg-white border-none shadow-xl">
            <CardHeader>
              <CardTitle className="text-2xl text-center">Nossas Diretrizes de Confiança</CardTitle>
            </CardHeader>
@@ -65,6 +133,24 @@ export default function SegurancaPage() {
            </CardContent>
         </Card>
 
+      </div>
+
+      {/* CTA Final */}
+      <div className="container mx-auto px-4 mt-16 mb-8 text-center">
+        <h2 className="text-2xl font-bold text-slate-900 mb-3">Contrate com Confiança em Trancoso</h2>
+        <p className="text-slate-600 mb-6 max-w-lg mx-auto">Todos os profissionais listados passaram por verificação. Você tem a segurança que merece.</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link to={createPageUrl("ServicosCategoria")}>
+            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold w-full sm:w-auto">
+              Ver Profissionais Verificados
+            </Button>
+          </Link>
+          <Link to={createPageUrl("SejaPrestador")}>
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              Seja um Prestador
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
