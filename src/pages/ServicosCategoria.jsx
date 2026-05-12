@@ -121,6 +121,25 @@ export default function ServicosCategoriaPage() {
   const [viewMode, setViewMode] = useState('list');
   const queryClient = useQueryClient();
 
+  const filteredProviders = useMemo(() => providers?.filter(provider => {
+    // Ocultar reprovados sempre
+    if (provider.status_verificacao === 'reprovado') return false;
+
+    const matchesCategory = selectedCategory === 'Todos' || provider.occupation === selectedCategory;
+    
+    let matchesSearch = true;
+    if (searchQuery.trim() !== '') {
+        matchesSearch = aiFilteredProviderIds ? aiFilteredProviderIds.includes(provider.id) : false;
+    }
+
+    const matchesPrice = priceFilter === "all" || provider.price_range === priceFilter;
+    const matchesRating = ratingFilter === "all" || (provider.rating && provider.rating >= parseFloat(ratingFilter));
+    const matchesAvailability = availabilityFilter === "all" || provider.availability === availabilityFilter;
+    const matchesNeighborhood = neighborhoodFilter === "all" || provider.location?.neighborhood === neighborhoodFilter;
+    
+    return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability && matchesNeighborhood;
+  }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter, neighborhoodFilter]);
+
   useEffect(() => {
     const cat = selectedCategory !== 'Todos' ? selectedCategory : null;
     const title = cat
@@ -311,28 +330,7 @@ export default function ServicosCategoriaPage() {
 
     return () => clearTimeout(handler);
   }, [searchQuery, providers]);
-
-
-  const filteredProviders = useMemo(() => providers?.filter(provider => {
-    // Ocultar reprovados sempre
-    if (provider.status_verificacao === 'reprovado') return false;
-
-    const matchesCategory = selectedCategory === 'Todos' || provider.occupation === selectedCategory;
-    
-    let matchesSearch = true;
-    if (searchQuery.trim() !== '') {
-        matchesSearch = aiFilteredProviderIds ? aiFilteredProviderIds.includes(provider.id) : false;
-    }
-
-    const matchesPrice = priceFilter === "all" || provider.price_range === priceFilter;
-    const matchesRating = ratingFilter === "all" || (provider.rating && provider.rating >= parseFloat(ratingFilter));
-    const matchesAvailability = availabilityFilter === "all" || provider.availability === availabilityFilter;
-    const matchesNeighborhood = neighborhoodFilter === "all" || provider.location?.neighborhood === neighborhoodFilter;
-    
-    return matchesCategory && matchesSearch && matchesPrice && matchesRating && matchesAvailability && matchesNeighborhood;
-  }) || [], [providers, selectedCategory, searchQuery, aiFilteredProviderIds, priceFilter, ratingFilter, availabilityFilter, neighborhoodFilter]);
   
-
 
   const renderContent = () => {
     if (isLoadingProviders) {
