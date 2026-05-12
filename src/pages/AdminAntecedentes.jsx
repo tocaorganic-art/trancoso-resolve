@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { verificarAntecedentes } from "@/functions/verificarAntecedentes";
+// Chamado via SDK: base44.functions.invoke('verificarAntecedentes', {})
 import {
   Loader2, ShieldCheck, Search, CheckCircle, XCircle, Clock, AlertTriangle, RefreshCw
 } from "lucide-react";
@@ -71,7 +71,7 @@ export default function AdminAntecedentesPage() {
   });
 
   const reverificaMutation = useMutation({
-    mutationFn: (id) => verificarAntecedentes({ service_provider_id: id }),
+    mutationFn: (id) => base44.functions.invoke('verificarAntecedentes', { service_provider_id: id }),
     onSuccess: (_, id) => {
       toast.success("🔄 Verificação reenviada para Infosimples.");
       queryClient.invalidateQueries({ queryKey: ["allProviders"] });

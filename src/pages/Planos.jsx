@@ -6,7 +6,7 @@ import { Check, Zap, Tag, Loader2, Building2, AlertTriangle } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { createSubscriptionCheckout } from "@/functions/createSubscriptionCheckout";
+// Chamado via SDK: base44.functions.invoke('createSubscriptionCheckout', {})
 import CancelSubscriptionButton from "@/components/dashboard/CancelSubscriptionButton";
 import PositionamentoEstrategico from "@/components/plans/PositionamentoEstrategico";
 
@@ -196,7 +196,7 @@ export default function PlanosPage() {
     }
     setLoadingPlan(plan);
     try {
-      const res = await createSubscriptionCheckout({ plan, user_email: user.email });
+      const res = await base44.functions.invoke('createSubscriptionCheckout', { plan, user_email: user.email });
       if (res.data?.url) window.location.href = res.data.url;
     } catch {
       toast.error('Erro ao iniciar pagamento. Tente novamente.');
