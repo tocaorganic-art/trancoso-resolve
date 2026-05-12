@@ -85,33 +85,33 @@ export default function CookieConsent() {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-in slide-in-from-bottom-full duration-500"
+      className="fixed bottom-0 left-0 right-0 z-40 p-3 md:p-4 animate-in slide-in-from-bottom-full duration-500 pb-20 md:pb-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="cookie-consent-title"
       aria-describedby="cookie-consent-description"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 3rem)' }}
     >
-      <Card className="max-w-3xl mx-auto shadow-2xl border-2 border-slate-200">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <CardTitle id="cookie-consent-title" className="flex items-center gap-2">
-              <Cookie className="w-5 h-5 text-cyan-600"/>
-              Sua Privacidade é Importante
+      <Card className="max-w-3xl mx-auto shadow-2xl border-2 border-slate-200 overflow-hidden">
+        <CardHeader className="pb-2 md:pb-3">
+          <div className="flex items-start justify-between gap-2">
+            <CardTitle id="cookie-consent-title" className="flex items-center gap-2 text-base md:text-lg">
+              <Cookie className="w-4 md:w-5 h-4 md:h-5 text-cyan-600 shrink-0"/>
+              <span>Sua Privacidade</span>
             </CardTitle>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-8 w-8 -mr-2 -mt-2"
+              className="h-7 w-7 md:h-8 md:w-8 -mr-2 -mt-2 shrink-0"
               onClick={handleRejectAll}
               aria-label="Recusar cookies não essenciais e fechar"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3 md:w-4 h-3 md:h-4" />
             </Button>
           </div>
-          <CardDescription id="cookie-consent-description" className="text-sm leading-relaxed">
-            Usamos cookies para melhorar sua experiência. <strong>Cookies essenciais</strong> são necessários para autenticação e funcionamento básico. 
-            Você pode: <strong>Aceitar Todos</strong> (inclui analytics e marketing), <strong>Recusar Não Essenciais</strong> (apenas cookies obrigatórios), 
-            ou <strong>Personalizar</strong> suas preferências individualmente.
+          <CardDescription id="cookie-consent-description" className="text-xs md:text-sm leading-snug mt-1">
+            Usamos cookies para melhorar sua experiência. <strong>Cookies essenciais</strong> são necessários para autenticação. 
+            Você pode <strong>Personalizar</strong> suas preferências.
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">
@@ -154,33 +154,33 @@ export default function CookieConsent() {
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col gap-2 md:flex-row">
             <Button 
               onClick={handleAcceptAll} 
-              className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+              className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-xs md:text-sm h-9 md:h-10"
             >
               Aceitar Todos
             </Button>
             <Button 
               onClick={handleRejectAll} 
               variant="secondary" 
-              className="flex-1"
+              className="flex-1 text-xs md:text-sm h-9 md:h-10"
             >
-              Recusar Não Essenciais
+              Recusar
             </Button>
             <Button 
               variant="outline" 
               onClick={() => expanded ? handleAcceptSelected() : setExpanded(true)}
-              className="flex-1"
+              className="flex-1 text-xs md:text-sm h-9 md:h-10"
             >
-              {expanded ? 'Salvar Preferências' : 'Personalizar'}
+              {expanded ? 'Salvar' : 'Personalizar'}
             </Button>
           </div>
-          <p className="text-xs text-slate-500 mt-4 text-center">
+          <p className="text-xs text-slate-500 mt-2 text-center leading-tight">
             Ao continuar navegando, você concorda com nossa{' '}
             <Link to={createPageUrl("PoliticaPrivacidade")} className="underline text-cyan-600 hover:text-cyan-700">
               Política de Privacidade
-            </Link>. Suas preferências podem ser alteradas a qualquer momento.
+            </Link>.
           </p>
         </CardContent>
       </Card>
