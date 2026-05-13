@@ -16,6 +16,8 @@ import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Ma
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
 import { getProviderMockImages, DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
+import FavoriteButton from "@/components/favorites/FavoriteButton";
+import MultilingualAutocomplete from "@/components/search/MultilingualAutocomplete";
 
 const ProviderCard = ({ provider }) => {
     const mockImages = getProviderMockImages(provider.occupation);
@@ -43,17 +45,25 @@ const ProviderCard = ({ provider }) => {
                 />
                 <div className="flex-1">
                     <div className="flex items-start justify-between">
-                        <div>
-                            <h3 className="font-bold text-lg text-slate-900">{provider.full_name}</h3>
-                            <p className="text-sm text-slate-600">{provider.occupation}</p>
-                        </div>
-                        {provider.verified && (
-                            <VerificacaoBadge verified showLabel size="sm" />
-                        )}
-                        {provider.status_verificacao && provider.status_verificacao !== 'aprovado' && provider.status_verificacao !== 'reprovado' && (
-                            <BadgeEmVerificacao />
-                        )}
-                    </div>
+                             <div>
+                                 <h3 className="font-bold text-lg text-slate-900">{provider.full_name}</h3>
+                                 <p className="text-sm text-slate-600">{provider.occupation}</p>
+                             </div>
+                             <div className="flex items-start gap-2">
+                                 {provider.verified && (
+                                     <VerificacaoBadge verified showLabel size="sm" />
+                                 )}
+                                 {provider.status_verificacao && provider.status_verificacao !== 'aprovado' && provider.status_verificacao !== 'reprovado' && (
+                                     <BadgeEmVerificacao />
+                                 )}
+                                 <FavoriteButton 
+                                     id={provider.id} 
+                                     type="provider" 
+                                     name={provider.full_name}
+                                     category={provider.occupation}
+                                 />
+                             </div>
+                         </div>
                     <div className="flex items-center gap-2 mt-2">
                         <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 text-yellow-500 fill-current" />
@@ -487,18 +497,14 @@ export default function ServicosCategoriaPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input
-                type="text"
-                placeholder="Busca inteligente..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-                aria-label="Busca inteligente de profissionais"
-              />
-              {isSearching && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 animate-spin" />}
-            </div>
+             <MultilingualAutocomplete 
+               onSelect={(suggestion) => {
+                 setSearchQuery(suggestion.name);
+                 setSelectedCategory(suggestion.category);
+               }}
+               language="pt"
+               placeholder="Buscar serviços..."
+             />
             
             <Select value={priceFilter} onValueChange={setPriceFilter}>
               <SelectTrigger aria-label="Filtrar por faixa de preço">
