@@ -2,16 +2,42 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles, Loader2 } from 'lucide-react';
 import TrIAMessageBubble from './TrIAMessageBubble.jsx';
 
-const QUICK_PROMPTS = [
-  '🗺️ Monte um roteiro turístico em Trancoso',
-  '📋 Resuma dados',
-  '💬 Responda cliente',
-  '🔍 Pesquise algo'
-];
 
-export default function TrIAChatArea({ messages, onSendMessage, isLoading, error, onErrorDismiss }) {
+
+export default function TrIAChatArea({ messages, onSendMessage, isLoading, error, onErrorDismiss, language = 'pt' }) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
+
+  // Traduzir quick prompts baseado no idioma
+  const getLocalizedPrompts = () => {
+    const prompts = {
+      pt: [
+        '🗺️ Monte um roteiro turístico em Trancoso',
+        '📋 Resuma dados',
+        '💬 Responda cliente',
+        '🔍 Pesquise algo'
+      ],
+      en: [
+        '🗺️ Create a tourist itinerary in Trancoso',
+        '📋 Summarize data',
+        '💬 Reply to client',
+        '🔍 Search for something'
+      ],
+      es: [
+        '🗺️ Crear un itinerario turístico en Trancoso',
+        '📋 Resumir datos',
+        '💬 Responder al cliente',
+        '🔍 Buscar algo'
+      ],
+      fr: [
+        '🗺️ Créer un itinéraire touristique à Trancoso',
+        '📋 Résumer les données',
+        '💬 Répondre au client',
+        '🔍 Rechercher quelque chose'
+      ]
+    };
+    return prompts[language] || prompts.pt;
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -52,9 +78,17 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-4 flex items-center justify-center animate-pulse">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">Bem-vindo à Toca TrIA</h2>
+              <h2 className="text-xl font-bold text-white mb-2">
+                {language === 'en' && 'Welcome to Toca TrIA'}
+                {language === 'es' && 'Bienvenido a Toca TrIA'}
+                {language === 'fr' && 'Bienvenue à Toca TrIA'}
+                {language === 'pt' && 'Bem-vindo à Toca TrIA'}
+              </h2>
               <p className="text-slate-400 text-sm max-w-xs mx-auto">
-                Sua assistente de IA que executa tarefas de forma autônoma em Trancoso
+                {language === 'en' && 'Your AI assistant that executes tasks autonomously in Trancoso'}
+                {language === 'es' && 'Tu asistente de IA que ejecuta tareas de forma autónoma en Trancoso'}
+                {language === 'fr' && 'Votre assistant IA qui exécute des tâches de manière autonome à Trancoso'}
+                {language === 'pt' && 'Sua assistente de IA que executa tarefas de forma autônoma em Trancoso'}
               </p>
             </div>
           </div>
@@ -81,7 +115,7 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
       {messages.length === 0 && !isLoading && (
         <div className="px-4 md:px-6 pb-4 animate-fade-in">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {QUICK_PROMPTS.map(prompt => (
+            {getLocalizedPrompts().map(prompt => (
               <button
                 key={prompt}
                 onClick={() => handleQuickPrompt(prompt)}
@@ -102,7 +136,12 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            placeholder="Converse com a Toca TrIA..."
+            placeholder={
+              language === 'en' ? 'Chat with Toca TrIA...' :
+              language === 'es' ? 'Conversa con Toca TrIA...' :
+              language === 'fr' ? 'Discutez avec Toca TrIA...' :
+              'Converse com a Toca TrIA...'
+            }
             disabled={isLoading}
             className="flex-1 bg-slate-800 border border-slate-700 hover:border-slate-600 focus:border-purple-500 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none transition-colors focus:shadow-lg focus:shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
           />

@@ -3,6 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import TrIASidebar from './TrIASidebar.jsx';
 import TrIAChatArea from './TrIAChatArea.jsx';
+import LanguageSelector from './LanguageSelector.jsx';
 
 export default function TocaTrIAPremium() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -11,6 +12,8 @@ export default function TocaTrIAPremium() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [language, setLanguage] = useState('pt');
+  const [translationLoading, setTranslationLoading] = useState(false);
 
   // Inicializar ou carregar conversa
   useEffect(() => {
@@ -59,16 +62,37 @@ export default function TocaTrIAPremium() {
     try {
       setError(null);
       setIsLoading(true);
+      setTranslationLoading(true);
+
+      // Se idioma não é português, traduzir mensagem antes de enviar
+      let messageToSend = content;
+      if (language !== 'pt') {
+        try {
+          const translationRes = await base44.functions.invoke('tocaTriaTranslator', {
+            text: content,
+            sourceLanguage: language,
+            targetLanguage: 'pt'
+          });
+          messageToSend = translationRes.translated || content;
+          console.log(`[CHAT] Traduzido ${language}→pt: "${messageToSend}"`);
+        } catch (err) {
+          console.warn('[CHAT] Falha na tradução, usando original:', err);
+        }
+      }
+
+      setTranslationLoading(false);
 
       const convo = await base44.agents.getConversation(activeConversationId);
       await base44.agents.addMessage(convo, {
         role: 'user',
-        content
+        content: messageToSend,
+        metadata: { language, originalContent: content }
       });
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err);
       setError('Desculpe, ocorreu um erro ao processar sua solicitação.');
       setIsLoading(false);
+      setTranslationLoading(false);
     }
   };
 
@@ -112,21 +136,22 @@ export default function TocaTrIAPremium() {
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
           <div className="flex items-center gap-2">
-            <div className={`w-3 h-3 rounded-full ${isLoading ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`}></div>
+            <div className={`w-3 h-3 rounded-full ${isLoading || translationLoading ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`}></div>
             <span className="text-sm font-semibold text-slate-200">
-              {isLoading ? 'Toca TrIA está pensando...' : 'Toca TrIA Online'}
+              {translationLoading ? 'Traduzindo...' : isLoading ? 'Toca TrIA está pensando...' : 'Toca TrIA Online'}
             </span>
           </div>
-          <div className="text-xs text-slate-500">v1.0 Premium</div>
+          <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
         </div>
 
         {/* Chat Content */}
         <TrIAChatArea 
           messages={messages} 
           onSendMessage={handleSendMessage}
-          isLoading={isLoading}
+          isLoading={isLoading || translationLoading}
           error={error}
           onErrorDismiss={() => setError(null)}
+          language={language}
         />
       </div>
     </div>
