@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
+import { DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
 
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 const categoryImageMap = {
@@ -548,8 +549,13 @@ export default function HomePage() {
                           <span className="text-base font-bold text-slate-900">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
                           <span className="sr-only">estrelas</span>
                         </div>
-                      </CardContent>
-                    </Card>
+
+                        {/* Aviso de perfil ilustrativo */}
+                        <p className="text-xs text-slate-400 opacity-60 text-center mt-2 pt-2 border-t border-slate-100 w-full">
+                          {DEMO_PROFILE_WARNING}
+                        </p>
+                        </CardContent>
+                        </Card>
                   </Link>
                 ))
             ) : (

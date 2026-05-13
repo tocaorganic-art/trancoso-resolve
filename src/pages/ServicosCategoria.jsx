@@ -15,8 +15,12 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
+import { getProviderMockImages, DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
 
-const ProviderCard = ({ provider }) => (
+const ProviderCard = ({ provider }) => {
+    const mockImages = getProviderMockImages(provider.occupation);
+    
+    return (
     <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col overflow-hidden">
         {/* Foto de Capa */}
         <div className="relative h-32 bg-gradient-to-r from-cyan-400 to-blue-500 shrink-0">
@@ -91,9 +95,15 @@ const ProviderCard = ({ provider }) => (
                     Ver Perfil Completo
                 </Button>
             </Link>
+            
+            {/* Aviso de perfil ilustrativo */}
+            <p className="text-xs text-slate-400 opacity-60 text-center mt-2 pt-2 border-t border-slate-100">
+                {DEMO_PROFILE_WARNING}
+            </p>
         </CardContent>
     </Card>
-);
+    );
+};
 
 const slugMap = {
   'Limpeza': 'limpeza-trancoso',
