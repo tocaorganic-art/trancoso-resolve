@@ -386,19 +386,19 @@ export default function HomePage() {
               Diaristas, eletricistas, encanadores, cozinheiros e muito mais — todos verificados e prontos para atender.
             </p>
             
-            <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0">
+            <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0 shadow-lg rounded-lg overflow-hidden">
               <Input
                 type="text"
                 placeholder="O que você precisa?"
-                className="flex-1 rounded-r-none focus:ring-0 focus:ring-offset-0 border-r-0 text-base h-12"
+                className="flex-1 rounded-r-none focus:ring-0 focus:ring-offset-0 border-r-0 text-base h-12 placeholder:text-slate-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 aria-label="Buscar serviços"
               />
               <Link to={createPageUrl("ServicosCategoria", `?q=${searchQuery}`)}>
-              <Button className="rounded-l-none h-12 bg-[var(--primary)] min-w-[80px]" aria-label={`Buscar serviços: ${searchQuery || 'todos'}`}>
+              <Button className="rounded-l-none h-12 bg-[var(--primary)] min-w-[80px] font-semibold" aria-label={`Buscar serviços: ${searchQuery || 'todos'}`}>
                   <Search className="w-5 h-5 mr-1" aria-hidden="true" />
-                  <span>Buscar</span>
+                  <span className="hidden sm:inline">Buscar</span>
               </Button>
               </Link>
             </div>
@@ -528,7 +528,7 @@ export default function HomePage() {
             ) : topProviders.length > 0 ? (
                 topProviders.map((provider) => (
                   <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
-                    <Card className="border-none shadow-lg hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2">
+                    <Card className="border-none shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 bg-white">
                       <CardContent className="p-4">
                         <div className="relative mb-3">
                           <LazyImage
@@ -542,8 +542,8 @@ export default function HomePage() {
                             </div>
                           )}
                         </div>
-                        <p className="font-bold text-base text-slate-900 mb-1 leading-tight">{provider.full_name}</p>
-                        <p className="text-sm text-slate-700 font-medium mb-2">{provider.occupation}</p>
+                        <p className="font-bold text-base text-slate-900 mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
+                         <p className="text-xs md:text-sm text-slate-600 font-medium mb-2 line-clamp-1">{provider.occupation}</p>
                         <div className="flex items-center justify-center gap-1">
                           <Star className="w-4 h-4 text-yellow-500 fill-current" aria-hidden="true" />
                           <span className="text-base font-bold text-slate-900">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>

@@ -37,12 +37,12 @@ export default function BottomNav() {
             to={path}
             onClick={(e) => handleNavClick(e, path)}
             className={cn(
-              "select-none flex flex-col items-center justify-center flex-1 py-2 gap-0.5 text-xs transition-colors",
-              isActive ? "text-blue-600" : "text-slate-500 hover:text-slate-800"
+              "select-none flex flex-col items-center justify-center flex-1 py-3 px-2 gap-1 transition-colors min-h-[60px]",
+              isActive ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:text-slate-900"
             )}
           >
-            <Icon className={cn("w-6 h-6 select-none", isActive && "stroke-blue-600")} />
-            <span className="text-sm font-semibold">{label}</span>
+            <Icon className={cn("w-6 h-6 select-none", isActive ? "stroke-[2.5]" : "stroke-2")} />
+            <span className="text-xs font-semibold leading-tight">{label}</span>
           </Link>
         );
       })}
