@@ -427,22 +427,23 @@ export default function HomePage() {
 
       <BannerCategorias />
 
-      {/* CTA Destacado */}
-      <section className="bg-gradient-to-r from-cyan-600 to-blue-700 py-8 md:py-16 my-4 md:my-12">
-      <div className="container mx-auto max-w-4xl px-4 text-center">
-        <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg">
-          Precisa de Ajuda? Encontre a Solução em Trancoso Agora!
-        </h2>
-        <p className="text-base md:text-xl text-white font-medium mb-6 leading-relaxed">
-          Profissionais verificados em Trancoso prontos para resolver.
-        </p>
-          <Link to={createPageUrl("ServicosCategoria")}>
-            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-lg px-8 py-6">
-              Encontrar Solução Agora
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
+      {/* CTA Destacado - Prestador */}
+      <section className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 py-6 md:py-12 my-4 md:my-12 rounded-3xl mx-4">
+      <div className="container mx-auto max-w-3xl px-4 text-center">
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Logo" className="h-8 w-8" />
+          <span className="text-white font-bold text-sm">Trancoso Resolve</span>
         </div>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-lg leading-tight">
+          Trancoso, Porque Uma Vez Só É Fique com 100% de Tudo que Você Ganhar. Sem Taxas Escondidas.
+        </h2>
+        <div className="bg-amber-700/40 rounded-2xl p-4 md:p-6 mt-4 border border-amber-400/50">
+          <div className="flex items-center justify-center gap-2 text-white text-lg md:text-2xl font-bold">
+            <Zap className="w-6 h-6 text-yellow-200" />
+            47 vagas restantes!
+          </div>
+        </div>
+      </div>
       </section>
 
       <div className="container mx-auto max-w-6xl px-4 py-8 md:py-16">
