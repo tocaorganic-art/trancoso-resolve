@@ -60,17 +60,18 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
           </div>
         ) : (
           <>
-            {messages.map(message => (
-              <TrIAMessageBubble key={message.id} message={message} />
-            ))}
-            {isLoading && (
-              <div className="flex justify-start animate-fade-in">
-                <div className="bg-slate-800 rounded-2xl px-4 py-3 flex items-center gap-2 border border-slate-700">
-                  <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
-                  <span className="text-sm text-slate-300">Toca TrIA está pensando...</span>
-                </div>
-              </div>
-            )}
+            {messages.map((message, idx) => {
+              const isLastMessage = idx === messages.length - 1;
+              const isStreaming = isLoading && isLastMessage && message.role === 'assistant';
+              
+              return (
+                <TrIAMessageBubble 
+                  key={message.id} 
+                  message={message}
+                  isStreaming={isStreaming}
+                />
+              );
+            })}
             <div ref={messagesEndRef} />
           </>
         )}
