@@ -73,7 +73,7 @@ export default function TocaTrIAPremium() {
             sourceLanguage: language,
             targetLanguage: 'pt'
           });
-          messageToSend = translationRes.translated || content;
+          messageToSend = translationRes.data?.translated || translationRes.translated || content;
           console.log(`[CHAT] Traduzido ${language}→pt: "${messageToSend}"`);
         } catch (err) {
           console.warn('[CHAT] Falha na tradução, usando original:', err);
@@ -82,12 +82,18 @@ export default function TocaTrIAPremium() {
 
       setTranslationLoading(false);
 
-      const convo = await base44.agents.getConversation(activeConversationId);
-      await base44.agents.addMessage(convo, {
-        role: 'user',
-        content: messageToSend,
-        metadata: { language, originalContent: content }
-      });
+      // Adicionar mensagem do usuário
+      try {
+        const convo = await base44.agents.getConversation(activeConversationId);
+        await base44.agents.addMessage(convo, {
+          role: 'user',
+          content: messageToSend,
+          metadata: { language, originalContent: content }
+        });
+      } catch (addErr) {
+        console.error('[CHAT] Erro ao adicionar mensagem:', addErr);
+        // Continuar mesmo se falhar (mensagem pode ter sido adicionada)
+      }
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err);
       setError('Desculpe, ocorreu um erro ao processar sua solicitação.');
