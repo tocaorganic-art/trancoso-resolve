@@ -608,20 +608,26 @@ export default function HomePage() {
         {/* Testimonials Section */}
         <Testimonials />
 
-        {/* Quick Help CTA */}
-        <Card className="border-none bg-gradient-to-r from-orange-400 to-amber-500 text-white shadow-2xl mt-10 md:mt-20">
-          <CardContent className="p-6 md:p-8 text-center">
-            <Zap className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3" />
-            <h3 className="text-xl md:text-2xl font-bold mb-2 drop-shadow-md">Serviço Urgente? Contrate Agora em Trancoso!</h3>
-            <p className="text-white mb-5 text-base md:text-lg font-medium">
-              Precisa de um serviço com urgência? Entre em contato e encontraremos alguém disponível agora.
-            </p>
-            <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-orange-50 font-semibold" data-testid="home-ajuda-urgente-button" aria-label="Solicitar serviço urgente agora">
-              <Phone className="w-5 h-5 mr-2" aria-hidden="true" />
-              Solicitar Agora
+        {/* CTA Final - Chat e Suporte */}
+        <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-3xl py-8 md:py-12 px-4 mt-10 md:mt-20 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-lg">
+            Precisa de Ajuda? Encontre a Solução em Trancoso Agora!
+          </h2>
+          <p className="text-white mb-6 text-base md:text-lg font-medium max-w-2xl mx-auto">
+            Profissionais verificados em Trancoso prontos para resolver seu problema.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white/20 font-semibold text-base" aria-label="Voltar para categorias">
+              Puxar
             </Button>
-          </CardContent>
-        </Card>
+            <Link to={createPageUrl("ServicosCategoria")}>
+              <Button className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-base px-8" aria-label="Buscar solução agora">
+                Próximo
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );
