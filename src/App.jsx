@@ -22,6 +22,7 @@ import AboutPage from '@/pages/About';
 import ContactPage from '@/pages/Contact';
 import AssistenteVirtualPage from '@/pages/AssistenteVirtual';
 import VerificacaoDocumentoPage from '@/pages/VerificacaoDocumento';
+import VerificacaoAntecedentesPage from '@/pages/VerificacaoAntecedentes';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -127,6 +128,11 @@ const AuthenticatedApp = () => {
         <Route path="/VerificacaoDocumento" element={
           <LayoutWrapper currentPageName="VerificacaoDocumento">
             <AnimatedPage><VerificacaoDocumentoPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/VerificacaoAntecedentes" element={
+          <LayoutWrapper currentPageName="VerificacaoAntecedentes">
+            <AnimatedPage><VerificacaoAntecedentesPage /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="*" element={<PageNotFound />} />
