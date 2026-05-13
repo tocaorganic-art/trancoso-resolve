@@ -120,10 +120,8 @@ const AuthenticatedApp = () => {
             <AnimatedPage><ContactPage /></AnimatedPage>
           </LayoutWrapper>
         } />
-        <Route path="/AssistenteVirtual" element={
-          <LayoutWrapper currentPageName="AssistenteVirtual">
-            <AnimatedPage><AssistenteVirtualPage /></AnimatedPage>
-          </LayoutWrapper>
+        <Route path="/Assistentevirtual" element={
+          <AnimatedPage><AssistenteVirtualPage /></AnimatedPage>
         } />
         <Route path="/VerificacaoDocumento" element={
           <LayoutWrapper currentPageName="VerificacaoDocumento">
