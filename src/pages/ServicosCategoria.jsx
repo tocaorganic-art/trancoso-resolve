@@ -385,22 +385,22 @@ export default function ServicosCategoriaPage() {
     }
     
     if (filteredProviders.length === 0) {
-      const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '';
-      const hasSearchQuery = searchQuery.trim() !== '';
-      
-      return (
-        <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
-          <div className="w-16 h-16 mx-auto mb-4 bg-slate-200 rounded-full flex items-center justify-center">
-            <Search className="w-8 h-8 text-slate-400" />
-          </div>
-          <h3 className="text-xl font-semibold text-slate-700 mb-2">Nenhum Profissional Encontrado</h3>
-          <p className="text-slate-500 max-w-md mx-auto mb-6">
-            {hasSearchQuery
-              ? `Não encontramos profissionais para "${searchQuery}". Tente uma busca diferente ou use as categorias.`
-              : hasActiveFilters 
-              ? "Não encontramos profissionais com os filtros selecionados. Experimente ajustar sua busca."
-              : "Ainda não há profissionais cadastrados nesta categoria."}
-          </p>
+       const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '';
+       const hasSearchQuery = searchQuery.trim() !== '';
+
+       return (
+         <div className="col-span-full text-center py-16 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-100">
+           <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+             <Search className="w-8 h-8 text-blue-400" />
+           </div>
+           <h3 className="text-xl font-semibold text-slate-700 mb-2">Nenhum Prestador Encontrado</h3>
+           <p className="text-slate-500 max-w-md mx-auto mb-6">
+             {hasSearchQuery
+               ? `Não encontramos profissionais para "${searchQuery}". Tente uma busca diferente ou explore as categorias.`
+               : hasActiveFilters 
+               ? "Nenhum prestador corresponde aos filtros selecionados. Ajuste sua busca e tente novamente."
+               : "Nenhum prestador encontrado para essa categoria ainda. Em breve novos profissionais estarão disponíveis."}
+           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {hasActiveFilters && (
               <Button variant="outline" onClick={() => {

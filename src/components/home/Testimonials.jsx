@@ -46,25 +46,32 @@ export default function Testimonials() {
           <p className="text-slate-700 mt-2 font-medium text-lg">Histórias reais de quem usa e aprova a nossa plataforma.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="border-none shadow-lg bg-white">
-              <CardContent className="p-8 flex flex-col h-full">
-                <div className="flex-grow mb-4">
-                  <StarRating rating={testimonial.rating} />
-                  <p className="text-slate-800 mt-4 italic leading-relaxed text-base">"{testimonial.comment}"</p>
-                </div>
-                <div className="flex items-center mt-auto">
-                  <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover mr-4" />
-                  <div>
-                    <p className="font-bold text-slate-900 text-base">{testimonial.name}</p>
-                    <p className="text-sm font-medium text-slate-700">{testimonial.role}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+           {testimonials.map((testimonial, index) => (
+             <Card key={index} className="border-none shadow-lg bg-white">
+               <CardContent className="p-8 flex flex-col h-full">
+                 <div className="flex-grow mb-4">
+                   <StarRating rating={testimonial.rating} />
+                   <p className="text-slate-800 mt-4 italic leading-relaxed text-base">"{testimonial.comment}"</p>
+                 </div>
+                 <div className="flex items-center mt-auto">
+                   <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover mr-4" />
+                   <div>
+                     <p className="font-bold text-slate-900 text-base">{testimonial.name}</p>
+                     <p className="text-sm font-medium text-slate-700">{testimonial.role}</p>
+                   </div>
+                 </div>
+               </CardContent>
+             </Card>
+           ))}
+         </div>
+
+         {/* Micro-texto discreto */}
+         <div className="text-center mt-8">
+           <p className="text-xs text-slate-400 opacity-60">
+             Depoimentos ilustrativos criados para demonstrar como a seção ficará quando recebermos os primeiros relatos reais de clientes e prestadores.
+           </p>
+         </div>
         </div>
-      </div>
-    </section>
-  );
-}
+        </section>
+        );
+        }
