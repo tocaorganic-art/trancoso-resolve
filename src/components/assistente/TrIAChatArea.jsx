@@ -2,13 +2,28 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles, Loader2 } from 'lucide-react';
 import TrIAMessageBubble from './TrIAMessageBubble.jsx';
 
-
+/**
+ * TrIAChatArea - INTERFACE PURA
+ * 
+ * Responsabilidade ÚNICA:
+ * - Renderizar UI do chat (input, bubbles, status)
+ * - Passar mensagem do usuário para Toca TrIA
+ * - Exibir resposta que Toca TrIA retorna
+ * 
+ * O que NÃO faz:
+ * - ❌ Detectar intenção
+ * - ❌ Validar dados complexos
+ * - ❌ Chamar APIs externas
+ * - ❌ Tomar decisão de lógica de negócio
+ * 
+ * Toda lógica de negócio = Toca TrIA (agente)
+ */
 
 export default function TrIAChatArea({ messages, onSendMessage, isLoading, error, onErrorDismiss, language = 'pt' }) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
 
-  // Traduzir quick prompts baseado no idioma
+  // Sugestões localizadas para cada idioma
   const getLocalizedPrompts = () => {
     const prompts = {
       pt: [
