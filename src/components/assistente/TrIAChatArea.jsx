@@ -3,7 +3,7 @@ import { Send, Sparkles, Loader2 } from 'lucide-react';
 import TrIAMessageBubble from './TrIAMessageBubble.jsx';
 
 const QUICK_PROMPTS = [
-  '🗺️ Monte um roteiro',
+  '🗺️ Monte um roteiro turístico em Trancoso',
   '📋 Resuma dados',
   '💬 Responda cliente',
   '🔍 Pesquise algo'
