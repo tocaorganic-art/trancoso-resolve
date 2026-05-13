@@ -594,10 +594,10 @@ export default function HomePage() {
                { slug: 'garcom-trancoso', label: 'Garçom', emoji: '🍽️' },
              ].map(item => (
                <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
-                 <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-4 text-center shadow-md hover:shadow-lg transition-all duration-300 border-2 border-slate-200 hover:border-cyan-400 cursor-pointer group h-full flex flex-col items-center justify-center">
+                 <div className="bg-white rounded-2xl p-4 text-center shadow-md hover:shadow-lg transition-all duration-300 border-2 border-slate-200 hover:border-cyan-400 cursor-pointer group h-full flex flex-col items-center justify-center">
                    <span className="text-3xl block mb-2" aria-hidden="true">{item.emoji}</span>
-                   <span className="text-sm md:text-base font-bold text-slate-900 group-hover:text-cyan-600 transition-colors">{item.label}</span>
-                   <span className="block text-xs font-medium text-slate-500 mt-1">em Trancoso</span>
+                   <span className="text-sm md:text-base font-bold text-slate-800 group-hover:text-cyan-600 transition-colors">{item.label}</span>
+                   <span className="block text-xs font-medium text-slate-600 mt-1">em Trancoso</span>
                  </div>
                </Link>
              ))}
