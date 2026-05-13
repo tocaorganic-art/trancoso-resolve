@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus, MessageSquare, Trash2 } from 'lucide-react';
 
-export default function TrIASidebar({ isOpen, conversations, activeConversationId, onSelectConversation, onClose }) {
+export default function TrIASidebar({ isOpen, conversations, activeConversationId, onSelectConversation, onNewConversation, onClose }) {
   return (
     <>
       {/* Overlay mobile */}
@@ -21,7 +21,10 @@ export default function TrIASidebar({ isOpen, conversations, activeConversationI
       `}>
         {/* Header */}
         <div className="p-4 border-b border-slate-800">
-          <button className="w-full flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg text-white font-semibold transition-all transform hover:scale-105">
+          <button 
+            onClick={onNewConversation}
+            className="w-full flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg text-white font-semibold transition-all transform hover:scale-105 active:scale-95"
+          >
             <Plus className="w-4 h-4" />
             Nova Conversa
           </button>

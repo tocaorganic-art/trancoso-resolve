@@ -9,9 +9,8 @@ const QUICK_PROMPTS = [
   '🔍 Pesquise algo'
 ];
 
-export default function TrIAChatArea({ messages, onSendMessage }) {
+export default function TrIAChatArea({ messages, onSendMessage, isLoading, error, onErrorDismiss }) {
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -19,27 +18,38 @@ export default function TrIAChatArea({ messages, onSendMessage }) {
   }, [messages]);
 
   const handleSend = () => {
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
     
-    setIsLoading(true);
     onSendMessage(input);
     setInput('');
-    
-    setTimeout(() => setIsLoading(false), 500);
   };
 
   const handleQuickPrompt = (prompt) => {
-    setInput(prompt);
+    if (isLoading) return;
+    onSendMessage(prompt);
   };
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
+      {/* Error Banner */}
+      {error && (
+        <div className="mx-4 mt-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg flex items-center justify-between text-sm text-red-200">
+          <span>{error}</span>
+          <button 
+            onClick={onErrorDismiss}
+            className="text-red-300 hover:text-red-100 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-center">
             <div>
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-4 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-4 flex items-center justify-center animate-pulse">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-xl font-bold text-white mb-2">Bem-vindo à Toca TrIA</h2>
@@ -54,8 +64,8 @@ export default function TrIAChatArea({ messages, onSendMessage }) {
               <TrIAMessageBubble key={message.id} message={message} />
             ))}
             {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-slate-800 rounded-2xl px-4 py-3 flex items-center gap-2">
+              <div className="flex justify-start animate-fade-in">
+                <div className="bg-slate-800 rounded-2xl px-4 py-3 flex items-center gap-2 border border-slate-700">
                   <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
                   <span className="text-sm text-slate-300">Toca TrIA está pensando...</span>
                 </div>
@@ -67,14 +77,15 @@ export default function TrIAChatArea({ messages, onSendMessage }) {
       </div>
 
       {/* Quick Prompts */}
-      {messages.length < 2 && (
-        <div className="px-4 md:px-6 pb-4">
+      {messages.length === 0 && !isLoading && (
+        <div className="px-4 md:px-6 pb-4 animate-fade-in">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {QUICK_PROMPTS.map(prompt => (
               <button
                 key={prompt}
                 onClick={() => handleQuickPrompt(prompt)}
-                className="text-xs p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700"
+                disabled={isLoading}
+                className="text-xs p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
               >
                 {prompt}
               </button>
@@ -91,15 +102,20 @@ export default function TrIAChatArea({ messages, onSendMessage }) {
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="Converse com a Toca TrIA..."
-            className="flex-1 bg-slate-800 border border-slate-700 hover:border-slate-600 focus:border-purple-500 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none transition-colors focus:shadow-lg focus:shadow-purple-500/20"
+            disabled={isLoading}
+            className="flex-1 bg-slate-800 border border-slate-700 hover:border-slate-600 focus:border-purple-500 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none transition-colors focus:shadow-lg focus:shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             aria-label="Enviar mensagem"
           >
-            <Send className="w-5 h-5" />
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Send className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>

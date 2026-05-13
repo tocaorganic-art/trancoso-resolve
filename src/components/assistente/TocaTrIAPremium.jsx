@@ -1,31 +1,91 @@
-import React, { useState } from 'react';
-import { Menu, X, Send, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 import TrIASidebar from './TrIASidebar.jsx';
 import TrIAChatArea from './TrIAChatArea.jsx';
 
 export default function TocaTrIAPremium() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [conversations, setConversations] = useState([
-    { id: '1', name: 'Roteiro Trancoso', preview: 'Monte um roteiro de 3 dias...' }
-  ]);
-  const [activeConversationId, setActiveConversationId] = useState('1');
-  const [messages, setMessages] = useState([
-    { id: '1', role: 'assistant', content: 'Olá! Sou a Toca TrIA, sua assistente de IA. Como posso ajudar você em Trancoso hoje?' }
-  ]);
+  const [conversations, setConversations] = useState([]);
+  const [activeConversationId, setActiveConversationId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSendMessage = (content) => {
-    const newMessage = { id: Date.now(), role: 'user', content };
-    setMessages([...messages, newMessage]);
+  // Inicializar ou carregar conversa
+  useEffect(() => {
+    const initializeConversations = async () => {
+      try {
+        const convos = await base44.agents.listConversations({ agent_name: 'toca' });
+        if (convos && convos.length > 0) {
+          setConversations(convos);
+          setActiveConversationId(convos[0].id);
+          const convo = await base44.agents.getConversation(convos[0].id);
+          setMessages(convo.messages || []);
+        } else {
+          // Criar primeira conversa
+          const newConvo = await base44.agents.createConversation({
+            agent_name: 'toca',
+            metadata: { name: 'Primeira Conversa' }
+          });
+          setConversations([newConvo]);
+          setActiveConversationId(newConvo.id);
+          setMessages([]);
+        }
+      } catch (err) {
+        console.error('Erro ao carregar conversas:', err);
+        setError('Erro ao carregar histórico');
+      }
+    };
+    
+    initializeConversations();
+  }, []);
 
-    // Simular resposta da IA
-    setTimeout(() => {
-      const response = { 
-        id: Date.now() + 1, 
-        role: 'assistant', 
-        content: 'Entendi sua pergunta. Deixe-me pesquisar as melhores opções para você...' 
-      };
-      setMessages(prev => [...prev, response]);
-    }, 500);
+  // Subscriber para atualizações em tempo real
+  useEffect(() => {
+    if (!activeConversationId) return;
+
+    const unsubscribe = base44.agents.subscribeToConversation(activeConversationId, (data) => {
+      setMessages(data.messages || []);
+      setIsLoading(false);
+    });
+
+    return unsubscribe;
+  }, [activeConversationId]);
+
+  const handleSendMessage = async (content) => {
+    if (!activeConversationId) return;
+
+    try {
+      setError(null);
+      setIsLoading(true);
+
+      const convo = await base44.agents.getConversation(activeConversationId);
+      await base44.agents.addMessage(convo, {
+        role: 'user',
+        content
+      });
+    } catch (err) {
+      console.error('Erro ao enviar mensagem:', err);
+      setError('Desculpe, ocorreu um erro ao processar sua solicitação.');
+      setIsLoading(false);
+    }
+  };
+
+  const handleNewConversation = async () => {
+    try {
+      setError(null);
+      const newConvo = await base44.agents.createConversation({
+        agent_name: 'toca',
+        metadata: { name: `Conversa de ${new Date().toLocaleString('pt-BR')}` }
+      });
+      setConversations(prev => [newConvo, ...prev]);
+      setActiveConversationId(newConvo.id);
+      setMessages([]);
+    } catch (err) {
+      console.error('Erro ao criar conversa:', err);
+      setError('Erro ao criar nova conversa');
+    }
   };
 
   return (
@@ -36,6 +96,7 @@ export default function TocaTrIAPremium() {
         conversations={conversations}
         activeConversationId={activeConversationId}
         onSelectConversation={setActiveConversationId}
+        onNewConversation={handleNewConversation}
         onClose={() => setSidebarOpen(false)}
       />
 
@@ -51,8 +112,10 @@ export default function TocaTrIAPremium() {
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-            <span className="text-sm font-semibold text-slate-200">Toca TrIA Online</span>
+            <div className={`w-3 h-3 rounded-full ${isLoading ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`}></div>
+            <span className="text-sm font-semibold text-slate-200">
+              {isLoading ? 'Toca TrIA está pensando...' : 'Toca TrIA Online'}
+            </span>
           </div>
           <div className="text-xs text-slate-500">v1.0 Premium</div>
         </div>
@@ -61,6 +124,9 @@ export default function TocaTrIAPremium() {
         <TrIAChatArea 
           messages={messages} 
           onSendMessage={handleSendMessage}
+          isLoading={isLoading}
+          error={error}
+          onErrorDismiss={() => setError(null)}
         />
       </div>
     </div>
