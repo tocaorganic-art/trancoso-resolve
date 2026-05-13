@@ -570,33 +570,33 @@ export default function HomePage() {
         </section>
 
         {/* Landing Pages por Serviço - SEO Local */}
-        <section className="mb-10 md:mb-20">
-          <div className="text-center mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900 drop-shadow-sm">Serviços Mais Buscados em Trancoso</h2>
-            <p className="text-base text-slate-700 font-medium mt-1">Guias completos com profissionais verificados para cada categoria</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {[
-              { slug: 'limpeza-trancoso', label: 'Diarista', emoji: '🧹' },
-              { slug: 'eletricista-trancoso', label: 'Eletricista', emoji: '⚡' },
-              { slug: 'encanador-trancoso', label: 'Encanador', emoji: '🔧' },
-              { slug: 'jardinagem-trancoso', label: 'Jardineiro', emoji: '🌿' },
-              { slug: 'cozinheiro-trancoso', label: 'Cozinheiro', emoji: '👨‍🍳' },
-              { slug: 'pedreiro-trancoso', label: 'Pedreiro', emoji: '🏗️' },
-              { slug: 'pintor-trancoso', label: 'Pintor', emoji: '🖌️' },
-              { slug: 'baba-trancoso', label: 'Babá', emoji: '👶' },
-              { slug: 'garcom-trancoso', label: 'Garçom', emoji: '🍽️' },
-            ].map(item => (
-              <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
-                <div className="bg-white rounded-xl p-3 text-center shadow-sm hover:shadow-md transition-shadow border border-slate-100 hover:border-cyan-200 cursor-pointer group">
-                  <span className="text-2xl block mb-1" aria-hidden="true">{item.emoji}</span>
-                  <span className="text-sm font-bold text-slate-800 group-hover:text-cyan-700">{item.label}</span>
-                  <span className="block text-xs font-medium text-slate-600 mt-0.5">em Trancoso</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
+         <section className="mb-10 md:mb-20 pt-8 md:pt-16">
+           <div className="text-center mb-8">
+             <h2 className="text-2xl md:text-4xl font-bold text-slate-900 drop-shadow-sm mb-2">Serviços Mais Buscados em Trancoso</h2>
+             <p className="text-base md:text-lg text-slate-700 font-medium max-w-2xl mx-auto">Acesse guias completos com profissionais verificados em cada categoria</p>
+           </div>
+           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+             {[
+               { slug: 'limpeza-trancoso', label: 'Diarista', emoji: '🧹' },
+               { slug: 'eletricista-trancoso', label: 'Eletricista', emoji: '⚡' },
+               { slug: 'encanador-trancoso', label: 'Encanador', emoji: '🔧' },
+               { slug: 'jardinagem-trancoso', label: 'Jardineiro', emoji: '🌿' },
+               { slug: 'cozinheiro-trancoso', label: 'Cozinheiro', emoji: '👨‍🍳' },
+               { slug: 'pedreiro-trancoso', label: 'Pedreiro', emoji: '🏗️' },
+               { slug: 'pintor-trancoso', label: 'Pintor', emoji: '🖌️' },
+               { slug: 'baba-trancoso', label: 'Babá', emoji: '👶' },
+               { slug: 'garcom-trancoso', label: 'Garçom', emoji: '🍽️' },
+             ].map(item => (
+               <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
+                 <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-4 text-center shadow-md hover:shadow-lg transition-all duration-300 border-2 border-slate-200 hover:border-cyan-400 cursor-pointer group h-full flex flex-col items-center justify-center">
+                   <span className="text-3xl block mb-2" aria-hidden="true">{item.emoji}</span>
+                   <span className="text-sm md:text-base font-bold text-slate-900 group-hover:text-cyan-600 transition-colors">{item.label}</span>
+                   <span className="block text-xs font-medium text-slate-500 mt-1">em Trancoso</span>
+                 </div>
+               </Link>
+             ))}
+           </div>
+         </section>
 
         {/* Testimonials Section */}
         <Testimonials />
