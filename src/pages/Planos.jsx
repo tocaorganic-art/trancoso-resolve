@@ -336,7 +336,7 @@ export default function PlanosPage() {
         </div>
 
         <p className="text-center text-slate-500 text-sm mb-6">
-          Dúvidas? Entre em contato: <a href="mailto:contato@trancosoresolve.com.br" className="underline"><strong>contato@trancosoresolve.com.br</strong></a>
+          Dúvidas? Entre em contato: <a href="mailto:suporte@trancosoresolve.com" className="underline"><strong>suporte@trancosoresolve.com</strong></a>
         </p>
 
         {/* Gerenciar assinatura existente */}
