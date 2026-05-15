@@ -137,12 +137,12 @@ export default function Layout({ children, currentPageName }) {
   { name: "Ver Site", path: "/", icon: Globe, clearLogin: true }];
 
 
-  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat'];
+  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat', '/About', '/Contact', '/PreLancamento', '/ServicoLanding', '/SolicitacaoConfirmada'];
   const isPublicPage = publicPages.some((page) => {
     const pagePath = page === '/Home' ? '/' : page;
     const currentLocationPath = location.pathname === '/Home' ? '/' : location.pathname;
     return currentLocationPath === pagePath || currentLocationPath === `${pagePath}/`;
-  });
+  }) || location.pathname.startsWith('/servicos/');
 
   const isActive = (path) => location.pathname === path;
 
@@ -265,6 +265,13 @@ export default function Layout({ children, currentPageName }) {
                 <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Toca Vision</Link>
                 <Link to={createPageUrl("Seguranca")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
                 <Link to={createPageUrl("Manual")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
+                {!user && (
+                  <div className="pt-2 border-t border-slate-600">
+                    <Button onClick={() => { setMobileMenuOpen(false); sessionStorage.setItem('loginTimestamp', Date.now().toString()); base44.auth.redirectToLogin(); }} className="w-full bg-[var(--primary)] text-white hover:bg-blue-700" size="sm">
+                      Entrar
+                    </Button>
+                  </div>
+                )}
               </div>
             }
           </nav>
@@ -307,7 +314,7 @@ export default function Layout({ children, currentPageName }) {
                 </Link>
               </div>
               <p className="text-slate-300 text-base font-medium">
-                © 2025 Trancoso Resolve • Plataforma de Serviços em Trancoso • Todos os direitos reservados
+                © 2026 Trancoso Resolve • Plataforma de Serviços em Trancoso • Todos os direitos reservados
               </p>
             </div>
           </footer>
