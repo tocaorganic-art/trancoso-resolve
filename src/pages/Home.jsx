@@ -190,12 +190,12 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Trancoso Resolve: Encontre Profissionais Verificados em Trancoso, Bahia";
+    document.title = "Serviços em Trancoso | Encontre Prestadores Locais";
 
     // Meta description otimizada
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Contrate diaristas, eletricistas, encanadores, jardineiros e mais em Trancoso, BA. Profissionais verificados com avaliações reais. Orçamento grátis.";
+    meta.content = "A forma mais simples e segura de encontrar e contratar diarista, eletricista, piscineiro e outros prestadores de serviços em Trancoso, Bahia.";
 
     // Canonical + OG URL da Home
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -390,13 +390,15 @@ export default function HomePage() {
             </p>
             
             <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0 shadow-lg rounded-lg overflow-hidden">
+              <label htmlFor="search-servicos" className="sr-only">Buscar serviços em Trancoso</label>
               <Input
-                type="text"
+                id="search-servicos"
+                type="search"
                 placeholder="O que você precisa?"
                 className="flex-1 rounded-r-none focus:ring-0 focus:ring-offset-0 border-r-0 text-base h-12 placeholder:text-slate-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Buscar serviços"
+                aria-label="Buscar serviços em Trancoso"
               />
               <Link to={createPageUrl("ServicosCategoria", `?q=${searchQuery}`)}>
               <Button className="rounded-l-none h-12 bg-[var(--primary)] min-w-[80px] font-semibold" aria-label={`Buscar serviços: ${searchQuery || 'todos'}`}>
