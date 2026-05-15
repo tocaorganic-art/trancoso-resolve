@@ -23,6 +23,9 @@ import ContactPage from '@/pages/Contact';
 import AssistenteVirtualPage from '@/pages/AssistenteVirtual';
 import VerificacaoDocumentoPage from '@/pages/VerificacaoDocumento';
 import VerificacaoAntecedentesPage from '@/pages/VerificacaoAntecedentes';
+import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
+import EletricistaTrancoso from '@/pages/servicos/EletricistaTrancoso';
+import PiscineiroTrancoso from '@/pages/servicos/PiscineiroTrancoso';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -131,6 +134,21 @@ const AuthenticatedApp = () => {
         <Route path="/VerificacaoAntecedentes" element={
           <LayoutWrapper currentPageName="VerificacaoAntecedentes">
             <AnimatedPage><VerificacaoAntecedentesPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/diarista-trancoso" element={
+          <LayoutWrapper currentPageName="DiaristaTrancoso">
+            <AnimatedPage><DiaristaTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/eletricista-trancoso" element={
+          <LayoutWrapper currentPageName="EletricistaTrancoso">
+            <AnimatedPage><EletricistaTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/piscineiro-trancoso" element={
+          <LayoutWrapper currentPageName="PiscineiroTrancoso">
+            <AnimatedPage><PiscineiroTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="*" element={<PageNotFound />} />

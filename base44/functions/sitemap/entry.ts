@@ -11,6 +11,11 @@ const staticPages = [
   { path: '/Planos', priority: '0.8', changefreq: 'weekly' },
   { path: '/Manual', priority: '0.5', changefreq: 'monthly' },
   { path: '/PoliticaPrivacidade', priority: '0.3', changefreq: 'yearly' },
+  { path: '/About', priority: '0.8', changefreq: 'monthly' },
+  { path: '/Contact', priority: '0.7', changefreq: 'monthly' },
+  { path: '/servicos/diarista-trancoso', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/eletricista-trancoso', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/piscineiro-trancoso', priority: '0.9', changefreq: 'weekly' },
 ];
 
 // Landing pages SEO por categoria de serviço
