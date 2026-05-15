@@ -1,52 +1,62 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, Download, RefreshCw } from 'lucide-react';
-import PerformanceMonitor from '../components/diagnostics/PerformanceMonitor';
-import A11yChecker from '../components/diagnostics/A11yChecker';
-import SEOMonitor from '../components/diagnostics/SEOMonitor';
-import NetworkMonitor from '../components/diagnostics/NetworkMonitor';
-import SystemHealthCheck from '../components/maintenance/SystemHealthCheck';
-import ContinuousMonitor from '../components/monitoring/ContinuousMonitor';
+import { Activity, Download, RefreshCw, Loader2 } from 'lucide-react';
 import PermissionChecker from '../components/auth/PermissionChecker';
 import { toast } from 'sonner';
+
+// Lazy load todos os monitores pesados — só carregam após o primeiro paint
+const PerformanceMonitor = lazy(() => import('../components/diagnostics/PerformanceMonitor'));
+const A11yChecker        = lazy(() => import('../components/diagnostics/A11yChecker'));
+const SEOMonitor         = lazy(() => import('../components/diagnostics/SEOMonitor'));
+const NetworkMonitor     = lazy(() => import('../components/diagnostics/NetworkMonitor'));
+const SystemHealthCheck  = lazy(() => import('../components/maintenance/SystemHealthCheck'));
+const ContinuousMonitor  = lazy(() => import('../components/monitoring/ContinuousMonitor'));
+
+const LoadingCard = () => (
+  <Card>
+    <CardContent className="flex items-center justify-center py-12">
+      <Loader2 className="w-6 h-6 animate-spin text-blue-500 mr-3" />
+      <span className="text-slate-500 text-sm">Carregando módulo...</span>
+    </CardContent>
+  </Card>
+);
 
 function DiagnosticosCompletosContent() {
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
 
+  // SEO próprio desta página — sobrescreve o title da home
+  useEffect(() => {
+    document.title = 'Diagnósticos Completos do Sistema | Trancoso Resolve';
+
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'description';
+      document.head.appendChild(meta);
+    }
+    meta.content = 'Acompanhe em tempo real os diagnósticos de performance, acessibilidade, SEO, rede e módulos de IA da plataforma Trancoso Resolve.';
+
+    // Ao sair desta página, nenhum cleanup necessário — o layout/home vai sobrescrever novamente
+  }, []);
+
   const generateFullReport = () => {
     setIsGeneratingReport(true);
-    
+
     setTimeout(() => {
       const report = {
         timestamp: new Date().toISOString(),
-        performance: {
-          score: 92,
-          lcp: 1850,
-          fid: 45,
-          cls: 0.05,
-        },
-        accessibility: {
-          score: 95,
-          issues: 2,
-        },
-        seo: {
-          score: 88,
-          passed: 8,
-          total: 10,
-        },
-        network: {
-          type: '4g',
-          resources: 45,
-          totalSize: '2.3 MB',
-        },
+        performance: { score: 92, lcp: 1850, fid: 45, cls: 0.05 },
+        accessibility: { score: 95, issues: 2 },
+        seo: { score: 88, passed: 8, total: 10 },
+        network: { type: '4g', resources: 45, totalSize: '2.3 MB' },
       };
 
       const reportText = `
 ==============================================
 RELATÓRIO DE DIAGNÓSTICO COMPLETO
-Base44 - Trancoso Experience
+Trancoso Resolve
 ==============================================
 
 Data: ${new Date().toLocaleString('pt-BR')}
@@ -97,6 +107,7 @@ Todos os critérios dentro dos limites aceitáveis.
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Hero — carrega imediatamente, sem dependências pesadas */}
       <div className="mb-8">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
@@ -108,7 +119,7 @@ Todos os critérios dentro dos limites aceitáveis.
               Monitoramento em tempo real de performance, acessibilidade, SEO e rede
             </p>
           </div>
-          <Button 
+          <Button
             onClick={generateFullReport}
             disabled={isGeneratingReport}
             className="bg-blue-600 hover:bg-blue-700"
@@ -128,6 +139,7 @@ Todos os critérios dentro dos limites aceitáveis.
         </div>
       </div>
 
+      {/* Tabs + monitores — lazy loaded após o primeiro paint */}
       <Tabs defaultValue="all" className="space-y-6">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="all">Todos</TabsTrigger>
@@ -140,34 +152,34 @@ Todos os critérios dentro dos limites aceitáveis.
 
         <TabsContent value="all" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <PerformanceMonitor />
-            <A11yChecker />
-            <SEOMonitor />
-            <NetworkMonitor />
+            <Suspense fallback={<LoadingCard />}><PerformanceMonitor /></Suspense>
+            <Suspense fallback={<LoadingCard />}><A11yChecker /></Suspense>
+            <Suspense fallback={<LoadingCard />}><SEOMonitor /></Suspense>
+            <Suspense fallback={<LoadingCard />}><NetworkMonitor /></Suspense>
           </div>
-          <SystemHealthCheck />
-          <ContinuousMonitor />
+          <Suspense fallback={<LoadingCard />}><SystemHealthCheck /></Suspense>
+          <Suspense fallback={<LoadingCard />}><ContinuousMonitor /></Suspense>
         </TabsContent>
 
         <TabsContent value="performance">
-          <PerformanceMonitor />
+          <Suspense fallback={<LoadingCard />}><PerformanceMonitor /></Suspense>
         </TabsContent>
 
         <TabsContent value="a11y">
-          <A11yChecker />
+          <Suspense fallback={<LoadingCard />}><A11yChecker /></Suspense>
         </TabsContent>
 
         <TabsContent value="seo">
-          <SEOMonitor />
+          <Suspense fallback={<LoadingCard />}><SEOMonitor /></Suspense>
         </TabsContent>
 
         <TabsContent value="network">
-          <NetworkMonitor />
+          <Suspense fallback={<LoadingCard />}><NetworkMonitor /></Suspense>
         </TabsContent>
 
         <TabsContent value="system" className="space-y-6">
-          <SystemHealthCheck />
-          <ContinuousMonitor />
+          <Suspense fallback={<LoadingCard />}><SystemHealthCheck /></Suspense>
+          <Suspense fallback={<LoadingCard />}><ContinuousMonitor /></Suspense>
         </TabsContent>
       </Tabs>
     </div>

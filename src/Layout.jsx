@@ -70,7 +70,10 @@ export default function Layout({ children, currentPageName }) {
       '/MeuPerfilPrestador': 'Meu Perfil de Prestador - Trancoso Resolve',
       '/MeusServicos': 'Meus Serviços - Trancoso Resolve',
       '/DeployDashboard': 'Deploy Dashboard - Trancoso Resolve',
-      '/Chat': 'Minhas Conversas - Trancoso Resolve'
+      '/Chat': 'Minhas Conversas - Trancoso Resolve',
+      '/DiagnosticosCompletos': 'Diagnósticos Completos do Sistema | Trancoso Resolve',
+      '/ManutencaoSistema': 'Manutenção do Sistema | Trancoso Resolve',
+      '/MonitoringDashboard': 'Monitoramento | Trancoso Resolve',
     };
 
     const pageDescriptions = {
@@ -82,7 +85,7 @@ export default function Layout({ children, currentPageName }) {
     };
 
     const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
-    const currentTitle = pageTitles[currentPath] || 'Trancoso Experience';
+    const currentTitle = pageTitles[currentPath] || 'Trancoso Resolve';
     const currentDescription = pageDescriptions[currentPath] || 'A forma mais fácil de encontrar e contratar serviços de confiança em Trancoso, Bahia.';
 
     document.title = currentTitle;
