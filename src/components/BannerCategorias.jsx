@@ -30,15 +30,25 @@ export default function BannerCategorias() {
                       className="group flex flex-col items-center gap-2 text-center min-w-0 transition-all duration-300"
                       aria-label={`Ver serviços de ${cat.name} em Trancoso`}
                     >
-                         <div className={`w-14 h-14 md:w-20 md:h-20 rounded-2xl ${cat.bgColor} border-2 border-transparent group-hover:border-white dark:group-hover:border-slate-700 flex items-center justify-center transition-all duration-300 ease-out group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-slate-400/30 dark:group-hover:shadow-black/50 shrink-0 relative overflow-hidden`}>
-                            {/* Gradient background on hover */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                         <div className={`w-14 h-14 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out group-hover:-translate-y-2 shrink-0 relative overflow-hidden`}
+                           style={{
+                             background: 'rgba(255,255,255,0.08)',
+                             backdropFilter: 'blur(12px)',
+                             WebkitBackdropFilter: 'blur(12px)',
+                             border: '1px solid rgba(99,179,237,0.35)',
+                             boxShadow: '0 4px 16px rgba(56,189,248,0.18), inset 0 1px 0 rgba(255,255,255,0.15)',
+                           }}
+                         >
+                             {/* Gradient background on hover */}
+                             <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-80 transition-opacity duration-300`} />
+                             {/* Glass shine */}
+                             <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
 
-                            {/* Icon */}
-                            <div className="text-slate-700 dark:text-slate-300 transition-all duration-300 group-hover:text-white relative z-10 group-hover:scale-125">
-                              {React.cloneElement(cat.icon, { size: 24 })}
-                            </div>
-                          </div>
+                             {/* Icon */}
+                             <div className="text-cyan-300 transition-all duration-300 group-hover:text-white relative z-10 group-hover:scale-125">
+                               {React.cloneElement(cat.icon, { size: 24 })}
+                             </div>
+                           </div>
                           <span className="text-[11px] md:text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight truncate w-full group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{cat.name}</span>
                     </Link>
                 ))}
