@@ -144,15 +144,22 @@ export default function ServicoDetalhesPage() {
 
   if (error || !service) {
     return (
-      <div className="container mx-auto px-4 py-16">
-        <Card className="border-red-200 bg-red-50">
+      <div className="container mx-auto px-4 py-16 max-w-lg">
+        <Card className="border-none shadow-lg">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-red-900 mb-2">Serviço Não Encontrado</h2>
-            <p className="text-red-700 mb-6">O serviço que você está procurando não existe ou foi removido.</p>
-            <Link to={createPageUrl("Home")}>
-              <Button>Voltar ao Início</Button>
-            </Link>
+            <AlertCircle className="w-14 h-14 text-slate-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Serviço não encontrado 😕</h2>
+            <p className="text-slate-600 mb-6">O serviço que você procura pode ter sido removido ou o link está incorreto.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to={createPageUrl("ServicosCategoria")}>
+                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600">
+                  Explorar todos os serviços →
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button variant="outline" className="w-full">Voltar ao início</Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>

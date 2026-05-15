@@ -17,7 +17,7 @@ import { ptBR } from "date-fns/locale";
 import LazyImage from "@/components/ui/LazyImage";
 import {
   ArrowLeft, Star, MapPin, Award, Clock,
-  DollarSign, CheckCircle, Calendar as CalendarIcon, Images, ChevronRight, Check
+  DollarSign, CheckCircle, Calendar as CalendarIcon, Images, ChevronRight, Check, AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import StarRating from "@/components/reviews/StarRating";
@@ -244,7 +244,22 @@ export default function PrestadorPerfilPage() {
   }
 
   if (!provider) {
-    return <div className="container mx-auto px-4 py-8">Prestador não encontrado</div>;
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-lg">
+        <Card className="border-none shadow-lg">
+          <CardContent className="p-8 text-center">
+            <AlertCircle className="w-14 h-14 text-slate-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Prestador não encontrado 😕</h2>
+            <p className="text-slate-600 mb-6">O perfil que você procura pode ter sido removido ou o link está incorreto.</p>
+            <Link to={createPageUrl("ServicosCategoria")}>
+              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600">
+                Ver todos os prestadores
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   const totalReviews = reviews.length;

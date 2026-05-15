@@ -65,12 +65,7 @@ export default function Testimonials() {
            ))}
          </div>
 
-         {/* Micro-texto discreto */}
-         <div className="text-center mt-8">
-           <p className="text-xs text-slate-400 opacity-60">
-             Depoimentos ilustrativos criados para demonstrar como a seção ficará quando recebermos os primeiros relatos reais de clientes e prestadores.
-           </p>
-         </div>
+
         </div>
         </section>
         );

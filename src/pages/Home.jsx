@@ -556,10 +556,7 @@ export default function HomePage() {
                           <span className="sr-only">estrelas</span>
                         </div>
 
-                        {/* Aviso de perfil ilustrativo */}
-                        <p className="text-xs text-slate-400 opacity-60 text-center mt-2 pt-2 border-t border-slate-100 w-full">
-                          {DEMO_PROFILE_WARNING}
-                        </p>
+
                         </CardContent>
                         </Card>
                   </Link>

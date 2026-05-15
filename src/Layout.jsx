@@ -180,7 +180,7 @@ export default function Layout({ children, currentPageName }) {
           <nav className="bg-slate-800 shadow-slate-900 sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-9 shrink-0" width="36" height="36" loading="eager" fetchpriority="high" />
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchpriority="high" />
                 <span className="font-bold text-sm md:text-lg text-white truncate hidden xs:inline sm:inline drop-shadow-md">Trancoso Resolve</span>
               </Link>
 
@@ -199,6 +199,8 @@ export default function Layout({ children, currentPageName }) {
                 </>}
                 <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Como funciona?</Link>
+                <Link to="/ComoFunciona#toca-tria" className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Toca TrIA</Link>
+                <Link to={createPageUrl("GeradorDeImagem")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Toca Vision</Link>
                 <Link to={createPageUrl("Seguranca")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Segurança</Link>
                 <Link to={createPageUrl("Manual")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Manual</Link>
               </div>
@@ -259,6 +261,8 @@ export default function Layout({ children, currentPageName }) {
                 </>}
                 <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
                 <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
+                <Link to="/ComoFunciona#toca-tria" className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Toca TrIA</Link>
+                <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Toca Vision</Link>
                 <Link to={createPageUrl("Seguranca")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
                 <Link to={createPageUrl("Manual")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
               </div>
