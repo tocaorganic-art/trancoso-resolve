@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +21,19 @@ import {
 } from "@/components/ui/table";
 
 export default function AdminAssinaturasPage() {
+  useEffect(() => {
+    document.title = "Administração de Assinaturas | Trancoso Resolve";
+    const setMeta = (name, content, prop = false) => {
+      const attr = prop ? 'property' : 'name';
+      let el = document.querySelector(`meta[${attr}="${name}"]`);
+      if (!el) { el = document.createElement('meta'); el.setAttribute(attr, name); document.head.appendChild(el); }
+      el.content = content;
+    };
+    setMeta('description', 'Painel administrativo de assinaturas e planos ativos da Trancoso Resolve. Controle de prestadores, status de pagamentos e renovações.');
+    setMeta('og:title', 'Admin Assinaturas — Trancoso Resolve', true);
+    setMeta('og:description', 'Gestão centralizada de assinaturas e planos da plataforma Trancoso Resolve.', true);
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const queryClient = useQueryClient();
