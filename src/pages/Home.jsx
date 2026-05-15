@@ -380,10 +380,13 @@ export default function HomePage() {
         <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-5 md:py-20 px-4 overflow-hidden">
           <div className="hero-content text-center lg:text-left">
             <h1 className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-2 drop-shadow-sm">
-              Trancoso Resolve: Encontre Profissionais Verificados em Trancoso
+              Encontre Prestadores de Serviços Confiáveis em Trancoso
             </h1>
-            <p className="text-base md:text-lg text-slate-700 mb-4 font-medium leading-relaxed">
-              Diaristas, eletricistas, encanadores, cozinheiros e muito mais — todos verificados e prontos para atender.
+            <p className="text-base md:text-lg text-slate-700 mb-2 font-medium leading-relaxed">
+              Conectamos moradores e empresários de Trancoso aos melhores prestadores locais, com foco em gerar novos clientes todos os dias.
+            </p>
+            <p className="text-sm text-slate-600 mb-4 leading-relaxed">
+              Descreva em poucas palavras o serviço que você precisa em Trancoso e receba retorno de prestadores locais qualificados.
             </p>
             
             <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0 shadow-lg rounded-lg overflow-hidden">
@@ -608,21 +611,75 @@ export default function HomePage() {
         {/* Testimonials Section */}
         <Testimonials />
 
-        {/* CTA Final - Chat e Suporte */}
-        <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-3xl py-8 md:py-12 px-4 mt-10 md:mt-20 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-lg">
-            Precisa de Ajuda? Encontre a Solução em Trancoso Agora!
-          </h2>
-          <p className="text-white mb-6 text-base md:text-lg font-medium max-w-2xl mx-auto">
-            Profissionais verificados em Trancoso prontos para resolver seu problema.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white/20 font-semibold text-base" aria-label="Voltar para categorias">
-              Puxar
-            </Button>
+        {/* Como Funciona */}
+        <section className="mb-10 md:mb-20 mt-10 md:mt-20">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 drop-shadow-sm">Como funciona a Trancoso Resolve</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { step: '1', title: 'Você conta o que precisa', desc: 'Explique o tipo de serviço, bairro em Trancoso e melhor horário para contato.' },
+              { step: '2', title: 'Nós conectamos aos prestadores certos', desc: 'Nosso sistema distribui seu pedido para prestadores qualificados na região.' },
+              { step: '3', title: 'Você recebe contatos e escolhe', desc: 'Compare respostas, avalie e decida com quem quer fechar.' },
+            ].map(item => (
+              <div key={item.step} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 text-center">
+                <div className="w-12 h-12 rounded-full bg-cyan-500 text-white font-bold text-xl flex items-center justify-center mx-auto mb-4">{item.step}</div>
+                <h3 className="font-bold text-lg text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Por que usar */}
+        <section className="mb-10 md:mb-20 bg-gradient-to-br from-slate-50 to-cyan-50 rounded-3xl p-8 md:p-12 border border-slate-100">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 drop-shadow-sm">Por que usar a Trancoso Resolve em Trancoso</h2>
+          <ul className="space-y-4">
+            {[
+              'Prestadores locais e confiáveis, focados em atender Trancoso e região.',
+              'Resposta rápida: seu pedido chega direto nos prestadores certos.',
+              'Mais segurança: perfis dos prestadores, histórico e verificação quando disponível.',
+              'Sem custo para quem pede serviço: você pede, recebe retorno e escolhe.',
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-3 text-slate-700">
+                <span className="w-6 h-6 rounded-full bg-cyan-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
+                <span className="text-base">{item}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8">
             <Link to={createPageUrl("ServicosCategoria")}>
-              <Button className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-base px-8" aria-label="Buscar solução agora">
-                Próximo
+              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold text-base px-8">
+                Pedir Orçamento Agora
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        {/* CTA Prestadores */}
+        <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-3xl py-8 md:py-12 px-4 md:px-12 mt-10 md:mt-20">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 drop-shadow-lg">
+              É prestador de serviços em Trancoso?
+            </h2>
+            <p className="text-white/90 mb-6 text-base md:text-lg font-medium">
+              Ganhe visibilidade local e receba novos clientes qualificados todos os dias. A Trancoso Resolve é a sua vitrine digital oficial em Trancoso.
+            </p>
+            <ul className="space-y-2 mb-8">
+              {[
+                'Destaque do seu serviço nos resultados da plataforma.',
+                'Estatísticas detalhadas de visualizações e cliques no seu card.',
+                'Ferramentas inteligentes para gerenciar leads e oportunidades.',
+              ].map((item, i) => (
+                <li key={i} className="flex items-center gap-2 text-white/90 text-sm">
+                  <span className="text-yellow-300 font-bold">✓</span> {item}
+                </li>
+              ))}
+            </ul>
+            <Link to={createPageUrl("SejaPrestador")}>
+              <Button className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-base px-8">
+                Cadastrar meu serviço
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
