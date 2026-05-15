@@ -23,6 +23,7 @@ import ContactPage from '@/pages/Contact';
 import AssistenteVirtualPage from '@/pages/AssistenteVirtual';
 import VerificacaoDocumentoPage from '@/pages/VerificacaoDocumento';
 import VerificacaoAntecedentesPage from '@/pages/VerificacaoAntecedentes';
+import SeoDashboard from '@/pages/admin/SeoDashboard';
 import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
 import EletricistaTrancoso from '@/pages/servicos/EletricistaTrancoso';
 import PiscineiroTrancoso from '@/pages/servicos/PiscineiroTrancoso';
@@ -135,6 +136,9 @@ const AuthenticatedApp = () => {
           <LayoutWrapper currentPageName="VerificacaoAntecedentes">
             <AnimatedPage><VerificacaoAntecedentesPage /></AnimatedPage>
           </LayoutWrapper>
+        } />
+        <Route path="/admin/seo" element={
+          <AnimatedPage><SeoDashboard /></AnimatedPage>
         } />
         <Route path="/servicos/diarista-trancoso" element={
           <LayoutWrapper currentPageName="DiaristaTrancoso">
