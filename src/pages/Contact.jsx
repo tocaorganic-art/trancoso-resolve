@@ -58,8 +58,8 @@ export default function ContactPage() {
               <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-bold mb-2">Email</h3>
-                <a href="mailto:suporte@trancosoresolve.com" className="text-primary hover:underline">
-                  suporte@trancosoresolve.com
+                <a href="mailto:suporte@trancosoresolve.com.br" className="text-primary hover:underline">
+                  suporte@trancosoresolve.com.br
                 </a>
                 <p className="text-sm text-muted-foreground mt-1">Resposta em até 24 horas</p>
               </div>
