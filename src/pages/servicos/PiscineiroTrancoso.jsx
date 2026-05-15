@@ -20,6 +20,7 @@ export default function PiscineiroTrancoso() {
       cta="Descreva sua necessidade de manutenção de piscina em Trancoso e receba retorno de piscineiros locais qualificados."
       ctaButton="Pedir orçamento de piscineiro em Trancoso"
       category="Outro"
+      serviceLabel="piscineiros"
       heroEmoji="🏊"
     />
   );

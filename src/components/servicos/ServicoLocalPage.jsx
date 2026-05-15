@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { CheckCircle, ArrowRight, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import LeadCaptureForm from '@/components/servicos/LeadCaptureForm';
 
 export default function ServicoLocalPage({
   title,
@@ -17,6 +18,7 @@ export default function ServicoLocalPage({
   ctaButton,
   category,
   heroEmoji,
+  serviceLabel,
 }) {
   useEffect(() => {
     document.title = title;
@@ -75,6 +77,9 @@ export default function ServicoLocalPage({
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{howTitle}</h2>
           <p className="text-slate-600 text-base leading-relaxed">{howText}</p>
         </section>
+
+        {/* Lead Capture Form */}
+        <LeadCaptureForm serviceInterest={category} serviceLabel={serviceLabel || category} />
 
         {/* CTA */}
         <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-3xl p-8 md:p-12 text-center">

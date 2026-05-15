@@ -20,6 +20,7 @@ export default function EletricistaTrancoso() {
       cta="Peça agora um eletricista em Trancoso descrevendo o que você precisa e receba retorno de prestadores locais de confiança."
       ctaButton="Pedir orçamento de eletricista em Trancoso"
       category="Eletricista"
+      serviceLabel="eletricistas"
       heroEmoji="⚡"
     />
   );
