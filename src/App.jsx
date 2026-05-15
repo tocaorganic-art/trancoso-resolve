@@ -25,6 +25,7 @@ import VerificacaoDocumentoPage from '@/pages/VerificacaoDocumento';
 import VerificacaoAntecedentesPage from '@/pages/VerificacaoAntecedentes';
 import SeoDashboard from '@/pages/admin/SeoDashboard';
 import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
+import AdminMetricasPage from '@/pages/AdminMetricas';
 import EletricistaTrancoso from '@/pages/servicos/EletricistaTrancoso';
 import PiscineiroTrancoso from '@/pages/servicos/PiscineiroTrancoso';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -153,6 +154,11 @@ const AuthenticatedApp = () => {
         <Route path="/servicos/piscineiro-trancoso" element={
           <LayoutWrapper currentPageName="PiscineiroTrancoso">
             <AnimatedPage><PiscineiroTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/admin/metricas" element={
+          <LayoutWrapper currentPageName="AdminMetricas">
+            <AnimatedPage><AdminMetricasPage /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="*" element={<PageNotFound />} />

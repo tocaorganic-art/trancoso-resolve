@@ -133,6 +133,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
     { name: "Antecedentes", path: "/AdminAntecedentes", icon: ShieldCheck },
     { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
+    { name: "📊 Métricas", path: "/admin/metricas", icon: TrendingUp },
   ] : []),
   { name: "Ver Site", path: "/", icon: Globe, clearLogin: true }];
 
