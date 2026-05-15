@@ -30,16 +30,22 @@ export default function BannerCategorias() {
                       className="group flex flex-col items-center gap-2 text-center min-w-0 transition-all duration-300"
                       aria-label={`Ver serviços de ${cat.name} em Trancoso`}
                     >
-                         <div className={`w-14 h-14 md:w-20 md:h-20 rounded-2xl ${cat.bgColor} border-2 border-transparent group-hover:border-white dark:group-hover:border-slate-700 flex items-center justify-center transition-all duration-300 ease-out group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-slate-400/30 dark:group-hover:shadow-black/50 shrink-0 relative overflow-hidden`}>
-                            {/* Gradient background on hover */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                         <div className={`w-14 h-14 md:w-20 md:h-20 rounded-2xl border-2 border-slate-300/40 dark:border-slate-600/40 flex items-center justify-center transition-all duration-300 ease-out group-hover:-translate-y-2 shrink-0 relative overflow-hidden`}
+                       style={{
+                         background: 'rgba(255, 255, 255, 0.15)',
+                         backdropFilter: 'blur(8px)',
+                         boxShadow: '0 8px 20px rgba(0, 102, 255, 0.18), 0 2px 8px rgba(0, 0, 0, 0.1)',
+                       }}
+                     >
+                       {/* Hover state: intensify background and shadow */}
+                       <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-40 transition-opacity duration-300`} />
 
-                            {/* Icon */}
-                            <div className="text-slate-700 dark:text-slate-300 transition-all duration-300 group-hover:text-white relative z-10 group-hover:scale-125">
-                              {React.cloneElement(cat.icon, { size: 24 })}
-                            </div>
-                          </div>
-                          <span className="text-[11px] md:text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight truncate w-full group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{cat.name}</span>
+                       {/* Icon - always visible */}
+                       <div className="text-slate-700 dark:text-slate-300 transition-all duration-300 group-hover:text-slate-900 dark:group-hover:text-white relative z-10 group-hover:scale-125">
+                         {React.cloneElement(cat.icon, { size: 24 })}
+                       </div>
+                     </div>
+                       <span className="text-[11px] md:text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight truncate w-full transition-colors">{cat.name}</span>
                     </Link>
                 ))}
             </div>
