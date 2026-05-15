@@ -25,7 +25,7 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 flex items-center justify-around"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-800 border-t border-slate-700 flex items-center justify-around"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       {navItems.map(({ label, path, icon: Icon }) => {
@@ -38,7 +38,7 @@ export default function BottomNav() {
             onClick={(e) => handleNavClick(e, path)}
             className={cn(
               "select-none flex flex-col items-center justify-center flex-1 py-3 px-2 gap-1 transition-colors min-h-[60px]",
-              isActive ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:text-slate-900"
+              isActive ? "text-cyan-400 bg-slate-700" : "text-slate-400 hover:text-slate-200"
             )}
           >
             <Icon className={cn("w-6 h-6 select-none", isActive ? "stroke-[2.5]" : "stroke-2")} />

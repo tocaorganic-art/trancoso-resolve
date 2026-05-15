@@ -41,8 +41,8 @@ export default function BannerCategorias() {
                        <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-40 transition-opacity duration-300`} />
 
                        {/* Icon - always visible */}
-                       <div className="text-slate-700 dark:text-slate-300 transition-all duration-300 group-hover:text-slate-900 dark:group-hover:text-white relative z-10 group-hover:scale-125">
-                         {React.cloneElement(cat.icon, { size: 24 })}
+                       <div className="text-slate-700 dark:text-slate-300 transition-all duration-300 group-hover:text-slate-900 dark:group-hover:text-white relative z-10 group-hover:scale-125" role="img" aria-hidden="true">
+                         {cat.icon}
                        </div>
                      </div>
                        <span className="text-[11px] md:text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight truncate w-full transition-colors">{cat.name}</span>
