@@ -5,18 +5,18 @@ export default function PiscineiroTrancoso() {
     <ServicoLocalPage
       title="Piscineiro em Trancoso – Limpeza, Tratamento e Manutenção de Piscinas | Trancoso Resolve"
       metaDescription="Encontre piscineiro em Trancoso para limpeza, tratamento e manutenção da sua piscina em casa, condomínio ou imóvel de temporada. Peça orçamento rápido pela Trancoso Resolve e fale com prestadores locais."
-      h1="Piscineiro em Trancoso: Limpeza, Tratamento e Manutenção de Piscinas"
-      intro="Precisa manter a piscina sempre limpa e pronta para uso em Trancoso? Na Trancoso Resolve você encontra piscineiros e empresas especializadas em limpeza, tratamento e manutenção de piscinas para residências, condomínios e imóveis de temporada."
-      servicesTitle="Serviços de piscineiro em Trancoso"
+      h1="Piscineiro em Trancoso para Limpeza e Manutenção de Piscinas"
+      intro="Quer manter sua piscina sempre cristalina e segura em Trancoso? Na Trancoso Resolve você contrata piscineiros locais com experiência em clima tropical e rotina de imóveis de temporada, para residências, villas e pousadas."
+      servicesTitle="Serviços especializados de piscineiro em Trancoso"
       services={[
-        'Limpeza periódica de piscinas',
-        'Tratamento químico e balanceamento da água',
-        'Aspiração e remoção de sujeira do fundo',
-        'Limpeza de bordas e filtros',
-        'Manutenção preventiva para casas de temporada e pousadas',
+        'Limpeza semanal, quinzenal ou mensal conforme rotina',
+        'Tratamento e análise de química da água para clima tropical',
+        'Manutenção de bombas, filtros e sistemas de circulação',
+        'Vistoria e reparos de revestimento e estrutura da piscina',
+        'Planos de manutenção para imóveis desocupados ou pousadas',
       ]}
-      howTitle="Como contratar piscineiro pela Trancoso Resolve"
-      howText="Você informa o tipo de piscina, localização em Trancoso e a frequência desejada de manutenção. Enviamos seu pedido a piscineiros locais, e você recebe contato para alinhar valores, datas e condições."
+      howTitle="Piscineiros locais que conhecem o clima e a rotina de Trancoso"
+      howText="Os profissionais na plataforma entendem as desafios específicos de manutenção em Trancoso: maresia, umidade e sazonalidade. Você negocia direto com eles, sem intermediários, e monta um plano de manutenção adequado para sua necessidade e frequência."
       cta="Descreva sua necessidade de manutenção de piscina em Trancoso e receba retorno de piscineiros locais qualificados."
       ctaButton="Pedir orçamento de piscineiro em Trancoso"
       category="Outro"
