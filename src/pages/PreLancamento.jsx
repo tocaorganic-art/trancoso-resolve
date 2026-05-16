@@ -109,7 +109,8 @@ export default function PreLancamento() {
       color: "#fff",
       minHeight: "100vh",
       position: "relative",
-      background: "linear-gradient(160deg, #064e3b 0%, #054335 100%)",
+      background: "linear-gradient(160deg, rgba(6,78,59,0.82) 0%, rgba(5,67,53,0.90) 100%), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80') center/cover no-repeat",
+      backgroundAttachment: "fixed",
     }}>
       <style>{`
         @keyframes pulse-green {
@@ -119,7 +120,7 @@ export default function PreLancamento() {
         .pulse-green { animation: pulse-green 1.8s ease-in-out infinite; }
 
         .btn-primary {
-          background: linear-gradient(135deg, #0072FF, #00AEEF);
+          background: #10b981;
           color: #fff; border: none; border-radius: 999px;
           font-weight: 800; cursor: pointer;
           transition: opacity 0.2s, transform 0.15s;
@@ -221,9 +222,9 @@ export default function PreLancamento() {
           </div>
 
           <h1 className="pl-hero-title" style={{
-            fontSize: "clamp(2rem, 7vw, 3.4rem)", fontWeight: 900,
+            fontSize: "clamp(2rem, 8vw, 3.2rem)", fontWeight: 900,
             lineHeight: 1.08, marginBottom: 20,
-            color: "#fff", letterSpacing: "-1.5px",
+            color: "#fff", letterSpacing: "-1px",
             textShadow: "0 2px 20px rgba(0,0,0,0.3)",
           }}>
             Seja um dos{" "}
@@ -232,30 +233,27 @@ export default function PreLancamento() {
           </h1>
 
           <p style={{
-            fontSize: "clamp(0.95rem, 2.8vw, 1.1rem)",
-            color: "rgba(255,255,255,0.85)", lineHeight: 1.7,
+            fontSize: "clamp(0.95rem, 3vw, 1.1rem)",
+            color: "rgba(255,255,255,0.72)", lineHeight: 1.7,
             maxWidth: 500, margin: "0 auto 32px",
           }}>
             Garanta agora e receba <strong style={{ color: "#34d399" }}>60 dias grátis</strong> ao pagar a primeira mensalidade. Sua vitrine digital oficial está esperando por você.
           </p>
 
-          {/* Contador âmbar/dourado ANTES do CTA */}
+          {/* Contador card sutil */}
           <div style={{
             margin: "0 auto 32px",
-            background: "linear-gradient(135deg, rgba(217,119,6,0.25), rgba(245,158,11,0.15))",
-            border: "2px solid rgba(245,158,11,0.7)",
-            borderRadius: 20, padding: "22px 32px",
+            background: "rgba(245,158,11,0.10)",
+            border: "1px solid rgba(245,158,11,0.35)",
+            borderRadius: 16, padding: "20px 28px",
             display: "inline-block", textAlign: "center",
-            boxShadow: "0 4px 32px rgba(245,158,11,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
           }}>
             <span style={{ fontSize: "clamp(2.8rem, 10vw, 4rem)", fontWeight: 900, color: "#fbbf24", lineHeight: 1, display: "block" }}>
               {vagas}
             </span>
-            <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.85)", marginTop: 6, fontWeight: 600 }}>
-              vagas restantes de <strong style={{ color: "#fcd34d" }}>{TOTAL_VAGAS}</strong> disponíveis
-            </p>
-            <p style={{ fontSize: "0.72rem", color: "rgba(255,200,100,0.7)", marginTop: 4 }}>
-              ⚡ Oferta encerra quando esgotar
+            <p style={{ fontSize: "0.83rem", color: "rgba(255,255,255,0.8)", marginTop: 6, fontWeight: 600 }}>
+              vagas restantes de <strong>{TOTAL_VAGAS}</strong> disponíveis
             </p>
           </div>
 
@@ -270,7 +268,7 @@ export default function PreLancamento() {
               </button>
             </a>
           </div>
-          <p style={{ fontSize: "0.76rem", color: "rgba(255,255,255,0.5)", marginTop: 12 }}>
+          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.45)", marginTop: 12 }}>
             Leva 2 minutos · Sem cartão · Cancele quando quiser
           </p>
         </section>
