@@ -220,25 +220,8 @@ p, span, h1, h2, h3, h4, h5, h6, li, td, th, label, input, textarea {
 
 /* Android-specific Dark Mode enforcement */
 @media (prefers-color-scheme: dark) {
-  * {
-    background-color: hsl(var(--background)) !important;
-    color: hsl(var(--foreground)) !important;
-    border-color: hsl(var(--border)) !important;
-  }
-  
   /* Exceptions for images, videos */
   img, video, canvas, svg {
     background-color: transparent !important;
-  }
-  
-  /* Input fields */
-  input, textarea, select {
-    background-color: hsl(var(--input)) !important;
-    color: hsl(var(--foreground)) !important;
-    border-color: hsl(var(--border)) !important;
-  }
-  
-  input::placeholder, textarea::placeholder {
-    color: hsl(var(--muted-foreground)) !important;
   }
 }
