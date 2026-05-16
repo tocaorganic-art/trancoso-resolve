@@ -301,7 +301,7 @@ export default function Layout({ children, currentPageName }) {
 
           <main id="main-content" className="pb-24 md:pb-0 pt-12 md:pt-0 md:min-h-screen">{children}</main>
 
-          <footer className="text-white py-8 mt-16 pb-safe bg-[#0931d3]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
+          <footer className="text-white py-8 mt-16 pb-safe bg-[hsl(var(--card))]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
               <div className="flex justify-center gap-4 mb-4 flex-wrap">
                 <Link to={createPageUrl("About")} className="text-base font-medium text-slate-200 hover:text-white transition-colors">
