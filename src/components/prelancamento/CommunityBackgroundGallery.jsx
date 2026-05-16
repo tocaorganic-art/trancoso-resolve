@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 const COMMUNITY_IMAGES = [
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop", // praia
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop", // por do sol
-  "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&h=800&fit=crop", // rua colorida
-  "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&h=800&fit=crop", // arquitetura
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop", // natureza
+  "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=1400&h=900&fit=crop&q=80", // praia tropical brasil
+  "https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=1400&h=900&fit=crop&q=80", // vila colorida brasil
+  "https://images.unsplash.com/photo-1580537659466-0a9bfa916a54?w=1400&h=900&fit=crop&q=80", // por do sol praia
+  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1400&h=900&fit=crop&q=80", // natureza verde tropical
+  "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=1400&h=900&fit=crop&q=80", // praia serena
 ];
 
 export default function CommunityBackgroundGallery() {
@@ -14,81 +14,66 @@ export default function CommunityBackgroundGallery() {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % COMMUNITY_IMAGES.length);
-    }, 5000); // Muda a cada 5 segundos
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 0,
-        overflow: "hidden",
-      }}
-    >
-      {/* Imagens em carrossel */}
+    <div style={{
+      position: "fixed",
+      top: 0, left: 0, right: 0, bottom: 0,
+      zIndex: 0,
+      overflow: "hidden",
+    }}>
       {COMMUNITY_IMAGES.map((img, idx) => (
         <div
           key={idx}
           style={{
             position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            top: 0, left: 0, right: 0, bottom: 0,
             backgroundImage: `url('${img}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            backgroundAttachment: "fixed",
             opacity: idx === activeIndex ? 1 : 0,
-            transition: "opacity 1s ease-in-out",
+            transition: "opacity 1.5s ease-in-out",
+            willChange: "opacity",
           }}
         />
       ))}
 
-      {/* Overlay gradiente escuro */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: "linear-gradient(135deg, rgba(15, 51, 102, 0.82) 0%, rgba(10, 40, 80, 0.88) 100%)",
-          zIndex: 1,
-        }}
-      />
+      {/* Overlay escuro gradiente */}
+      <div style={{
+        position: "absolute",
+        top: 0, left: 0, right: 0, bottom: 0,
+        background: "linear-gradient(160deg, rgba(5, 25, 65, 0.80) 0%, rgba(8, 35, 80, 0.88) 100%)",
+        zIndex: 1,
+      }} />
 
-      {/* Indicadores de dots */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 24,
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          gap: 8,
-          zIndex: 2,
-        }}
-      >
+      {/* Dots de navegação */}
+      <div style={{
+        position: "absolute",
+        bottom: 20,
+        left: "50%",
+        transform: "translateX(-50%)",
+        display: "flex",
+        gap: 8,
+        zIndex: 2,
+      }}>
         {COMMUNITY_IMAGES.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setActiveIndex(idx)}
             style={{
-              width: idx === activeIndex ? 28 : 8,
-              height: 8,
+              width: idx === activeIndex ? 24 : 7,
+              height: 7,
               borderRadius: 999,
-              background: idx === activeIndex ? "#00AEEF" : "rgba(255, 255, 255, 0.4)",
+              background: idx === activeIndex ? "#00AEEF" : "rgba(255,255,255,0.35)",
               border: "none",
               cursor: "pointer",
-              transition: "all 0.3s ease",
+              transition: "all 0.4s ease",
+              padding: 0,
             }}
-            aria-label={`Slide ${idx + 1}`}
+            aria-label={`Foto ${idx + 1}`}
           />
         ))}
       </div>
