@@ -21,16 +21,20 @@ Deno.serve(async (req) => {
       userEmail = userData.email;
       userName = userData.full_name || '';
     } else {
-      // SEGURANÇA: Chamada direta requer admin
+      // Chamada direta: aceita do próprio usuário autenticado ou admin
       const user = await base44.auth.me();
       if (!user) {
         return Response.json({ error: 'Unauthorized' }, { status: 401 });
       }
-      if (user.role !== 'admin') {
-        return Response.json({ error: 'Forbidden: admin only' }, { status: 403 });
+      // Usa o email do próprio usuário autenticado (ou o informado no payload, se admin)
+      if (user.role === 'admin' && payload.user_email) {
+        userEmail = payload.user_email;
+        userName = payload.user_name || '';
+      } else {
+        // Prestador criando o próprio trial
+        userEmail = user.email;
+        userName = user.full_name || payload.user_name || '';
       }
-      userEmail = payload.user_email;
-      userName = payload.user_name || '';
     }
 
     if (!userEmail) {

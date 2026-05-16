@@ -49,35 +49,42 @@ export default function CadastroTipoPage() {
     mutationFn: (userType) => base44.auth.updateMe({ user_type: userType }),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
-      await queryClient.refetchQueries({ queryKey: ['currentUser'] });
+
       if (data.user_type === 'prestador') {
-        try {
-          await criarTrialPrestador({ user_email: data.email, user_name: data.full_name });
-        } catch {
+        // 1. Cria trial — fire-and-forget, não bloqueia o fluxo
+        criarTrialPrestador({ user_email: data.email, user_name: data.full_name }).catch(() => {
           localStorage.setItem('trial_pendente', 'true');
-        }
-        // Salva tipo de pessoa no ServiceProvider em background
-        try {
-          const providers = await base44.entities.ServiceProvider.filter({ created_by: data.email });
-          const providerData = {
-            tipo_pessoa: tipoPessoa,
-            cpf: cpf.replace(/\D/g, ''),
-            cnpj: cnpj.replace(/\D/g, '') || undefined,
-            tem_ponto_fisico_em_trancoso: temPontoFisico,
-            razao_social: razaoSocial || undefined,
-            nome_fantasia: nomFantasia || undefined,
-          };
-          if (providers && providers.length > 0) {
-            await base44.entities.ServiceProvider.update(providers[0].id, providerData);
-            verificarAntecedentes({ service_provider_id: providers[0].id }).catch(() => {});
-          }
-        } catch {
-          // Silencioso
-        }
+        });
+
+        // 2. Salva CPF/dados no ServiceProvider e dispara verificação em background
+        base44.entities.ServiceProvider.filter({ created_by: data.email })
+          .then((providers) => {
+            if (providers && providers.length > 0) {
+              const providerData = {
+                tipo_pessoa: tipoPessoa,
+                cpf: cpf.replace(/\D/g, ''),
+                ...(cnpj && { cnpj: cnpj.replace(/\D/g, '') }),
+                tem_ponto_fisico_em_trancoso: temPontoFisico,
+                ...(razaoSocial && { razao_social: razaoSocial }),
+                ...(nomFantasia && { nome_fantasia: nomFantasia }),
+              };
+              base44.entities.ServiceProvider.update(providers[0].id, providerData)
+                .then(() => {
+                  verificarAntecedentes({ service_provider_id: providers[0].id }).catch(() => {});
+                })
+                .catch(() => {});
+            }
+          })
+          .catch(() => {});
+
+        // 3. Redireciona imediatamente sem esperar pelas operações acima
         window.location.replace('/Dashboard');
       } else {
         window.location.replace('/');
       }
+    },
+    onError: () => {
+      setStep('tipo_pessoa');
     },
   });
 
@@ -100,12 +107,13 @@ export default function CadastroTipoPage() {
     updateUserMutation.mutate('prestador');
   };
 
-  if (isLoading || step === 'processando') {
+  if (isLoading || step === 'processando' || updateUserMutation.isPending) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-cyan-100">
         <div className="text-center">
           <Loader2 className="w-10 h-10 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-slate-600">Configurando sua conta...</p>
+          <p className="text-slate-600 font-medium">Configurando sua conta...</p>
+          <p className="text-slate-400 text-sm mt-1">Isso leva apenas alguns segundos.</p>
         </div>
       </div>
     );
