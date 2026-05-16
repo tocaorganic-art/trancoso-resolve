@@ -101,9 +101,7 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         } />
         <Route path="/PreLancamento" element={
-          <LayoutWrapper currentPageName="PreLancamento">
-            <AnimatedPage><PreLancamentoPage /></AnimatedPage>
-          </LayoutWrapper>
+          <AnimatedPage><PreLancamentoPage /></AnimatedPage>
         } />
         <Route path="/ServicoLanding" element={
           <LayoutWrapper currentPageName="ServicoLanding">
