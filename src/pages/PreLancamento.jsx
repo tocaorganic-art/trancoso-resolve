@@ -211,7 +211,7 @@ export default function PreLancamento() {
       fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
       color: "#fff",
       minHeight: "100vh",
-      background: `linear-gradient(170deg, rgba(7,28,55,0.92) 0%, rgba(4,18,40,0.96) 60%, rgba(10,30,50,0.98) 100%), url('https://media.base44.com/images/public/68eb21726a9614db4a82ba99/ab7f3d171_generated_image.png') center/cover no-repeat fixed`,
+      background: `linear-gradient(170deg, rgba(7,28,55,0.85) 0%, rgba(4,18,40,0.90) 60%, rgba(10,30,50,0.95) 100%), url('https://media.base44.com/images/public/68eb21726a9614db4a82ba99/dfe6ee67e_generated_image.png') center/cover no-repeat fixed`,
       overflowX: "hidden",
     }}>
       <style>{`
