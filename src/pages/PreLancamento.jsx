@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
+import CommunityBackgroundGallery from "@/components/prelancamento/CommunityBackgroundGallery";
 
 const TOTAL_VAGAS = 50;
 
@@ -82,7 +83,8 @@ export default function PreLancamento() {
   const CTA_URL = "/SejaPrestador";
 
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: "#f8faf9", color: "#1a2e1a", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: "#f8faf9", color: "#1a2e1a", minHeight: "100vh", position: "relative", zIndex: 1 }}>
+      <CommunityBackgroundGallery />
       <style>{`
         @keyframes pulse-dot {
           0%, 100% { opacity: 1; transform: scale(1); }
@@ -97,8 +99,13 @@ export default function PreLancamento() {
         }
         .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
         .btn-primary:active { transform: translateY(0); }
+        .prelancamento-wrapper {
+          position: relative;
+          z-index: 10;
+        }
       `}</style>
 
+      <div className="prelancamento-wrapper">
       {/* ── HEADER LIQUID GLASS ── */}
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
@@ -371,6 +378,7 @@ export default function PreLancamento() {
           © 2026 · Todos os direitos reservados
         </p>
       </footer>
+      </div>
     </div>
   );
 }
