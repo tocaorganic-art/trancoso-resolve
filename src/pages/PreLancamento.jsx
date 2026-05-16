@@ -129,26 +129,24 @@ function FAQItem({ q, a }) {
       >
         <span style={{ fontWeight: 700, fontSize: "0.92rem", color: "#fff", lineHeight: 1.4 }}>{q}</span>
         <span style={{
-          color: "#60a5fa",
+          color: "#10b981",
           fontSize: "1.4rem",
           flexShrink: 0,
-          transition: "transform 0.2s",
+          transition: "transform 0.3s ease",
           transform: open ? "rotate(45deg)" : "rotate(0)",
           display: "inline-block",
         }}>+</span>
       </button>
-      {open && (
-        <div style={{ padding: "0 20px 18px", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          <p style={{ fontSize: "0.87rem", color: "rgba(255,255,255,0.75)", lineHeight: 1.7, marginTop: 14 }}>{a}</p>
-        </div>
-      )}
+      <div className={`faq-body${open ? " open" : ""}`} style={{ borderTop: open ? "1px solid rgba(255,255,255,0.08)" : "none" }}>
+        <p style={{ fontSize: "0.87rem", color: "rgba(255,255,255,0.75)", lineHeight: 1.7, margin: "14px 20px 18px" }}>{a}</p>
+      </div>
     </div>
   );
 }
 
 export default function PreLancamento() {
   const [vagasRestantes, setVagasRestantes] = useState(null);
-  const [form, setForm] = useState({ name: "", whatsapp: "", categoria: "" });
+  const [form, setForm] = useState({ name: "", whatsapp: "", categoria: "", pagamento: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -191,7 +189,7 @@ export default function PreLancamento() {
         service_interest: form.categoria,
         type: "prestador",
         source: "prelancamento-50vagas",
-        description: `data_cadastro: ${new Date().toISOString()} | status: pendente | categoria: ${form.categoria}`,
+        description: `data_cadastro: ${new Date().toISOString()} | status: pendente | categoria: ${form.categoria} | pagamento: ${form.pagamento || "não informado"}`,
       });
       setSubmitted(true);
     } catch {
@@ -221,23 +219,50 @@ export default function PreLancamento() {
         }
         .pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
         .btn-cta {
-          background: linear-gradient(135deg, #1d4ed8, #2563eb);
+          background: linear-gradient(135deg, #059669, #10b981);
           color: #fff;
           border: none;
           border-radius: 999px;
           font-weight: 800;
           cursor: pointer;
           letter-spacing: 0.5px;
-          min-height: 52px;
+          min-height: 56px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-          box-shadow: 0 4px 24px rgba(29,78,216,0.5);
+          box-shadow: 0 0 32px rgba(16,185,129,0.4);
           text-decoration: none;
         }
-        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(29,78,216,0.65); }
+        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(16,185,129,0.6); }
         .btn-cta:active { transform: translateY(0); }
+        .faq-body {
+          overflow: hidden;
+          max-height: 0;
+          transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .faq-body.open {
+          max-height: 300px;
+        }
+        .pl-radio { display: none; }
+        .pl-radio-label {
+          flex: 1;
+          padding: 10px 14px;
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 10px;
+          color: rgba(255,255,255,0.7);
+          font-size: 0.88rem;
+          font-weight: 600;
+          cursor: pointer;
+          text-align: center;
+          transition: all 0.2s;
+          background: rgba(255,255,255,0.06);
+        }
+        .pl-radio:checked + .pl-radio-label {
+          background: rgba(16,185,129,0.2);
+          border-color: #10b981;
+          color: #fff;
+        }
         .pl-input, .pl-select {
           width: 100%;
           padding: 14px 16px;
@@ -269,9 +294,9 @@ export default function PreLancamento() {
         position: "fixed",
         top: 0, left: 0, right: 0,
         zIndex: 200,
-        background: "rgba(4,18,40,0.9)",
-        backdropFilter: "blur(16px)",
-        borderBottom: "1px solid rgba(96,165,250,0.2)",
+        background: "rgba(6,78,59,0.97)",
+        backdropFilter: "blur(10px)",
+        borderBottom: "1px solid rgba(16,185,129,0.25)",
         paddingTop: "max(10px, env(safe-area-inset-top))",
         paddingBottom: 10,
         paddingLeft: 20,
@@ -296,12 +321,6 @@ export default function PreLancamento() {
 
         {/* ══════════════ HERO ══════════════ */}
         <section className="sec-pad" style={{ padding: "64px 24px 56px", textAlign: "center", maxWidth: 640, margin: "0 auto" }}>
-
-          <img
-            src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
-            alt="Trancoso Resolve"
-            style={{ height: 60, marginBottom: 24 }}
-          />
 
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
@@ -384,7 +403,7 @@ export default function PreLancamento() {
             <p style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.35)", marginTop: 6 }}>Atualizado em tempo real</p>
           </div>
 
-          <a href={CTA_URL} className="btn-cta" style={{ padding: "16px 40px", fontSize: "1.05rem", width: "100%", maxWidth: 380, display: "flex", margin: "0 auto" }}>
+          <a href={CTA_URL} className="btn-cta" style={{ padding: "16px 40px", fontSize: "1.05rem", width: "100%", maxWidth: 400, display: "flex", margin: "0 auto" }}>
             QUERO GARANTIR MINHA VAGA
           </a>
           <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.38)", marginTop: 12 }}>
@@ -532,14 +551,14 @@ export default function PreLancamento() {
             {submitted ? (
               <div style={{
                 textAlign: "center", padding: "44px 24px",
-                background: "rgba(29,78,216,0.12)",
-                border: "1px solid rgba(96,165,250,0.4)",
+                background: "rgba(16,185,129,0.1)",
+                border: "1px solid rgba(16,185,129,0.4)",
                 borderRadius: 20,
               }}>
                 <div style={{ fontSize: "3rem", marginBottom: 16 }}>🎉</div>
-                <h3 style={{ fontWeight: 800, fontSize: "1.3rem", color: "#60a5fa", marginBottom: 10 }}>Recebemos seu contato!</h3>
+                <h3 style={{ fontWeight: 800, fontSize: "1.3rem", color: "#10b981", marginBottom: 10 }}>Vaga garantida!</h3>
                 <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.7 }}>
-                  Obrigado! Em breve entraremos em contato com você pelo WhatsApp.
+                  Obrigado! Em breve entraremos em contato com você pelo WhatsApp para finalizar seu cadastro.
                 </p>
               </div>
             ) : (
@@ -554,6 +573,7 @@ export default function PreLancamento() {
                 <input
                   className="pl-input"
                   type="tel"
+                  inputMode="tel"
                   placeholder="WhatsApp (73) 99999-9999 *"
                   value={form.whatsapp}
                   onChange={handlePhone}
@@ -569,9 +589,31 @@ export default function PreLancamento() {
                   </select>
                   <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,0.4)", pointerEvents: "none", fontSize: "0.75rem" }}>▼</span>
                 </div>
+
+                {/* Forma de pagamento */}
+                <div>
+                  <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", marginBottom: 8, fontWeight: 600, letterSpacing: "0.5px" }}>FORMA DE PAGAMENTO PREFERIDA</p>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {["Pix", "Boleto", "Cartão"].map((opt) => (
+                      <React.Fragment key={opt}>
+                        <input
+                          type="radio"
+                          id={`pag-${opt}`}
+                          name="pagamento"
+                          value={opt}
+                          className="pl-radio"
+                          checked={form.pagamento === opt}
+                          onChange={() => setForm(f => ({ ...f, pagamento: opt }))}
+                        />
+                        <label htmlFor={`pag-${opt}`} className="pl-radio-label">{opt}</label>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+
                 {error && <p style={{ color: "#f87171", fontSize: "0.82rem", textAlign: "center" }}>{error}</p>}
                 <button type="submit" className="btn-cta" disabled={loading} style={{ padding: "16px", fontSize: "1rem", width: "100%", marginTop: 4 }}>
-                  {loading ? "Enviando..." : "QUERO SER CONTATADO"}
+                  {loading ? "Enviando..." : "Garantir minha vaga agora 🚀"}
                 </button>
                 <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.32)", textAlign: "center" }}>
                   🔒 Seus dados são seguros e não serão compartilhados.
