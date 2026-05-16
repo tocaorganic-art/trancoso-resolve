@@ -37,7 +37,7 @@ export default function BottomNav() {
             to={path}
             onClick={(e) => handleNavClick(e, path)}
             className={cn(
-              "select-none flex flex-col items-center justify-center flex-1 py-3 px-2 gap-1 transition-colors min-h-[60px] text-[hsl(var(--background))]",
+              "select-none flex flex-col items-center justify-center flex-1 py-3 px-2 gap-1 transition-colors min-h-[60px] text-[hsl(var(--card))]",
               isActive ? "text-cyan-400 bg-slate-700" : "hover:text-slate-200"
             )}>
             
