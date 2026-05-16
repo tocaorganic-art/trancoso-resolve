@@ -118,7 +118,7 @@ export default function Layout({ children, currentPageName }) {
 
   const isAdmin = user?.role === "admin";
   const [perfilModalFechado, setPerfilModalFechado] = useState(false);
-  const precisaCompletarPerfil = !!user && !user.profile_completed && !location.pathname.includes('CadastroTipo') && !perfilModalFechado;
+  const precisaCompletarPerfil = !!user && !user.profile_completed && !user.phone && !location.pathname.includes('CadastroTipo') && location.pathname === '/' && !perfilModalFechado;
 
   const adminNavItems = [
   { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
