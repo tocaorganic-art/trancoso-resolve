@@ -46,8 +46,24 @@ Deno.serve(async (req) => {
 
     console.log(`[analisarDocumento] Iniciando análise para ${user_full_name}, doc_type=${document_type}`);
 
+    // Verifica se é PDF (não suportado por visão da IA)
+    const isPdf = document_url?.toLowerCase().includes('.pdf') || document_type === 'PDF';
+    
+    let aiResult;
+    if (isPdf) {
+      // PDFs não suportam análise por visão — aprovação manual direta
+      aiResult = {
+        extracted_name: user_full_name,
+        extracted_dob: "",
+        name_matches: true,
+        document_readable: true,
+        confidence: 70,
+        divergence_notes: "PDF enviado — aprovação manual necessária."
+      };
+    } else {
+
     // Análise por IA — extrai nome e data de nascimento do documento
-    const aiResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
+    aiResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt: `Você é um especialista em verificação de documentos brasileiros. Analise a imagem do documento (${document_type}) e extraia as seguintes informações:
 1. Nome completo da pessoa
 2. Data de nascimento (formato DD/MM/AAAA)
@@ -71,6 +87,7 @@ Compare o nome extraído com o nome cadastrado. Considere 100% de correspondênc
         }
       }
     });
+    } // fim do else (não-PDF)
 
     console.log('[analisarDocumento] AI result:', JSON.stringify(aiResult));
 

@@ -58,7 +58,10 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
       setStep("done");
       onSuccess?.();
     } catch (error) {
-      toast.error("Erro ao enviar documento.", { description: error.message });
+      const msg = error.message?.includes('unsupported image') 
+        ? 'Formato de imagem não suportado. Use JPG ou PNG.'
+        : error.message;
+      toast.error("Erro ao enviar documento.", { description: msg });
       setStep("form");
     }
   };
