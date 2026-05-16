@@ -25,6 +25,7 @@ import VerificacaoDocumentoPage from '@/pages/VerificacaoDocumento';
 import VerificacaoAntecedentesPage from '@/pages/VerificacaoAntecedentes';
 import PoliticaDevolucoesPage from '@/pages/PoliticaDevolucoes';
 import TermosDeServicoPage from '@/pages/TermosDeServico';
+import AssinaturaConfirmadaPage from '@/pages/AssinaturaConfirmada';
 import SeoDashboard from '@/pages/admin/SeoDashboard';
 import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
 import AdminMetricasPage from '@/pages/AdminMetricas';
@@ -148,6 +149,9 @@ const AuthenticatedApp = () => {
           <LayoutWrapper currentPageName="TermosDeServico">
             <AnimatedPage><TermosDeServicoPage /></AnimatedPage>
           </LayoutWrapper>
+        } />
+        <Route path="/AssinaturaConfirmada" element={
+          <AnimatedPage><AssinaturaConfirmadaPage /></AnimatedPage>
         } />
         <Route path="/admin/seo" element={
           <AnimatedPage><SeoDashboard /></AnimatedPage>
