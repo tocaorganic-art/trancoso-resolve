@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 
 const TOTAL_VAGAS = 50;
-const CTA_URL = "/SejaPrestador";
+const CTA_URL = "https://trancosoresolve.com.br/SejaPrestador";
 // Contador regressivo até 19/05/2025 às 00:00 (horário de Brasília)
 const DEADLINE = new Date("2025-05-19T00:00:00-03:00").getTime();
 
@@ -144,6 +144,7 @@ export default function PreLancamento() {
         service_interest: form.categoria,
         type: "prestador",
         source: "prelancamento-50vagas",
+        description: `data_cadastro: ${new Date().toISOString()} | status: pendente | categoria: ${form.categoria}`,
       });
       setSubmitted(true);
     } catch {
