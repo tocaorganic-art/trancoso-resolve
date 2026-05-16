@@ -9,21 +9,17 @@ import { toast } from 'sonner';
 export default function PermissionChecker({ children, requiredRole = null, requiredUserType = null }) {
   const [permissionStatus, setPermissionStatus] = useState('checking');
   const [errorDetails, setErrorDetails] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   const { data: user, isLoading, error, refetch } = useQuery({
     queryKey: ['currentUser'],
     queryFn: async () => {
-      try {
-        const userData = await base44.auth.me();
-        return userData;
-      } catch (err) {
-        console.error('Erro ao buscar usuário:', err);
-        throw err;
-      }
+      const userData = await base44.auth.me();
+      return userData;
     },
     retry: 2,
     retryDelay: 1000,
-    staleTime: 0, // Sempre busca dados frescos para verificar permissões
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -34,21 +30,12 @@ export default function PermissionChecker({ children, requiredRole = null, requi
 
     if (error) {
       setPermissionStatus('error');
-      setErrorDetails({
-        code: 'AUTH_ERROR',
-        message: 'Falha na autenticação',
-        details: error.message,
-      });
+      setErrorDetails({ code: 'AUTH_ERROR', message: 'Falha na autenticação', details: error.message });
       return;
     }
 
     if (!user) {
       setPermissionStatus('unauthorized');
-      setErrorDetails({
-        code: 'NO_USER',
-        message: 'Usuário não autenticado',
-        details: 'Sessão inválida ou expirada',
-      });
       return;
     }
 
@@ -65,29 +52,67 @@ export default function PermissionChecker({ children, requiredRole = null, requi
 
     // Verificar user_type se necessário
     if (requiredUserType && user.user_type !== requiredUserType) {
+      const userTypeUndefined = !user.user_type || user.user_type === 'indefinido';
+
+      // Flag de cadastro recente (banco ainda propagando): bypass por até 30s
+      const cadastroTs = localStorage.getItem('user_type_prestador_pendente');
+      const cadastroRecente = cadastroTs && (Date.now() - parseInt(cadastroTs)) < 30000;
+      if (cadastroRecente && requiredUserType === 'prestador') {
+        console.log('[PermissionChecker] Cadastro de prestador recente, aguardando propagação...');
+        if (retryCount < 8) {
+          setTimeout(() => {
+            setRetryCount(c => c + 1);
+            refetch();
+          }, 1500);
+          setPermissionStatus('checking');
+          return;
+        }
+        // Após 8 tentativas (~12s), limpa o flag e deixa passar mesmo assim
+        localStorage.removeItem('user_type_prestador_pendente');
+        setPermissionStatus('authorized');
+        return;
+      }
+
+      // user_type indefinido sem cadastro recente: tenta algumas vezes antes de bloquear
+      if (userTypeUndefined && retryCount < 3) {
+        setTimeout(() => {
+          setRetryCount(c => c + 1);
+          refetch();
+        }, 1500);
+        setPermissionStatus('checking');
+        return;
+      }
+
+      // user_type indefinido após retries → vai pro CadastroTipo
+      if (userTypeUndefined) {
+        setPermissionStatus('needs_setup');
+        return;
+      }
+
+      // user_type definido mas incorreto (ex: cliente no Dashboard de prestador)
       setPermissionStatus('forbidden');
       setErrorDetails({
         code: 'INSUFFICIENT_USER_TYPE',
         message: 'Acesso negado',
-        details: `Esta página requer tipo de usuário "${requiredUserType}". Seu tipo: "${user.user_type || 'indefinido'}"`,
+        details: `Esta página requer tipo de usuário "${requiredUserType}". Seu tipo: "${user.user_type}"`,
       });
       return;
     }
 
-    // Verificar se user_type está indefinido (novo usuário)
+    // Limpa flag de cadastro recente se o user_type já está correto
+    if (requiredUserType && user.user_type === requiredUserType) {
+      localStorage.removeItem('user_type_prestador_pendente');
+    }
+
+    // Verificar se user_type está indefinido (novo usuário sem requiredUserType)
     const userTypeUndefined = !user.user_type || user.user_type === 'indefinido';
     if (userTypeUndefined && window.location.pathname !== '/CadastroTipo') {
       setPermissionStatus('needs_setup');
-      setErrorDetails({
-        code: 'USER_SETUP_REQUIRED',
-        message: 'Configure sua conta',
-        details: 'Você precisa selecionar como deseja usar a plataforma',
-      });
       return;
     }
 
     setPermissionStatus('authorized');
-  }, [user, isLoading, error, requiredRole, requiredUserType]);
+  }, [user, isLoading, error, requiredRole, requiredUserType, retryCount]);
 
   // Loading
   if (permissionStatus === 'checking') {

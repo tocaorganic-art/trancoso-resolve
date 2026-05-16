@@ -93,6 +93,8 @@ export default function CadastroTipoPage() {
       const name = updated?.full_name || user?.full_name || '';
 
       if (userType === 'prestador') {
+        // Grava flag para PermissionChecker fazer bypass enquanto banco propaga
+        localStorage.setItem('user_type_prestador_pendente', Date.now().toString());
         redirectPrestador(email, name);
       } else {
         window.location.replace('/');
