@@ -242,16 +242,19 @@ export default function PlanosPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <PlanCard
-                badge={isPromoAtivaPrestador ? "Lançamento" : null}
+                badge={isPromoAtivaPrestador ? "🎁 60 dias grátis" : null}
                 badgeColor="bg-amber-400 text-amber-900"
                 headerColor={isPromoAtivaPrestador ? "bg-gradient-to-br from-amber-500 to-orange-500" : "bg-slate-400"}
                 icon={<Zap className="w-10 h-10 mx-auto opacity-90" />}
                 name="Plano Lançamento"
                 price="29,90"
-                subtitle="Apenas para os 50 primeiros prestadores"
-                benefits={BENEFICIOS_LANCAMENTO_PRESTADOR}
+                subtitle={isPromoAtivaPrestador ? "Pague 1 mês agora e ganhe 60 dias grátis!" : "Apenas para os 50 primeiros prestadores"}
+                benefits={[
+                  ...(isPromoAtivaPrestador ? ["🎁 60 dias grátis após o 1º pagamento — oferta dos 50 primeiros", '🏅 Selo exclusivo "Prestador Pioneiro"', "⭐ Prioridade nos resultados de busca em Trancoso", "🚀 Acesso antecipado a novos recursos e melhorias"] : []),
+                  ...BENEFICIOS_LANCAMENTO_PRESTADOR,
+                ]}
                 ctaLabel="Garantir plano de lançamento — R$ 29,90/mês"
-                ctaNote="Válido apenas para os 50 primeiros prestadores cadastrados."
+                ctaNote={isPromoAtivaPrestador ? "✅ 60 dias grátis após o 1º pagamento · Oferta exclusiva para os 50 primeiros" : "Válido apenas para os 50 primeiros prestadores cadastrados."}
                 onCta={() => handleCheckout('lancamento')}
                 loading={loadingPlan === 'lancamento'}
                 disabled={!isPromoAtivaPrestador}
@@ -299,16 +302,19 @@ export default function PlanosPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <PlanCard
-                badge={isPromoAtivaEmpresa ? "Lançamento · Empresas" : null}
+                badge={isPromoAtivaEmpresa ? "🎁 60 dias grátis" : null}
                 badgeColor="bg-amber-400 text-amber-900"
                 headerColor={isPromoAtivaEmpresa ? "bg-gradient-to-br from-amber-500 to-orange-500" : "bg-slate-400"}
                 icon={<Building2 className="w-10 h-10 mx-auto opacity-90" />}
                 name="Plano Empresas – Lançamento"
                 price="59,90"
-                subtitle="Preço promocional para as 50 primeiras empresas"
-                benefits={BENEFICIOS_LANCAMENTO_EMPRESA}
+                subtitle={isPromoAtivaEmpresa ? "Pague 1 mês agora e ganhe 60 dias grátis!" : "Preço promocional para as 50 primeiras empresas"}
+                benefits={[
+                  ...(isPromoAtivaEmpresa ? ["🎁 60 dias grátis após o 1º pagamento — oferta das 50 primeiras empresas", '🏅 Selo exclusivo "Empresa Pioneira"', "⭐ Prioridade nos resultados de busca em Trancoso", "🚀 Acesso antecipado a novos recursos e melhorias"] : []),
+                  ...BENEFICIOS_LANCAMENTO_EMPRESA,
+                ]}
                 ctaLabel="Garantir plano de lançamento — R$ 59,90/mês"
-                ctaNote="Válido apenas para as 50 primeiras empresas cadastradas."
+                ctaNote={isPromoAtivaEmpresa ? "✅ 60 dias grátis após o 1º pagamento · Oferta exclusiva para as 50 primeiras empresas" : "Válido apenas para as 50 primeiras empresas cadastradas."}
                 onCta={() => handleCheckout('empresa_lancamento')}
                 loading={loadingPlan === 'empresa_lancamento'}
                 disabled={!isPromoAtivaEmpresa}

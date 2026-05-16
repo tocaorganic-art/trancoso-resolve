@@ -30,7 +30,10 @@ Deno.serve(async (req) => {
     // SEGURANÇA: Usa email do usuário autenticado, não do body
     const customerEmail = user.email;
 
-    const session = await stripe.checkout.sessions.create({
+    // Planos de lançamento têm 60 dias grátis após o 1º pagamento (oferta dos 50 primeiros)
+    const isPlanoLancamento = plan === 'lancamento' || plan === 'empresa_lancamento';
+
+    const sessionParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
@@ -41,9 +44,24 @@ Deno.serve(async (req) => {
         base44_app_id: Deno.env.get('BASE44_APP_ID'),
         plan,
         user_email: customerEmail,
+        bonus_days: isPlanoLancamento ? '60' : '0',
       },
       locale: 'pt-BR',
-    });
+    };
+
+    // Para planos de lançamento: cobrar 1 mês agora + 60 dias grátis antes do próximo ciclo
+    if (isPlanoLancamento) {
+      sessionParams.subscription_data = {
+        trial_period_days: 60,
+        metadata: {
+          plano_lancamento: 'true',
+          bonus_dias: '60',
+          oferta: 'pioneiro_50_primeiros',
+        },
+      };
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     console.log(`Checkout criado: ${session.id} para plano ${plan}`);
     return Response.json({ url: session.url, session_id: session.id });
