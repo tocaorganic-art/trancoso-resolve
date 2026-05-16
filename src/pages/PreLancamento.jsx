@@ -358,7 +358,7 @@ export default function PreLancamento() {
               borderRadius: 10, padding: "10px 20px",
               fontSize: "0.88rem", color: "#fca5a5", fontWeight: 700,
             }}>
-              ⚠️ Período de oferta encerrado — vagas ainda disponíveis
+              🎁 Oferta exclusiva de pré-lançamento para os 50 primeiros
             </div>
           )}
 
