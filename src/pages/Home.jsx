@@ -129,9 +129,17 @@ const ServiceCard = ({ service, provider }) => {
     const Icon = categoryIconMap[service.category] || categoryIconMap.default;
     const description = service.description || categoryDescriptionMap[service.category] || 'Serviço profissional de qualidade em Trancoso.';
 
+    // Formata preço no padrão brasileiro com vírgula
+    const formatPrice = (price) => {
+        return price?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0,00';
+    };
+
+    const isNew = !provider?.rating || provider?.rating === 0;
+
     return (
-        <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group flex flex-col">
-            <div className="aspect-video w-full overflow-hidden bg-slate-200">
+        <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col rounded-2xl">
+            {/* Imagem */}
+            <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-700 shrink-0">
                 {imageSrc ? (
                     <LazyImage
                         src={imageSrc}
@@ -143,39 +151,60 @@ const ServiceCard = ({ service, provider }) => {
                         <Icon className="w-10 h-10 text-slate-400" />
                     </div>
                 )}
-            </div>
-            <CardContent className="p-5 flex flex-col flex-grow">
-                <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-bold text-lg text-slate-900">{service.title}</h3>
-                    <Badge className="bg-cyan-100 text-cyan-800 shrink-0 ml-2">{service.category}</Badge>
+                {/* Badge de categoria sobre a imagem */}
+                <div className="absolute top-3 right-3">
+                    <Badge className="bg-cyan-500 text-white text-xs font-semibold px-2 py-0.5 shadow-md">
+                        {service.category}
+                    </Badge>
                 </div>
+                {/* Selo "Novo" se não tiver avaliações */}
+                {isNew && (
+                    <div className="absolute top-3 left-3">
+                        <Badge className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 shadow-md">
+                            ⭐ Novo
+                        </Badge>
+                    </div>
+                )}
+            </div>
 
+            <CardContent className="p-5 flex flex-col flex-grow">
+                {/* Título */}
+                <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug mb-1 line-clamp-2">
+                    {service.title}
+                </h3>
+
+                {/* Nome do prestador */}
                 {provider && (
-                    <p className="text-sm text-slate-600 mb-3">{provider.full_name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 font-medium">{provider.full_name}</p>
                 )}
 
-                <p className="text-sm text-slate-600 mb-4 line-clamp-2 flex-grow">{description}</p>
+                {/* Descrição */}
+                <p className="text-sm text-slate-600 dark:text-slate-300 mb-4 line-clamp-2 flex-grow leading-relaxed">
+                    {description}
+                </p>
 
-                <div className="flex items-center justify-between mt-auto">
+                {/* Avaliação + Preço */}
+                <div className="flex items-end justify-between mt-auto mb-4">
                     <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="text-sm font-bold">
+                        <span className="text-sm font-bold text-slate-800 dark:text-slate-100">
                             {provider?.rating ? provider.rating.toFixed(1) : 'Novo'}
                         </span>
+                        {provider?.total_reviews > 0 && (
+                            <span className="text-xs text-slate-500 dark:text-slate-400 ml-0.5">({provider.total_reviews})</span>
+                        )}
                     </div>
                     <div className="text-right">
-                        <p className="text-lg font-bold text-cyan-600">
-                            R$ {service.price.toFixed(2)}
+                        <p className="text-lg font-extrabold text-cyan-600 dark:text-cyan-400 leading-tight">
+                            R$ {formatPrice(service.price)}
                         </p>
-                        <p className="text-xs text-slate-500">por {service.price_unit || 'serviço'}</p>
-                        {provider?.total_reviews > 0 && (
-                            <span className="text-xs text-slate-500">({provider.total_reviews} avaliações)</span>
-                        )}
+                        <p className="text-xs text-slate-500 dark:text-slate-400">por {service.price_unit || 'serviço'}</p>
                     </div>
                 </div>
 
-                <Link to={createPageUrl("ServicoDetalhes", `?id=${service.id}`)} data-testid={`service-card-link-${service.id}`} className="mt-4" aria-label={`Ver detalhes do serviço ${service.title}`}>
-                    <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700">
+                {/* Botão Ver Detalhes */}
+                <Link to={createPageUrl("ServicoDetalhes", `?id=${service.id}`)} data-testid={`service-card-link-${service.id}`} aria-label={`Ver detalhes do serviço ${service.title}`}>
+                    <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold">
                         Ver Detalhes
                     </Button>
                 </Link>

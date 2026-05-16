@@ -572,16 +572,22 @@ export default function PrestadorPerfilPage() {
             <CardContent>
               <div className="space-y-4">
                 {services.map((service) => (
-                  <div key={service.id} className="p-4 bg-slate-50 rounded-lg border">
-                    <div className="flex justify-between items-start">
+                  <div key={service.id} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div className="flex justify-between items-start gap-4">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900 mb-1">{service.title}</h4>
-                        <p className="text-sm text-slate-600 mb-2">{service.description}</p>
-                        {service.duration_estimate && <Badge variant="secondary">Duração: {service.duration_estimate}</Badge>}
+                        <h4 className="font-bold text-slate-900 dark:text-white mb-1 leading-snug">{service.title}</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-300 mb-2 leading-relaxed line-clamp-2">{service.description}</p>
+                        {service.duration_estimate && (
+                          <Badge className="bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200 text-xs font-medium">
+                            ⏱ {service.duration_estimate}
+                          </Badge>
+                        )}
                       </div>
-                      <div className="text-right ml-4">
-                        <p className="text-lg font-bold text-cyan-600">R$ {service.price.toFixed(2)}</p>
-                        <p className="text-xs text-slate-500">por {service.price_unit}</p>
+                      <div className="text-right shrink-0">
+                        <p className="text-lg font-extrabold text-cyan-600 dark:text-cyan-400 leading-tight">
+                          R$ {service.price?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">por {service.price_unit}</p>
                       </div>
                     </div>
                   </div>

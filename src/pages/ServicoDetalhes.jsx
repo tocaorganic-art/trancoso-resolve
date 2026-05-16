@@ -195,7 +195,9 @@ export default function ServicoDetalhesPage() {
                 <Badge className="bg-cyan-100 text-cyan-800">{service.category}</Badge>
               </div>
               <div className="text-left sm:text-right shrink-0">
-                <p className="text-2xl sm:text-3xl font-bold text-cyan-600">R$ {service.price.toFixed(2)}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-cyan-600">
+                  R$ {service.price?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
                 <p className="text-sm text-slate-500">por {service.price_unit || 'serviço'}</p>
               </div>
             </div>
