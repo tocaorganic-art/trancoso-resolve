@@ -109,7 +109,7 @@ button:focus-visible {
 @layer base {
   :root {
     /* Dark Mode Only - Forced for Android Compliance */
-    --background: 15 23.5% 5.5%;
+    --background: 182 77% 53%;
     --foreground: 0 0% 94.1%;
     --card: 15 23.5% 9.8%;
     --card-foreground: 0 0% 97.3%;
