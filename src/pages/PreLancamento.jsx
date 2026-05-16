@@ -163,7 +163,7 @@ export default function PreLancamento() {
       fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
       color: "#fff",
       minHeight: "100vh",
-      background: "linear-gradient(160deg, rgba(5,60,46,0.92) 0%, rgba(3,40,30,0.97) 100%), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80') center/cover no-repeat fixed",
+      background: "linear-gradient(160deg, rgba(3,30,22,0.88) 0%, rgba(2,20,15,0.94) 100%), url('https://media.base44.com/images/public/68eb21726a9614db4a82ba99/ab7f3d171_generated_image.png') center/cover no-repeat fixed",
       overflowX: "hidden",
     }}>
       <style>{`
