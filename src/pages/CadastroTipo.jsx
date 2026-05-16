@@ -45,40 +45,46 @@ export default function CadastroTipoPage() {
     queryFn: () => base44.auth.me(),
   });
 
+  const redirectPrestador = (email, name) => {
+    // Fire-and-forget: cria trial
+    criarTrialPrestador({ user_email: email, user_name: name }).catch(() => {
+      localStorage.setItem('trial_pendente', 'true');
+    });
+
+    // Fire-and-forget: salva CPF e dispara verificação
+    base44.entities.ServiceProvider.filter({ created_by: email })
+      .then((providers) => {
+        if (providers && providers.length > 0) {
+          const providerData = {
+            tipo_pessoa: tipoPessoa,
+            cpf: cpf.replace(/\D/g, ''),
+            ...(cnpj && { cnpj: cnpj.replace(/\D/g, '') }),
+            tem_ponto_fisico_em_trancoso: temPontoFisico,
+            ...(razaoSocial && { razao_social: razaoSocial }),
+            ...(nomFantasia && { nome_fantasia: nomFantasia }),
+          };
+          base44.entities.ServiceProvider.update(providers[0].id, providerData)
+            .then(() => verificarAntecedentes({ service_provider_id: providers[0].id }).catch(() => {}))
+            .catch(() => {});
+        }
+      })
+      .catch(() => {});
+
+    window.location.replace('/Dashboard');
+  };
+
   const updateUserMutation = useMutation({
-    mutationFn: (userType) => base44.auth.updateMe({ user_type: userType }),
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+    mutationFn: async (userType) => {
+      const updated = await base44.auth.updateMe({ user_type: userType });
+      return { updated, userType };
+    },
+    onSuccess: ({ updated, userType }) => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      const email = updated?.email || user?.email || '';
+      const name = updated?.full_name || user?.full_name || '';
 
-      if (data.user_type === 'prestador') {
-        // 1. Cria trial — fire-and-forget, não bloqueia o fluxo
-        criarTrialPrestador({ user_email: data.email, user_name: data.full_name }).catch(() => {
-          localStorage.setItem('trial_pendente', 'true');
-        });
-
-        // 2. Salva CPF/dados no ServiceProvider e dispara verificação em background
-        base44.entities.ServiceProvider.filter({ created_by: data.email })
-          .then((providers) => {
-            if (providers && providers.length > 0) {
-              const providerData = {
-                tipo_pessoa: tipoPessoa,
-                cpf: cpf.replace(/\D/g, ''),
-                ...(cnpj && { cnpj: cnpj.replace(/\D/g, '') }),
-                tem_ponto_fisico_em_trancoso: temPontoFisico,
-                ...(razaoSocial && { razao_social: razaoSocial }),
-                ...(nomFantasia && { nome_fantasia: nomFantasia }),
-              };
-              base44.entities.ServiceProvider.update(providers[0].id, providerData)
-                .then(() => {
-                  verificarAntecedentes({ service_provider_id: providers[0].id }).catch(() => {});
-                })
-                .catch(() => {});
-            }
-          })
-          .catch(() => {});
-
-        // 3. Redireciona imediatamente sem esperar pelas operações acima
-        window.location.replace('/Dashboard');
+      if (userType === 'prestador') {
+        redirectPrestador(email, name);
       } else {
         window.location.replace('/');
       }
@@ -105,6 +111,11 @@ export default function CadastroTipoPage() {
     }
     setStep('processando');
     updateUserMutation.mutate('prestador');
+
+    // Timeout de segurança: se travar por mais de 12s, força o redirect
+    setTimeout(() => {
+      window.location.replace('/Dashboard');
+    }, 12000);
   };
 
   if (isLoading || step === 'processando' || updateUserMutation.isPending) {
