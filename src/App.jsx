@@ -24,6 +24,7 @@ import AssistenteVirtualPage from '@/pages/AssistenteVirtual';
 import VerificacaoDocumentoPage from '@/pages/VerificacaoDocumento';
 import VerificacaoAntecedentesPage from '@/pages/VerificacaoAntecedentes';
 import PoliticaDevolucoesPage from '@/pages/PoliticaDevolucoes';
+import TermosDeServicoPage from '@/pages/TermosDeServico';
 import SeoDashboard from '@/pages/admin/SeoDashboard';
 import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
 import AdminMetricasPage from '@/pages/AdminMetricas';
@@ -141,6 +142,11 @@ const AuthenticatedApp = () => {
         <Route path="/PoliticaDevolucoes" element={
           <LayoutWrapper currentPageName="PoliticaDevolucoes">
             <AnimatedPage><PoliticaDevolucoesPage /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/TermosDeServico" element={
+          <LayoutWrapper currentPageName="TermosDeServico">
+            <AnimatedPage><TermosDeServicoPage /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="/admin/seo" element={
