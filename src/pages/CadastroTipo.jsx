@@ -45,20 +45,17 @@ export default function CadastroTipoPage() {
     queryFn: () => base44.auth.me(),
   });
 
-  const redirectPrestador = (email, name) => {
+  const redirectPrestador = async (email, name) => {
     // Fire-and-forget: cria trial em paralelo
     criarTrialPrestador({ user_email: email, user_name: name }).catch(() => {
       localStorage.setItem('trial_pendente', 'true');
     });
 
-    // Fire-and-forget: salva CPF PRIMEIRO, só depois dispara verificação (evita race condition)
+    // Fire-and-forget: salva CPF e dispara verificação
     const cpfLimpo = cpf.replace(/\D/g, '');
     base44.entities.ServiceProvider.filter({ created_by: email })
       .then(async (providers) => {
-        if (!providers || providers.length === 0) {
-          console.warn('[CadastroTipo] Nenhum ServiceProvider encontrado para', email);
-          return;
-        }
+        if (!providers || providers.length === 0) return;
         const providerId = providers[0].id;
         const providerData = {
           tipo_pessoa: tipoPessoa,
@@ -68,17 +65,27 @@ export default function CadastroTipoPage() {
           ...(razaoSocial && { razao_social: razaoSocial }),
           ...(nomFantasia && { nome_fantasia: nomFantasia }),
         };
-        console.log('[CadastroTipo] Salvando dados do provider:', providerId, providerData);
         await base44.entities.ServiceProvider.update(providerId, providerData);
-        // Só verifica antecedentes APÓS salvar o CPF com sucesso
-        verificarAntecedentes({ service_provider_id: providerId }).catch((err) => {
-          console.warn('[CadastroTipo] verificarAntecedentes erro (ignorado):', err?.message);
-        });
+        verificarAntecedentes({ service_provider_id: providerId }).catch(() => {});
       })
-      .catch((err) => {
-        console.warn('[CadastroTipo] Erro ao buscar/atualizar provider (ignorado):', err?.message);
-      });
+      .catch(() => {});
 
+    // Aguarda o banco propagar o user_type antes de redirecionar (polling com timeout)
+    localStorage.setItem('user_type_prestador_pendente', Date.now().toString());
+    const maxWait = Date.now() + 15000; // máximo 15s
+    while (Date.now() < maxWait) {
+      await new Promise(r => setTimeout(r, 1000));
+      try {
+        const freshUser = await base44.auth.me();
+        if (freshUser?.user_type === 'prestador') {
+          console.log('[CadastroTipo] user_type propagado, redirecionando...');
+          break;
+        }
+        console.log('[CadastroTipo] Aguardando propagação...', freshUser?.user_type);
+      } catch (e) {
+        console.warn('[CadastroTipo] Erro ao verificar user_type:', e);
+      }
+    }
     window.location.replace('/Dashboard');
   };
 
