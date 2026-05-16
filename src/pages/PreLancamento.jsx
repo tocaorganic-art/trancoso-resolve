@@ -152,14 +152,26 @@ export default function PreLancamento() {
   const [error, setError] = useState("");
   const countdown = useCountdown(DEADLINE);
 
-  useEffect(() => {
+  const atualizarVagas = () => {
     base44.entities.LeadPreLancamento.list("-created_date", 200)
       .then((leads) => {
         const prestadores = leads.filter(l => l.type === "prestador").length;
         setVagasRestantes(Math.max(0, TOTAL_VAGAS - prestadores));
       })
       .catch(() => setVagasRestantes(46));
-  }, [submitted]);
+  };
+
+  useEffect(() => {
+    atualizarVagas();
+
+    const unsubscribe = base44.entities.LeadPreLancamento.subscribe((event) => {
+      if (event.type === "create" && event.data?.type === "prestador") {
+        setVagasRestantes(prev => Math.max(0, (prev ?? TOTAL_VAGAS) - 1));
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const scrollToForm = () => {
     document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" });
