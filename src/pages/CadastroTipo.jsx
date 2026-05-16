@@ -46,29 +46,38 @@ export default function CadastroTipoPage() {
   });
 
   const redirectPrestador = (email, name) => {
-    // Fire-and-forget: cria trial
+    // Fire-and-forget: cria trial em paralelo
     criarTrialPrestador({ user_email: email, user_name: name }).catch(() => {
       localStorage.setItem('trial_pendente', 'true');
     });
 
-    // Fire-and-forget: salva CPF e dispara verificação
+    // Fire-and-forget: salva CPF PRIMEIRO, só depois dispara verificação (evita race condition)
+    const cpfLimpo = cpf.replace(/\D/g, '');
     base44.entities.ServiceProvider.filter({ created_by: email })
-      .then((providers) => {
-        if (providers && providers.length > 0) {
-          const providerData = {
-            tipo_pessoa: tipoPessoa,
-            cpf: cpf.replace(/\D/g, ''),
-            ...(cnpj && { cnpj: cnpj.replace(/\D/g, '') }),
-            tem_ponto_fisico_em_trancoso: temPontoFisico,
-            ...(razaoSocial && { razao_social: razaoSocial }),
-            ...(nomFantasia && { nome_fantasia: nomFantasia }),
-          };
-          base44.entities.ServiceProvider.update(providers[0].id, providerData)
-            .then(() => verificarAntecedentes({ service_provider_id: providers[0].id }).catch(() => {}))
-            .catch(() => {});
+      .then(async (providers) => {
+        if (!providers || providers.length === 0) {
+          console.warn('[CadastroTipo] Nenhum ServiceProvider encontrado para', email);
+          return;
         }
+        const providerId = providers[0].id;
+        const providerData = {
+          tipo_pessoa: tipoPessoa,
+          cpf: cpfLimpo,
+          ...(cnpj && { cnpj: cnpj.replace(/\D/g, '') }),
+          tem_ponto_fisico_em_trancoso: temPontoFisico,
+          ...(razaoSocial && { razao_social: razaoSocial }),
+          ...(nomFantasia && { nome_fantasia: nomFantasia }),
+        };
+        console.log('[CadastroTipo] Salvando dados do provider:', providerId, providerData);
+        await base44.entities.ServiceProvider.update(providerId, providerData);
+        // Só verifica antecedentes APÓS salvar o CPF com sucesso
+        verificarAntecedentes({ service_provider_id: providerId }).catch((err) => {
+          console.warn('[CadastroTipo] verificarAntecedentes erro (ignorado):', err?.message);
+        });
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.warn('[CadastroTipo] Erro ao buscar/atualizar provider (ignorado):', err?.message);
+      });
 
     window.location.replace('/Dashboard');
   };

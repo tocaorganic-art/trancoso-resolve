@@ -16,13 +16,20 @@ Deno.serve(async (req) => {
     }
 
     // SEGURANÇA: Verifica se o usuário autenticado é admin ou o próprio prestador
+    // NOTA: service_provider_id é o ID do registro ServiceProvider, não o user.id
+    // Precisamos checar se o provider pertence ao usuário autenticado via created_by
     const userRole = user?.role;
-    const userId = user?.id;
     const isAdmin = userRole === 'admin';
-    const isOwnProvider = userId === service_provider_id;
+    console.log(`[verificarAntecedentes] user.email=${user?.email} role=${userRole} provider_id=${service_provider_id}`);
 
-    if (!isAdmin && !isOwnProvider) {
-      return Response.json({ error: 'Sem permissão para verificar este prestador' }, { status: 403 });
+    if (!isAdmin) {
+      // Verifica ownership via created_by
+      const ownProviders = await base44.entities.ServiceProvider.filter({ created_by: user.email });
+      const isOwner = ownProviders.some(p => p.id === service_provider_id);
+      if (!isOwner) {
+        console.error(`[verificarAntecedentes] 403 - user ${user.email} não é dono do provider ${service_provider_id}`);
+        return Response.json({ error: 'Sem permissão para verificar este prestador' }, { status: 403 });
+      }
     }
 
     // Busca o prestador
