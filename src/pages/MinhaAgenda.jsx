@@ -54,11 +54,11 @@ function MinhaAgendaContent() {
     queryFn: () => base44.auth.me(),
   });
 
-  const { data: myProvider } = useQuery({
+  const { data: myProvider, isLoading: isProviderLoading } = useQuery({
     queryKey: ['myProviderProfile', user?.email],
     queryFn: async () => {
-      const all = await base44.entities.ServiceProvider.list();
-      return all.find(p => p.created_by === user.email) || null;
+      const results = await base44.entities.ServiceProvider.filter({ created_by: user.email });
+      return results[0] || null;
     },
     enabled: !!user?.email,
   });
@@ -145,7 +145,7 @@ function MinhaAgendaContent() {
     return statuses;
   }, [serviceRequests]);
 
-  const isLoading = isUserLoading || isLoadingRequests || isLoadingServices;
+  const isLoading = isUserLoading || isProviderLoading || (!!providerId && (isLoadingRequests || isLoadingServices));
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-blue-600" /></div>;
