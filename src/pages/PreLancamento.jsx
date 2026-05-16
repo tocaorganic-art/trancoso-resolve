@@ -90,7 +90,7 @@ export default function PreLancamento() {
         }
         .pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
         .btn-primary {
-          background: linear-gradient(135deg, #064e3b, #065f46);
+          background: linear-gradient(135deg, #0072FF, #00AEEF);
           color: #fff; border: none; border-radius: 999px;
           font-weight: 800; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
           letter-spacing: 0.2px;
@@ -146,14 +146,14 @@ export default function PreLancamento() {
         {/* Emblema com bolinha pulsando */}
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 8,
-          background: "#ecfdf5", border: "1px solid #a7f3d0",
+          background: "rgba(0, 114, 255, 0.12)", border: "1px solid rgba(0, 174, 239, 0.4)",
           borderRadius: 999, padding: "6px 16px 6px 12px",
-          fontSize: "0.78rem", fontWeight: 700, color: "#065f46",
+          fontSize: "0.78rem", fontWeight: 700, color: "#0072FF",
           marginBottom: 32, letterSpacing: "0.3px",
         }}>
           <span className="pulse-dot" style={{
             width: 8, height: 8, borderRadius: "50%",
-            background: "#10b981", display: "inline-block", flexShrink: 0,
+            background: "#00AEEF", display: "inline-block", flexShrink: 0,
           }} />
           Pré-lançamento · Vagas de Fundador
         </div>
@@ -164,7 +164,7 @@ export default function PreLancamento() {
           color: "#0f2918", letterSpacing: "-1.5px",
         }}>
           Seja um dos{" "}
-          <em style={{ fontStyle: "italic", color: "#065f46" }}>50 fundadores</em>{" "}
+          <em style={{ fontStyle: "italic", color: "#0072FF" }}>50 fundadores</em>{" "}
           de Trancoso.
         </h1>
 
@@ -172,7 +172,7 @@ export default function PreLancamento() {
           fontSize: "clamp(1rem, 2.8vw, 1.15rem)",
           color: "#4a6450", lineHeight: 1.7, marginBottom: 36, maxWidth: 520, margin: "0 auto 36px",
         }}>
-          Garanta agora e receba <strong style={{ color: "#064e3b" }}>60 dias grátis</strong> ao pagar a primeira mensalidade. Sua vitrine digital oficial está esperando por você.
+          Garanta agora e receba <strong style={{ color: "#0072FF" }}>60 dias grátis</strong> ao pagar a primeira mensalidade. Sua vitrine digital oficial está esperando por você.
         </p>
 
         <a href={CTA_URL} style={{ textDecoration: "none" }}>
@@ -187,12 +187,12 @@ export default function PreLancamento() {
         {/* Contador de vagas */}
         <div style={{
           marginTop: 40,
-          background: "#fff", border: "1px solid #d1fae5",
+          background: "#fff", border: "1px solid rgba(0, 174, 239, 0.3)",
           borderRadius: 16, padding: "20px 28px",
           display: "inline-block", textAlign: "center",
-          boxShadow: "0 2px 12px rgba(6,78,59,0.06)",
+          boxShadow: "0 2px 12px rgba(0, 114, 255, 0.08)",
         }}>
-          <span style={{ fontSize: "clamp(2.5rem, 8vw, 3.5rem)", fontWeight: 900, color: "#064e3b", lineHeight: 1 }}>
+          <span style={{ fontSize: "clamp(2.5rem, 8vw, 3.5rem)", fontWeight: 900, color: "#0072FF", lineHeight: 1 }}>
             {vagas}
           </span>
           <p style={{ fontSize: "0.85rem", color: "#4a6450", marginTop: 4, fontWeight: 500 }}>
@@ -214,13 +214,13 @@ export default function PreLancamento() {
                 borderRadius: 14, padding: "18px 20px",
               }}>
                 <div style={{
-                  width: 44, height: 44, borderRadius: 10, flexShrink: 0,
-                  background: "#ecfdf5", border: "1px solid #a7f3d0",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "1.3rem",
-                }}>
-                  {b.emoji}
-                </div>
+                   width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+                   background: "rgba(0, 114, 255, 0.12)", border: "1px solid rgba(0, 174, 239, 0.4)",
+                   display: "flex", alignItems: "center", justifyContent: "center",
+                   fontSize: "1.3rem",
+                 }}>
+                   {b.emoji}
+                 </div>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: "0.92rem", color: "#0f2918", marginBottom: 3 }}>{b.title}</p>
                   <p style={{ fontSize: "0.83rem", color: "#5a7a60", lineHeight: 1.6 }}>{b.desc}</p>
@@ -235,15 +235,15 @@ export default function PreLancamento() {
       <section style={{ padding: "64px 24px" }}>
         <div style={{
           maxWidth: 600, margin: "0 auto",
-          background: "#fff", border: "1.5px solid #a7f3d0",
+          background: "#fff", border: "1.5px solid rgba(0, 174, 239, 0.3)",
           borderRadius: 24, padding: "40px 32px", textAlign: "center",
-          boxShadow: "0 4px 24px rgba(6,78,59,0.08)",
+          boxShadow: "0 4px 24px rgba(0, 114, 255, 0.08)",
         }}>
           <span style={{ fontSize: "2rem" }}>🎁</span>
           <h2 style={{ fontSize: "clamp(1.4rem, 4vw, 2rem)", fontWeight: 900, color: "#0f2918", marginTop: 12, marginBottom: 8, lineHeight: 1.2 }}>
             Pague a 1ª mensalidade<br />
             e ganhe{" "}
-            <em style={{ fontStyle: "italic", color: "#065f46" }}>60 dias grátis</em>
+            <em style={{ fontStyle: "italic", color: "#0072FF" }}>60 dias grátis</em>
           </h2>
           <p style={{ color: "#5a7a60", fontSize: "0.88rem", marginBottom: 28, lineHeight: 1.6 }}>
             Somente para os 50 primeiros fundadores. Sem pegadinhas, sem renovação automática.
@@ -253,11 +253,11 @@ export default function PreLancamento() {
             {CHECKLIST.map((item) => (
               <div key={item} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <span style={{
-                  width: 20, height: 20, borderRadius: "50%",
-                  background: "#ecfdf5", border: "1px solid #a7f3d0",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.65rem", color: "#065f46", fontWeight: 900, flexShrink: 0,
-                }}>✓</span>
+                   width: 20, height: 20, borderRadius: "50%",
+                   background: "rgba(0, 114, 255, 0.12)", border: "1px solid rgba(0, 174, 239, 0.4)",
+                   display: "flex", alignItems: "center", justifyContent: "center",
+                   fontSize: "0.65rem", color: "#0072FF", fontWeight: 900, flexShrink: 0,
+                 }}>✓</span>
                 <span style={{ fontSize: "0.86rem", color: "#2d4a30" }}>{item}</span>
               </div>
             ))}
@@ -286,13 +286,13 @@ export default function PreLancamento() {
                 padding: "18px 0", borderBottom: "1px solid #e8f0ea",
               }}>
                 <div style={{
-                  width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                  background: "linear-gradient(135deg, #064e3b, #065f46)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontWeight: 900, fontSize: "0.95rem", color: "#fff",
-                }}>
-                  {p.num}
-                </div>
+                   width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                   background: "linear-gradient(135deg, #0072FF, #00AEEF)",
+                   display: "flex", alignItems: "center", justifyContent: "center",
+                   fontWeight: 900, fontSize: "0.95rem", color: "#fff",
+                 }}>
+                   {p.num}
+                 </div>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: "0.92rem", color: "#0f2918", marginBottom: 2 }}>{p.title}</p>
                   <p style={{ fontSize: "0.83rem", color: "#5a7a60", lineHeight: 1.55 }}>{p.desc}</p>
@@ -310,7 +310,7 @@ export default function PreLancamento() {
             Não perca sua vaga de fundador.
           </h2>
           <p style={{ color: "#4a6450", fontSize: "0.95rem", marginBottom: 8, lineHeight: 1.6 }}>
-            Restam <strong style={{ color: "#064e3b" }}>{vagas}</strong> vagas com 60 dias grátis.
+            Restam <strong style={{ color: "#0072FF" }}>{vagas}</strong> vagas com 60 dias grátis.
           </p>
           <p style={{ color: "#8aab90", fontSize: "0.85rem", marginBottom: 36 }}>
             Quando esgotarem, a oferta acaba.
@@ -377,7 +377,7 @@ export default function PreLancamento() {
 
 const secLabel = {
   fontSize: "0.72rem", fontWeight: 700, letterSpacing: "1.5px",
-  textTransform: "uppercase", color: "#065f46", textAlign: "center", marginBottom: 8,
+  textTransform: "uppercase", color: "#0072FF", textAlign: "center", marginBottom: 8,
 };
 
 const secTitle = {
