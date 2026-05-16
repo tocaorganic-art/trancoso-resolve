@@ -99,26 +99,46 @@ export default function PreLancamento() {
         .btn-primary:active { transform: translateY(0); }
       `}</style>
 
-      {/* ── NAVBAR ── */}
-      <nav style={{
-        position: "sticky", top: 0, zIndex: 100,
-        background: "rgba(248,250,249,0.97)", backdropFilter: "blur(12px)",
-        borderBottom: "1px solid #e2ede6",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 24px", height: 60,
+      {/* ── HEADER LIQUID GLASS ── */}
+      <header style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+        background: "rgba(15, 51, 102, 0.65)", backdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(139, 184, 255, 0.2)",
+        padding: "12px 24px", paddingTop: "max(12px, env(safe-area-inset-top))",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img
-            src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
-            alt="Trancoso Resolve" style={{ height: 32, width: 32 }}
-          />
-          <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "#064e3b" }}>Trancoso Resolve</span>
+        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <img
+              src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
+              alt="Trancoso Resolve" style={{ height: 28, width: 28 }}
+            />
+            <span style={{ fontWeight: 800, fontSize: "0.9rem", color: "#fff" }}>Trancoso Resolve</span>
+          </div>
+          
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.7rem", color: "#b8d4ff" }}>
+              <span>⏱️</span> Leva 2 minutos
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.7rem", color: "#b8d4ff" }}>
+              <span>💳</span> Sem cartão
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.7rem", color: "#b8d4ff" }}>
+              <span>📷</span> Toca Vision
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.7rem", color: "#b8d4ff" }}>
+              <span>🤖</span> Toca TrIA
+            </div>
+          </div>
+
+          <button className="btn-primary" onClick={scrollToForm}
+            style={{ padding: "7px 16px", fontSize: "0.75rem", fontWeight: 700 }}>
+            Garantir vaga →
+          </button>
         </div>
-        <button className="btn-primary" onClick={scrollToForm}
-          style={{ padding: "9px 20px", fontSize: "0.82rem" }}>
-          Garantir vaga →
-        </button>
-      </nav>
+      </header>
+
+      {/* Espaço para o header fixo */}
+      <div style={{ height: 52 }} />
 
       {/* ── HERO ── */}
       <section style={{ padding: "72px 24px 64px", textAlign: "center", maxWidth: 620, margin: "0 auto" }}>
