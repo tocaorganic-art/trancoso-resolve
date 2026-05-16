@@ -7,8 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, User, Camera, AlertCircle, Video, ImagePlus } from 'lucide-react';
-import LiveCameraCapture from '@/components/perfil/LiveCameraCapture';
+import { Loader2, User, Camera, AlertCircle, ImagePlus } from 'lucide-react';
 import PortfolioGallery from '@/components/perfil/PortfolioGallery';
 import VerificacaoStatusCard from '@/components/verificacao/VerificacaoStatusCard';
 import VerificacaoBadge from '@/components/verificacao/VerificacaoBadge';
@@ -44,7 +43,6 @@ const ProfileCompleteness = ({ formData }) => {
     const completenessChecks = {
         photo_url: { weight: 10, label: 'Adicionar uma foto de perfil' },
         cover_photo_url: { weight: 10, label: 'Enviar foto de capa (16:9)' },
-        full_body_photo_url: { weight: 10, label: 'Enviar foto de corpo inteiro (verificação)' },
         phone: { weight: 10, label: 'Informar um telefone de contato' },
         bio: { weight: 10, label: 'Escrever uma biografia (Sobre mim)' },
         experience_years: { weight: 10, label: 'Informar seus anos de experiência' },
@@ -128,7 +126,6 @@ function MeuPerfilPrestadorContent() {
 
   const [formData, setFormData] = useState(null);
   const [uploading, setUploading] = useState({ profile: false, document: false, cover: false });
-  const [showLiveCamera, setShowLiveCamera] = useState(false);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -270,11 +267,6 @@ function MeuPerfilPrestadorContent() {
     }
   };
 
-  const handleLiveCameraCapture = async (file) => {
-    setShowLiveCamera(false);
-    await handleFileUpload(file, 'fullbody');
-  };
-
   const validateForm = () => {
     const newErrors = {};
     
@@ -294,11 +286,6 @@ function MeuPerfilPrestadorContent() {
       newErrors.cover_photo_url = 'Foto de capa é obrigatória.';
     }
 
-    // Foto de corpo inteiro não é necessária para empresas com ponto físico
-    const isCompanyWithLocation = (formData.tipo_pessoa === 'mei' || formData.tipo_pessoa === 'pj') && formData.tem_ponto_fisico_em_trancoso;
-    if (!isCompanyWithLocation && (!formData.full_body_photo_url || formData.full_body_photo_url.trim() === '')) {
-      newErrors.full_body_photo_url = 'Foto de corpo inteiro é obrigatória para verificação de identidade.';
-    }
     
     if (!formData.phone || formData.phone.trim() === '') {
       newErrors.phone = 'Telefone de contato é obrigatório.';
@@ -339,12 +326,6 @@ function MeuPerfilPrestadorContent() {
 
   return (
     <>
-    {showLiveCamera && (
-      <LiveCameraCapture
-        onCapture={handleLiveCameraCapture}
-        onClose={() => setShowLiveCamera(false)}
-      />
-    )}
     <div className="container mx-auto max-w-4xl py-8">
       <Card className="dark:bg-slate-800 dark:border-slate-700">
         <CardHeader>
@@ -426,50 +407,7 @@ function MeuPerfilPrestadorContent() {
               {errors.cover_photo_url && <p className="text-xs text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.cover_photo_url}</p>}
             </div>
 
-            {/* Foto de Corpo Inteiro — Captura ao vivo (não obrigatória para empresas com ponto físico) */}
-             {!((formData.tipo_pessoa === 'mei' || formData.tipo_pessoa === 'pj') && formData.tem_ponto_fisico_em_trancoso) && (
-             <div className="space-y-3">
-               <Label>
-                 Foto de Corpo Inteiro <span className="text-red-500">*</span>
-                 <span className="ml-2 text-xs font-normal text-slate-500">Captura ao vivo obrigatória — galeria não permitida</span>
-               </Label>
-              <div className="flex items-start gap-5 flex-wrap">
-                <div className={`relative w-44 h-60 rounded-xl overflow-hidden border-2 flex items-center justify-center bg-slate-100 ${errors.full_body_photo_url ? 'border-red-400' : 'border-slate-300'}`}>
-                  {uploading.fullbody ? (
-                    <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-                  ) : formData.full_body_photo_url ? (
-                    <img src={formData.full_body_photo_url} alt="Corpo inteiro" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="text-center text-slate-400 px-3">
-                      <span className="text-4xl block mb-2">🧍</span>
-                      <span className="text-xs">Sem foto</span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-col gap-3 justify-center">
-                  <button
-                    type="button"
-                    onClick={() => setShowLiveCamera(true)}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
-                  >
-                    <Video className="w-4 h-4" />
-                    {formData.full_body_photo_url ? 'Refazer foto ao vivo' : 'Capturar foto ao vivo'}
-                  </button>
-                  <div className="text-xs text-slate-500 space-y-1 max-w-xs">
-                    <p className="font-medium text-slate-700">Requisitos:</p>
-                    <p>📷 Somente captura pela câmera</p>
-                    <p>🧍 Corpo inteiro visível</p>
-                    <p>💡 Boa iluminação, fundo neutro</p>
-                  </div>
-                </div>
-              </div>
-              {errors.full_body_photo_url && (
-                <p className="text-xs text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />{errors.full_body_photo_url}
-                </p>
-              )}
-              </div>
-              )}
+
 
             {/* Tipo de Pessoa / Dados Jurídicos */}
             <div className="space-y-4">
