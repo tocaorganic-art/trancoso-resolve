@@ -318,7 +318,7 @@ export default function Layout({ children, currentPageName }) {
               {/* Redes Sociais */}
               <div className="flex justify-center gap-5 mb-4">
                 <a
-                  href="https://www.instagram.com/trancosoresolve"
+                  href="https://www.instagram.com/trancosoresolve/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram da Trancoso Resolve"
@@ -329,7 +329,7 @@ export default function Layout({ children, currentPageName }) {
                   </svg>
                 </a>
                 <a
-                  href="https://www.facebook.com/trancosoresolve"
+                  href="https://www.facebook.com/share/1B7w8mmbMN/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook da Trancoso Resolve"
