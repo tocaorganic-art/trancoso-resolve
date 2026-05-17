@@ -44,8 +44,8 @@ export default function CTAPrestador({ vagasRestantes = 0 }) {
           <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">O que está incluso</p>
           <ul className="space-y-3">
             {BENEFICIOS.map((b, i) => (
-              <li key={i} className="flex items-start gap-3 text-slate-200 text-sm">
-                <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+              <li key={i} className="flex items-start gap-3 text-sm" style={{ color: '#CBD5E1' }}>
+                <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#5DCAA5' }} />
                 {b}
               </li>
             ))}

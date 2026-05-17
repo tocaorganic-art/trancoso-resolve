@@ -107,14 +107,14 @@ function PlanCard({
       <div className={`p-6 text-center text-white ${headerColor}`}>
         {icon}
         <h2 className="text-xl font-bold mb-1 mt-2">{name}</h2>
-        <p className="text-3xl font-extrabold mt-1">R$ {price}<span className="text-sm font-normal">/mês</span></p>
+        <p className="text-3xl font-extrabold mt-1">R$ {price}<span className="text-sm font-normal opacity-90">/mês</span></p>
         {trialLabel && (
-          <p className="text-xs mt-1 flex items-center justify-center gap-1 opacity-90">
+          <p className="text-xs mt-1 flex items-center justify-center gap-1" style={{ color: 'rgba(255,255,255,0.95)' }}>
             <Calendar className="w-3 h-3" /> {trialLabel}
           </p>
         )}
         {vagasLabel && (
-          <Badge className={`mt-2 text-xs ${vagasCor}`}>{vagasLabel}</Badge>
+          <Badge className={`mt-2 text-xs font-bold ${vagasCor}`}>{vagasLabel}</Badge>
         )}
       </div>
 
@@ -122,8 +122,8 @@ function PlanCard({
         {/* Benefícios */}
         <ul className="space-y-2 mb-5">
           {benefits.map((item, i) => (
-            <li key={i} className="flex items-start gap-2 text-slate-700 text-sm">
-              <Check className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+            <li key={i} className="flex items-start gap-2 text-sm" style={{ color: '#CBD5E1' }}>
+              <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#5DCAA5' }} />
               {item}
             </li>
           ))}
@@ -134,7 +134,7 @@ function PlanCard({
             <>
               {/* Botão primário */}
               <Button
-                className={`w-full text-sm ${popular ? 'bg-cyan-500 hover:bg-cyan-600' : ''}`}
+                className={`w-full text-sm ${popular ? 'bg-cyan-500 hover:bg-cyan-600 text-white' : ''}`}
                 onClick={onCta}
                 disabled={loading}
               >
@@ -146,7 +146,8 @@ function PlanCard({
               {onCtaAvulso && (
                 <Button
                   variant="outline"
-                  className="w-full text-xs border-slate-300 text-slate-600 hover:bg-slate-50"
+                  className="w-full text-xs hover:bg-white/10"
+                  style={{ border: '1.5px solid rgba(255,255,255,0.6)', color: '#FFFFFF', background: 'transparent' }}
                   onClick={onCtaAvulso}
                   disabled={loadingAvulso}
                 >
@@ -157,20 +158,22 @@ function PlanCard({
 
               {/* Etiqueta sazonalidade */}
               {onCtaAvulso && (
-                <p className="text-center text-xs text-teal-600 font-medium">🏖 Ideal para alta temporada</p>
+                <p className="text-center text-xs font-medium flex items-center justify-center gap-1" style={{ color: '#9FE1CB' }}>
+                  🏖 Ideal para alta temporada
+                </p>
               )}
 
               {/* Aviso cartão */}
               {trialLabel && (
-                <p className="text-center text-xs text-slate-400 flex items-center justify-center gap-1 mt-1">
-                  <Lock className="w-3 h-3" /> Seu cartão é salvo no cadastro. Nenhuma cobrança durante o período gratuito.
+                <p className="text-center text-xs flex items-center justify-center gap-1 mt-1 pt-2 border-t border-white/10" style={{ color: '#94A3B8' }}>
+                  <Lock className="w-3 h-3" style={{ color: '#5DCAA5' }} /> Seu cartão é salvo no cadastro. Nenhuma cobrança durante o período gratuito.
                 </p>
               )}
 
-              {ctaNote && <p className="text-xs text-slate-500 text-center">{ctaNote}</p>}
+              {ctaNote && <p className="text-xs text-center" style={{ color: '#94A3B8' }}>{ctaNote}</p>}
             </>
           ) : (
-            <p className="text-sm text-slate-500 text-center py-2">Vagas esgotadas.</p>
+            <p className="text-sm text-center py-2" style={{ color: '#94A3B8' }}>Vagas esgotadas.</p>
           )}
         </div>
       </CardContent>
@@ -190,10 +193,10 @@ function AvulsoCard({ icon, title, price, onCta, loading }) {
         <p className="text-3xl font-extrabold mt-2">R$ {price}<span className="text-sm font-normal"> / mês</span></p>
       </div>
       <CardContent className="p-5 space-y-3">
-        <ul className="space-y-2 text-sm text-slate-700">
-          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-teal-500" /> 1 mês de acesso completo</li>
-          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-teal-500" /> Sem renovação automática</li>
-          <li className="flex items-center gap-2"><Check className="w-4 h-4 text-teal-500" /> Todos os recursos da plataforma</li>
+        <ul className="space-y-2 text-sm">
+          <li className="flex items-center gap-2" style={{ color: '#CBD5E1' }}><Check className="w-4 h-4 shrink-0" style={{ color: '#5DCAA5' }} /> 1 mês de acesso completo</li>
+          <li className="flex items-center gap-2" style={{ color: '#CBD5E1' }}><Check className="w-4 h-4 shrink-0" style={{ color: '#5DCAA5' }} /> Sem renovação automática</li>
+          <li className="flex items-center gap-2" style={{ color: '#CBD5E1' }}><Check className="w-4 h-4 shrink-0" style={{ color: '#5DCAA5' }} /> Todos os recursos da plataforma</li>
         </ul>
         <Button
           className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold"

@@ -34,7 +34,7 @@ export default function SocialProofBar({ totalVerificados = 0, totalCategorias =
                   <Icon className="w-4 h-4 text-cyan-400 shrink-0" />
                   <div className="text-center md:text-left">
                     <span className="text-white font-bold text-sm">{m.value}</span>
-                    <span className="text-slate-400 text-xs ml-1">{m.label}</span>
+                    <span className="text-xs ml-1" style={{ color: '#94A3B8' }}>{m.label}</span>
                   </div>
                 </div>
               </React.Fragment>

@@ -15,7 +15,7 @@ const CATEGORIAS = [
 
 export default function CategoriasGrid() {
   return (
-    <section className="py-10 md:py-14 bg-slate-50">
+    <section className="py-10 md:py-14 bg-white">
       <div className="container mx-auto max-w-5xl px-4">
         <h2 className="text-center text-2xl md:text-3xl font-extrabold text-slate-900 mb-8">
           O que você precisa hoje?

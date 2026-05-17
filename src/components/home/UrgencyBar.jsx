@@ -34,7 +34,7 @@ export default function UrgencyBar({ user }) {
   };
 
   return (
-    <div className="w-full bg-red-900 text-white text-xs md:text-sm flex items-center justify-between px-3 md:px-6 py-2 gap-2 z-50">
+    <div className="w-full text-white text-xs md:text-sm flex items-center justify-between px-3 md:px-6 py-2 gap-2 z-50" style={{ background: '#7F1D1D' }}>
       <div className="flex-1 text-center">
         <span className="mr-1">🔴</span>
         <strong>Lançamento:</strong> apenas{" "}

@@ -98,7 +98,7 @@ export default function HeroBanner({ vagasRestantes = 0, total = 0 }) {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base md:text-lg text-white/85 mb-8 max-w-xl leading-relaxed">
+        <p className="text-base md:text-lg mb-8 max-w-xl leading-relaxed" style={{ color: '#E2E8F0' }}>
           {slide.subtitle}
         </p>
 
@@ -112,7 +112,7 @@ export default function HeroBanner({ vagasRestantes = 0, total = 0 }) {
           </Link>
           {slide.cta2 && (
             <Link to={slide.cta2.to}>
-              <Button variant="outline" className="border-white/60 text-white hover:bg-white/10 font-semibold px-6 py-3 text-sm w-full sm:w-auto">
+              <Button variant="outline" className="font-semibold px-6 py-3 text-sm w-full sm:w-auto hover:bg-white/10" style={{ border: '1.5px solid rgba(255,255,255,0.8)', color: '#FFFFFF', background: 'transparent' }}>
                 {slide.cta2.label}
               </Button>
             </Link>
