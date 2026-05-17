@@ -1,5 +1,13 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+async function sha256Hash(str) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str.toLowerCase().trim());
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -14,19 +22,22 @@ Deno.serve(async (req) => {
       );
     }
 
+    const emHash = await sha256Hash('test@example.com');
+    const phHash = await sha256Hash('1234567890');
+
     const testEventData = {
       data: [
         {
           event_name: 'PageView',
           event_time: Math.floor(Date.now() / 1000),
           event_id: `test_${Date.now()}`,
-          test_event_code: testEventCode,
           user_data: {
-            em: 'test@example.com',
-            ph: '1234567890'
+            em: emHash,
+            ph: phHash
           }
         }
-      ]
+      ],
+      test_event_code: testEventCode
     };
 
     const response = await fetch(
