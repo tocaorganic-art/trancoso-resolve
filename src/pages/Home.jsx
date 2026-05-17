@@ -12,6 +12,11 @@ import LazyImage from "@/components/ui/LazyImage";
 import BannerCategorias from "@/components/BannerCategorias";
 import PromotionalBanner from "@/components/PromotionalBanner";
 import Testimonials from "@/components/home/Testimonials";
+import UrgencyBar from "@/components/home/UrgencyBar";
+import HeroBanner from "@/components/home/HeroBanner";
+import SocialProofBar from "@/components/home/SocialProofBar";
+import CategoriasGrid from "@/components/home/CategoriasGrid";
+import CTAPrestador from "@/components/home/CTAPrestador";
 import {
   Search, Sparkles, UtensilsCrossed, Hammer, Leaf,
   Baby, Zap, Star, MapPin, Phone, Grid3x3, AlertCircle, Loader2, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight
@@ -224,7 +229,7 @@ export default function HomePage() {
     // Meta description otimizada
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "A forma mais simples e segura de encontrar e contratar diarista, eletricista, piscineiro e outros prestadores de serviços em Trancoso, Bahia.";
+    meta.content = "Trancoso Resolve — A plataforma oficial de serviços em Trancoso, Bahia. Encontre diaristas, eletricistas, piscineiros e muito mais. Profissionais verificados com avaliações reais. Cadastre-se como prestador com 2 meses grátis.";
 
     // Canonical + OG URL da Home
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -356,6 +361,30 @@ export default function HomePage() {
     queryKey: ['serviceProviders'],
     queryFn: () => base44.entities.ServiceProvider.list('-rating', 50),
   });
+
+  const { data: allProviders } = useQuery({
+    queryKey: ['allProviders'],
+    queryFn: () => base44.entities.ServiceProvider.list('-created_date', 200),
+    initialData: [],
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: allReviews } = useQuery({
+    queryKey: ['allReviewsCount'],
+    queryFn: () => base44.entities.ServiceReview.list('-created_date', 500),
+    initialData: [],
+    staleTime: 10 * 60 * 1000,
+  });
+
+  const totalPrestadoresVagas = allProviders?.filter(p =>
+    p.tipo_pessoa === 'pf' ||
+    (p.tipo_pessoa === 'mei' && !p.tem_ponto_fisico_em_trancoso) ||
+    (p.tipo_pessoa === 'pj' && !p.tem_ponto_fisico_em_trancoso)
+  ).length || 0;
+  const vagasRestantes = Math.max(0, 50 - totalPrestadoresVagas);
+  const totalVerificados = allProviders?.filter(p => p.verificado === true || p.status === 'ativo').length || 0;
+  const totalCategorias = 9;
+  const totalAvaliacoes = allReviews?.length || 0;
   
   const { data: services, isLoading: isLoadingServices, isError: isErrorServices } = useQuery({
     queryKey: ['serviceListings'],
@@ -377,18 +406,6 @@ export default function HomePage() {
 
   return (
     <div className="bg-slate-50 overflow-x-hidden">
-      <style>{`
-        @media (max-width: 768px) {
-          .service-card-title { font-size: 1.125rem !important; line-height: 1.4 !important; }
-          .service-card-desc { font-size: 0.9375rem !important; line-height: 1.6 !important; }
-          .provider-name { font-size: 1rem !important; font-weight: 700 !important; }
-          .provider-occupation { font-size: 0.875rem !important; }
-          .section-heading { font-size: 1.5rem !important; font-weight: 800 !important; }
-          .card-text { color: #1e293b !important; }
-          .card-text-dark { color: #f1f5f9 !important; }
-          h1, h2, h3 { text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        }
-      `}</style>
       {/* Pull-to-refresh indicator */}
       {pullDistance > 10 && (
         <div
@@ -404,81 +421,18 @@ export default function HomePage() {
         </div>
       )}
       <OnboardingTour />
-      {/* Hero Section */}
-      <div className="bg-white">
-        <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-4 md:gap-6 py-5 md:py-20 px-4 overflow-hidden">
-          <div className="hero-content text-center lg:text-left">
-            <h1 className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-2 drop-shadow-sm">
-              Encontre Prestadores de Serviços Confiáveis em Trancoso
-            </h1>
-            <p className="text-base md:text-lg text-slate-700 mb-2 font-medium leading-relaxed">
-              Conectamos moradores e empresários de Trancoso aos melhores prestadores locais, com foco em gerar novos clientes todos os dias.
-            </p>
-            <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-              Descreva em poucas palavras o serviço que você precisa em Trancoso e receba retorno de prestadores locais qualificados.
-            </p>
-            
-            <div className="flex w-full max-w-lg mx-auto lg:mx-0 mb-4 min-w-0 shadow-lg rounded-lg overflow-hidden">
-              <label htmlFor="search-servicos" className="sr-only">Buscar serviços em Trancoso</label>
-              <Input
-                id="search-servicos"
-                type="search"
-                placeholder="O que você precisa?"
-                className="flex-1 rounded-r-none focus:ring-0 focus:ring-offset-0 border-r-0 text-base h-12 placeholder:text-slate-500"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Buscar serviços em Trancoso"
-              />
-              <Link to={createPageUrl("ServicosCategoria", `?q=${searchQuery}`)}>
-              <Button className="rounded-l-none h-12 bg-[var(--primary)] min-w-[80px] font-semibold" aria-label={`Buscar serviços: ${searchQuery || 'todos'}`}>
-                  <Search className="w-5 h-5 mr-1" aria-hidden="true" />
-                  <span className="hidden sm:inline">Buscar</span>
-              </Button>
-              </Link>
-            </div>
-            
-            <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap">
-              <span className="text-sm font-medium text-slate-700">Popular:</span>
-              <div className="flex gap-2 flex-wrap justify-center lg:justify-start">
-                {popularServices.map(service => (
-                    <Link key={service} to={createPageUrl("ServicosCategoria", `?cat=${service}`)}>
-                        <Badge variant="outline" className="cursor-pointer hover:bg-[var(--secondary)] hover:border-[var(--secondary)] bg-white border-slate-200 rounded-full text-xs py-1 px-2">{service}</Badge>
-                    </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="hidden lg:block">
-            <PromotionalBanner />
-          </div>
-        </section>
-      </div>
 
-      <div className="container mx-auto max-w-7xl px-4 lg:hidden mt-0">
-        <PromotionalBanner />
-      </div>
+      {/* Barra de urgência */}
+      <UrgencyBar user={user} />
 
-      <BannerCategorias />
+      {/* Hero Carrossel */}
+      <HeroBanner vagasRestantes={vagasRestantes} total={totalPrestadoresVagas} />
 
-      {/* CTA Destacado - Prestador */}
-      <section className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 py-6 md:py-12 my-4 md:my-12 rounded-3xl mx-4">
-      <div className="container mx-auto max-w-3xl px-4 text-center">
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Logo" className="h-8 w-8" />
-          <span className="text-white font-bold text-sm">Trancoso Resolve</span>
-        </div>
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-lg leading-tight">
-          Trancoso, Porque Uma Vez Só É Fique com 100% de Tudo que Você Ganhar. Sem Taxas Escondidas.
-        </h2>
-        <div className="bg-amber-700/40 rounded-2xl p-4 md:p-6 mt-4 border border-amber-400/50">
-          <div className="flex items-center justify-center gap-2 text-white text-lg md:text-2xl font-bold">
-            <Zap className="w-6 h-6 text-yellow-200" />
-            47 vagas restantes!
-          </div>
-        </div>
-      </div>
-      </section>
+      {/* Barra prova social */}
+      <SocialProofBar totalVerificados={totalVerificados} totalCategorias={totalCategorias} totalAvaliacoes={totalAvaliacoes} />
+
+      {/* Grade de categorias */}
+      <CategoriasGrid />
 
       <div className="container mx-auto max-w-6xl px-4 py-8 md:py-16">
 
@@ -686,33 +640,7 @@ export default function HomePage() {
         </section>
 
         {/* CTA Prestadores */}
-        <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-3xl py-8 md:py-12 px-4 md:px-12 mt-10 md:mt-20">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 drop-shadow-lg">
-              É prestador de serviços em Trancoso?
-            </h2>
-            <p className="text-white/90 mb-6 text-base md:text-lg font-medium">
-              Ganhe visibilidade local e receba novos clientes qualificados todos os dias. A Trancoso Resolve é a sua vitrine digital oficial em Trancoso.
-            </p>
-            <ul className="space-y-2 mb-8">
-              {[
-                'Destaque do seu serviço nos resultados da plataforma.',
-                'Estatísticas detalhadas de visualizações e cliques no seu card.',
-                'Ferramentas inteligentes para gerenciar leads e oportunidades.',
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-2 text-white/90 text-sm">
-                  <span className="text-yellow-300 font-bold">✓</span> {item}
-                </li>
-              ))}
-            </ul>
-            <Link to={createPageUrl("SejaPrestador")}>
-              <Button className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-base px-8">
-                Cadastrar meu serviço
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </section>
+        <CTAPrestador vagasRestantes={vagasRestantes} />
       </div>
     </div>
   );
