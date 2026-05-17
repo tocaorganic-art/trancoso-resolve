@@ -145,12 +145,37 @@ function FAQItem({ q, a }) {
 }
 
 export default function PreLancamento() {
-  const [vagasRestantes, setVagasRestantes] = useState(null);
-  const [form, setForm] = useState({ name: "", whatsapp: "", categoria: "", pagamento: "" });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const countdown = useCountdown(DEADLINE);
+   const [vagasRestantes, setVagasRestantes] = useState(null);
+   const [form, setForm] = useState({ name: "", whatsapp: "", categoria: "", pagamento: "" });
+   const [submitted, setSubmitted] = useState(false);
+   const [loading, setLoading] = useState(false);
+   const [error, setError] = useState("");
+   const countdown = useCountdown(DEADLINE);
+
+   // Meta tags para SEO e social media
+   useEffect(() => {
+     document.title = "Oferta de Lançamento | Trancoso Resolve";
+
+     const updateMeta = (name, prop, content) => {
+       let tag = document.querySelector(`meta[${prop}="${name}"]`);
+       if (!tag) {
+         tag = document.createElement("meta");
+         tag.setAttribute(prop, name);
+         document.head.appendChild(tag);
+       }
+       tag.content = content;
+     };
+
+     updateMeta("description", "name", "Pré-lançamento Trancoso Resolve: Oferta exclusiva para os 50 primeiros prestadores. R$ 29,90/mês + 60 dias grátis. Vagas limitadas!");
+     updateMeta("og:title", "property", "Oferta de Lançamento | Trancoso Resolve");
+     updateMeta("og:description", "property", "Seja um dos 50 primeiros prestadores de Trancoso Resolve. R$ 29,90/mês + 60 dias grátis. Vagas limitadas — garantir a sua agora!");
+     updateMeta("og:image", "property", "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/dfe6ee67e_generated_image.png");
+     updateMeta("og:type", "property", "website");
+     updateMeta("og:url", "property", window.location.href);
+     updateMeta("twitter:card", "name", "summary_large_image");
+     updateMeta("twitter:title", "name", "Oferta de Lançamento | Trancoso Resolve");
+     updateMeta("twitter:description", "name", "Pré-lançamento: R$ 29,90/mês + 60 dias grátis. Vagas limitadas!");
+   }, []);
 
   const atualizarVagas = () => {
     base44.entities.LeadPreLancamento.list("-created_date", 200)
@@ -203,8 +228,15 @@ export default function PreLancamento() {
         source: "prelancamento-50vagas",
         description: `data_cadastro: ${new Date().toISOString()} | status: pendente | categoria: ${form.categoria} | pagamento: ${form.pagamento || "não informado"}`,
       });
+
+      // Meta Pixel — evento de Lead
+      if (window.fbq) window.fbq("track", "Lead", { currency: "BRL", value: 29.90 });
+
+      // Google Analytics — evento de Lead
+      if (window.gtag) window.gtag("event", "generate_lead", { currency: "BRL", value: 29.90, event_category: "engagement" });
+
       setSubmitted(true);
-    } catch {
+    } catch (err) {
       setError("Erro ao cadastrar. Tente novamente em instantes.");
     } finally {
       setLoading(false);
