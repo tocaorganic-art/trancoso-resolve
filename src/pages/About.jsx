@@ -1,101 +1,222 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import { Shield, Star, Bot, Camera, BarChart2, Users, ArrowRight, CheckCircle, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const pillars = [
+  {
+    icon: <Shield className="w-7 h-7 text-cyan-400" />,
+    title: "Profissionais Verificados",
+    desc: "Análise de antecedentes criminais, verificação de identidade e validação de dados — cada prestador aprovado passa por rigoroso processo antes de aparecer na plataforma."
+  },
+  {
+    icon: <Star className="w-7 h-7 text-yellow-400" />,
+    title: "Avaliações Transparentes",
+    desc: "Clientes reais, avaliações reais. Nada de notas infladas: todo feedback é auditado para que você confie em quem contrata."
+  },
+  {
+    icon: <Bot className="w-7 h-7 text-purple-400" />,
+    title: "Toca TrIA — IA 24 horas",
+    desc: "Nosso agente de inteligência artificial está disponível a qualquer momento para sugerir o profissional certo, responder dúvidas e agilizar seu pedido — tudo em português (e espanhol)."
+  },
+  {
+    icon: <Camera className="w-7 h-7 text-emerald-400" />,
+    title: "Toca Vision — Criação Visual com IA",
+    desc: "Prestadores têm acesso a um gerador de imagens exclusivo: crie posts, cardápios e materiais visuais de alto padrão em segundos, sem custo adicional."
+  },
+  {
+    icon: <BarChart2 className="w-7 h-7 text-blue-400" />,
+    title: "Dashboard Financeiro Integrado",
+    desc: "Controle de receitas, despesas, previsão de ganhos e relatórios — tudo dentro da plataforma. Sem planilhas, sem complicação."
+  },
+  {
+    icon: <Users className="w-7 h-7 text-rose-400" />,
+    title: "Comunidade VIP Trancoso",
+    desc: "Uma rede exclusiva de moradores, empresários e prestadores que compartilham o compromisso com a excelência que Trancoso exige."
+  },
+];
 
 export default function AboutPage() {
   useEffect(() => {
-    document.title = 'Sobre Nós - Trancoso Resolve';
-    
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.name = 'description';
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.content = 'Conheça o Trancoso Resolve: a plataforma que conecta profissionais verificados com clientes em Trancoso. Nossa missão é facilitar a contratação de serviços confiáveis.';
+    document.title = 'Sobre o Trancoso Resolve — Serviços Premium em Trancoso, Bahia';
 
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (!ogTitle) {
-      ogTitle = document.createElement('meta');
-      ogTitle.setAttribute('property', 'og:title');
-      document.head.appendChild(ogTitle);
-    }
-    ogTitle.content = 'Sobre Nós - Trancoso Resolve';
+    const setMeta = (selector, attr, key, value) => {
+      let el = document.querySelector(selector);
+      if (!el) { el = document.createElement('meta'); if (attr) el.setAttribute(attr, key); else el.name = key; document.head.appendChild(el); }
+      el.content = value;
+    };
 
-    let ogDescription = document.querySelector('meta[property="og:description"]');
-    if (!ogDescription) {
-      ogDescription = document.createElement('meta');
-      ogDescription.setAttribute('property', 'og:description');
-      document.head.appendChild(ogDescription);
-    }
-    ogDescription.content = 'Conheça o Trancoso Resolve: a plataforma que conecta profissionais verificados com clientes em Trancoso.';
+    const desc = 'Conheça o Trancoso Resolve: 8 anos de curadoria de serviços premium em Trancoso, Bahia. Profissionais verificados, IA integrada (Toca TrIA e Toca Vision) e Dashboard Financeiro para prestadores.';
+    setMeta('meta[name="description"]', null, 'description', desc);
+    setMeta('meta[property="og:title"]', 'property', 'og:title', 'Sobre o Trancoso Resolve — Serviços Premium em Trancoso, Bahia');
+    setMeta('meta[property="og:description"]', 'property', 'og:description', desc);
 
-    let canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (!canonicalLink) {
-      canonicalLink = document.createElement('link');
-      canonicalLink.rel = 'canonical';
-      document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.href = `${window.location.origin}/About`;
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = `${window.location.origin}/About`;
+
+    // JSON-LD
+    const schemaId = 'schema-about';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const script = document.createElement('script');
+    script.id = schemaId;
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Trancoso Resolve",
+      "url": window.location.origin,
+      "description": desc,
+      "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+      "foundingDate": "2017",
+      "sameAs": [
+        "https://www.instagram.com/trancosoresolve/",
+        "https://www.facebook.com/share/1B7w8mmbMN/"
+      ]
+    });
+    document.head.appendChild(script);
+    return () => { const s = document.getElementById(schemaId); if (s) s.remove(); };
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-12 md:py-16 max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8 text-primary">Sobre o Trancoso Resolve</h1>
-        
-        <div className="prose prose-invert max-w-none space-y-6 text-lg leading-relaxed">
-          <p>
-            O <strong>Trancoso Resolve</strong> é a plataforma digital que revoluciona a forma como você encontra e contrata serviços profissionais em Trancoso, Bahia. Nossa missão é conectar clientes com profissionais verificados e confiáveis, oferecendo transparência, segurança e qualidade em cada transação.
+    <div className="min-h-screen bg-slate-900 text-slate-100">
+
+      {/* Hero */}
+      <section className="relative overflow-hidden py-20 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div className="absolute inset-0 opacity-5 pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #00b4d8 0%, transparent 60%)' }} />
+        <div className="container mx-auto max-w-4xl relative">
+          <div className="flex items-center gap-2 text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4">
+            <MapPin className="w-4 h-4" />
+            <span>Trancoso, Bahia — Brasil</span>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
+            Sua Expertise no<br />
+            <span className="text-cyan-400">Coração de Trancoso.</span>
+          </h1>
+          <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl mb-8">
+            O Trancoso Resolve nasceu da Toca Concierge — 8 anos conectando moradores, turistas e empresários ao melhor que Trancoso tem a oferecer. Hoje somos a plataforma digital que transforma essa curadoria em tecnologia acessível para todos.
           </p>
-
-          <section>
-            <h2 className="text-2xl font-bold mt-8 mb-4 text-accent">O Que Fazemos</h2>
-            <p>
-              Operamos como um marketplace de serviços que funciona como um intermediário confiável entre clientes que precisam de ajuda e prestadores de serviço qualificados. Oferecemos uma experiência simplificada para contratar profissionais em diversas categorias: limpeza, jardinagem, eletricista, encanador, pintor, cozinheiro, babá, pedreiro e muito mais.
-            </p>
-            <p>
-              Cada profissional na plataforma passa por verificações de identidade, análise de antecedentes criminais e validação de dados cadastrais, garantindo que você está contratando alguém confiável. Clientes podem visualizar avaliações, portfólios, taxas e disponibilidade em tempo real.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold mt-8 mb-4 text-accent">Para Quem É</h2>
-            <p>
-              <strong>Para Clientes:</strong> Se você mora em Trancoso ou está visitando a região e precisa de um eletricista, encanador, limpeza profissional, ou qualquer outro serviço, o Trancoso Resolve conecta você diretamente com profissionais verificados. Sem intermediários desnecessários, com preços claros e avaliações transparentes.
-            </p>
-            <p>
-              <strong>Para Prestadores de Serviço:</strong> Se você é um profissional independente em Trancoso, nossa plataforma oferece a oportunidade de construir sua reputação, alcançar novos clientes e gerenciar seu trabalho de forma organizada. Com ferramentas de agendamento, portfólio digital, recebimento de pagamentos via Stripe e análise de ganhos, você tem tudo que precisa para crescer.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold mt-8 mb-4 text-accent">Quem Constrói o Trancoso Resolve</h2>
-            <p>
-              O Trancoso Resolve foi desenvolvido por uma equipe comprometida com a transformação digital de Trancoso. Utilizamos tecnologias modernas como React, Stripe para pagamentos seguros, e inteligência artificial para recomendações inteligentes de profissionais. Nosso foco é criar uma plataforma intuitiva, segura e que realmente resolva os problemas de falta de acesso a serviços confiáveis na região.
-            </p>
-            <p>
-              Estamos constantemente evoluindo a plataforma com base em feedback de usuários, agregando novos recursos e expandindo as categorias de serviços disponíveis.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold mt-8 mb-4 text-accent">Por Que Usar o Trancoso Resolve</h2>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li><strong>Profissionais Verificados:</strong> Todos passam por verificação de identidade e análise de antecedentes.</li>
-              <li><strong>Avaliações Transparentes:</strong> Veja o que outros clientes pensam antes de contratar.</li>
-              <li><strong>Pagamentos Seguros:</strong> Integração com Stripe garante transações protegidas.</li>
-              <li><strong>Sem Intermediários:</strong> Comunicação direta entre cliente e prestador.</li>
-              <li><strong>Preços Claros:</strong> Sem taxas ocultas ou surpresas no orçamento.</li>
-              <li><strong>Suporte Local:</strong> Atendimento dedicado à comunidade de Trancoso.</li>
-            </ul>
-          </section>
+          <Link to={createPageUrl('ServicosCategoria')}>
+            <Button className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold px-8 py-3 text-base">
+              Explorar Profissionais <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </Link>
         </div>
+      </section>
 
-        <div className="mt-12 p-6 bg-accent/10 rounded-lg border border-accent/20">
-          <h3 className="text-xl font-bold mb-3">Quer conhecer melhor?</h3>
-          <p className="mb-4">Navegue por nossa plataforma, explore os profissionais disponíveis ou se registre como prestador para começar a ganhar.</p>
-          <a href="/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition">Voltar à Página Inicial</a>
+      {/* Missão */}
+      <section className="py-16 px-4 border-b border-slate-800">
+        <div className="container mx-auto max-w-4xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest">Nossa Missão</span>
+              <h2 className="text-3xl font-bold mt-2 mb-4">Curadoria de experiências. Conexão de confiança.</h2>
+              <p className="text-slate-300 leading-relaxed mb-4">
+                Trancoso atrai um público exigente — e esse público merece serviços à altura. Por isso desenvolvemos um processo rigoroso de verificação que vai além do básico: análise de antecedentes criminais, validação de identidade e acompanhamento contínuo de desempenho.
+              </p>
+              <p className="text-slate-300 leading-relaxed">
+                Mais que uma plataforma de contratação, somos o elo entre quem vive e trabalha em Trancoso e os visitantes que desejam viver a experiência com tranquilidade absoluta.
+              </p>
+            </div>
+            <div className="space-y-4">
+              {[
+                'Verificação de antecedentes criminais em todos os prestadores',
+                'Avaliações auditadas e transparentes',
+                'Suporte em português, inglês e espanhol (argentino)',
+                'Pagamentos seguros via Stripe',
+                'IA integrada: Toca TrIA e Toca Vision',
+                'Dashboard financeiro completo para prestadores',
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-cyan-400 shrink-0" />
+                  <span className="text-slate-300">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Pilares */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12">
+            <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest">O que nos diferencia</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2">Tecnologia a serviço da excelência</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pillars.map((p, i) => (
+              <div key={i} className="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 hover:border-cyan-500/40 transition-colors">
+                <div className="w-12 h-12 bg-slate-700/60 rounded-xl flex items-center justify-center mb-4">
+                  {p.icon}
+                </div>
+                <h3 className="font-bold text-lg mb-2">{p.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Para quem */}
+      <section className="py-16 px-4 bg-slate-800/40 border-y border-slate-800">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest">Para quem é</span>
+            <h2 className="text-3xl font-bold mt-2">Feito para Trancoso. Para todos.</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                emoji: '🏡',
+                title: 'Moradores & Proprietários',
+                desc: 'Mantenha sua casa, pousada ou villa com os melhores profissionais locais — verificados, avaliados e sempre disponíveis quando você precisa.'
+              },
+              {
+                emoji: '✈️',
+                title: 'Turistas & Visitantes',
+                desc: 'Chegou a Trancoso e precisa de um eletricista, diarista ou cozinheiro? Contrate com segurança em minutos, sem precisar de indicação.'
+              },
+              {
+                emoji: '🔧',
+                title: 'Prestadores de Serviço',
+                desc: 'Acesse uma audiência VIP, receba mais pedidos, organize seu negócio com IA e construa uma reputação digital sólida em Trancoso.'
+              },
+            ].map((card, i) => (
+              <div key={i} className="bg-slate-800 border border-slate-700 rounded-2xl p-6 text-center">
+                <span className="text-4xl block mb-4">{card.emoji}</span>
+                <h3 className="font-bold text-lg mb-2">{card.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold mb-4">Pronto para começar?</h2>
+          <p className="text-slate-400 mb-8 leading-relaxed">
+            Seja para contratar um profissional de confiança ou expandir seu negócio em Trancoso, estamos aqui para facilitar cada passo.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to={createPageUrl('ServicosCategoria')}>
+              <Button className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold px-8">
+                Contratar um Profissional <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+            <Link to={createPageUrl('SejaPrestador')}>
+              <Button variant="outline" className="border-slate-600 text-slate-200 hover:bg-slate-800 px-8">
+                Quero ser Prestador
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

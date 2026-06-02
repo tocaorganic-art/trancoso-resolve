@@ -193,17 +193,29 @@ export default function SejaPrestadorPage() {
       </section>
 
       {/* CTA Final */}
-      <div className="bg-gradient-to-r from-blue-600 to-cyan-500 py-12 md:py-20">
-        <div className="container mx-auto text-center px-4">
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-3">Pronto para começar?</h2>
-          <p className="text-blue-100 mb-6 max-w-xl mx-auto text-base md:text-lg">
-            Faça parte da comunidade de profissionais que está prosperando em Trancoso.
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 md:py-24 border-t border-slate-700">
+        <div className="container mx-auto text-center px-4 max-w-2xl">
+          <span className="inline-block bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Vagas limitadas por categoria</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
+            Sua Expertise no<br />
+            <span className="text-cyan-400">Coração de Trancoso.</span>
+          </h2>
+          <p className="text-slate-300 mb-8 max-w-lg mx-auto text-base md:text-lg leading-relaxed">
+            Conecte-se a uma audiência VIP de moradores, proprietários de villas e turistas de alto padrão que buscam exatamente o que você oferece. Sem custo de marketing. Sem intermediários.
           </p>
-          <Link to={createPageUrl('CadastroTipo')}>
-            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-lg px-8 py-4 md:py-6 shadow-xl min-h-[48px]">
-              Cadastre-se Agora — É Grátis
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to={createPageUrl('CadastroTipo')}>
+              <Button size="lg" className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold text-lg px-10 py-4 shadow-xl min-h-[52px]">
+                Cadastre-se Agora — É Grátis
+              </Button>
+            </Link>
+            <Link to={createPageUrl('Planos')}>
+              <Button size="lg" variant="outline" className="border-slate-600 text-slate-200 hover:bg-slate-800 font-semibold px-8 min-h-[52px]">
+                Ver Planos e Preços
+              </Button>
+            </Link>
+          </div>
+          <p className="text-slate-500 text-xs mt-6">Todos os prestadores passam por verificação de identidade e análise de antecedentes.</p>
         </div>
       </div>
 

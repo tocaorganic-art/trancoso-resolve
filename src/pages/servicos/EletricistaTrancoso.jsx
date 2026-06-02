@@ -3,22 +3,24 @@ import ServicoLocalPage from '@/components/servicos/ServicoLocalPage';
 export default function EletricistaTrancoso() {
   return (
     <ServicoLocalPage
-      title="Eletricista em Trancoso – Instalações, Manutenção e Emergências | Trancoso Resolve"
-      metaDescription="Encontre eletricista em Trancoso para instalações elétricas, manutenção, troca de disjuntores e emergências. Peça orçamento rápido e receba contatos de prestadores locais pela Trancoso Resolve."
-      h1="Eletricista em Trancoso para Casas, Comércios e Imóveis de Temporada"
-      intro="Precisa de um eletricista em Trancoso confiável para instalações, manutenção ou emergências? Na Trancoso Resolve você encontra profissionais verificados prontos para atender sua casa, comércio ou imóvel de temporada com qualidade e rapidez."
-      servicesTitle="Principais serviços de eletricista em Trancoso"
+      title="Eletricista em Trancoso – Emergências, Instalações e Manutenção em Villas e Propriedades de Luxo"
+      metaDescription="Eletricista verificado em Trancoso para emergências elétricas, instalações em villas e pousadas de alto padrão. Atendimento rápido e profissional. Contrate pela Trancoso Resolve."
+      h1="Eletricista em Trancoso: Pronto para Emergências e Instalações em Propriedades de Alto Padrão"
+      intro="Uma falha elétrica em uma villa de luxo ou pousada não pode esperar. Na Trancoso Resolve você acessa eletricistas locais verificados — com experiência em instalações sofisticadas e prontos para atender emergências na sua propriedade em Trancoso com rapidez e segurança."
+      servicesTitle="Serviços de eletricista especializado em Trancoso"
       services={[
-        'Instalação e reforma de sistemas elétricos residenciais',
-        'Análise de carga e instalação de painéis de distribuição',
-        'Serviços de emergência: apagões, disjuntores e curtos',
-        'Instalação de iluminação externa e decorativa para eventos',
-        'Manutenção periódica para casas de temporada e pousadas',
+        'Atendimento emergencial 24h para curtos-circuitos, quedas de energia e disjuntores',
+        'Instalação e reforma de sistemas elétricos em villas e residências de alto padrão',
+        'Análise de carga e projeto elétrico para ampliações e reformas',
+        'Instalação de iluminação cênica, decorativa e de fachada para eventos',
+        'Manutenção preventiva de gerador, nobreaks e rede estabilizada',
+        'Adequação elétrica para piscinas, spas, saunas e equipamentos de lazer',
+        'Instalação de sistemas fotovoltaicos e gestão de energia solar',
       ]}
-      howTitle="Por que contratar eletricista pela Trancoso Resolve?"
-      howText="Todos os eletricistas são locais e conhecem as especificidades da rede de Trancoso. Você tem acesso direto aos profissionais, sem intermediários, e pode avaliar referências e histórico antes de fechar. Rápido, seguro e sem taxa de plataforma."
-      cta="Peça agora um eletricista em Trancoso descrevendo o que você precisa e receba retorno de prestadores locais de confiança."
-      ctaButton="Pedir orçamento de eletricista em Trancoso"
+      howTitle="Eletricistas que conhecem as especificidades de Trancoso"
+      howText="Trancoso tem características únicas: oscilações de tensão, instalações em madeira de demolição, propriedades sem planta elétrica atualizada e demanda alta nas temporadas. Os eletricistas da plataforma conhecem essas realidades e chegam preparados para resolver, não para improvisar. Todos são verificados, têm histórico de avaliações públicas e atendem com responsabilidade técnica."
+      cta="Descreva o problema ou projeto elétrico na sua propriedade em Trancoso e receba retorno de eletricistas verificados rapidamente."
+      ctaButton="Contratar eletricista em Trancoso"
       category="Eletricista"
       serviceLabel="eletricistas"
       heroEmoji="⚡"
