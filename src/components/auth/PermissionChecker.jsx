@@ -1,28 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, RefreshCw, LogOut, Shield } from 'lucide-react';
-import { toast } from 'sonner';
+import { AlertCircle, RefreshCw, LogOut } from 'lucide-react';
+
+const MAX_RETRIES = 10;
+const RETRY_INTERVAL_MS = 1000;
+const TIMEOUT_MS = 12000; // 12s total máximo
 
 export default function PermissionChecker({ children, requiredRole = null, requiredUserType = null }) {
   const [permissionStatus, setPermissionStatus] = useState('checking');
   const [errorDetails, setErrorDetails] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const retryCountRef = useRef(0);
+  const timedOutRef = useRef(false);
+  const timerRef = useRef(null);
 
   const { data: user, isLoading, error, refetch } = useQuery({
     queryKey: ['currentUser'],
-    queryFn: async () => {
-      const userData = await base44.auth.me();
-      return userData;
-    },
-    retry: 2,
-    retryDelay: 1000,
+    queryFn: () => base44.auth.me(),
+    retry: 1,
+    retryDelay: 500,
     staleTime: 0,
   });
 
+  // Timeout global: se após TIMEOUT_MS ainda estiver checking, desiste
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      timedOutRef.current = true;
+      if (permissionStatus === 'checking') {
+        // Limpa flags antigas que possam estar causando loops
+        localStorage.removeItem('user_type_prestador_pendente');
+        setPermissionStatus('timeout');
+      }
+    }, TIMEOUT_MS);
+    return () => clearTimeout(timeout);
+  }, []); // roda só uma vez na montagem
+
+  useEffect(() => {
+    // Limpa retry timer anterior
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    if (timedOutRef.current) return;
     if (isLoading) {
       setPermissionStatus('checking');
       return;
@@ -30,7 +52,7 @@ export default function PermissionChecker({ children, requiredRole = null, requi
 
     if (error) {
       setPermissionStatus('error');
-      setErrorDetails({ code: 'AUTH_ERROR', message: 'Falha na autenticação', details: error.message });
+      setErrorDetails({ message: error.message });
       return;
     }
 
@@ -39,72 +61,62 @@ export default function PermissionChecker({ children, requiredRole = null, requi
       return;
     }
 
-    // Verificar role se necessário
+    // Verificar role
     if (requiredRole && user.role !== requiredRole) {
       setPermissionStatus('forbidden');
       setErrorDetails({
         code: 'INSUFFICIENT_ROLE',
-        message: 'Acesso negado',
         details: `Esta página requer perfil "${requiredRole}". Seu perfil: "${user.role || 'indefinido'}"`,
       });
       return;
     }
 
-    // Verificar user_type se necessário
-    if (requiredUserType && user.user_type !== requiredUserType) {
-      const userTypeUndefined = !user.user_type || user.user_type === 'indefinido';
-
-      // Flag de cadastro recente (banco ainda propagando): bypass por até 30s
-      const cadastroTs = localStorage.getItem('user_type_prestador_pendente');
-      const cadastroRecente = cadastroTs && (Date.now() - parseInt(cadastroTs)) < 30000;
-      if (cadastroRecente && requiredUserType === 'prestador') {
-        console.log('[PermissionChecker] Cadastro de prestador recente, aguardando propagação...');
-        if (retryCount < 8) {
-          setTimeout(() => {
-            setRetryCount(c => c + 1);
-            refetch();
-          }, 1500);
-          setPermissionStatus('checking');
-          return;
-        }
-        // Após 8 tentativas (~12s), limpa o flag e deixa passar mesmo assim
+    // Verificar user_type
+    if (requiredUserType) {
+      if (user.user_type === requiredUserType) {
+        // Correto! Limpa flags e autoriza
         localStorage.removeItem('user_type_prestador_pendente');
         setPermissionStatus('authorized');
         return;
       }
 
-      // user_type indefinido sem cadastro recente: tenta algumas vezes antes de bloquear
-      if (userTypeUndefined && retryCount < 3) {
-        setTimeout(() => {
-          setRetryCount(c => c + 1);
-          refetch();
-        }, 1500);
+      const userTypeUndefined = !user.user_type || user.user_type === 'indefinido';
+      const cadastroTs = localStorage.getItem('user_type_prestador_pendente');
+      const cadastroRecente = cadastroTs && (Date.now() - parseInt(cadastroTs)) < 30000;
+
+      // Se cadastro recente OU user_type indefinido: tenta até MAX_RETRIES
+      if ((cadastroRecente || userTypeUndefined) && retryCountRef.current < MAX_RETRIES) {
+        retryCountRef.current += 1;
         setPermissionStatus('checking');
+        timerRef.current = setTimeout(() => {
+          refetch();
+        }, RETRY_INTERVAL_MS);
         return;
       }
 
-      // user_type indefinido após retries → vai pro CadastroTipo
+      // Esgotou tentativas com cadastro recente → deixa passar (benefício da dúvida)
+      if (cadastroRecente) {
+        localStorage.removeItem('user_type_prestador_pendente');
+        setPermissionStatus('authorized');
+        return;
+      }
+
+      // user_type indefinido após retries → cadastro incompleto
       if (userTypeUndefined) {
         setPermissionStatus('needs_setup');
         return;
       }
 
-      // user_type definido mas incorreto (ex: cliente no Dashboard de prestador)
+      // user_type definido mas errado (ex: cliente tentando acessar área de prestador)
       setPermissionStatus('forbidden');
       setErrorDetails({
         code: 'INSUFFICIENT_USER_TYPE',
-        message: 'Acesso negado',
-        details: `Esta página requer tipo de usuário "${requiredUserType}". Seu tipo: "${user.user_type}"`,
+        details: `Esta página é exclusiva para prestadores de serviço.`,
       });
       return;
     }
 
-    // Limpa flag de cadastro recente se o user_type já está correto
-    if (requiredUserType && user.user_type === requiredUserType) {
-      localStorage.removeItem('user_type_prestador_pendente');
-    }
-
-    // Verificar se user_type está indefinido (novo usuário sem requiredUserType)
+    // Sem requiredUserType: verifica se precisa fazer setup
     const userTypeUndefined = !user.user_type || user.user_type === 'indefinido';
     if (userTypeUndefined && window.location.pathname !== '/CadastroTipo') {
       setPermissionStatus('needs_setup');
@@ -112,9 +124,16 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     }
 
     setPermissionStatus('authorized');
-  }, [user, isLoading, error, requiredRole, requiredUserType, retryCount]);
+  }, [user, isLoading, error, requiredRole, requiredUserType]);
 
-  // Loading
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timedOutRef.current = true;
+    };
+  }, []);
+
   if (permissionStatus === 'checking') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50">
@@ -129,35 +148,57 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     );
   }
 
-  // Needs Setup (user_type indefinido)
+  if (permissionStatus === 'timeout') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50">
+        <Card className="w-full max-w-md border-red-200">
+          <CardContent className="p-8 text-center">
+            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Não foi possível carregar seu perfil</h2>
+            <p className="text-slate-600 mb-6">
+              Tente fazer login novamente. Se o problema persistir, entre em contato com o suporte.
+            </p>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => window.location.href = '/SejaPrestador'}
+                className="flex-1"
+              >
+                Ir para Cadastro
+              </Button>
+              <Button
+                onClick={() => base44.auth.logout()}
+                variant="destructive"
+                className="flex-1"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Fazer login novamente
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (permissionStatus === 'needs_setup') {
     window.location.href = '/CadastroTipo';
     return null;
   }
 
-  // Unauthorized (não logado) — redireciona automaticamente para login
   if (permissionStatus === 'unauthorized') {
     base44.auth.redirectToLogin(window.location.pathname);
     return null;
   }
 
-  // Forbidden (logado mas sem permissão)
   if (permissionStatus === 'forbidden') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 to-orange-50">
         <Card className="w-full max-w-md border-yellow-200">
           <CardContent className="p-8 text-center">
             <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Sem Permissão</h2>
-            <p className="text-slate-600 mb-4">{errorDetails?.details}</p>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <p className="text-xs text-yellow-800 font-mono">
-                Código: {errorDetails?.code}
-              </p>
-              <p className="text-xs text-yellow-700 mt-2">
-                Se você acredita que deveria ter acesso, entre em contato com o suporte.
-              </p>
-            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Acesso Restrito</h2>
+            <p className="text-slate-600 mb-6">{errorDetails?.details}</p>
             <div className="flex gap-3">
               <Button variant="outline" onClick={() => window.location.href = '/'} className="flex-1">
                 Ir para Início
@@ -173,12 +214,10 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     );
   }
 
-  // Error de autenticação — redireciona para login
   if (permissionStatus === 'error') {
     base44.auth.redirectToLogin(window.location.pathname);
     return null;
   }
 
-  // Authorized - render children
   return <>{children}</>;
 }
