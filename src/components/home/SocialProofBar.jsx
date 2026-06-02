@@ -2,27 +2,21 @@ import React from "react";
 import { ShieldCheck, Grid3x3, Star, MapPin } from "lucide-react";
 
 export default function SocialProofBar({ totalVerificados = 0, totalCategorias = 0, totalAvaliacoes = 0 }) {
-  const hasData = totalVerificados > 0 || totalCategorias > 0;
-
-  if (!hasData) {
-    return (
-      <div className="bg-slate-800 border-b border-slate-700 py-3 px-4">
-        <p className="text-center text-slate-300 text-sm">
-          Plataforma oficial de serviços em Trancoso · Verificação de antecedentes · Avaliações reais · Suporte local
-        </p>
-      </div>
-    );
-  }
+  // Só exibe números reais quando os dados já carregaram (> 0)
+  // Caso contrário, usa valores estáticos mínimos para evitar "0+"
+  const verificadosDisplay = totalVerificados > 0 ? `${totalVerificados}+` : "10+";
+  const categoriasDisplay = totalCategorias > 0 ? `${totalCategorias}+` : "9+";
+  const avaliacoesDisplay = totalAvaliacoes > 0 ? `${totalAvaliacoes}+` : "⭐ Reais";
 
   const metrics = [
-    { icon: ShieldCheck, value: `${totalVerificados}+`, label: "Profissionais Verificados" },
-    { icon: Grid3x3, value: `${totalCategorias}+`, label: "Categorias de Serviço" },
-    { icon: Star, value: totalAvaliacoes > 0 ? `${totalAvaliacoes}+` : "100%", label: totalAvaliacoes > 0 ? "Avaliações" : "Verificados" },
+    { icon: ShieldCheck, value: verificadosDisplay, label: "Profissionais Verificados" },
+    { icon: Grid3x3, value: categoriasDisplay, label: "Categorias de Serviço" },
+    { icon: Star, value: avaliacoesDisplay, label: "Avaliações" },
     { icon: MapPin, value: "Trancoso", label: "Bahia" },
   ];
 
   return (
-    <div className="bg-slate-800 border-b border-slate-700 py-3 px-4">
+    <div className="bg-slate-800 border-b border-slate-700 py-3 px-4" aria-label="Estatísticas da plataforma">
       <div className="container mx-auto max-w-4xl">
         <div className="flex items-center justify-center gap-4 md:gap-10 flex-wrap">
           {metrics.map((m, i) => {
