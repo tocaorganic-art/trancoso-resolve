@@ -14,15 +14,36 @@ import { checkContactData } from "@/lib/contactFilter";
 import { toast } from "sonner";
 import { playMessageSound } from "@/components/chat/ChatNotificationSound";
 
+function EmptyConversations() {
+  const suggestions = ["Preciso de uma diarista", "Quero um eletricista", "Buscar cozinheiro particular"];
+  return (
+    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+      <span className="text-5xl mb-4">💬</span>
+      <h3 className="text-lg font-bold text-slate-800 mb-2">Olá! Sou o Toca TrIA 👋</h3>
+      <p className="text-sm text-slate-500 mb-6 max-w-xs leading-relaxed">
+        Seu assistente para encontrar os melhores profissionais em Trancoso. Como posso ajudar hoje?
+      </p>
+      <Link to="/Assistentevirtual">
+        <Button className="bg-amber-700 hover:bg-amber-800 text-white font-semibold mb-5 transition-all duration-200 active:scale-95 hover:scale-105">
+          Iniciar Conversa
+        </Button>
+      </Link>
+      <div className="space-y-2 w-full max-w-xs">
+        {suggestions.map((s) => (
+          <Link key={s} to={`/Assistentevirtual`}>
+            <button className="w-full text-left text-sm px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 transition-colors duration-150">
+              {s} →
+            </button>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ConversationList({ conversations, selectedId, onSelect, currentUser }) {
   if (!conversations || conversations.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-64 text-slate-400 p-6 text-center">
-        <MessageCircle className="w-12 h-12 mb-3 opacity-40" />
-        <p className="font-medium text-slate-600">Nenhuma conversa ainda</p>
-        <p className="text-sm mt-1">Inicie um chat pelo perfil de um prestador</p>
-      </div>
-    );
+    return <EmptyConversations />;
   }
 
   return (

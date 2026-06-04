@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Menu, X, FileText, User, MessageCircle, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered } from
+  TrendingUp, CreditCard, Menu, X, FileText, User, MessageCircle, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered, Image } from
 "lucide-react";
 
 import RoutePreloader from "./components/optimization/RoutePreloader";
@@ -175,9 +175,9 @@ export default function Layout({ children, currentPageName }) {
         <div className="min-h-screen bg-slate-900 overflow-x-hidden">
           <style>{`
             :root {
-              --primary: #0A81D1;
-              --secondary: #F4D35E;
-              --accent: #0D8A6F;
+              --primary: #8B6914;
+              --secondary: #C4713A;
+              --accent: #4A6741;
               --text-dark: #f1f5f9;
               --text-light: #FFFFFF;
               --background: #0f172a;
