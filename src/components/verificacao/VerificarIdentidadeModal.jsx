@@ -93,6 +93,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
       // 3. Chamar IA para análise
       await analisarDocumento({
         verificacao_id: verificacao.id,
+        prestador_id: user.id,
         document_url,
         ...(document_url_verso && { document_url_verso }),
         document_type: documentType,

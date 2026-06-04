@@ -110,13 +110,19 @@ Compare o nome extraído com o nome cadastrado. Considere 100% de correspondênc
       adminNotes = `✅ IA: Nome confirmado (${aiResult.extracted_name}). Aguardando aprovação manual do admin.`;
     }
 
-    // Atualiza a verificação com os dados da IA
+    // Atualiza a verificação com os dados da IA (usando apenas campos existentes no schema)
     await base44.asServiceRole.entities.Verificacao.update(verificacao_id, {
       status: newStatus,
-      ai_extracted_name: aiResult.extracted_name || "",
-      ai_extracted_dob: aiResult.extracted_dob || "",
-      ai_confidence: aiResult.confidence || 0,
-      admin_notes: adminNotes
+      result: adminNotes,
+      description: JSON.stringify({
+        ai_extracted_name: aiResult.extracted_name || "",
+        ai_extracted_dob: aiResult.extracted_dob || "",
+        ai_confidence: aiResult.confidence || 0,
+        admin_notes: adminNotes,
+        document_url,
+        document_type,
+        user_full_name,
+      })
     });
 
     console.log(`[analisarDocumento] Status definido como "${newStatus}" para verificacao ${verificacao_id}`);
