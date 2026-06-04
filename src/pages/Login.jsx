@@ -1,125 +1,68 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
+import { LogIn } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 
+function MicrosoftIcon({ className }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23" fill="none">
+      <rect x="1" y="1" width="10" height="10" fill="#F25022" />
+      <rect x="12" y="1" width="10" height="10" fill="#7FBA00" />
+      <rect x="1" y="12" width="10" height="10" fill="#00A4EF" />
+      <rect x="12" y="12" width="10" height="10" fill="#FFB900" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ className }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2">
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.234 2.686.234v2.953h-1.514c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
+    </svg>
+  );
+}
+
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      await base44.auth.loginViaEmailPassword(email, password);
-      window.location.href = "/";
-    } catch (err) {
-      setError(err.message || "Invalid email or password");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", "/");
-  };
+  const handleGoogle = () => base44.auth.loginWithProvider("google", "/");
+  const handleMicrosoft = () => base44.auth.loginWithProvider("microsoft", "/");
+  const handleFacebook = () => base44.auth.loginWithProvider("facebook", "/");
 
   return (
     <AuthLayout
       icon={LogIn}
-      title="Welcome back"
-      subtitle="Log in to your account"
-      footer={
-        <>
-          Don't have an account?{" "}
-          <Link to="/register" className="text-primary font-medium hover:underline">
-            Create one
-          </Link>
-        </>
-      }
+      title="Bem-vindo(a)"
+      subtitle="Entre com sua conta para continuar"
     >
-      <Button
-        variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleGoogle}
-      >
-        <GoogleIcon className="w-5 h-5 mr-2" />
-        Continue with Google
-      </Button>
-
-      <div className="relative mb-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or</span>
-        </div>
-      </div>
-
-      {error && (
-        <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              autoFocus
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="pl-10 h-12"
-              required
-            />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-              Forgot password?
-            </Link>
-          </div>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 h-12"
-              required
-            />
-          </div>
-        </div>
-        <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Logging in...
-            </>
-          ) : (
-            "Log in"
-          )}
+      <div className="space-y-3">
+        <Button
+          variant="outline"
+          className="w-full h-12 text-sm font-medium"
+          onClick={handleGoogle}
+        >
+          <GoogleIcon className="w-5 h-5 mr-2" />
+          Continuar com Google
         </Button>
-      </form>
+
+        <Button
+          variant="outline"
+          className="w-full h-12 text-sm font-medium"
+          onClick={handleMicrosoft}
+        >
+          <MicrosoftIcon className="w-5 h-5 mr-2" />
+          Continuar com Microsoft
+        </Button>
+
+        <Button
+          variant="outline"
+          className="w-full h-12 text-sm font-medium"
+          onClick={handleFacebook}
+        >
+          <FacebookIcon className="w-5 h-5 mr-2" />
+          Continuar com Facebook
+        </Button>
+      </div>
     </AuthLayout>
   );
 }

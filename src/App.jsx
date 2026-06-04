@@ -12,6 +12,9 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import Login from '@/pages/Login';
+import { Navigate } from 'react-router-dom';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import FilaVerificacaoPage from '@/pages/FilaVerificacao';
 import AdminPagamentosPage from '@/pages/AdminPagamentos';
 import PreLancamentoPage from '@/pages/PreLancamento';
@@ -71,38 +74,42 @@ const AuthenticatedApp = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={
-          <LayoutWrapper currentPageName={mainPageKey}>
-            <AnimatedPage><MainPage /></AnimatedPage>
-          </LayoutWrapper>
-        } />
-        {Object.entries(Pages).map(([path, Page]) => (
-          <Route
-            key={path}
-            path={`/${path}`}
-            element={
-              <LayoutWrapper currentPageName={path}>
-                <AnimatedPage><Page /></AnimatedPage>
-              </LayoutWrapper>
-            }
-          />
-        ))}
-        <Route path="/FilaVerificacao" element={
-          <LayoutWrapper currentPageName="FilaVerificacao">
-            <AnimatedPage><FilaVerificacaoPage /></AnimatedPage>
-          </LayoutWrapper>
-        } />
-        <Route path="/AdminPagamentos" element={
-          <LayoutWrapper currentPageName="AdminPagamentos">
-            <AnimatedPage><AdminPagamentosPage /></AnimatedPage>
-          </LayoutWrapper>
-        } />
-        <Route path="/AdminAntecedentes" element={
-          <LayoutWrapper currentPageName="AdminAntecedentes">
-            <AnimatedPage><AdminAntecedentesPage /></AnimatedPage>
-          </LayoutWrapper>
-        } />
+    <Routes location={location} key={location.pathname}>
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/" element={
+        <LayoutWrapper currentPageName={mainPageKey}>
+          <AnimatedPage><MainPage /></AnimatedPage>
+        </LayoutWrapper>
+      } />
+      {Object.entries(Pages).map(([path, Page]) => (
+        <Route
+          key={path}
+          path={`/${path}`}
+          element={
+            <LayoutWrapper currentPageName={path}>
+              <AnimatedPage><Page /></AnimatedPage>
+            </LayoutWrapper>
+          }
+        />
+      ))}
+        <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+          <Route path="/FilaVerificacao" element={
+            <LayoutWrapper currentPageName="FilaVerificacao">
+              <AnimatedPage><FilaVerificacaoPage /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/AdminPagamentos" element={
+            <LayoutWrapper currentPageName="AdminPagamentos">
+              <AnimatedPage><AdminPagamentosPage /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/AdminAntecedentes" element={
+            <LayoutWrapper currentPageName="AdminAntecedentes">
+              <AnimatedPage><AdminAntecedentesPage /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+        </Route>
         <Route path="/PreLancamento" element={
           <AnimatedPage><PreLancamentoPage /></AnimatedPage>
         } />
@@ -127,9 +134,11 @@ const AuthenticatedApp = () => {
             <AnimatedPage><ContactPage /></AnimatedPage>
           </LayoutWrapper>
         } />
-        <Route path="/Assistentevirtual" element={
-          <AnimatedPage><AssistenteVirtualPage /></AnimatedPage>
-        } />
+        <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+          <Route path="/Assistentevirtual" element={
+            <AnimatedPage><AssistenteVirtualPage /></AnimatedPage>
+          } />
+        </Route>
         <Route path="/VerificacaoDocumento" element={
           <LayoutWrapper currentPageName="VerificacaoDocumento">
             <AnimatedPage><VerificacaoDocumentoPage /></AnimatedPage>
@@ -153,9 +162,16 @@ const AuthenticatedApp = () => {
         <Route path="/AssinaturaConfirmada" element={
           <AnimatedPage><AssinaturaConfirmadaPage /></AnimatedPage>
         } />
-        <Route path="/admin/seo" element={
-          <AnimatedPage><SeoDashboard /></AnimatedPage>
-        } />
+        <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+          <Route path="/admin/seo" element={
+            <AnimatedPage><SeoDashboard /></AnimatedPage>
+          } />
+          <Route path="/admin/metricas" element={
+            <LayoutWrapper currentPageName="AdminMetricas">
+              <AnimatedPage><AdminMetricasPage /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+        </Route>
         <Route path="/servicos/diarista-trancoso" element={
           <LayoutWrapper currentPageName="DiaristaTrancoso">
             <AnimatedPage><DiaristaTrancoso /></AnimatedPage>
@@ -171,11 +187,7 @@ const AuthenticatedApp = () => {
             <AnimatedPage><PiscineiroTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
-        <Route path="/admin/metricas" element={
-          <LayoutWrapper currentPageName="AdminMetricas">
-            <AnimatedPage><AdminMetricasPage /></AnimatedPage>
-          </LayoutWrapper>
-        } />
+
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatePresence>
