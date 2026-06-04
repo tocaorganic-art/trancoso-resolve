@@ -8,7 +8,7 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    document.title = 'Contato - Trancoso Resolve';
+    document.title = 'Contato | Trancoso Resolve';
     
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
@@ -16,7 +16,7 @@ export default function ContactPage() {
       metaDescription.name = 'description';
       document.head.appendChild(metaDescription);
     }
-    metaDescription.content = 'Entre em contato com o Trancoso Resolve. Estamos aqui para ajudar com dúvidas, sugestões e feedback sobre nossa plataforma de serviços.';
+    metaDescription.content = 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Bahia.';
 
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) {
@@ -24,7 +24,7 @@ export default function ContactPage() {
       ogTitle.setAttribute('property', 'og:title');
       document.head.appendChild(ogTitle);
     }
-    ogTitle.content = 'Contato - Trancoso Resolve';
+    ogTitle.content = 'Contato | Trancoso Resolve';
 
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {

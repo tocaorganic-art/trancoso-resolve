@@ -39,7 +39,7 @@ const pillars = [
 
 export default function AboutPage() {
   useEffect(() => {
-    document.title = 'Sobre o Trancoso Resolve — Serviços Premium em Trancoso, Bahia';
+    document.title = 'Sobre Nós | Trancoso Resolve';
 
     const setMeta = (selector, attr, key, value) => {
       let el = document.querySelector(selector);
@@ -47,9 +47,9 @@ export default function AboutPage() {
       el.content = value;
     };
 
-    const desc = 'Conheça o Trancoso Resolve: 8 anos de curadoria de serviços premium em Trancoso, Bahia. Profissionais verificados, IA integrada (Toca TrIA e Toca Vision) e Dashboard Financeiro para prestadores.';
+    const desc = 'Conheça a Trancoso Resolve, a plataforma que conecta quem precisa de serviço a profissionais verificados em Trancoso, Bahia.';
     setMeta('meta[name="description"]', null, 'description', desc);
-    setMeta('meta[property="og:title"]', 'property', 'og:title', 'Sobre o Trancoso Resolve — Serviços Premium em Trancoso, Bahia');
+    setMeta('meta[property="og:title"]', 'property', 'og:title', 'Sobre Nós | Trancoso Resolve');
     setMeta('meta[property="og:description"]', 'property', 'og:description', desc);
 
     let canonical = document.querySelector('link[rel="canonical"]');

@@ -11,22 +11,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export default function AssistenteVirtualPage() {
   useEffect(() => {
-    document.title = 'Assistente de IA para Prestadores - Trancoso Resolve';
+    document.title = 'Assistente IA | Trancoso Resolve';
+    const desc = 'Converse com o Toca TrIA, o assistente inteligente da Trancoso Resolve. Encontre o profissional certo para sua necessidade em segundos.';
     
     const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.content = 'Seu assistente de IA para conquistar mais clientes em Trancoso. Responde clientes 24/7, organiza pedidos e ajuda você a vender mais.';
-    }
+    if (metaDescription) metaDescription.content = desc;
 
     const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) {
-      ogTitle.content = 'Assistente de IA para Prestadores - Trancoso Resolve';
-    }
+    if (ogTitle) ogTitle.content = 'Assistente IA | Trancoso Resolve';
 
     const ogDescription = document.querySelector('meta[property="og:description"]');
-    if (ogDescription) {
-      ogDescription.content = 'Seu assistente de IA para conquistar mais clientes em Trancoso. Responde clientes 24/7, organiza pedidos e ajuda você a vender mais.';
-    }
+    if (ogDescription) ogDescription.content = desc;
   }, []);
 
   const handleActivarClick = async () => {

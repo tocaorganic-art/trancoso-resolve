@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Wrench, Menu, X, FileText, User, MessageCircle, Image, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft } from
+  TrendingUp, CreditCard, Menu, X, FileText, User, MessageCircle, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered } from
 "lucide-react";
 
 import RoutePreloader from "./components/optimization/RoutePreloader";
@@ -120,22 +120,36 @@ export default function Layout({ children, currentPageName }) {
   const [perfilModalFechado, setPerfilModalFechado] = useState(false);
   const precisaCompletarPerfil = !!user && !user.profile_completed && !user.phone && !location.pathname.includes('CadastroTipo') && location.pathname === '/' && !perfilModalFechado;
 
-  const adminNavItems = [
-  { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
-  { name: "Minha Agenda", path: createPageUrl("MinhaAgenda"), icon: Calendar },
-  { name: "Meus Serviços", path: createPageUrl("MeusServicos"), icon: Briefcase },
-  { name: "Meu Perfil", path: createPageUrl("MeuPerfilPrestador"), icon: UserCog },
-  { name: "Financeiro", path: createPageUrl("Financeiro"), icon: TrendingUp },
-  { name: "Planos", path: createPageUrl("Planos"), icon: CreditCard },
-  { name: "Manual", path: createPageUrl("Manual"), icon: FileText },
-  ...(isAdmin ? [{ name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket }] : []),
-  ...(isAdmin ? [
-  { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
-  { name: "Antecedentes", path: "/AdminAntecedentes", icon: ShieldCheck },
-  { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
-  { name: "📊 Métricas", path: "/admin/metricas", icon: TrendingUp }] :
-  []),
-  { name: "Ver Site", path: "/", icon: Globe, clearLogin: true }];
+  const isPrestador = user?.user_type === 'prestador';
+
+  const adminNavItems = isAdmin ? [
+    { name: "Dashboard", path: createPageUrl("Dashboard"), icon: Home },
+    { name: "Minha Agenda", path: createPageUrl("MinhaAgenda"), icon: Calendar },
+    { name: "Meus Serviços", path: createPageUrl("MeusServicos"), icon: Briefcase },
+    { name: "Meu Perfil", path: createPageUrl("MeuPerfilPrestador"), icon: UserCog },
+    { name: "Financeiro", path: createPageUrl("Financeiro"), icon: TrendingUp },
+    { name: "Planos", path: createPageUrl("Planos"), icon: CreditCard },
+    { name: "Verificações", path: "/FilaVerificacao", icon: ShieldCheck },
+    { name: "Antecedentes", path: "/AdminAntecedentes", icon: ShieldCheck },
+    { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
+    { name: "📊 Métricas", path: "/admin/metricas", icon: TrendingUp },
+    { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
+    { name: "Ver Site", path: "/", icon: Globe, clearLogin: true },
+  ] : isPrestador ? [
+    { name: "Início", path: createPageUrl("Dashboard"), icon: Home },
+    { name: "Meus Serviços", path: createPageUrl("MeusServicos"), icon: Briefcase },
+    { name: "Minha Agenda", path: createPageUrl("MinhaAgenda"), icon: Calendar },
+    { name: "Meus Pedidos", path: createPageUrl("MeusPedidos"), icon: ListOrdered },
+    { name: "Assistente IA", path: createPageUrl("Assistentevirtual"), icon: Bot },
+    { name: "Meu Perfil", path: createPageUrl("MeuPerfilPrestador"), icon: UserCog },
+    { name: "Ver Site", path: "/", icon: Globe, clearLogin: true },
+  ] : [
+    { name: "Início", path: "/", icon: Home },
+    { name: "Serviços", path: createPageUrl("ServicosCategoria"), icon: Briefcase },
+    { name: "Meus Pedidos", path: createPageUrl("MeusPedidos"), icon: ListOrdered },
+    { name: "Assistente IA", path: createPageUrl("Assistentevirtual"), icon: Bot },
+    { name: "Meu Perfil", path: createPageUrl("MeuPerfilPrestador"), icon: UserCog },
+  ];
 
 
   const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat', '/About', '/Contact', '/ServicoLanding', '/SolicitacaoConfirmada'];
@@ -161,9 +175,9 @@ export default function Layout({ children, currentPageName }) {
         <div className="min-h-screen bg-slate-900 overflow-x-hidden">
           <style>{`
             :root {
-              --primary: #8B6914;
-              --secondary: #C4713A;
-              --accent: #4A6741;
+              --primary: #0A81D1;
+              --secondary: #F4D35E;
+              --accent: #0D8A6F;
               --text-dark: #f1f5f9;
               --text-light: #FFFFFF;
               --background: #0f172a;
@@ -186,24 +200,24 @@ export default function Layout({ children, currentPageName }) {
               </Link>
 
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-8">
-                {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">
-                    <Image className="w-4 h-4" /> Toca Vision
-                  </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">
-                    <MessageCircle className="w-4 h-4" /> Toca TrIA
-                  </Link>
-                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">
-                    <MessageCircle className="w-4 h-4" /> Chat
-                  </Link>
-                </>}
-                <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Como funciona?</Link>
-                <Link to="/ComoFunciona#toca-tria" className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Toca TrIA</Link>
-                <Link to={createPageUrl("GeradorDeImagem")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Toca Vision</Link>
-                <Link to={createPageUrl("Seguranca")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Manual</Link>
+              <div className="hidden md:flex items-center gap-6">
+                {user ? (
+                  <>
+                    <Link to={createPageUrl("ServicosCategoria")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Serviços</Link>
+                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors">
+                      <ListOrdered className="w-4 h-4" /> Meus Pedidos
+                    </Link>
+                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors">
+                      <Bot className="w-4 h-4" /> Assistente IA
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Como Funciona</Link>
+                    <Link to={createPageUrl("ServicosCategoria")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Serviços</Link>
+                    <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Seja Prestador</Link>
+                  </>
+                )}
               </div>
 
               <div className="flex items-center gap-2">
@@ -248,31 +262,29 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Mobile Navigation */}
             {mobileMenuOpen &&
-            <div className="md:hidden mt-2 pb-4 space-y-2 px-4 bg-slate-700 rounded" data-testid="mobile-menu-content-public">
-                {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>
-                    <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Toca Vision</span>
-                  </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>
-                    <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Toca TrIA</span>
-                  </Link>
-                  <Link to={createPageUrl("Chat")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>
-                    <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
-                  </Link>
-                </>}
-                <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
-                <Link to="/ComoFunciona#toca-tria" className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Toca TrIA</Link>
-                <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Toca Vision</Link>
-                <Link to={createPageUrl("Seguranca")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
-                {!user &&
-              <div className="pt-2 border-t border-slate-600">
-                    <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="w-full bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200" size="sm">
-                      Entrar
-                    </Button>
-                  </div>
-              }
+            <div className="md:hidden mt-2 pb-4 space-y-1 px-4 bg-slate-700 rounded" data-testid="mobile-menu-content-public">
+                {user ? (
+                  <>
+                    <Link to={createPageUrl("ServicosCategoria")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
+                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>
+                      <ListOrdered className="w-4 h-4" /> Meus Pedidos
+                    </Link>
+                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>
+                      <Bot className="w-4 h-4" /> Assistente IA
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Como Funciona</Link>
+                    <Link to={createPageUrl("ServicosCategoria")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
+                    <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Seja Prestador</Link>
+                    <div className="pt-2 border-t border-slate-600">
+                      <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="w-full bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200" size="sm">
+                        Entrar
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
             }
           </nav>
@@ -392,7 +404,7 @@ export default function Layout({ children, currentPageName }) {
           }
           *:focus:not(:focus-visible) { outline: none; }
           a:not([class]) { text-decoration: underline; text-underline-offset: 2px; }
-          .skip-link { position: absolute; top: -40px; left: 0; background: #0A81D1; color: white; padding: 8px 16px; z-index: 100; transition: top 0.3s; }
+          .skip-link { position: absolute; top: -40px; left: 0; background: #8B6914; color: white; padding: 8px 16px; z-index: 100; transition: top 0.3s; }
           .skip-link:focus { top: 0; }
           @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
         `}</style>

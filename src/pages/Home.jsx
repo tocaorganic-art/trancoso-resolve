@@ -218,12 +218,12 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Serviços em Trancoso | Encontre Prestadores Locais";
+    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, BA";
 
     // Meta description otimizada
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Trancoso Resolve — A plataforma oficial de serviços em Trancoso, Bahia. Encontre diaristas, eletricistas, piscineiros e muito mais. Profissionais verificados com avaliações reais. Cadastre-se como prestador com 2 meses grátis.";
+    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada.";
 
     // Canonical + OG URL da Home
     let canonical = document.querySelector('link[rel="canonical"]');

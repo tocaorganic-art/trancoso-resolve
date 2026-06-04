@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
@@ -25,6 +25,13 @@ function FacebookIcon({ className }) {
 }
 
 export default function Login() {
+  useEffect(() => {
+    document.title = 'Entrar | Trancoso Resolve';
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = 'Acesse sua conta na Trancoso Resolve e gerencie seus pedidos ou serviços em Trancoso, Bahia.';
+  }, []);
+
   const handleGoogle = () => base44.auth.loginWithProvider("google", "/");
   const handleMicrosoft = () => base44.auth.loginWithProvider("microsoft", "/");
   const handleFacebook = () => base44.auth.loginWithProvider("facebook", "/");

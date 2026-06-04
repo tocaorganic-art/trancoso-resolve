@@ -21,20 +21,24 @@ export default function ServicoLocalPage({
   serviceLabel,
 }) {
   useEffect(() => {
-    document.title = title;
+    // Padrão: "[Nome do Serviço] em Trancoso | Trancoso Resolve"
+    const seoTitle = title.includes('| Trancoso Resolve') ? title : `${title} | Trancoso Resolve`;
+    const seoDesc = metaDescription || `Encontre ${serviceLabel || category} verificado em Trancoso, Bahia. Profissionais avaliados, atendimento rápido e seguro.`;
+
+    document.title = seoTitle;
 
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = metaDescription;
+    meta.content = seoDesc;
 
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
-    ogTitle.content = title;
+    ogTitle.content = seoTitle;
 
     let ogDesc = document.querySelector('meta[property="og:description"]');
     if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
-    ogDesc.content = metaDescription;
-  }, [title, metaDescription]);
+    ogDesc.content = seoDesc;
+  }, [title, metaDescription, serviceLabel, category]);
 
   const searchUrl = createPageUrl('ServicosCategoria', `?cat=${encodeURIComponent(category)}`);
 
