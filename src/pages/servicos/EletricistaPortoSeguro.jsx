@@ -1,30 +1,26 @@
-import ServicoLocalPagePS from '@/components/servicos/ServicoLocalPagePS';
+import ServicoLocalPage from '@/components/servicos/ServicoLocalPage';
 
 export default function EletricistaPortoSeguro() {
   return (
-    <ServicoLocalPagePS
+    <ServicoLocalPage
       title="Eletricista em Porto Seguro | Trancoso Resolve"
-      metaDescription="Encontre eletricista verificado em Porto Seguro, BA. Profissionais avaliados para emergências elétricas, instalações e manutenção. Solicite agora pela Trancoso Resolve."
-      keywords="eletricista Porto Seguro, eletricista Porto Seguro BA, eletricista Porto Seguro Bahia, elétrica residencial Porto Seguro, profissional Porto Seguro Bahia"
-      canonical="https://trancosoresolve.com.br/servicos/eletricista-porto-seguro"
+      metaDescription="Encontre eletricista verificado em Porto Seguro, BA. Profissionais avaliados, atendimento rápido. Solicite agora pela Trancoso Resolve."
       h1="Eletricista em Porto Seguro"
-      intro="Uma falha elétrica não pode esperar. Em Porto Seguro, a Trancoso Resolve conecta você a eletricistas locais verificados, prontos para emergências, instalações e manutenção preventiva em residências, pousadas e estabelecimentos comerciais."
+      intro="Para instalações e reparos elétricos em Porto Seguro com segurança e agilidade. A Trancoso Resolve conecta você com eletricistas verificados, prontos para atender residências, pousadas e empreendimentos na região."
       servicesTitle="Serviços de eletricista em Porto Seguro"
       services={[
-        'Atendimento emergencial para curtos-circuitos, queda de energia e disjuntores',
-        'Instalação e reforma de sistemas elétricos residenciais e comerciais',
-        'Instalação de iluminação interna, externa e decorativa',
-        'Manutenção preventiva de geradores e redes estabilizadas',
-        'Adequação elétrica para piscinas, spas e equipamentos de lazer',
-        'Instalação de sistemas de energia solar fotovoltaica',
-        'Certificação e laudos elétricos para imóveis e estabelecimentos',
+        'Instalação e manutenção elétrica residencial e comercial',
+        'Atendimento de emergências elétricas em Porto Seguro',
+        'Instalação de ar-condicionado, chuveiros elétricos e equipamentos',
+        'Rede de tomadas e iluminação para reformas e novas construções',
+        'Vistoria e laudo elétrico para imóveis e pousadas',
+        'Instalação de quadros de distribuição e disjuntores',
       ]}
-      howTitle="Eletricistas verificados em Porto Seguro"
-      howText="Porto Seguro tem uma rede elétrica que sofre com alta demanda nas temporadas, oscilações de tensão e estruturas antigas em muitas pousadas e residências. Os eletricistas da Trancoso Resolve conhecem essas particularidades locais. Todos são verificados, têm avaliações públicas e trabalham com responsabilidade técnica."
-      cta="Descreva o problema ou projeto elétrico e receba retorno de eletricistas verificados em Porto Seguro."
+      howTitle="Por que contratar eletricista pela Trancoso Resolve em Porto Seguro?"
+      howText="Eletricistas com verificação de identidade e avaliações de clientes anteriores. Você agenda diretamente e recebe profissionais habilitados — com segurança e sem complicações."
+      cta="Descreva o problema elétrico e receba contato de eletricistas verificados em Porto Seguro."
       ctaButton="Contratar eletricista em Porto Seguro"
       category="Eletricista"
-      serviceLabel="eletricistas"
       heroEmoji="⚡"
     />
   );

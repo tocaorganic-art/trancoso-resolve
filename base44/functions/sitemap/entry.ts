@@ -33,6 +33,13 @@ const staticPages = [
   { path: '/servicos/cozinheiro-porto-seguro', priority: '0.9', changefreq: 'weekly' },
   { path: '/servicos/jardineiro-porto-seguro', priority: '0.9', changefreq: 'weekly' },
   { path: '/servicos/pedreiro-porto-seguro', priority: '0.9', changefreq: 'weekly' },
+  // Caraíva
+  { path: '/servicos/diarista-caraiva', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/eletricista-caraiva', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/piscineiro-caraiva', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/cozinheiro-caraiva', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/jardineiro-caraiva', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/pedreiro-caraiva', priority: '0.9', changefreq: 'weekly' },
 ];
 
 // Landing pages SEO por categoria de serviço
@@ -171,7 +178,7 @@ ${urls.join('')}
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
         'Cache-Control': 'public, max-age=3600',
-        'X-Robots-Tag': 'noindex',
+        'X-Robots-Tag': 'noindex, nofollow',
       },
     });
   } catch (error) {

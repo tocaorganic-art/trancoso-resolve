@@ -50,6 +50,12 @@ import PiscineiroPortoSeguro from '@/pages/servicos/PiscineiroPortoSeguro';
 import CozinheiroPortoSeguro from '@/pages/servicos/CozinheiroPortoSeguro';
 import JardineiroPortoSeguro from '@/pages/servicos/JardineiroPortoSeguro';
 import PedreiroPortoSeguro from '@/pages/servicos/PedreiroPortoSeguro';
+import DiaristaCaraiva from '@/pages/servicos/DiaristaCaraiva';
+import EletricistaCaraiva from '@/pages/servicos/EletricistaCaraiva';
+import PiscineiroCaraiva from '@/pages/servicos/PiscineiroCaraiva';
+import CozinheiroCaraiva from '@/pages/servicos/CozinheiroCaraiva';
+import JardineiroCaraiva from '@/pages/servicos/JardineiroCaraiva';
+import PedreiroCaraiva from '@/pages/servicos/PedreiroCaraiva';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -248,12 +254,6 @@ const AuthenticatedApp = () => {
             <AnimatedPage><RioVerdeTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
-        <Route path="/servicos/pitinga-trancoso" element={
-          <LayoutWrapper currentPageName="PitingaTrancoso">
-            <AnimatedPage><PitingaTrancoso /></AnimatedPage>
-          </LayoutWrapper>
-        } />
-        {/* Porto Seguro */}
         <Route path="/servicos/diarista-porto-seguro" element={
           <LayoutWrapper currentPageName="DiaristaPortoSeguro">
             <AnimatedPage><DiaristaPortoSeguro /></AnimatedPage>
@@ -282,6 +282,41 @@ const AuthenticatedApp = () => {
         <Route path="/servicos/pedreiro-porto-seguro" element={
           <LayoutWrapper currentPageName="PedreiroPortoSeguro">
             <AnimatedPage><PedreiroPortoSeguro /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/diarista-caraiva" element={
+          <LayoutWrapper currentPageName="DiaristaCaraiva">
+            <AnimatedPage><DiaristaCaraiva /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/eletricista-caraiva" element={
+          <LayoutWrapper currentPageName="EletricistaCaraiva">
+            <AnimatedPage><EletricistaCaraiva /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/piscineiro-caraiva" element={
+          <LayoutWrapper currentPageName="PiscineiroCaraiva">
+            <AnimatedPage><PiscineiroCaraiva /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/cozinheiro-caraiva" element={
+          <LayoutWrapper currentPageName="CozinheiroCaraiva">
+            <AnimatedPage><CozinheiroCaraiva /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/jardineiro-caraiva" element={
+          <LayoutWrapper currentPageName="JardineiroCaraiva">
+            <AnimatedPage><JardineiroCaraiva /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/pedreiro-caraiva" element={
+          <LayoutWrapper currentPageName="PedreiroCaraiva">
+            <AnimatedPage><PedreiroCaraiva /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/pitinga-trancoso" element={
+          <LayoutWrapper currentPageName="PitingaTrancoso">
+            <AnimatedPage><PitingaTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
 

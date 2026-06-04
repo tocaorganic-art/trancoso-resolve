@@ -1,30 +1,26 @@
-import ServicoLocalPagePS from '@/components/servicos/ServicoLocalPagePS';
+import ServicoLocalPage from '@/components/servicos/ServicoLocalPage';
 
 export default function PiscineiroPortoSeguro() {
   return (
-    <ServicoLocalPagePS
+    <ServicoLocalPage
       title="Piscineiro em Porto Seguro | Trancoso Resolve"
-      metaDescription="Encontre piscineiro verificado em Porto Seguro, BA. Tratamento, manutenção e limpeza de piscinas. Profissionais avaliados com atendimento rápido. Solicite pela Trancoso Resolve."
-      keywords="piscineiro Porto Seguro, piscineiro Porto Seguro BA, manutenção piscina Porto Seguro, limpeza piscina Porto Seguro Bahia, profissional Porto Seguro Bahia"
-      canonical="https://trancosoresolve.com.br/servicos/piscineiro-porto-seguro"
+      metaDescription="Encontre piscineiro verificado em Porto Seguro, BA. Profissionais avaliados, atendimento rápido. Solicite agora pela Trancoso Resolve."
       h1="Piscineiro em Porto Seguro"
-      intro="Manter a piscina limpa e com química equilibrada é essencial em Porto Seguro, onde o calor é constante. A Trancoso Resolve conecta você a piscineiros verificados, com experiência em piscinas residenciais, de pousadas e resorts na região."
+      intro="Mantenha a piscina da sua residência ou pousada em Porto Seguro sempre limpa e equilibrada. A Trancoso Resolve conecta você com piscineiros verificados e avaliados por clientes reais."
       servicesTitle="Serviços de piscineiro em Porto Seguro"
       services={[
-        'Tratamento químico semanal e quinzenal (cloro, pH, alcalinidade)',
-        'Limpeza de fundo, paredes e filtros',
-        'Manutenção e reparo de bombas, motores e equipamentos de filtragem',
-        'Algas e problemas de água: diagnóstico e tratamento',
-        'Limpeza pré e pós-temporada para imóveis de segunda residência',
-        'Instalação e revisão de sistemas de aquecimento de piscina',
-        'Vistorias técnicas para laudos de piscinas em condomínios e pousadas',
+        'Limpeza e tratamento de piscina residencial e de pousadas',
+        'Controle de pH, cloro e produtos químicos',
+        'Manutenção de bombas, filtros e equipamentos',
+        'Limpeza de fundo, paredes e borda de piscina',
+        'Tratamento para piscinas com algas ou água turva',
+        'Manutenção periódica para imóveis de temporada',
       ]}
-      howTitle="Piscineiros confiáveis para Porto Seguro"
-      howText="Em Porto Seguro, piscinas ficam em uso praticamente o ano todo — o que exige manutenção constante e profissional qualificado. Todos os piscineiros da Trancoso Resolve passam por verificação e têm histórico de avaliações de clientes reais. Você agenda direto, sem intermediários."
-      cta="Informe o tipo e tamanho da sua piscina e receba contato de piscineiros verificados em Porto Seguro."
+      howTitle="Por que contratar piscineiro pela Trancoso Resolve em Porto Seguro?"
+      howText="Piscineiros verificados, com histórico de avaliações e análise de antecedentes. Agende a manutenção diretamente pelo WhatsApp, sem intermediários, com profissionais que conhecem as condições climáticas de Porto Seguro."
+      cta="Descreva a situação da sua piscina e receba contato de piscineiros verificados em Porto Seguro."
       ctaButton="Contratar piscineiro em Porto Seguro"
       category="Piscineiro"
-      serviceLabel="piscineiros"
       heroEmoji="🏊"
     />
   );
