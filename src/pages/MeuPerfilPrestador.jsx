@@ -16,6 +16,7 @@ import ServiceLocationMap from '@/components/map/ServiceLocationMap';
 import { Progress } from '@/components/ui/progress';
 import PermissionChecker from "../components/auth/PermissionChecker";
 import AccountDeletionDialog from '@/components/account/AccountDeletionDialog';
+import SecurityBadge from '@/components/security/SecurityBadge';
 
 const occupations = ["Limpeza", "Garçom", "Pedreiro", "Jardinagem", "Babá", "Eletricista", "Encanador", "Pintor", "Cozinheiro", "Outro"];
 const priceRanges = ["$", "$$", "$$$"];
@@ -333,6 +334,9 @@ function MeuPerfilPrestadorContent() {
           <CardDescription className="dark:text-slate-400">Mantenha suas informações atualizadas para atrair mais clientes.</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="flex items-center gap-3 mb-4">
+            <SecurityBadge twoFaEnabled={!!user?.two_fa_enabled} />
+          </div>
           <ProfileCompleteness formData={formData} />
 
           {!provider && (
