@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
+import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
+import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 const categoryImageMap = {
@@ -690,9 +692,18 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Lead Capture Form */}
+        <LeadCaptureForm
+          serviceInterest="Geral"
+          serviceLabel="um profissional"
+          source="home"
+        />
+
         {/* CTA Prestadores */}
         <CTAPrestador vagasRestantes={vagasRestantes} />
       </div>
+
+      <WhatsAppStickyBar serviceLabel="um profissional" />
     </div>
   );
 }

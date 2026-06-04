@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Loader2, ArrowRight, Shield } from 'lucide-react';
+import { CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 
-export default function LeadCaptureForm({ serviceInterest, serviceLabel }) {
-  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+function formatPhone(value) {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  if (digits.length <= 2) return digits.length ? `(${digits}` : '';
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  if (digits.length <= 11) return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  return value;
+}
+
+export default function LeadCaptureForm({ serviceInterest, serviceLabel, source }) {
+  const [form, setForm] = useState({ name: '', phone: '', message: '' });
+  const [status, setStatus] = useState('idle');
+
+  const handlePhoneChange = (e) => {
+    setForm(f => ({ ...f, phone: formatPhone(e.target.value) }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,13 +26,12 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel }) {
       const lead = await base44.entities.LeadPreLancamento.create({
         name: form.name,
         phone: form.phone,
-        email: form.email || undefined,
-        message: form.message,
+        whatsapp: form.phone,
+        message: form.message || undefined,
         service_interest: serviceInterest,
-        source: 'pagina-servico',
+        source: source || `pagina-servico-${(serviceInterest || '').toLowerCase().replace(/\s+/g, '-')}`,
         type: 'cliente',
       });
-      // Dispara notificação em background (não bloqueia o UX)
       if (lead?.id) {
         base44.functions.invoke('notifyNewLead', { leadId: lead.id }).catch(() => {});
       }
@@ -32,92 +43,98 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel }) {
 
   if (status === 'success') {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
-        <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-        <h3 className="text-xl font-bold text-green-800 mb-2">Pedido recebido! 🎉</h3>
-        <p className="text-green-700 leading-relaxed">
-          Em breve você receberá contato de {serviceLabel || serviceInterest} verificados em Trancoso diretamente pelo seu WhatsApp.
+      <div
+        className="rounded-2xl p-8 text-center border"
+        style={{ background: '#F5E6CC', borderColor: '#E8D5B7' }}
+      >
+        <CheckCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#4A6741' }} />
+        <h3 className="text-xl font-bold mb-2" style={{ color: '#2C1A0E' }}>Recebemos seu contato! ✅</h3>
+        <p style={{ color: '#6B4F3A' }} className="leading-relaxed">
+          Em breve um de nossos consultores entrará em contato pelo WhatsApp.
         </p>
-        {form.email && (
-          <p className="text-green-600 text-sm mt-2">Enviamos uma confirmação para {form.email}.</p>
-        )}
       </div>
     );
   }
 
+  const displayLabel = serviceLabel || serviceInterest || 'profissional';
+
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-      <div className="flex items-center gap-2 mb-1">
-        <Shield className="w-5 h-5 text-cyan-500" />
-        <span className="text-xs font-semibold text-cyan-600 uppercase tracking-wide">Profissionais verificados</span>
-      </div>
-      <h2 className="text-2xl font-bold text-slate-900 mb-2">
-        Receba contato de {serviceLabel || serviceInterest} em Trancoso
+    <div
+      className="rounded-2xl p-6 md:p-8 border"
+      style={{ background: '#F5E6CC', borderColor: '#E8D5B7' }}
+    >
+      <h2 className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2C1A0E' }}>
+        Precisa de {displayLabel} agora?
       </h2>
-      <p className="text-slate-500 text-sm mb-6">
-        Preencha abaixo e profissionais locais verificados entrarão em contato direto com você — sem intermediários.
+      <p className="text-sm mb-6" style={{ color: '#6B4F3A' }}>
+        Deixe seu contato e entraremos em 5 minutos pelo WhatsApp
       </p>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Seu nome *</label>
+            <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+              Nome <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               required
               value={form.name}
               onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              placeholder="Ex: Maria Oliveira"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              placeholder="Seu nome"
+              className="w-full rounded-lg border px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2"
+              style={{ borderColor: '#E8D5B7', color: '#2C1A0E', focusRingColor: '#8B6914' }}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">WhatsApp *</label>
+            <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+              WhatsApp <span className="text-red-500">*</span>
+            </label>
             <input
               type="tel"
               required
               value={form.phone}
-              onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-              placeholder="(73) 99999-0000"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              onChange={handlePhoneChange}
+              placeholder="(73) 9 0000-0000"
+              className="w-full rounded-lg border px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2"
+              style={{ borderColor: '#E8D5B7', color: '#2C1A0E' }}
             />
           </div>
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Email (opcional — para confirmação)</label>
-          <input
-            type="email"
-            value={form.email}
-            onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-            placeholder="seu@email.com"
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">O que você precisa? (opcional)</label>
+          <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+            Mensagem (opcional)
+          </label>
           <textarea
             value={form.message}
             onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-            placeholder="Descreva brevemente o serviço, a propriedade ou a urgência..."
+            placeholder="Descreva brevemente o que precisa..."
             rows={3}
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 resize-none"
+            className="w-full rounded-lg border px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 resize-none"
+            style={{ borderColor: '#E8D5B7', color: '#2C1A0E' }}
           />
         </div>
+
         {status === 'error' && (
           <p className="text-red-600 text-sm">Erro ao enviar. Tente novamente.</p>
         )}
+
         <Button
           type="submit"
           disabled={status === 'loading'}
-          className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold text-base py-3"
+          className="w-full font-bold text-base py-3 text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+          style={{ background: '#8B6914', borderColor: '#8B6914' }}
         >
           {status === 'loading' ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Enviando...</>
           ) : (
-            <>Quero receber contato de profissionais <ArrowRight className="w-4 h-4 ml-2" /></>
+            <>Quero ser atendido agora <ArrowRight className="w-4 h-4 ml-1" /></>
           )}
         </Button>
-        <p className="text-xs text-slate-400 text-center">
-          🔒 Seus dados são usados somente para conectar com prestadores locais verificados. Sem spam.
+
+        <p className="text-xs text-center" style={{ color: '#A0785A' }}>
+          ✓ Resposta em até 5 min &nbsp;·&nbsp; ✓ Profissionais verificados &nbsp;·&nbsp; ✓ Sem compromisso
         </p>
       </form>
     </div>

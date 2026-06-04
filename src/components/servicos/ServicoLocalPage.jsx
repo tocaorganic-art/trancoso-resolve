@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import { CheckCircle, ArrowRight, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LeadCaptureForm from '@/components/servicos/LeadCaptureForm';
+import WhatsAppStickyBar from '@/components/servicos/WhatsAppStickyBar';
 
 export default function ServicoLocalPage({
   title,
@@ -107,6 +108,14 @@ export default function ServicoLocalPage({
       </section>
 
       <div className="container mx-auto max-w-4xl px-4 py-12 space-y-16">
+
+        {/* Lead Capture Form — antes da listagem */}
+        <LeadCaptureForm
+          serviceInterest={category}
+          serviceLabel={serviceLabel || category}
+          source={`pagina-servico-${(serviceLabel || category || '').toLowerCase().replace(/\s+/g, '-')}`}
+        />
+
         {/* Serviços */}
         <section>
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">{servicesTitle}</h2>
@@ -125,9 +134,6 @@ export default function ServicoLocalPage({
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{howTitle}</h2>
           <p className="text-slate-600 text-base leading-relaxed">{howText}</p>
         </section>
-
-        {/* Lead Capture Form */}
-        <LeadCaptureForm serviceInterest={category} serviceLabel={serviceLabel || category} />
 
         {/* CTA */}
         <section className="bg-gradient-to-r from-amber-700 to-amber-900 rounded-3xl p-8 md:p-12 text-center">
@@ -150,6 +156,8 @@ export default function ServicoLocalPage({
           </section>
         )}
       </div>
+
+      <WhatsAppStickyBar serviceLabel={serviceLabel || category} />
     </div>
   );
 }
