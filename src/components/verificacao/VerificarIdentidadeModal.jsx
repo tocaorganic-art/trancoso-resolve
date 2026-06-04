@@ -11,8 +11,13 @@ import { analisarDocumento } from "@/functions/analisarDocumento";
 export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSuccess }) {
   const [step, setStep] = useState("form"); // form | uploading | analyzing | done
   const [documentType, setDocumentType] = useState("");
+  const [uploadMode, setUploadMode] = useState("inteiro"); // inteiro | frente_verso
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [fileFrente, setFileFrente] = useState(null);
+  const [previewFrente, setPreviewFrente] = useState(null);
+  const [fileVerso, setFileVerso] = useState(null);
+  const [previewVerso, setPreviewVerso] = useState(null);
   const [userType] = useState(user?.tipo_pessoa || 'pf');
   const [hasPhysicalLocation] = useState(user?.tem_ponto_fisico_em_trancoso || false);
 
@@ -23,24 +28,58 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
     setPreview(URL.createObjectURL(f));
   };
 
+  const handleFrenteChange = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    setFileFrente(f);
+    setPreviewFrente(URL.createObjectURL(f));
+  };
+
+  const handleVersoChange = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    setFileVerso(f);
+    setPreviewVerso(URL.createObjectURL(f));
+  };
+
+  const isFormValid = () => {
+    if (!documentType) return false;
+    if (uploadMode === "inteiro") return !!file;
+    return !!fileFrente && !!fileVerso;
+  };
+
   const handleSubmit = async () => {
-    if (!file || !documentType) {
-      toast.error("Selecione o tipo de documento e faça o upload da imagem.");
+    if (!isFormValid()) {
+      toast.error("Selecione o tipo de documento e faça o upload das imagens.");
       return;
     }
 
     try {
       setStep("uploading");
 
-      // 1. Upload do arquivo
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      let document_url;
+      let document_url_verso = null;
+
+      if (uploadMode === "inteiro") {
+        const result = await base44.integrations.Core.UploadFile({ file });
+        document_url = result.file_url;
+      } else {
+        const [resFrente, resVerso] = await Promise.all([
+          base44.integrations.Core.UploadFile({ file: fileFrente }),
+          base44.integrations.Core.UploadFile({ file: fileVerso }),
+        ]);
+        document_url = resFrente.file_url;
+        document_url_verso = resVerso.file_url;
+      }
 
       // 2. Criar registro de verificação
       const verificacao = await base44.entities.Verificacao.create({
         user_email: user.email,
         user_name: user.full_name,
-        document_url: file_url,
+        document_url,
+        ...(document_url_verso && { document_url_verso }),
         document_type: documentType,
+        upload_mode: uploadMode,
         status: "Em Análise",
         submission_date: new Date().toISOString(),
       });
@@ -50,7 +89,8 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
       // 3. Chamar IA para análise
       await analisarDocumento({
         verificacao_id: verificacao.id,
-        document_url: file_url,
+        document_url,
+        ...(document_url_verso && { document_url_verso }),
         document_type: documentType,
         user_full_name: user.full_name,
       });
@@ -69,8 +109,13 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
   const handleClose = () => {
     setStep("form");
     setDocumentType("");
+    setUploadMode("inteiro");
     setFile(null);
     setPreview(null);
+    setFileFrente(null);
+    setPreviewFrente(null);
+    setFileVerso(null);
+    setPreviewVerso(null);
     onClose();
   };
 
@@ -131,40 +176,107 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
               </Select>
             </div>
 
-            {/* Upload */}
+            {/* Modo de upload */}
             <div className="space-y-1.5">
-              <Label>Foto do Documento</Label>
-              {preview ? (
-                <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-                  <img src={preview} alt="Documento" className="w-full h-48 object-contain" />
-                  {step === "form" && (
-                    <button
-                      type="button"
-                      onClick={() => { setFile(null); setPreview(null); }}
-                      className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md hover:bg-black/80 transition"
-                    >
-                      Trocar
-                    </button>
+              <Label>Forma de envio</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setUploadMode("inteiro")}
+                  className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${
+                    uploadMode === "inteiro"
+                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                  }`}
+                >
+                  📄 Documento inteiro
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUploadMode("frente_verso")}
+                  className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${
+                    uploadMode === "frente_verso"
+                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                  }`}
+                >
+                  🪪 Frente e verso
+                </button>
+              </div>
+            </div>
+
+            {/* Upload */}
+            {uploadMode === "inteiro" ? (
+              <div className="space-y-1.5">
+                <Label>Foto do Documento</Label>
+                {preview ? (
+                  <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                    <img src={preview} alt="Documento" className="w-full h-48 object-contain" />
+                    {step === "form" && (
+                      <button type="button" onClick={() => { setFile(null); setPreview(null); }}
+                        className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md hover:bg-black/80 transition">
+                        Trocar
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <label htmlFor="doc-upload"
+                    className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
+                    <FileImage className="w-10 h-10 text-slate-300 mb-2" />
+                    <span className="text-sm font-medium text-slate-500">Clique para selecionar a foto</span>
+                    <span className="text-xs text-slate-400 mt-1">JPG, PNG ou PDF (máx. 10MB)</span>
+                    <input id="doc-upload" type="file" accept="image/*,application/pdf" className="hidden" onChange={handleFileChange} />
+                  </label>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {/* Frente */}
+                <div className="space-y-1.5">
+                  <Label>Frente do Documento</Label>
+                  {previewFrente ? (
+                    <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                      <img src={previewFrente} alt="Frente" className="w-full h-36 object-contain" />
+                      {step === "form" && (
+                        <button type="button" onClick={() => { setFileFrente(null); setPreviewFrente(null); }}
+                          className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md hover:bg-black/80 transition">
+                          Trocar
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <label htmlFor="doc-frente"
+                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
+                      <FileImage className="w-8 h-8 text-slate-300 mb-1" />
+                      <span className="text-sm font-medium text-slate-500">Frente</span>
+                      <input id="doc-frente" type="file" accept="image/*,application/pdf" className="hidden" onChange={handleFrenteChange} />
+                    </label>
                   )}
                 </div>
-              ) : (
-                <label
-                  htmlFor="doc-upload"
-                  className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
-                >
-                  <FileImage className="w-10 h-10 text-slate-300 mb-2" />
-                  <span className="text-sm font-medium text-slate-500">Clique para selecionar a foto</span>
-                  <span className="text-xs text-slate-400 mt-1">JPG, PNG ou PDF (máx. 10MB)</span>
-                  <input
-                    id="doc-upload"
-                    type="file"
-                    accept="image/*,application/pdf"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </label>
-              )}
-            </div>
+                {/* Verso */}
+                <div className="space-y-1.5">
+                  <Label>Verso do Documento</Label>
+                  {previewVerso ? (
+                    <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                      <img src={previewVerso} alt="Verso" className="w-full h-36 object-contain" />
+                      {step === "form" && (
+                        <button type="button" onClick={() => { setFileVerso(null); setPreviewVerso(null); }}
+                          className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md hover:bg-black/80 transition">
+                          Trocar
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <label htmlFor="doc-verso"
+                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
+                      <FileImage className="w-8 h-8 text-slate-300 mb-1" />
+                      <span className="text-sm font-medium text-slate-500">Verso</span>
+                      <input id="doc-verso" type="file" accept="image/*,application/pdf" className="hidden" onChange={handleVersoChange} />
+                    </label>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Dicas */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
@@ -202,7 +314,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
               </Button>
               <Button
                 onClick={handleSubmit}
-                disabled={step !== "form" || !file || !documentType}
+                disabled={step !== "form" || !isFormValid()}
                 className="flex-1 bg-blue-600 hover:bg-blue-700"
               >
                 <Upload className="w-4 h-4 mr-2" />
