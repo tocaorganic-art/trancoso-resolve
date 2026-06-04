@@ -68,6 +68,53 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Atualiza o Relatório Diário automaticamente
+    try {
+      const hoje = new Date().toISOString().split('T')[0];
+      const relatorios = await base44.asServiceRole.entities.RelatorioDiario.filter({ data: hoje });
+      
+      if (relatorios && relatorios.length > 0) {
+        // Atualiza relatório existente
+        const relatorio = relatorios[0];
+        const tarefasConcluidas = relatorio.tarefas_concluidas || [];
+        tarefasConcluidas.push({
+          descricao: `Serviço concluído - Payment ${payment.id}`,
+          request_id: payment.request_id,
+          valor: payment.amount_provider / 100,
+          horario: new Date().toLocaleTimeString('pt-BR'),
+        });
+        
+        await base44.asServiceRole.entities.RelatorioDiario.update(relatorio.id, {
+          tarefas_concluidas: tarefasConcluidas,
+          metricas: {
+            ...relatorio.metricas,
+            servicos_concluidos: (relatorio.metricas?.servicos_concluidos || 0) + 1,
+            receita_gerada: (relatorio.metricas?.receita_gerada || 0) + (payment.amount_provider / 100),
+          },
+          ultima_atualizacao: new Date().toISOString(),
+        });
+      } else {
+        // Cria novo relatório do dia
+        await base44.asServiceRole.entities.RelatorioDiario.create({
+          data: hoje,
+          tarefas_concluidas: [{
+            descricao: `Serviço concluído - Payment ${payment.id}`,
+            request_id: payment.request_id,
+            valor: payment.amount_provider / 100,
+            horario: new Date().toLocaleTimeString('pt-BR'),
+          }],
+          metricas: {
+            servicos_concluidos: 1,
+            receita_gerada: payment.amount_provider / 100,
+          },
+          ultima_atualizacao: new Date().toISOString(),
+        });
+      }
+      console.log(`[confirmarServico] Relatório diário atualizado para ${hoje}`);
+    } catch (e) {
+      console.warn(`[confirmarServico] Não foi possível atualizar relatório diário: ${e.message}`);
+    }
+
     console.log(`[confirmarServico] Pagamento ${payment.id} capturado e ServiceRequest ${payment.request_id} marcada como Concluída`);
 
     return Response.json({
