@@ -41,6 +41,9 @@ import EncanadorTrancoso from '@/pages/servicos/EncanadorTrancoso';
 import ChefTrancoso from '@/pages/servicos/ChefTrancoso';
 import SegurancaTrancoso from '@/pages/servicos/SegurancaTrancoso';
 import MotoristaTrancoso from '@/pages/servicos/MotoristaTrancoso';
+import QuadradoTrancoso from '@/pages/servicos/QuadradoTrancoso';
+import RioVerdeTrancoso from '@/pages/servicos/RioVerdeTrancoso';
+import PitingaTrancoso from '@/pages/servicos/PitingaTrancoso';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -227,6 +230,21 @@ const AuthenticatedApp = () => {
         <Route path="/servicos/motorista-trancoso" element={
           <LayoutWrapper currentPageName="MotoristaTrancoso">
             <AnimatedPage><MotoristaTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/quadrado-trancoso" element={
+          <LayoutWrapper currentPageName="QuadradoTrancoso">
+            <AnimatedPage><QuadradoTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/rio-verde-trancoso" element={
+          <LayoutWrapper currentPageName="RioVerdeTrancoso">
+            <AnimatedPage><RioVerdeTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/pitinga-trancoso" element={
+          <LayoutWrapper currentPageName="PitingaTrancoso">
+            <AnimatedPage><PitingaTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
 

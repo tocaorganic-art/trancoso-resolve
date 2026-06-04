@@ -23,6 +23,9 @@ const staticPages = [
   { path: '/servicos/chef-trancoso', priority: '0.9', changefreq: 'weekly' },
   { path: '/servicos/seguranca-trancoso', priority: '0.9', changefreq: 'weekly' },
   { path: '/servicos/motorista-trancoso', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/quadrado-trancoso', priority: '0.85', changefreq: 'weekly' },
+  { path: '/servicos/rio-verde-trancoso', priority: '0.85', changefreq: 'weekly' },
+  { path: '/servicos/pitinga-trancoso', priority: '0.85', changefreq: 'weekly' },
 ];
 
 // Landing pages SEO por categoria de serviço

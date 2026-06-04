@@ -1,25 +1,30 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
-    const { leadId } = body;
 
-    if (!leadId) {
-      return Response.json({ error: 'leadId is required' }, { status: 400 });
+    // Suporta chamada direta (leadId) e automação de entity (body.data ou event.entity_id)
+    let lead = body.data || null;
+
+    if (!lead) {
+      const leadId = body.leadId || body.event?.entity_id;
+      if (!leadId) {
+        return Response.json({ error: 'leadId is required' }, { status: 400 });
+      }
+      const leads = await base44.asServiceRole.entities.LeadPreLancamento.filter({ id: leadId });
+      lead = leads?.[0];
     }
-
-    // Busca os dados do lead
-    const leads = await base44.asServiceRole.entities.LeadPreLancamento.filter({ id: leadId });
-    const lead = leads?.[0];
 
     if (!lead) {
       return Response.json({ error: 'Lead not found' }, { status: 404 });
     }
 
     const serviceLabel = lead.service_interest || 'Serviço';
-    const sourceLabel = lead.source === 'pagina-servico' ? `Página de serviço (${serviceLabel})` : (lead.source || 'Plataforma');
+    const sourceLabel = lead.source === 'pagina-servico'
+      ? `Página de serviço (${serviceLabel})`
+      : (lead.source || 'Plataforma');
 
     // 1. Email de boas-vindas para o lead (se tiver email)
     if (lead.email) {
@@ -27,8 +32,7 @@ Deno.serve(async (req) => {
         to: lead.email,
         from_name: 'Trancoso Resolve',
         subject: `${lead.name}, recebemos seu pedido! 🎉`,
-        body: `
-Olá, ${lead.name}!
+        body: `Olá, ${lead.name}!
 
 Recebemos sua solicitação de ${serviceLabel} em Trancoso e já estamos conectando você com os melhores profissionais da região.
 
@@ -42,8 +46,7 @@ O que acontece agora:
 Se tiver dúvidas, acesse: https://trancosoresolve.com.br
 
 Att,
-Equipe Trancoso Resolve
-        `.trim(),
+Equipe Trancoso Resolve`,
       });
     }
 
@@ -52,8 +55,7 @@ Equipe Trancoso Resolve
       to: 'contato@trancosoresolve.com.br',
       from_name: 'Trancoso Resolve — Sistema',
       subject: `🔔 Novo Lead: ${lead.name} — ${serviceLabel}`,
-      body: `
-Novo lead capturado na plataforma!
+      body: `Novo lead capturado na plataforma!
 
 📋 DADOS DO LEAD
 Nome: ${lead.name}
@@ -66,8 +68,7 @@ Mensagem: ${lead.message || '(não informado)'}
 
 🕐 Recebido em: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Bahia' })}
 
-Acesse o painel admin para mais detalhes.
-      `.trim(),
+Acesse o painel admin para mais detalhes.`,
     });
 
     return Response.json({ success: true, message: 'Notifications sent' });
