@@ -324,6 +324,15 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         } />
 
+        {/* Aliases com hífen → redirect para CamelCase */}
+        <Route path="/como-funciona" element={<Navigate to="/ComoFunciona" replace />} />
+        <Route path="/seja-prestador" element={<Navigate to="/SejaPrestador" replace />} />
+        <Route path="/servicos" element={<Navigate to="/ServicosCategoria" replace />} />
+        <Route path="/sobre" element={<Navigate to="/About" replace />} />
+        <Route path="/contato" element={<Navigate to="/Contact" replace />} />
+        <Route path="/planos" element={<Navigate to="/Planos" replace />} />
+        <Route path="/politica-privacidade" element={<Navigate to="/PoliticaPrivacidade" replace />} />
+
         {/* Aliases sem barra para garantir acesso em hosting estático */}
         <Route path="/servicos-diarista-trancoso" element={<LayoutWrapper currentPageName="DiaristaTrancoso"><AnimatedPage><DiaristaTrancoso /></AnimatedPage></LayoutWrapper>} />
         <Route path="/servicos-eletricista-trancoso" element={<LayoutWrapper currentPageName="EletricistaTrancoso"><AnimatedPage><EletricistaTrancoso /></AnimatedPage></LayoutWrapper>} />
