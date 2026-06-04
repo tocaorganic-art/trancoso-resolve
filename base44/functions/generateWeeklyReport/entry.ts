@@ -1,6 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
-const ADMIN_EMAIL = 'tocaorganic@gmail.com';
+const ADMIN_EMAIL = 'suporte@trancosoresolve.com.br';
 
 function weekStart(daysBack = 0) {
   const d = new Date();
