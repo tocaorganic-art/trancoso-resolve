@@ -161,9 +161,9 @@ export default function Layout({ children, currentPageName }) {
         <div className="min-h-screen bg-slate-900 overflow-x-hidden">
           <style>{`
             :root {
-              --primary: #0A81D1;
-              --secondary: #F4D35E;
-              --accent: #0D8A6F;
+              --primary: #8B6914;
+              --secondary: #C4713A;
+              --accent: #4A6741;
               --text-dark: #f1f5f9;
               --text-light: #FFFFFF;
               --background: #0f172a;
@@ -188,22 +188,22 @@ export default function Layout({ children, currentPageName }) {
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-8">
                 {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">
+                  <Link to={createPageUrl("GeradorDeImagem")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">
                     <Image className="w-4 h-4" /> Toca Vision
                   </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">
+                  <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">
                     <MessageCircle className="w-4 h-4" /> Toca TrIA
                   </Link>
-                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">
+                  <Link to={createPageUrl("Chat")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">
                     <MessageCircle className="w-4 h-4" /> Chat
                   </Link>
                 </>}
-                <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Como funciona?</Link>
-                <Link to="/ComoFunciona#toca-tria" className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Toca TrIA</Link>
-                <Link to={createPageUrl("GeradorDeImagem")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Toca Vision</Link>
-                <Link to={createPageUrl("Seguranca")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors drop-shadow-sm">Manual</Link>
+                <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Seja um prestador</Link>
+                <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Como funciona?</Link>
+                <Link to="/ComoFunciona#toca-tria" className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Toca TrIA</Link>
+                <Link to={createPageUrl("GeradorDeImagem")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Toca Vision</Link>
+                <Link to={createPageUrl("Seguranca")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Segurança</Link>
+                <Link to={createPageUrl("Manual")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors duration-200 drop-shadow-sm">Manual</Link>
               </div>
 
               <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export default function Layout({ children, currentPageName }) {
                     </DropdownMenuContent>
                   </DropdownMenu> :
 
-                <Button onClick={() => {sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="bg-[var(--primary)] text-[var(--text-light)] hover:bg-blue-700" size="sm" data-testid="login-button">
+                <Button onClick={() => {sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200" size="sm" data-testid="login-button">
                     Entrar
                   </Button>
                 }
@@ -250,25 +250,25 @@ export default function Layout({ children, currentPageName }) {
             {mobileMenuOpen &&
             <div className="md:hidden mt-2 pb-4 space-y-2 px-4 bg-slate-700 rounded" data-testid="mobile-menu-content-public">
                 {user && <>
-                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><Image className="w-4 h-4" /> Toca Vision</span>
                   </Link>
-                  <Link to={createPageUrl("Assistentevirtual")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("Assistentevirtual")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Toca TrIA</span>
                   </Link>
-                  <Link to={createPageUrl("Chat")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={createPageUrl("Chat")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Minhas Conversas</span>
                   </Link>
                 </>}
-                <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
-                <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
-                <Link to="/ComoFunciona#toca-tria" className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Toca TrIA</Link>
-                <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Toca Vision</Link>
-                <Link to={createPageUrl("Seguranca")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
-                <Link to={createPageUrl("Manual")} className="block text-base font-semibold text-white hover:text-cyan-300 py-2" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
+                <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Seja um prestador</Link>
+                <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
+                <Link to="/ComoFunciona#toca-tria" className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Toca TrIA</Link>
+                <Link to={createPageUrl("GeradorDeImagem")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Toca Vision</Link>
+                <Link to={createPageUrl("Seguranca")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Segurança</Link>
+                <Link to={createPageUrl("Manual")} className="block text-base font-semibold text-white hover:text-amber-300 py-2 transition-colors duration-200" onClick={() => setMobileMenuOpen(false)}>Manual</Link>
                 {!user &&
               <div className="pt-2 border-t border-slate-600">
-                    <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="w-full bg-[var(--primary)] text-white hover:bg-blue-700" size="sm">
+                    <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="w-full bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200" size="sm">
                       Entrar
                     </Button>
                   </div>
@@ -415,7 +415,7 @@ export default function Layout({ children, currentPageName }) {
                       onClick={() => item.clearLogin && sessionStorage.removeItem('loginTimestamp')}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                       isActive(item.path) ?
-                      'bg-blue-500 text-white' :
+                      'bg-amber-700 text-white' :
                       'text-slate-300 hover:bg-slate-700'}`
                       }
                       data-testid={`admin-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
@@ -451,7 +451,7 @@ export default function Layout({ children, currentPageName }) {
                     onClick={() => {setMobileMenuOpen(false);item.clearLogin && sessionStorage.removeItem('loginTimestamp');}}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                     isActive(item.path) ?
-                    'bg-blue-500 text-white' :
+                    'bg-amber-700 text-white' :
                     'text-slate-300 hover:bg-slate-700'}`
                     }
                     data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}>

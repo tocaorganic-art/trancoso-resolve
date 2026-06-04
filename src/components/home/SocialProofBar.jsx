@@ -11,17 +11,17 @@ export default function SocialProofBar({ totalVerificados = 0 }) {
   ];
 
   return (
-    <div className="bg-white border-b border-slate-200 py-5 px-4" aria-label="Estatísticas da plataforma">
+    <div className="bg-amber-50 border-b border-amber-200 py-5 px-4" aria-label="Estatísticas da plataforma">
       <div className="container mx-auto max-w-4xl">
         <div className="flex items-center justify-center gap-6 md:gap-12 flex-wrap">
           {metrics.map((m, i) => {
             const Icon = m.icon;
             return (
               <React.Fragment key={i}>
-                {i > 0 && <div className="hidden md:block w-px h-8 bg-slate-200" />}
+                {i > 0 && <div className="hidden md:block w-px h-8 bg-amber-200" />}
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-cyan-50 flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-cyan-600" />
+                  <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5 text-amber-700" />
                   </div>
                   <div>
                     <p className="text-slate-900 font-bold text-sm leading-tight">{m.value}</p>

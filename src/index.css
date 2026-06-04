@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== PALETA TERROSA — Design Tokens Trancoso Resolve ===== */
+:root {
+  --color-primary: #8B6914;
+  --color-primary-dark: #6B4F10;
+  --color-primary-light: #D4A843;
+  --color-secondary: #C4713A;
+  --color-secondary-light: #E8A87C;
+  --color-earth: #A0785A;
+  --color-sand: #F5E6CC;
+  --color-forest: #4A6741;
+  --color-text-primary: #2C1A0E;
+  --color-text-secondary: #6B4F3A;
+  --color-bg: #FDFAF5;
+  --color-surface: #FFF8EE;
+  --color-border: #E8D5B7;
+}
+
 /* Igreja de Trancoso como marca d'água global - Dark Mode */
 body::before {
   content: "";
@@ -115,19 +132,19 @@ button:focus-visible {
     --card-foreground: 0 0% 97.3%;
     --popover: 15 23.5% 9.8%;
     --popover-foreground: 0 0% 97.3%;
-    --primary: 200 100% 50%;
-    --primary-foreground: 15 23.5% 5.5%;
+    --primary: 37 83% 31%;
+    --primary-foreground: 0 0% 98%;
     --secondary: 217 32.6% 17.5%;
     --secondary-foreground: 0 0% 98%;
     --muted: 217 32.6% 17.5%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 200 100% 50%;
-    --accent-foreground: 15 23.5% 5.5%;
+    --accent: 37 83% 31%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 217 32.6% 17.5%;
     --input: 217 32.6% 17.5%;
-    --ring: 200 100% 50%;
+    --ring: 37 83% 31%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -136,12 +153,12 @@ button:focus-visible {
     --radius: 0.5rem;
     --sidebar-background: 15 23.5% 9.8%;
     --sidebar-foreground: 0 0% 94.1%;
-    --sidebar-primary: 200 100% 50%;
-    --sidebar-primary-foreground: 15 23.5% 5.5%;
+    --sidebar-primary: 37 83% 31%;
+    --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 217 32.6% 17.5%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 217 32.6% 17.5%;
-    --sidebar-ring: 200 100% 50%;
+    --sidebar-ring: 37 83% 31%;
   }
 }
 
