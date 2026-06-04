@@ -5,6 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, RefreshCw, LogOut } from 'lucide-react';
 
+const ADMIN_WHITELIST = ['tocaorganic@gmail.com'];
+
 const MAX_RETRIES = 10;
 const RETRY_INTERVAL_MS = 1000;
 const TIMEOUT_MS = 12000; // 12s total máximo
@@ -61,8 +63,9 @@ export default function PermissionChecker({ children, requiredRole = null, requi
       return;
     }
 
-    // Verificar role
-    if (requiredRole && user.role !== requiredRole) {
+    // Verificar role (whitelist de emails admin sempre passa)
+    const isAdminByEmail = ADMIN_WHITELIST.includes(user.email);
+    if (requiredRole && user.role !== requiredRole && !isAdminByEmail) {
       setPermissionStatus('forbidden');
       setErrorDetails({
         code: 'INSUFFICIENT_ROLE',

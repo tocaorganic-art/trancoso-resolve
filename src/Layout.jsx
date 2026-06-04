@@ -129,7 +129,8 @@ export default function Layout({ children, currentPageName }) {
 
   }, [location.pathname]);
 
-  const isAdmin = user?.role === "admin";
+  const ADMIN_WHITELIST = ['tocaorganic@gmail.com'];
+  const isAdmin = user?.role === "admin" || ADMIN_WHITELIST.includes(user?.email);
   const [perfilModalFechado, setPerfilModalFechado] = useState(false);
   const precisaCompletarPerfil = !!user && !user.profile_completed && !user.phone && !location.pathname.includes('CadastroTipo') && location.pathname === '/' && !perfilModalFechado;
 
