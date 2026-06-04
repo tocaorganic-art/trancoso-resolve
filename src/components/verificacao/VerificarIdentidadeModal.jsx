@@ -114,11 +114,11 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
          <DialogHeader>
-           <DialogTitle className="flex items-center gap-2">
-             <ShieldCheck className="w-5 h-5 text-blue-500" />
+           <DialogTitle className="flex items-center gap-2 text-slate-100">
+             <ShieldCheck className="w-5 h-5 text-amber-400" />
              {(userType === 'mei' || userType === 'pj') && hasPhysicalLocation ? 'Verificar Identidade da Empresa' : 'Verificar Identidade'}
            </DialogTitle>
-           <DialogDescription>
+           <DialogDescription className="text-slate-300">
              {(userType === 'mei' || userType === 'pj') && hasPhysicalLocation
                ? 'Envie uma foto do seu CNPJ ou documento MEI para receber o selo de empresa verificada.'
                : 'Envie uma foto do seu documento (CNH ou RG) para receber o selo de identidade verificada.'}
@@ -131,8 +131,8 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
             <div className="text-center">
-              <h3 className="font-semibold text-lg text-slate-900">Documento enviado!</h3>
-              <p className="text-sm text-slate-500 mt-1">
+              <h3 className="font-semibold text-lg text-slate-100">Documento enviado!</h3>
+              <p className="text-sm text-slate-300 mt-1">
                 ✅ Seu documento foi enviado com sucesso. Nossa equipe irá analisar e você receberá uma resposta em breve.
               </p>
             </div>
@@ -142,7 +142,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
           <div className="space-y-5 py-2">
             {/* Tipo de documento */}
             <div className="space-y-1.5">
-              <Label>Tipo de Documento</Label>
+              <Label className="text-slate-200">Tipo de Documento</Label>
               <Select value={documentType} onValueChange={setDocumentType} disabled={step !== "form"}>
                 <SelectTrigger>
                   <SelectValue placeholder={
@@ -169,7 +169,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
 
             {/* Modo de upload */}
             <div className="space-y-1.5">
-              <Label>Forma de envio</Label>
+              <Label className="text-slate-200">Forma de envio</Label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -199,7 +199,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
             {/* Upload */}
             {uploadMode === "inteiro" ? (
               <div className="space-y-1.5">
-                <Label>Foto do Documento</Label>
+                <Label className="text-slate-200">Foto do Documento</Label>
                 {preview ? (
                   <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
                     <img src={preview} alt="Documento" className="w-full h-48 object-contain" />
@@ -224,7 +224,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
               <div className="space-y-3">
                 {/* Frente */}
                 <div className="space-y-1.5">
-                  <Label>Frente do Documento</Label>
+                  <Label className="text-slate-200">Frente do Documento</Label>
                   {previewFrente ? (
                     <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
                       <img src={previewFrente} alt="Frente" className="w-full h-36 object-contain" />
@@ -246,7 +246,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
                 </div>
                 {/* Verso */}
                 <div className="space-y-1.5">
-                  <Label>Verso do Documento</Label>
+                  <Label className="text-slate-200">Verso do Documento</Label>
                   {previewVerso ? (
                     <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
                       <img src={previewVerso} alt="Verso" className="w-full h-36 object-contain" />
@@ -270,9 +270,9 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
             )}
 
             {/* Dicas */}
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-              <p className="text-xs text-amber-800 font-medium mb-1">Dicas para uma boa foto:</p>
-              <ul className="text-xs text-amber-700 space-y-0.5 list-disc list-inside">
+            <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-3">
+              <p className="text-xs text-amber-200 font-medium mb-1">Dicas para uma boa foto:</p>
+              <ul className="text-xs text-amber-300 space-y-0.5 list-disc list-inside">
                 <li>Certifique-se de que o documento está completamente visível</li>
                 <li>Boa iluminação, sem reflexos ou sombras</li>
                 <li>Foco nítido — todas as informações devem ser legíveis</li>
