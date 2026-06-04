@@ -324,6 +324,33 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         } />
 
+        {/* Aliases sem barra para garantir acesso em hosting estático */}
+        <Route path="/servicos-diarista-trancoso" element={<LayoutWrapper currentPageName="DiaristaTrancoso"><AnimatedPage><DiaristaTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-eletricista-trancoso" element={<LayoutWrapper currentPageName="EletricistaTrancoso"><AnimatedPage><EletricistaTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-piscineiro-trancoso" element={<LayoutWrapper currentPageName="PiscineiroTrancoso"><AnimatedPage><PiscineiroTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-pedreiro-trancoso" element={<LayoutWrapper currentPageName="PedreiroTrancoso"><AnimatedPage><PedreiroTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-pintor-trancoso" element={<LayoutWrapper currentPageName="PintorTrancoso"><AnimatedPage><PintorTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-jardineiro-trancoso" element={<LayoutWrapper currentPageName="JardineiroTrancoso"><AnimatedPage><JardineiroTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-encanador-trancoso" element={<LayoutWrapper currentPageName="EncanadorTrancoso"><AnimatedPage><EncanadorTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-chef-trancoso" element={<LayoutWrapper currentPageName="ChefTrancoso"><AnimatedPage><ChefTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-seguranca-trancoso" element={<LayoutWrapper currentPageName="SegurancaTrancoso"><AnimatedPage><SegurancaTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-motorista-trancoso" element={<LayoutWrapper currentPageName="MotoristaTrancoso"><AnimatedPage><MotoristaTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-quadrado-trancoso" element={<LayoutWrapper currentPageName="QuadradoTrancoso"><AnimatedPage><QuadradoTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-rio-verde-trancoso" element={<LayoutWrapper currentPageName="RioVerdeTrancoso"><AnimatedPage><RioVerdeTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-pitinga-trancoso" element={<LayoutWrapper currentPageName="PitingaTrancoso"><AnimatedPage><PitingaTrancoso /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-diarista-porto-seguro" element={<LayoutWrapper currentPageName="DiaristaPortoSeguro"><AnimatedPage><DiaristaPortoSeguro /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-eletricista-porto-seguro" element={<LayoutWrapper currentPageName="EletricistaPortoSeguro"><AnimatedPage><EletricistaPortoSeguro /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-piscineiro-porto-seguro" element={<LayoutWrapper currentPageName="PiscineiroPortoSeguro"><AnimatedPage><PiscineiroPortoSeguro /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-cozinheiro-porto-seguro" element={<LayoutWrapper currentPageName="CozinheiroPortoSeguro"><AnimatedPage><CozinheiroPortoSeguro /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-jardineiro-porto-seguro" element={<LayoutWrapper currentPageName="JardineiroPortoSeguro"><AnimatedPage><JardineiroPortoSeguro /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-pedreiro-porto-seguro" element={<LayoutWrapper currentPageName="PedreiroPortoSeguro"><AnimatedPage><PedreiroPortoSeguro /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-diarista-caraiva" element={<LayoutWrapper currentPageName="DiaristaCaraiva"><AnimatedPage><DiaristaCaraiva /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-eletricista-caraiva" element={<LayoutWrapper currentPageName="EletricistaCaraiva"><AnimatedPage><EletricistaCaraiva /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-piscineiro-caraiva" element={<LayoutWrapper currentPageName="PiscineiroCaraiva"><AnimatedPage><PiscineiroCaraiva /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-cozinheiro-caraiva" element={<LayoutWrapper currentPageName="CozinheiroCaraiva"><AnimatedPage><CozinheiroCaraiva /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-jardineiro-caraiva" element={<LayoutWrapper currentPageName="JardineiroCaraiva"><AnimatedPage><JardineiroCaraiva /></AnimatedPage></LayoutWrapper>} />
+        <Route path="/servicos-pedreiro-caraiva" element={<LayoutWrapper currentPageName="PedreiroCaraiva"><AnimatedPage><PedreiroCaraiva /></AnimatedPage></LayoutWrapper>} />
+
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatePresence>

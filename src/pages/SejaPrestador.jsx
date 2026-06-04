@@ -14,7 +14,7 @@ import CalculadoraGanhos from '@/components/sejaprestador/CalculadoraGanhos';
 
 const beneficios = [
   {
-    icon: <Users className="w-8 h-8 text-blue-600" />,
+    icon: <Users className="w-8 h-8 text-amber-600" />,
     title: "Alcance Mais Clientes",
     description: "Tenha seu perfil divulgado para turistas e moradores de Trancoso que buscam profissionais qualificados e de confiança. Amplie sua base de forma eficiente e direcionada."
   },
@@ -34,7 +34,7 @@ const beneficios = [
     description: "Mais do que um assistente, o Toca TrIA automatiza agendamentos, responde a perguntas frequentes e qualifica leads — trabalhando por você enquanto você foca no serviço."
   },
   {
-    icon: <Camera className="w-8 h-8 text-cyan-600" />,
+    icon: <Camera className="w-8 h-8 text-amber-500" />,
     title: "Toca Vision: Imagens com IA",
     description: "Crie posts, cardápios, logos e materiais visuais impactantes em minutos. Gere imagens exclusivas em alta qualidade, fortalecendo sua identidade visual sem custos adicionais."
   },
@@ -156,13 +156,13 @@ export default function SejaPrestadorPage() {
       {/* Como Funciona */}
       <section id="como-funciona" className="container mx-auto py-10 md:py-20 px-4 max-w-2xl">
         <div className="text-center mb-6 md:mb-12">
-          <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Simples e rápido</span>
+          <span className="text-sm font-semibold text-amber-600 uppercase tracking-widest">Simples e rápido</span>
           <h2 className="text-xl md:text-3xl font-bold text-slate-800 mt-2">Como funciona</h2>
         </div>
         <ul className="space-y-6">
           {steps.map(s => (
             <li key={s.n} className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+              <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-700 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
                 {s.n}
               </div>
               <div>
@@ -201,17 +201,17 @@ export default function SejaPrestadorPage() {
       {/* CTA Final */}
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 md:py-24 border-t border-slate-700">
         <div className="container mx-auto text-center px-4 max-w-2xl">
-          <span className="inline-block bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Vagas limitadas por categoria</span>
+          <span className="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Vagas limitadas por categoria</span>
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
             Sua Expertise no<br />
-            <span className="text-cyan-400">Coração de Trancoso.</span>
+            <span className="text-amber-400">Coração de Trancoso.</span>
           </h2>
           <p className="text-slate-300 mb-8 max-w-lg mx-auto text-base md:text-lg leading-relaxed">
             Conecte-se a uma audiência VIP de moradores, proprietários de villas e turistas de alto padrão que buscam exatamente o que você oferece. Sem custo de marketing. Sem intermediários.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to={createPageUrl('CadastroTipo')}>
-              <Button size="lg" className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold text-lg px-10 py-4 shadow-xl min-h-[52px]">
+              <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-white font-bold text-lg px-10 py-4 shadow-xl min-h-[52px]">
                 Cadastre-se Agora — É Grátis
               </Button>
             </Link>

@@ -17,10 +17,10 @@ const items = [
 
 export default function TabelaComparativa() {
   return (
-    <section className="py-10 md:py-16 bg-gradient-to-br from-slate-50 to-blue-50">
+    <section className="py-10 md:py-16 bg-gradient-to-br from-slate-50 to-amber-50">
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="text-center mb-8 md:mb-12">
-          <span className="text-sm font-semibold text-blue-600 uppercase tracking-widest">Por que escolher o Trancoso Resolve?</span>
+          <span className="text-sm font-semibold text-amber-600 uppercase tracking-widest">Por que escolher o Trancoso Resolve?</span>
           <h2 className="text-xl md:text-3xl font-bold text-slate-900 mt-2 mb-3">Trabalhar Sozinho vs. Ser Parceiro Trancoso Resolve</h2>
           <p className="text-slate-500 text-sm md:text-base">Veja a diferença que a nossa plataforma faz para o seu negócio.</p>
         </div>
@@ -30,7 +30,7 @@ export default function TabelaComparativa() {
            <div className="grid grid-cols-3 bg-slate-900 text-white text-center">
              <div className="p-4 text-left pl-6 font-bold text-slate-100">Benefício</div>
              <div className="p-4 font-bold text-slate-300">Por conta própria</div>
-             <div className="p-4 font-bold text-white bg-gradient-to-b from-cyan-600 to-blue-700">
+             <div className="p-4 font-bold text-white bg-gradient-to-b from-amber-600 to-amber-800">
                Parceiro Trancoso Resolve 🌴
              </div>
            </div>
@@ -46,8 +46,8 @@ export default function TabelaComparativa() {
                   <X className="w-5 h-5 text-red-400" />
                 )}
               </div>
-              <div className="p-4 flex items-center justify-center bg-blue-50/50">
-                <Check className="w-5 h-5 text-blue-600 stroke-[2.5]" />
+              <div className="p-4 flex items-center justify-center bg-amber-50/50">
+               <Check className="w-5 h-5 text-amber-600 stroke-[2.5]" />
               </div>
             </div>
           ))}
@@ -55,7 +55,7 @@ export default function TabelaComparativa() {
             <div /><div />
             <div className="flex justify-center">
               <Link to={createPageUrl('CadastroTipo')}>
-                <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-sm font-bold">
+                <Button className="bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold">
                   Quero ser Parceiro
                 </Button>
               </Link>
@@ -79,16 +79,16 @@ export default function TabelaComparativa() {
                     <X className="w-5 h-5 text-red-400 mx-auto" />
                   )}
                 </div>
-                <div className="bg-blue-50 rounded-lg p-3 text-center border border-blue-100">
-                  <p className="text-xs text-blue-600 font-semibold mb-2">Parceiro Trancoso Resolve 🌴</p>
-                  <Check className="w-5 h-5 text-blue-600 stroke-[2.5] mx-auto" />
+                <div className="bg-amber-50 rounded-lg p-3 text-center border border-amber-100">
+                  <p className="text-xs text-amber-600 font-semibold mb-2">Parceiro Trancoso Resolve 🌴</p>
+                  <Check className="w-5 h-5 text-amber-600 stroke-[2.5] mx-auto" />
                 </div>
               </div>
             </div>
           ))}
           <div className="pt-2">
             <Link to={createPageUrl('CadastroTipo')}>
-              <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold h-12">
+              <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold h-12">
                 Quero ser Parceiro Trancoso Resolve 🌴
               </Button>
             </Link>

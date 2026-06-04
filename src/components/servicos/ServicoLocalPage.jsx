@@ -97,7 +97,7 @@ export default function ServicoLocalPage({
       {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-14 px-4">
         <div className="container mx-auto max-w-4xl">
-          <div className="flex items-center gap-2 text-cyan-400 text-sm font-medium mb-4">
+          <div className="flex items-center gap-2 text-amber-400 text-sm font-medium mb-4">
             <MapPin className="w-4 h-4" />
             <span>{locationLabel}</span>
           </div>
@@ -127,7 +127,7 @@ export default function ServicoLocalPage({
           <ul className="space-y-3">
             {services.map((item, i) => (
               <li key={i} className="flex items-start gap-3 bg-white rounded-xl px-5 py-4 shadow-sm border border-slate-100">
-                <CheckCircle className="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" />
+                <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
                 <span className="text-slate-700 text-base">{item}</span>
               </li>
             ))}
