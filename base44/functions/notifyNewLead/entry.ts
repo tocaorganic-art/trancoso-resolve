@@ -21,10 +21,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    const serviceLabel = lead.service_interest || 'Serviço';
+    const serviceLabel = lead.service_interest || 'Serviço não especificado';
     const sourceLabel = lead.source === 'pagina-servico'
       ? `Página de serviço (${serviceLabel})`
       : (lead.source || 'Plataforma');
+
+    const tipoLabel = lead.type === 'prestador' ? '🔧 Prestador (quer se cadastrar)' : '🛍️ Cliente (quer contratar)';
+    const now = new Date().toLocaleString('pt-BR', { timeZone: 'America/Bahia', dateStyle: 'short', timeStyle: 'short' });
+    const phoneClean = (lead.phone || '').replace(/\D/g, '');
+    const whatsappLink = phoneClean ? `https://wa.me/55${phoneClean}` : null;
 
     // 1. Email de boas-vindas para o lead (se tiver email)
     if (lead.email) {
@@ -43,6 +48,8 @@ O que acontece agora:
 • Você será contatado diretamente por WhatsApp para combinar detalhes, valores e agenda
 • Todos os prestadores passam por verificação de identidade e análise de antecedentes
 
+É grátis para quem contrata. Simples para quem trabalha.
+
 Se tiver dúvidas, acesse: https://trancosoresolve.com.br
 
 Att,
@@ -50,27 +57,32 @@ Equipe Trancoso Resolve`,
       });
     }
 
-    // 2. Notificação interna para a equipe
+    // 2. Notificação interna para a equipe (mais rica)
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: 'contato@trancosoresolve.com.br',
       from_name: 'Trancoso Resolve — Sistema',
-      subject: `🔔 Novo Lead: ${lead.name} — ${serviceLabel}`,
+      subject: `🔔 Novo Lead: ${lead.name} — ${serviceLabel} (${lead.type || 'cliente'})`,
       body: `Novo lead capturado na plataforma!
 
 📋 DADOS DO LEAD
+━━━━━━━━━━━━━━━━━━━━━━━━
 Nome: ${lead.name}
-WhatsApp: ${lead.phone}
+Tipo: ${tipoLabel}
+WhatsApp: ${lead.phone}${whatsappLink ? ` → ${whatsappLink}` : ''}
 Email: ${lead.email || '(não informado)'}
 Serviço de interesse: ${serviceLabel}
 Origem: ${sourceLabel}
-Tipo: ${lead.type || 'cliente'}
 Mensagem: ${lead.message || '(não informado)'}
+━━━━━━━━━━━━━━━━━━━━━━━━
+🕐 Recebido em: ${now}
 
-🕐 Recebido em: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Bahia' })}
-
-Acesse o painel admin para mais detalhes.`,
+${lead.type === 'prestador'
+  ? '👉 Acessar fila de verificação: https://trancosoresolve.com.br/FilaVerificacao'
+  : '👉 Acessar painel de leads: https://trancosoresolve.com.br/AdminPrestadores'}
+`,
     });
 
+    console.log(`[notifyNewLead] Lead ${lead.id} notificado: ${lead.name} (${lead.type || 'cliente'})`);
     return Response.json({ success: true, message: 'Notifications sent' });
   } catch (error) {
     console.error('[notifyNewLead] Error:', error);

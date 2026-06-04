@@ -1,22 +1,20 @@
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import {
   Loader2, ShieldCheck, BadgeCheck, Clock, XCircle, AlertTriangle,
-  Eye, CheckCircle, XOctagon, Filter, Search, Calendar
+  Eye, CheckCircle, XOctagon, Filter, Search, Calendar, Phone, User, CreditCard, RefreshCw
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
-// Chamado via SDK: base44.functions.invoke('adminVerificacao', {})
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
 const statusConfig = {
@@ -51,6 +49,8 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
     },
     enabled: !!verificacao?.user_email && isOpen,
   });
+
+  const tipoPessoaLabel = { pf: 'Pessoa Física', mei: 'MEI', pj: 'Pessoa Jurídica' };
 
   const handleAction = async (action) => {
     if (action === "rejeitar" && !motivo.trim()) {
@@ -128,7 +128,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-xs text-slate-500 uppercase tracking-wide">Tipo</Label>
+                <Label className="text-xs text-slate-500 uppercase tracking-wide">Tipo Doc.</Label>
                 <p className="font-medium text-sm mt-0.5">{verificacao.document_type}</p>
               </div>
               <div>
@@ -138,6 +138,40 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
                 </div>
               </div>
             </div>
+
+            {/* Dados do prestador */}
+            {provider && (
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+                <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Dados do Prestador</p>
+                {provider.phone && (
+                  <div className="flex items-center gap-2 text-sm text-slate-700">
+                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                    <a href={`https://wa.me/55${provider.phone.replace(/\D/g, '')}`} target="_blank" rel="noreferrer" className="text-green-600 hover:underline font-medium">{provider.phone}</a>
+                  </div>
+                )}
+                {provider.cpf && (
+                  <div className="flex items-center gap-2 text-sm text-slate-700">
+                    <CreditCard className="w-3.5 h-3.5 text-slate-400" />
+                    <span>CPF: {provider.cpf}</span>
+                  </div>
+                )}
+                {provider.cnpj && (
+                  <div className="flex items-center gap-2 text-sm text-slate-700">
+                    <CreditCard className="w-3.5 h-3.5 text-slate-400" />
+                    <span>CNPJ: {provider.cnpj}</span>
+                  </div>
+                )}
+                {provider.tipo_pessoa && (
+                  <div className="flex items-center gap-2 text-sm text-slate-700">
+                    <User className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{tipoPessoaLabel[provider.tipo_pessoa] || provider.tipo_pessoa} — {provider.occupation}</span>
+                  </div>
+                )}
+                {provider.razao_social && (
+                  <p className="text-xs text-slate-500">Razão Social: {provider.razao_social}</p>
+                )}
+              </div>
+            )}
 
             {verificacao.ai_extracted_name && (
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 space-y-1.5">
@@ -219,6 +253,7 @@ export default function FilaVerificacaoPage() {
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [selected, setSelected] = useState(null);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [quickActionId, setQuickActionId] = useState(null);
 
   const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ["currentUser"],
@@ -233,12 +268,15 @@ export default function FilaVerificacaoPage() {
   });
 
   const handleAction = async (id, action, motivo) => {
+    setQuickActionId(id);
     try {
       await base44.functions.invoke('adminVerificacao', { verificacao_id: id, action, motivo });
       toast.success(action === "aprovar" ? "✅ Identidade aprovada!" : "❌ Verificação rejeitada.");
       queryClient.invalidateQueries({ queryKey: ["todasVerificacoes"] });
     } catch (error) {
       toast.error("Erro ao processar.", { description: error.message });
+    } finally {
+      setQuickActionId(null);
     }
   };
 
@@ -276,12 +314,23 @@ export default function FilaVerificacaoPage() {
   return (
     <div className="container mx-auto max-w-6xl py-8 px-4">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-1">
-          <ShieldCheck className="w-7 h-7 text-blue-500" />
-          <h1 className="text-2xl font-bold text-slate-900">Fila de Verificação</h1>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-1">
+            <ShieldCheck className="w-7 h-7 text-blue-500" />
+            <h1 className="text-2xl font-bold text-slate-900">Fila de Verificação</h1>
+          </div>
+          <p className="text-slate-500 text-sm">Analise os documentos enviados e aprove ou rejeite identidades.</p>
         </div>
-        <p className="text-slate-500 text-sm">Analise os documentos enviados e aprove ou rejeite identidades.</p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["todasVerificacoes"] })}
+          className="gap-2 shrink-0"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Atualizar
+        </Button>
       </div>
 
       {/* Stats */}
@@ -362,11 +411,14 @@ export default function FilaVerificacaoPage() {
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden md:table-cell">Tipo</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3 hidden lg:table-cell">Enviado em</th>
                     <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 py-3">Status</th>
-                    <th className="text-right text-xs font-semibold text-slate-500 uppercase tracking-wide px-6 py-3">Ação</th>
+                    <th className="text-right text-xs font-semibold text-slate-500 uppercase tracking-wide px-6 py-3">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {filtered.map((v) => (
+                  {filtered.map((v) => {
+                    const isPending = ["Em Análise", "Aguardando Admin", "Pendente"].includes(v.status);
+                    const isProcessing = quickActionId === v.id;
+                    return (
                     <tr key={v.id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
@@ -400,19 +452,42 @@ export default function FilaVerificacaoPage() {
                       <td className="px-4 py-4">
                         <StatusBadge status={v.status} />
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => { setSelected(v); setReviewOpen(true); }}
-                          className="text-xs hover:border-blue-400 hover:text-blue-600 transition-colors"
-                        >
-                          <Eye className="w-3.5 h-3.5 mr-1.5" />
-                          Analisar
-                        </Button>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => { setSelected(v); setReviewOpen(true); }}
+                            className="text-xs hover:border-blue-400 hover:text-blue-600 transition-colors"
+                          >
+                            <Eye className="w-3.5 h-3.5 mr-1" />
+                            Ver
+                          </Button>
+                          {isPending && (
+                            <>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={isProcessing}
+                                onClick={() => handleAction(v.id, "rejeitar", "Rejeitado via ação rápida")}
+                                className="text-xs border-red-200 text-red-600 hover:bg-red-50"
+                              >
+                                {isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <XOctagon className="w-3.5 h-3.5" />}
+                              </Button>
+                              <Button
+                                size="sm"
+                                disabled={isProcessing}
+                                onClick={() => handleAction(v.id, "aprovar", "")}
+                                className="text-xs bg-green-600 hover:bg-green-700 text-white"
+                              >
+                                {isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle className="w-3.5 h-3.5" />}
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </td>
                     </tr>
-                  ))}
+                  );})}  
                 </tbody>
               </table>
             </div>
