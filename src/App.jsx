@@ -34,6 +34,13 @@ import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
 import AdminMetricasPage from '@/pages/AdminMetricas';
 import EletricistaTrancoso from '@/pages/servicos/EletricistaTrancoso';
 import PiscineiroTrancoso from '@/pages/servicos/PiscineiroTrancoso';
+import PedreiroTrancoso from '@/pages/servicos/PedreiroTrancoso';
+import PintorTrancoso from '@/pages/servicos/PintorTrancoso';
+import JardineiroTrancoso from '@/pages/servicos/JardineiroTrancoso';
+import EncanadorTrancoso from '@/pages/servicos/EncanadorTrancoso';
+import ChefTrancoso from '@/pages/servicos/ChefTrancoso';
+import SegurancaTrancoso from '@/pages/servicos/SegurancaTrancoso';
+import MotoristaTrancoso from '@/pages/servicos/MotoristaTrancoso';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -185,6 +192,41 @@ const AuthenticatedApp = () => {
         <Route path="/servicos/piscineiro-trancoso" element={
           <LayoutWrapper currentPageName="PiscineiroTrancoso">
             <AnimatedPage><PiscineiroTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/pedreiro-trancoso" element={
+          <LayoutWrapper currentPageName="PedreiroTrancoso">
+            <AnimatedPage><PedreiroTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/pintor-trancoso" element={
+          <LayoutWrapper currentPageName="PintorTrancoso">
+            <AnimatedPage><PintorTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/jardineiro-trancoso" element={
+          <LayoutWrapper currentPageName="JardineiroTrancoso">
+            <AnimatedPage><JardineiroTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/encanador-trancoso" element={
+          <LayoutWrapper currentPageName="EncanadorTrancoso">
+            <AnimatedPage><EncanadorTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/chef-trancoso" element={
+          <LayoutWrapper currentPageName="ChefTrancoso">
+            <AnimatedPage><ChefTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/seguranca-trancoso" element={
+          <LayoutWrapper currentPageName="SegurancaTrancoso">
+            <AnimatedPage><SegurancaTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/motorista-trancoso" element={
+          <LayoutWrapper currentPageName="MotoristaTrancoso">
+            <AnimatedPage><MotoristaTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
 
