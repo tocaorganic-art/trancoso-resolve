@@ -4,116 +4,12 @@ import usePullToRefresh from "@/hooks/usePullToRefresh";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import LazyImage from "@/components/ui/LazyImage";
-import ProvidersMap from "@/components/map/ProvidersMap";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
-import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
-import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
-import { getProviderMockImages, DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
-import FavoriteButton from "@/components/favorites/FavoriteButton";
+import { ArrowLeft } from "lucide-react";
+import ProviderCard from "@/components/providers/ProviderCard";
+import ProviderGrid from "@/components/providers/ProviderGrid";
+import FilterBar from "@/components/providers/FilterBar";
 import MultilingualAutocomplete from "@/components/search/MultilingualAutocomplete";
-
-const ProviderCard = ({ provider }) => {
-    const mockImages = getProviderMockImages(provider.occupation);
-    
-    return (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col overflow-hidden">
-        {/* Foto de Capa */}
-        <div className="relative h-32 bg-gradient-to-r from-amber-700 to-amber-600 shrink-0">
-            {provider.cover_photo_url ? (
-                <LazyImage
-                    src={provider.cover_photo_url}
-                    alt={`Foto de capa de ${provider.full_name}`}
-                    className="w-full h-full object-cover"
-                />
-            ) : null}
-            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/30 to-transparent" />
-        </div>
-
-        <CardContent className="p-6 flex flex-col flex-grow -mt-10 relative">
-            <div className="flex items-start gap-4 mb-4">
-                <LazyImage
-                    src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
-                    alt={`Foto de perfil de ${provider.full_name}`}
-                    className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md shrink-0"
-                />
-                <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                             <div>
-                                 <h3 className="font-bold text-lg text-slate-900">{provider.full_name}</h3>
-                                 <p className="text-sm text-slate-600">{provider.occupation}</p>
-                             </div>
-                             <div className="flex items-start gap-2">
-                                 {provider.verified && (
-                                     <VerificacaoBadge verified showLabel size="sm" />
-                                 )}
-                                 {provider.status_verificacao && provider.status_verificacao !== 'aprovado' && provider.status_verificacao !== 'reprovado' && (
-                                     <BadgeEmVerificacao />
-                                 )}
-                                 <FavoriteButton 
-                                     id={provider.id} 
-                                     type="provider" 
-                                     name={provider.full_name}
-                                     category={provider.occupation}
-                                 />
-                             </div>
-                         </div>
-                    <div className="flex items-center gap-2 mt-2">
-                        <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                            <span className="text-sm font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
-                        </div>
-                        {provider.total_reviews > 0 && <span className="text-xs text-slate-500">({provider.total_reviews} avaliações)</span>}
-                    </div>
-                </div>
-            </div>
-
-            {provider.bio && (
-                <p className="text-sm text-slate-600 mb-4 line-clamp-2 flex-grow">{provider.bio}</p>
-            )}
-
-            <div className="flex items-center justify-between mb-4 mt-auto flex-wrap gap-1">
-                {provider.location?.city && (
-                    <div className="flex items-center gap-1 text-sm text-slate-600 shrink-0">
-                        <MapPin className="w-4 h-4" />
-                        <span className="truncate max-w-[120px]">{provider.location.city}</span>
-                    </div>
-                )}
-                {provider.price_range && (
-                    <Badge variant="outline" className="shrink-0">{provider.price_range}</Badge>
-                )}
-            </div>
-
-            {provider.availability && (
-                 <Badge className={`mb-4 self-start ${
-                    provider.availability === 'Disponível' ? 'bg-green-100 text-green-800' :
-                    provider.availability === 'Ocupado' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                }`}>
-                    {provider.availability}
-                </Badge>
-            )}
-
-            <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
-                <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 min-h-[44px] transition-all duration-200 active:scale-95">
-                    Ver Perfil Completo
-                </Button>
-            </Link>
-            
-            {/* Aviso de perfil ilustrativo */}
-            <p className="text-xs text-slate-400 opacity-60 text-center mt-2 pt-2 border-t border-slate-100">
-                {DEMO_PROFILE_WARNING}
-            </p>
-        </CardContent>
-    </Card>
-    );
-};
 
 const slugMap = {
   'Limpeza': 'limpeza-trancoso',
@@ -375,78 +271,6 @@ export default function ServicosCategoriaPage() {
     return () => clearTimeout(handler);
   }, [searchQuery, providers]);
 
-  const renderContent = () => {
-    if (isLoadingProviders) {
-      return (
-        <div className="text-center py-16">
-          <Loader2 className="w-8 h-8 mx-auto text-amber-500 animate-spin mb-4" />
-          <p className="text-slate-500 text-lg">Carregando profissionais...</p>
-        </div>
-      );
-    }
-
-    if (isErrorProviders) {
-      return (
-        <div className="text-center py-16 bg-red-50 rounded-lg">
-          <AlertCircle className="w-10 h-10 mx-auto text-red-500 mb-4" />
-          <h3 className="text-xl font-semibold text-red-800">Erro ao Carregar</h3>
-          <p className="text-red-600 mt-2">Não foi possível buscar os profissionais. Por favor, tente novamente.</p>
-        </div>
-      );
-    }
-    
-    if (searchQuery.trim() !== '' && isSearching) {
-      return (
-        <div className="text-center py-16">
-          <Loader2 className="w-8 h-8 mx-auto text-amber-500 animate-spin mb-4" />
-          <p className="text-slate-500 text-lg">Buscando profissionais com IA...</p>
-        </div>
-      );
-    }
-    
-    if (filteredProviders.length === 0) {
-       const hasActiveFilters = priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '';
-       const hasSearchQuery = searchQuery.trim() !== '';
-
-       return (
-         <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700">
-           <div className="w-16 h-16 mx-auto mb-4 bg-slate-700 rounded-full flex items-center justify-center">
-             <Search className="w-8 h-8 text-cyan-400" />
-           </div>
-           <h3 className="text-xl font-semibold text-slate-100 mb-2">Nenhum Prestador Encontrado</h3>
-           <p className="text-slate-400 max-w-md mx-auto mb-6">
-             {hasSearchQuery
-               ? `Não encontramos profissionais para "${searchQuery}". Tente uma busca diferente ou explore as categorias.`
-               : hasActiveFilters 
-               ? "Nenhum prestador corresponde aos filtros selecionados. Ajuste sua busca e tente novamente."
-               : "Nenhum prestador encontrado para essa categoria ainda. Em breve novos profissionais estarão disponíveis."}
-           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            {hasActiveFilters && (
-              <Button variant="outline" onClick={() => {
-                setSearchQuery(''); setPriceFilter('all'); setRatingFilter('all');
-                setAvailabilityFilter('all'); setNeighborhoodFilter('all'); setSelectedCategory('Todos');
-              }} className="gap-2">
-                <Filter className="w-4 h-4" /> Limpar Filtros
-              </Button>
-            )}
-            <Link to={createPageUrl("SejaPrestador")}>
-              <Button className="bg-amber-600 hover:bg-amber-700 text-white gap-2">
-                <Star className="w-4 h-4" /> Seja o Primeiro!
-              </Button>
-            </Link>
-          </div>
-        </div>
-      );
-    }
-
-    if (viewMode === 'map') {
-      return <div className="col-span-full"><ProvidersMap providers={filteredProviders} /></div>;
-    }
-    
-    return filteredProviders.map((provider) => <ProviderCard key={provider.id} provider={provider} />);
-  };
-
   return (
     <div className="min-h-screen bg-slate-50">
       {pullDistance > 10 && (
@@ -484,98 +308,42 @@ export default function ServicosCategoriaPage() {
       </div>
 
       <div className="container mx-auto max-w-7xl px-4 py-8">
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-slate-600" />
-              <h3 className="font-semibold text-slate-900">Filtros</h3>
-            </div>
-            <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value)} className="flex">
-              <ToggleGroupItem value="list" aria-label="Ver em lista"><List className="h-4 w-4" /></ToggleGroupItem>
-              <ToggleGroupItem value="map" aria-label="Ver no mapa"><Map className="h-4 w-4" /></ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-             <MultilingualAutocomplete 
-               onSelect={(suggestion) => {
-                 setSearchQuery(suggestion.name);
-                 setSelectedCategory(suggestion.category);
-               }}
-               language="pt"
-               placeholder="Buscar serviços..."
-             />
-            
-            <Select value={priceFilter} onValueChange={setPriceFilter}>
-              <SelectTrigger aria-label="Filtrar por faixa de preço">
-                <SelectValue placeholder="Faixa de Preço" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Preços ({filterCounts.price?.all || 0})</SelectItem>
-                <SelectItem value="$">$ - Econômico ({filterCounts.price?.['$'] || 0})</SelectItem>
-                <SelectItem value="$$">$$ - Moderado ({filterCounts.price?.['$$'] || 0})</SelectItem>
-                <SelectItem value="$$$">$$$ - Premium ({filterCounts.price?.['$$$'] || 0})</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <Select value={ratingFilter} onValueChange={setRatingFilter}>
-              <SelectTrigger aria-label="Filtrar por avaliação">
-                <SelectValue placeholder="Avaliação" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas as Avaliações ({filterCounts.rating?.all || 0})</SelectItem>
-                <SelectItem value="4.5">⭐ 4.5+ Excelente ({filterCounts.rating?.['4.5'] || 0})</SelectItem>
-                <SelectItem value="4.0">⭐ 4.0+ Muito Bom ({filterCounts.rating?.['4.0'] || 0})</SelectItem>
-                <SelectItem value="3.5">⭐ 3.5+ Bom ({filterCounts.rating?.['3.5'] || 0})</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <FilterBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          priceFilter={priceFilter}
+          setPriceFilter={setPriceFilter}
+          ratingFilter={ratingFilter}
+          setRatingFilter={setRatingFilter}
+          availabilityFilter={availabilityFilter}
+          setAvailabilityFilter={setAvailabilityFilter}
+          neighborhoodFilter={neighborhoodFilter}
+          setNeighborhoodFilter={setNeighborhoodFilter}
+          filterCounts={filterCounts}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          onSelectCategory={setSelectedCategory}
+        />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-slate-100">
-            <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
-              <SelectTrigger aria-label="Filtrar por disponibilidade">
-                <SelectValue placeholder="Disponibilidade" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Qualquer Disponibilidade ({filterCounts.availability?.all || 0})</SelectItem>
-                <SelectItem value="Disponível">🟢 Disponível agora ({filterCounts.availability?.['Disponível'] || 0})</SelectItem>
-                <SelectItem value="Ocupado">🟡 Ocupado ({filterCounts.availability?.['Ocupado'] || 0})</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={neighborhoodFilter} onValueChange={setNeighborhoodFilter}>
-              <SelectTrigger aria-label="Filtrar por bairro">
-                <SelectValue placeholder="Bairro / Região" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">
-                  <span className="flex items-center gap-2"><Navigation className="w-3 h-3" /> Toda Trancoso</span>
-                </SelectItem>
-                {filterCounts.neighborhoods?.map(n => (
-                  <SelectItem key={n} value={n}>{n}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {(priceFilter !== 'all' || ratingFilter !== 'all' || availabilityFilter !== 'all' || neighborhoodFilter !== 'all' || searchQuery.trim() !== '') && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchQuery(''); setPriceFilter('all'); setRatingFilter('all');
-                  setAvailabilityFilter('all'); setNeighborhoodFilter('all');
-                }}
-                className="gap-2 text-slate-600"
-                aria-label="Limpar todos os filtros"
-              >
-                <X className="w-4 h-4" /> Limpar Filtros
-              </Button>
-            )}
-          </div>
-        </div>
-
-        <div className={`grid gap-4 md:gap-6 ${viewMode === 'list' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
-          {renderContent()}
-        </div>
+        <ProviderGrid
+          filteredProviders={filteredProviders}
+          isLoadingProviders={isLoadingProviders}
+          isErrorProviders={isErrorProviders}
+          isSearching={isSearching}
+          searchQuery={searchQuery}
+          viewMode={viewMode}
+          priceFilter={priceFilter}
+          ratingFilter={ratingFilter}
+          availabilityFilter={availabilityFilter}
+          neighborhoodFilter={neighborhoodFilter}
+          selectedCategory={selectedCategory}
+          setSearchQuery={setSearchQuery}
+          setPriceFilter={setPriceFilter}
+          setRatingFilter={setRatingFilter}
+          setAvailabilityFilter={setAvailabilityFilter}
+          setNeighborhoodFilter={setNeighborhoodFilter}
+          setSelectedCategory={setSelectedCategory}
+        />
       </div>
     </div>
   );
