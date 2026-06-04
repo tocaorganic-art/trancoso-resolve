@@ -26,7 +26,7 @@ export default function UrgencyBar({ user }) {
 
   const vagasRestantes = Math.max(0, 50 - total);
 
-  if (dismissed || user || vagasRestantes === 0) return null;
+  if (dismissed || vagasRestantes === 0) return null;
 
   const handleDismiss = () => {
     sessionStorage.setItem('urgency_bar_dismissed', '1');

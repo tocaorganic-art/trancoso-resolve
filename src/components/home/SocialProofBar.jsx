@@ -1,34 +1,31 @@
 import React from "react";
-import { ShieldCheck, Grid3x3, Star, MapPin } from "lucide-react";
+import { ShieldCheck, CreditCard, Users } from "lucide-react";
 
-export default function SocialProofBar({ totalVerificados = 0, totalCategorias = 0, totalAvaliacoes = 0 }) {
-  // Só exibe números reais quando os dados já carregaram (> 0)
-  // Caso contrário, usa valores estáticos mínimos para evitar "0+"
-  const verificadosDisplay = totalVerificados > 0 ? `${totalVerificados}+` : "10+";
-  const categoriasDisplay = totalCategorias > 0 ? `${totalCategorias}+` : "9+";
-  const avaliacoesDisplay = totalAvaliacoes > 0 ? `${totalAvaliacoes}+` : "⭐ Reais";
+export default function SocialProofBar({ totalVerificados = 0 }) {
+  const prestadoresDisplay = totalVerificados > 0 ? totalVerificados : 19;
 
   const metrics = [
-    { icon: ShieldCheck, value: verificadosDisplay, label: "Profissionais Verificados" },
-    { icon: Grid3x3, value: categoriasDisplay, label: "Categorias de Serviço" },
-    { icon: Star, value: avaliacoesDisplay, label: "Avaliações" },
-    { icon: MapPin, value: "Trancoso", label: "Bahia" },
+    { icon: Users, value: `${prestadoresDisplay} profissionais`, label: "cadastrados na plataforma" },
+    { icon: ShieldCheck, value: "Prestadores verificados", label: "com antecedentes checados" },
+    { icon: CreditCard, value: "Pagamento seguro", label: "para todos os serviços" },
   ];
 
   return (
-    <div className="bg-slate-800 border-b border-slate-700 py-3 px-4" aria-label="Estatísticas da plataforma">
+    <div className="bg-white border-b border-slate-200 py-5 px-4" aria-label="Estatísticas da plataforma">
       <div className="container mx-auto max-w-4xl">
-        <div className="flex items-center justify-center gap-4 md:gap-10 flex-wrap">
+        <div className="flex items-center justify-center gap-6 md:gap-12 flex-wrap">
           {metrics.map((m, i) => {
             const Icon = m.icon;
             return (
               <React.Fragment key={i}>
-                {i > 0 && <div className="hidden md:block w-px h-6 bg-slate-600" />}
-                <div className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <div className="text-center md:text-left">
-                    <span className="text-white font-bold text-sm">{m.value}</span>
-                    <span className="text-xs ml-1" style={{ color: '#94A3B8' }}>{m.label}</span>
+                {i > 0 && <div className="hidden md:block w-px h-8 bg-slate-200" />}
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-cyan-50 flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5 text-cyan-600" />
+                  </div>
+                  <div>
+                    <p className="text-slate-900 font-bold text-sm leading-tight">{m.value}</p>
+                    <p className="text-xs text-slate-500">{m.label}</p>
                   </div>
                 </div>
               </React.Fragment>

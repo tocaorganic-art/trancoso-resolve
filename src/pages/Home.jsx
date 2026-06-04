@@ -6,24 +6,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import LazyImage from "@/components/ui/LazyImage";
-import BannerCategorias from "@/components/BannerCategorias";
-import PromotionalBanner from "@/components/PromotionalBanner";
 import Testimonials from "@/components/home/Testimonials";
-import UrgencyBar from "@/components/home/UrgencyBar";
-import HeroBanner from "@/components/home/HeroBanner";
+import HeroSearch from "@/components/home/HeroSearch";
 import SocialProofBar from "@/components/home/SocialProofBar";
-import CategoriasGrid from "@/components/home/CategoriasGrid";
 import CTAPrestador from "@/components/home/CTAPrestador";
 import {
-  Search, Sparkles, UtensilsCrossed, Hammer, Leaf,
-  Baby, Zap, Star, MapPin, Phone, Grid3x3, AlertCircle, Loader2, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight
+  Sparkles, UtensilsCrossed, Hammer, Leaf,
+  Baby, Zap, Star, AlertCircle, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
-import { DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
 
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 const categoryImageMap = {
@@ -210,7 +204,7 @@ const ServiceCard = ({ service, provider }) => {
                 {/* Botão Ver Detalhes */}
                 <Link to={createPageUrl("ServicoDetalhes", `?id=${service.id}`)} data-testid={`service-card-link-${service.id}`} aria-label={`Ver detalhes do serviço ${service.title}`}>
                     <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold">
-                        Ver Detalhes
+                        Solicitar
                     </Button>
                 </Link>
             </CardContent>
@@ -422,17 +416,11 @@ export default function HomePage() {
       )}
       <OnboardingTour />
 
-      {/* Barra de urgência */}
-      <UrgencyBar user={user} />
-
-      {/* Hero Carrossel */}
-      <HeroBanner vagasRestantes={vagasRestantes} total={totalPrestadoresVagas} />
+      {/* Hero com busca */}
+      <HeroSearch />
 
       {/* Barra prova social */}
-      <SocialProofBar totalVerificados={totalVerificados} totalCategorias={totalCategorias} totalAvaliacoes={totalAvaliacoes} />
-
-      {/* Grade de categorias */}
-      <CategoriasGrid />
+      <SocialProofBar totalVerificados={totalVerificados} />
 
       <div className="container mx-auto max-w-6xl px-4 py-8 md:py-16">
 
@@ -461,7 +449,7 @@ export default function HomePage() {
         {/* Featured Services */}
         <section className="mb-10 md:mb-20">
           <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900 drop-shadow-sm">Descubra os Serviços Mais Procurados em Trancoso</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 drop-shadow-sm">Profissionais verificados em Trancoso, na hora que você precisa.</h2>
             <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
               <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700" aria-label="Ver todos os serviços">
                 Ver todos
@@ -517,31 +505,36 @@ export default function HomePage() {
             ) : topProviders.length > 0 ? (
                 topProviders.map((provider) => (
                   <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
-                    <Card className="border-none shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 bg-white">
+                    <Card className="border border-slate-200 shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 bg-white">
                       <CardContent className="p-4">
-                        <div className="relative mb-3">
-                          <LazyImage
-                            src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
-                            alt={`Foto de perfil de ${provider.full_name}`}
-                            className="w-20 h-20 rounded-full mx-auto border-4 border-white shadow-md"
-                          />
-                          {provider.verified && (
-                            <div className="absolute bottom-0 right-1/2 translate-x-1/2 bg-cyan-500 rounded-full p-1" aria-label="Profissional verificado">
-                              <Star className="w-3 h-3 text-white fill-current" />
-                            </div>
+                        <LazyImage
+                          src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
+                          alt={`Foto de perfil de ${provider.full_name}`}
+                          className="w-20 h-20 rounded-full mx-auto border-4 border-white shadow-md mb-3"
+                        />
+                        {provider.verified && (
+                          <div className="inline-flex items-center gap-1 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full mb-2">
+                            ✅ Verificado
+                          </div>
+                        )}
+                        <p className="font-bold text-sm text-slate-900 mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
+                        <p className="text-xs text-slate-500 font-medium mb-2 line-clamp-1">{provider.occupation}</p>
+                        <div className="flex items-center justify-center gap-1 mb-2">
+                          <Star className="w-3.5 h-3.5 text-yellow-500 fill-current" aria-hidden="true" />
+                          <span className="text-sm font-bold text-slate-900">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
+                          {provider.total_reviews > 0 && (
+                            <span className="text-xs text-slate-400">({provider.total_reviews})</span>
                           )}
                         </div>
-                        <p className="font-bold text-base text-slate-900 mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
-                         <p className="text-xs md:text-sm text-slate-600 font-medium mb-2 line-clamp-1">{provider.occupation}</p>
-                        <div className="flex items-center justify-center gap-1">
-                          <Star className="w-4 h-4 text-yellow-500 fill-current" aria-hidden="true" />
-                          <span className="text-base font-bold text-slate-900">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
-                          <span className="sr-only">estrelas</span>
+                        <div className={`text-xs font-medium px-2 py-1 rounded-full ${
+                          provider.availability === 'Disponível' ? 'bg-green-100 text-green-700' :
+                          provider.availability === 'Ocupado' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-slate-100 text-slate-500'
+                        }`}>
+                          {provider.availability === 'Disponível' ? 'Disponível · Responde em 2h' : provider.availability || 'Indisponível'}
                         </div>
-
-
-                        </CardContent>
-                        </Card>
+                      </CardContent>
+                    </Card>
                   </Link>
                 ))
             ) : (
@@ -632,7 +625,7 @@ export default function HomePage() {
           <div className="mt-8">
             <Link to={createPageUrl("ServicosCategoria")}>
               <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold text-base px-8">
-                Pedir Orçamento Agora
+                Encontrar profissional agora
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
