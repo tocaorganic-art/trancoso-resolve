@@ -9,7 +9,7 @@ const ADMIN_WHITELIST = ['tocaorganic@gmail.com'];
 
 const MAX_RETRIES = 10;
 const RETRY_INTERVAL_MS = 1000;
-const TIMEOUT_MS = 12000; // 12s total máximo
+const TIMEOUT_MS = 30000; // 30s total máximo
 
 export default function PermissionChecker({ children, requiredRole = null, requiredUserType = null }) {
   const [permissionStatus, setPermissionStatus] = useState('checking');
@@ -26,18 +26,22 @@ export default function PermissionChecker({ children, requiredRole = null, requi
     staleTime: 0,
   });
 
-  // Timeout global: se após TIMEOUT_MS ainda estiver checking, desiste
+  // Timeout global: só dispara se ainda estiver em 'checking' (nunca se já foi autorizado)
   useEffect(() => {
     const timeout = setTimeout(() => {
       timedOutRef.current = true;
+      // Só mostra timeout se ainda não foi autorizado
       if (permissionStatus === 'checking') {
-        // Limpa flags antigas que possam estar causando loops
         localStorage.removeItem('user_type_prestador_pendente');
         setPermissionStatus('timeout');
       }
     }, TIMEOUT_MS);
+    // Cancela o timeout se o status mudar para 'authorized' antes do prazo
+    if (permissionStatus === 'authorized') {
+      clearTimeout(timeout);
+    }
     return () => clearTimeout(timeout);
-  }, []); // roda só uma vez na montagem
+  }, [permissionStatus]);
 
   useEffect(() => {
     // Limpa retry timer anterior
