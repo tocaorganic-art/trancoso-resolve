@@ -146,7 +146,7 @@ export default function ServicosCategoriaPage() {
     queryKey: ['serviceProviders'],
     queryFn: async () => {
       try {
-        const result = await base44.entities.ServiceProvider.list('-rating');
+        const result = await base44.entities.ServiceProvider.filter({ availability: { '$ne': 'Indisponível' } }, '-rating');
         return Array.isArray(result) ? result : [];
       } catch (err) {
         console.error('ServiceProvider query error:', err);
