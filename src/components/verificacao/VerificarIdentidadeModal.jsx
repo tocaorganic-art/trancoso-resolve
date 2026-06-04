@@ -6,8 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Upload, ShieldCheck, FileImage, CheckCircle2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSuccess }) {
-  const [step, setStep] = useState("form"); // form | uploading | analyzing | done
+  const [step, setStep] = useState("form"); // form | uploading | done
   const [documentType, setDocumentType] = useState("");
   const [uploadMode, setUploadMode] = useState("inteiro"); // inteiro | frente_verso
   const [file, setFile] = useState(null);
@@ -18,6 +19,17 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
   const [previewVerso, setPreviewVerso] = useState(null);
   const [userType] = useState(user?.tipo_pessoa || 'pf');
   const [hasPhysicalLocation] = useState(user?.tem_ponto_fisico_em_trancoso || false);
+
+  // Buscar ServiceProvider do usuário para obter o provider_id correto
+  const { data: provider } = useQuery({
+    queryKey: ['myServiceProvider', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      const results = await base44.entities.ServiceProvider.filter({ created_by: user.email });
+      return results[0] || null;
+    },
+    enabled: !!user && isOpen,
+  });
 
   const handleFileChange = (e) => {
     const f = e.target.files[0];
@@ -46,9 +58,16 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
     return !!fileFrente && !!fileVerso;
   };
 
+  const isSubmitting = step === "uploading";
+
   const handleSubmit = async () => {
     if (!isFormValid()) {
       toast.error("Selecione o tipo de documento e faça o upload das imagens.");
+      return;
+    }
+
+    if (!provider?.id) {
+      toast.error("Perfil de prestador não encontrado. Complete seu cadastro primeiro.");
       return;
     }
 
@@ -71,8 +90,12 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
       }
 
       // 2. Criar registro de verificação (admin revisará manualmente)
+      if (!provider?.id) {
+        throw new Error('Prestador não encontrado. Complete seu perfil primeiro.');
+      }
+
       await base44.entities.Verificacao.create({
-        provider_id: user.id,
+        provider_id: provider.id,
         verification_type: "identity",
         status: "pending",
         description: JSON.stringify({
@@ -89,9 +112,16 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
       setStep("done");
       onSuccess?.();
     } catch (error) {
-      const msg = error.message?.includes('unsupported image') 
-        ? 'Formato de imagem não suportado. Use JPG ou PNG.'
-        : error.message;
+      let msg = 'Não foi possível enviar o documento. Tente novamente ou entre em contato pelo WhatsApp.';
+      
+      if (error.message?.includes('unsupported image')) {
+        msg = 'Formato de imagem não suportado. Use JPG ou PNG.';
+      } else if (error.message?.includes('Prestador não encontrado')) {
+        msg = 'Complete seu perfil de prestador antes de verificar identidade.';
+      } else if (error.status === 403) {
+        msg = 'Permissão negada. Entre em contato com o suporte.';
+      }
+      
       toast.error("Erro ao enviar documento.", { description: msg });
       setStep("form");
     }
@@ -292,16 +322,25 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
 
 
             <div className="flex gap-3 pt-2">
-              <Button variant="outline" onClick={handleClose} disabled={step !== "form"} className="flex-1">
+              <Button variant="outline" onClick={handleClose} disabled={isSubmitting} className="flex-1">
                 Cancelar
               </Button>
               <Button
                 onClick={handleSubmit}
-                disabled={step !== "form" || !isFormValid()}
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
+                disabled={isSubmitting || !isFormValid() || !provider?.id}
+                className="flex-1 bg-amber-600 hover:bg-amber-700 text-white"
               >
-                <Upload className="w-4 h-4 mr-2" />
-                Enviar Documento
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Enviar Documento
+                  </>
+                )}
               </Button>
             </div>
           </div>
