@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, XCircle, Clock, FileText, Palette, Code, Layout } from "lucide-react";
+import { CheckCircle2, XCircle, Clock, FileText, Palette, Code, Layout, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function RelatorioDiarioPage() {
@@ -88,6 +88,81 @@ export default function RelatorioDiarioPage() {
     substituicoesCores: 35,
     componentesAtualizados: 5,
     pendencias: 5
+  };
+
+  const gerarMarkdown = () => {
+    const md = `# Relatório Diário de Desenvolvimento
+
+**Data:** ${new Date(dataHoje).toLocaleDateString('pt-BR')}  
+**Projeto:** Trancoso Resolve - Refatoração de Identidade Visual
+
+---
+
+## 📊 Métricas
+
+| Arquivos Modificados | Substituições de Cores | Componentes Atualizados | Pendências |
+|---------------------|----------------------|----------------------|------------|
+| ${metricas.arquivosModificados} | ${metricas.substituicoesCores} | ${metricas.componentesAtualizados} | ${metricas.pendencias} |
+
+---
+
+## ✅ Concluído Hoje
+
+### Identidade Visual - Paleta Terrosa
+${tarefasConcluidas[0].itens.map(item => `- ${item}`).join('\n')}
+
+### Arquivos Modificados
+${tarefasConcluidas[1].itens.map(item => `- ${item}`).join('\n')}
+
+### Componentes Atualizados
+${tarefasConcluidas[2].itens.map(item => `- ${item}`).join('\n')}
+
+---
+
+## ⏳ Pendências
+
+${tarefasPendentes.map((t, i) => `### ${i + 1}. ${t.descricao}
+- **Prioridade:** ${t.prioridade}
+- **Motivo:** ${t.motivo}
+`).join('\n')}
+
+---
+
+## 🎨 Resumo da Migração de Cores
+
+### ❌ Removido (Azul/Ciano)
+- from-cyan-500 to-blue-600 (gradientes)
+- text-cyan-600 (textos e links)
+- bg-blue-50 (fundos)
+- border-blue-200 (bordas)
+- ring-cyan-500 (focus states)
+
+### ✅ Adicionado (Âmbar/Terroso)
+- bg-amber-600 (botões CTA)
+- text-amber-700 (textos e links)
+- from-amber-800 to-amber-600 (gradientes)
+- bg-amber-50 (fundos)
+- border-amber-200 (bordas)
+- ring-amber-500 (focus states)
+
+---
+
+*Relatório gerado em ${new Date().toLocaleString('pt-BR')}*
+`;
+    return md;
+  };
+
+  const handleExportMarkdown = () => {
+    const md = gerarMarkdown();
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio-diario-${dataHoje}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -245,9 +320,9 @@ export default function RelatorioDiarioPage() {
 
         {/* Ações */}
         <div className="flex gap-3">
-          <Button className="bg-amber-600 hover:bg-amber-700">
-            <FileText className="w-4 h-4 mr-2" />
-            Exportar PDF
+          <Button onClick={handleExportMarkdown} className="bg-amber-600 hover:bg-amber-700">
+            <Download className="w-4 h-4 mr-2" />
+            Exportar Markdown
           </Button>
           <Link to="/">
             <Button variant="outline">
