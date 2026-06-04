@@ -175,25 +175,25 @@ function MeusServicosContent() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <Card key={service.id} className="overflow-hidden rounded-2xl border border-slate-200">
+            <Card key={service.id} className="overflow-hidden rounded-2xl border border-slate-700">
             {service.images?.[0] && (
               <LazyImage src={service.images[0]} alt={service.title} className="h-48 w-full object-cover" />
             )}
             <CardHeader>
               <div className="flex items-start justify-between">
-                <CardTitle className="text-base font-bold text-slate-900 leading-snug">{service.title}</CardTitle>
-                <Badge className={service.active ? "bg-green-100 text-green-800 font-semibold" : "bg-slate-100 text-slate-600 font-semibold"}>
+                <CardTitle className="text-base font-bold text-slate-100 leading-snug">{service.title}</CardTitle>
+                <Badge className={service.active ? "bg-green-700 text-green-100 font-semibold" : "bg-slate-600 text-slate-200 font-semibold"}>
                   {service.active ? "Ativo" : "Inativo"}
                 </Badge>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-600 mb-4 line-clamp-2 leading-relaxed">{service.description}</p>
+              <p className="text-sm text-slate-300 mb-4 line-clamp-2 leading-relaxed">{service.description}</p>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-2xl font-extrabold text-cyan-600">
+                <span className="text-2xl font-extrabold text-amber-400">
                   R$ {service.price?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
-                <span className="text-sm text-slate-500 font-medium">por {service.price_unit}</span>
+                <span className="text-sm text-slate-400 font-medium">por {service.price_unit}</span>
               </div>
                 <div className="flex gap-2">
                   <Button
