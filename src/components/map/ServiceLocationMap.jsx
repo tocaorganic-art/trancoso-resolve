@@ -1,92 +1,147 @@
-
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LocateFixed, MapPin } from 'lucide-react';
 
-// Corrige o problema do ícone do marcador que não aparece no build do React
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
+const GOOGLE_MAPS_API_KEY = "SUA_CHAVE_API_AQUI"; // Substitua pela sua chave do Google Cloud Console
 
+const trancosoDefault = { lat: -16.5925, lng: -39.0931 };
 
-// Componente auxiliar para atualizar a visualização do mapa
-function ChangeView({ center, zoom }) {
-  const map = useMap();
-  map.setView(center, zoom);
-  return null;
-}
+const landmarks = [
+  { id: 1, name: "Quadrado", position: { lat: -16.5925, lng: -39.0931 } },
+  { id: 2, name: "Praia dos Nativos", position: { lat: -16.5931, lng: -39.0881 } },
+  { id: 3, name: "Praia dos Coqueiros", position: { lat: -16.5966, lng: -39.0911 } }
+];
 
-// Componente auxiliar para capturar eventos de clique no mapa
-function MapEvents({ onClick }) {
-  const map = useMap();
-  useEffect(() => {
-    map.on('click', onClick);
-    return () => {
-      map.off('click', onClick);
-    };
-  }, [map, onClick]);
-  return null;
+function loadGoogleMapsScript() {
+  return new Promise((resolve, reject) => {
+    if (window.google && window.google.maps) {
+      resolve();
+      return;
+    }
+    if (document.getElementById('google-maps-loader')) {
+      // Script já sendo carregado, aguarda
+      const check = setInterval(() => {
+        if (window.google && window.google.maps) {
+          clearInterval(check);
+          resolve();
+        }
+      }, 100);
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'google-maps-loader';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&v=weekly`;
+    script.async = true;
+    script.defer = true;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
 }
 
 export default function ServiceLocationMap({ initialPosition, onLocationSelect }) {
-  const trancosoDefault = [-16.5925, -39.0931];
-  const [position, setPosition] = useState(initialPosition || trancosoDefault);
-  
-  const landmarks = [
-    { id: 1, name: "Quadrado", position: [-16.5925, -39.0931] },
-    { id: 2, name: "Praia dos Nativos", position: [-16.5931, -39.0881] },
-    { id: 3, name: "Praia dos Coqueiros", position: [-16.5966, -39.0911] }
-  ];
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const markerRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleLocationUpdate = (newPos, zoom = 16) => {
-    setPosition(newPos);
-    if (onLocationSelect) {
-      onLocationSelect(newPos);
+  const initialLatLng = initialPosition
+    ? { lat: initialPosition[0], lng: initialPosition[1] }
+    : trancosoDefault;
+
+  const [position, setPosition] = useState(initialLatLng);
+
+  useEffect(() => {
+    loadGoogleMapsScript()
+      .then(() => setLoaded(true))
+      .catch(() => setError("Erro ao carregar o Google Maps. Verifique a chave de API."));
+  }, []);
+
+  useEffect(() => {
+    if (!loaded || !mapRef.current) return;
+
+    const map = new window.google.maps.Map(mapRef.current, {
+      center: position,
+      zoom: 16,
+      mapTypeId: 'hybrid', // Satélite com rótulos
+      tilt: 45,            // Visão 3D inclinada
+      heading: 0,
+      mapId: undefined,
+      mapTypeControl: true,
+      mapTypeControlOptions: {
+        mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain']
+      },
+      fullscreenControl: true,
+      streetViewControl: true,
+      zoomControl: true,
+    });
+
+    mapInstanceRef.current = map;
+
+    // Marcador arrastável
+    const marker = new window.google.maps.Marker({
+      position,
+      map,
+      draggable: true,
+      title: 'Localização selecionada',
+      animation: window.google.maps.Animation.DROP,
+    });
+    markerRef.current = marker;
+
+    // Clique no mapa move o marcador
+    map.addListener('click', (e) => {
+      const newPos = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+      marker.setPosition(newPos);
+      setPosition(newPos);
+      if (onLocationSelect) onLocationSelect([newPos.lat, newPos.lng]);
+    });
+
+    // Arrastar marcador
+    marker.addListener('dragend', () => {
+      const newPos = marker.getPosition();
+      const pos = { lat: newPos.lat(), lng: newPos.lng() };
+      setPosition(pos);
+      if (onLocationSelect) onLocationSelect([pos.lat, pos.lng]);
+    });
+  }, [loaded]);
+
+  const flyTo = (pos) => {
+    setPosition(pos);
+    if (mapInstanceRef.current && markerRef.current) {
+      mapInstanceRef.current.panTo(pos);
+      mapInstanceRef.current.setZoom(17);
+      markerRef.current.setPosition(pos);
+      if (onLocationSelect) onLocationSelect([pos.lat, pos.lng]);
     }
-  };
-
-  const handleMapClick = (e) => {
-    handleLocationUpdate([e.latlng.lat, e.latlng.lng]);
   };
 
   const handleUseCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          handleLocationUpdate([pos.coords.latitude, pos.coords.longitude]);
-        },
-        (error) => {
-            console.error("Erro ao obter localização:", error)
-            alert("Não foi possível obter sua localização. Verifique as permissões do navegador.");
-        }
-      );
-    } else {
-        alert("Geolocalização não é suportada por este navegador.");
+    if (!navigator.geolocation) {
+      alert("Geolocalização não é suportada por este navegador.");
+      return;
     }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => flyTo({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => alert("Não foi possível obter sua localização. Verifique as permissões do navegador.")
+    );
   };
 
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
-        <div className="h-[350px] w-full">
-          <MapContainer center={position} zoom={15} style={{ height: "100%", width: "100%" }}>
-            <ChangeView center={position} zoom={15} />
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; OpenStreetMap'
-            />
-            <Marker position={position}>
-              <Popup>Localização selecionada</Popup>
-            </Marker>
-            <MapEvents onClick={handleMapClick} />
-          </MapContainer>
+        <div className="h-[350px] w-full relative">
+          {error ? (
+            <div className="flex items-center justify-center h-full bg-slate-100 text-slate-500 text-sm p-4 text-center">
+              {error}
+            </div>
+          ) : !loaded ? (
+            <div className="flex items-center justify-center h-full bg-slate-100 text-slate-500 text-sm">
+              Carregando mapa 3D...
+            </div>
+          ) : null}
+          <div ref={mapRef} className="h-full w-full" />
         </div>
         <div className="p-4 bg-slate-50 border-t space-y-3">
           <p className="text-sm text-slate-600">Clique no mapa para definir sua localização principal ou use os atalhos abaixo.</p>
@@ -100,7 +155,7 @@ export default function ServiceLocationMap({ initialPosition, onLocationSelect }
                 key={landmark.id}
                 variant="outline"
                 size="sm"
-                onClick={() => handleLocationUpdate(landmark.position)}
+                onClick={() => flyTo(landmark.position)}
               >
                 <MapPin className="w-4 h-4 mr-2" />
                 {landmark.name}
