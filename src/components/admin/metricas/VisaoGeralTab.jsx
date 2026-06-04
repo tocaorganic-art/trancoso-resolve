@@ -7,7 +7,8 @@ import { Users, FileText, TrendingUp, Zap, Loader2 } from "lucide-react";
 import { format, subDays, parseISO, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-function KPICard({ title, value, icon: Icon, color, loading }) {
+function KPICard({ title, value, icon: KPIIcon, color, loading }) {
+  const Icon = KPIIcon;
   return (
     <Card className="bg-slate-800 border-slate-700">
       <CardContent className="p-5 flex items-center gap-4">

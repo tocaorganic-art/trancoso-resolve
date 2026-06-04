@@ -27,6 +27,7 @@ import OfflineIndicator from "./components/OfflineIndicator";
 import SkipToContent from "./components/ui/SkipToContent";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PageViewTracker from "./components/analytics/PageViewTracker";
+import WebVitalsCollector from "./components/analytics/WebVitalsCollector";
 import AccessLogger from "./components/auth/AccessLogger";
 import SupportChat from "./components/support/SupportChat";
 import FeedbackCollector from "./components/feedback/FeedbackCollector";
@@ -182,6 +183,7 @@ export default function Layout({ children, currentPageName }) {
         <ImagePreloader />
         <PerformanceMonitor />
         <PageViewTracker />
+        <WebVitalsCollector />
         <AccessLogger />
 
         <div className="min-h-screen bg-slate-900 overflow-x-hidden">
