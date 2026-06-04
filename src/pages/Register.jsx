@@ -13,9 +13,9 @@ import { toast } from "@/components/ui/use-toast";
 export default function Register() {
   useEffect(() => {
     document.title = 'Cadastrar | Trancoso Resolve';
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = 'Crie sua conta gratuita na Trancoso Resolve e contrate ou ofereça serviços verificados em Trancoso, Bahia.';
+    const desc = 'Crie sua conta na Trancoso Resolve. Conecte-se com os melhores profissionais verificados de Trancoso, Bahia.';
+    let m = document.querySelector('meta[name="description"]');
+    if (m) m.content = desc;
   }, []);
 
   const [email, setEmail] = useState("");
@@ -52,7 +52,7 @@ export default function Register() {
       if (result?.access_token) {
         base44.auth.setToken(result.access_token);
       }
-      window.location.href = "/";
+      window.location.href = "/CadastroTipo";
     } catch (err) {
       setError(err.message || "Invalid verification code");
     } finally {
@@ -74,7 +74,7 @@ export default function Register() {
   };
 
   const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", "/");
+    base44.auth.loginWithProvider("google", "/CadastroTipo");
   };
 
   if (showOtp) {

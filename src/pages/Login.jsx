@@ -27,14 +27,30 @@ function FacebookIcon({ className }) {
 export default function Login() {
   useEffect(() => {
     document.title = 'Entrar | Trancoso Resolve';
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = 'Acesse sua conta na Trancoso Resolve e gerencie seus pedidos ou serviços em Trancoso, Bahia.';
+    const desc = 'Acesse sua conta na Trancoso Resolve para contratar ou gerenciar seus serviços em Trancoso, Bahia.';
+    let m = document.querySelector('meta[name="description"]');
+    if (m) m.content = desc;
   }, []);
 
-  const handleGoogle = () => base44.auth.loginWithProvider("google", "/");
-  const handleMicrosoft = () => base44.auth.loginWithProvider("microsoft", "/");
-  const handleFacebook = () => base44.auth.loginWithProvider("facebook", "/");
+  const redirectAfterLogin = async () => {
+    try {
+      const user = await base44.auth.me();
+      if (!user) { window.location.href = "/"; return; }
+      if (!user.user_type || user.user_type === "indefinido") {
+        window.location.href = "/CadastroTipo";
+      } else if (user.user_type === "prestador") {
+        window.location.href = "/MeuPerfilPrestador";
+      } else {
+        window.location.href = "/";
+      }
+    } catch {
+      window.location.href = "/";
+    }
+  };
+
+  const handleGoogle = () => base44.auth.loginWithProvider("google", "/CadastroTipo");
+  const handleMicrosoft = () => base44.auth.loginWithProvider("microsoft", "/CadastroTipo");
+  const handleFacebook = () => base44.auth.loginWithProvider("facebook", "/CadastroTipo");
 
   return (
     <AuthLayout
