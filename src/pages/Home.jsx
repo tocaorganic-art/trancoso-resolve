@@ -635,28 +635,58 @@ export default function HomePage() {
         </section>
 
         {/* Costa do Descobrimento */}
-        <section className="mb-10 md:mb-20">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 text-center">Atendemos toda a Costa do Descobrimento</h2>
-          <p className="text-center text-slate-500 mb-8 text-base">Profissionais verificados nos principais destinos da região</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link to="/servicos/diarista-trancoso" className="group block bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-              <div className="text-3xl mb-3">🌴</div>
-              <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-amber-700 transition-colors">Trancoso</h3>
-              <p className="text-slate-500 text-sm mb-4">Villas, pousadas e residências de alto padrão</p>
-              <span className="text-amber-700 text-sm font-semibold flex items-center gap-1">Ver serviços <ArrowRight className="w-4 h-4" /></span>
-            </Link>
-            <Link to="/servicos/diarista-porto-seguro" className="group block bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-              <div className="text-3xl mb-3">⚓</div>
-              <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-amber-700 transition-colors">Porto Seguro</h3>
-              <p className="text-slate-500 text-sm mb-4">Centro histórico, resorts e casas de temporada</p>
-              <span className="text-amber-700 text-sm font-semibold flex items-center gap-1">Ver serviços <ArrowRight className="w-4 h-4" /></span>
-            </Link>
-            <Link to="/servicos/diarista-caraiva" className="group block bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-              <div className="text-3xl mb-3">🌊</div>
-              <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-amber-700 transition-colors">Caraíva</h3>
-              <p className="text-slate-500 text-sm mb-4">Pousadas e casas no destino mais preservado do Sul da Bahia</p>
-              <span className="text-amber-700 text-sm font-semibold flex items-center gap-1">Ver serviços <ArrowRight className="w-4 h-4" /></span>
-            </Link>
+        <section className="mb-10 md:mb-20 bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-8 md:p-12 border border-amber-100">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3 text-center">Atendemos toda a Costa do Descobrimento</h2>
+          <p className="text-slate-500 text-center mb-8 text-base max-w-xl mx-auto">Profissionais verificados para Trancoso, Porto Seguro e Caraíva — a mesma qualidade e segurança em toda a região.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                cidade: 'Trancoso',
+                emoji: '🏄',
+                desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.',
+                links: [
+                  { label: 'Diarista Trancoso', href: '/servicos/diarista-trancoso' },
+                  { label: 'Eletricista Trancoso', href: '/servicos/eletricista-trancoso' },
+                  { label: 'Piscineiro Trancoso', href: '/servicos/piscineiro-trancoso' },
+                ],
+              },
+              {
+                cidade: 'Porto Seguro',
+                emoji: '⚓',
+                desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.',
+                links: [
+                  { label: 'Diarista Porto Seguro', href: '/servicos/diarista-porto-seguro' },
+                  { label: 'Eletricista Porto Seguro', href: '/servicos/eletricista-porto-seguro' },
+                  { label: 'Piscineiro Porto Seguro', href: '/servicos/piscineiro-porto-seguro' },
+                ],
+              },
+              {
+                cidade: 'Caraíva',
+                emoji: '🌊',
+                desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.',
+                links: [
+                  { label: 'Diarista Caraíva', href: '/servicos/diarista-caraiva' },
+                  { label: 'Eletricista Caraíva', href: '/servicos/eletricista-caraiva' },
+                  { label: 'Piscineiro Caraíva', href: '/servicos/piscineiro-caraiva' },
+                ],
+              },
+            ].map((dest) => (
+              <div key={dest.cidade} className="bg-white rounded-2xl p-6 shadow-sm border border-amber-100">
+                <div className="text-3xl mb-3">{dest.emoji}</div>
+                <h3 className="font-bold text-lg text-slate-900 mb-2">{dest.cidade}</h3>
+                <p className="text-slate-500 text-sm mb-4 leading-relaxed">{dest.desc}</p>
+                <ul className="space-y-2">
+                  {dest.links.map((link) => (
+                    <li key={link.href}>
+                      <Link to={link.href} className="text-amber-700 hover:text-amber-900 text-sm font-medium flex items-center gap-1 group">
+                        <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </section>
 

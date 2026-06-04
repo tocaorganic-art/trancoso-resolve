@@ -254,6 +254,11 @@ const AuthenticatedApp = () => {
             <AnimatedPage><RioVerdeTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
+        <Route path="/servicos/pitinga-trancoso" element={
+          <LayoutWrapper currentPageName="PitingaTrancoso">
+            <AnimatedPage><PitingaTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
         <Route path="/servicos/diarista-porto-seguro" element={
           <LayoutWrapper currentPageName="DiaristaPortoSeguro">
             <AnimatedPage><DiaristaPortoSeguro /></AnimatedPage>
@@ -312,11 +317,6 @@ const AuthenticatedApp = () => {
         <Route path="/servicos/pedreiro-caraiva" element={
           <LayoutWrapper currentPageName="PedreiroCaraiva">
             <AnimatedPage><PedreiroCaraiva /></AnimatedPage>
-          </LayoutWrapper>
-        } />
-        <Route path="/servicos/pitinga-trancoso" element={
-          <LayoutWrapper currentPageName="PitingaTrancoso">
-            <AnimatedPage><PitingaTrancoso /></AnimatedPage>
           </LayoutWrapper>
         } />
 
