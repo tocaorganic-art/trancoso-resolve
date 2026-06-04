@@ -74,14 +74,18 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
 
       // 2. Criar registro de verificação
       const verificacao = await base44.entities.Verificacao.create({
-        user_email: user.email,
-        user_name: user.full_name,
-        document_url,
-        ...(document_url_verso && { document_url_verso }),
-        document_type: documentType,
-        upload_mode: uploadMode,
-        status: "Em Análise",
-        submission_date: new Date().toISOString(),
+        provider_id: user.id,
+        verification_type: "identity",
+        status: "in_progress",
+        description: JSON.stringify({
+          user_email: user.email,
+          user_name: user.full_name,
+          document_url,
+          ...(document_url_verso && { document_url_verso }),
+          document_type: documentType,
+          upload_mode: uploadMode,
+          submission_date: new Date().toISOString(),
+        }),
       });
 
       setStep("analyzing");
