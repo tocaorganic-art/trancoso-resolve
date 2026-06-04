@@ -373,6 +373,17 @@ export default function Layout({ children, currentPageName }) {
                 </a>
               </div>
 
+              {/* Links SEO Porto Seguro */}
+              <div className="flex justify-center gap-x-4 gap-y-1 mb-4 flex-wrap text-xs text-slate-400">
+                <span className="text-slate-500 font-semibold">Porto Seguro:</span>
+                <Link to="/servicos/diarista-porto-seguro" className="hover:text-slate-200 transition-colors">Diarista</Link>
+                <Link to="/servicos/eletricista-porto-seguro" className="hover:text-slate-200 transition-colors">Eletricista</Link>
+                <Link to="/servicos/piscineiro-porto-seguro" className="hover:text-slate-200 transition-colors">Piscineiro</Link>
+                <Link to="/servicos/cozinheiro-porto-seguro" className="hover:text-slate-200 transition-colors">Cozinheiro</Link>
+                <Link to="/servicos/jardineiro-porto-seguro" className="hover:text-slate-200 transition-colors">Jardineiro</Link>
+                <Link to="/servicos/pedreiro-porto-seguro" className="hover:text-slate-200 transition-colors">Pedreiro</Link>
+              </div>
+
               <p className="text-slate-300 text-base font-medium">
                 © 2026 Trancoso Resolve • Plataforma de Serviços em Trancoso • Todos os direitos reservados
               </p>

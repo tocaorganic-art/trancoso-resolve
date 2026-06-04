@@ -44,6 +44,12 @@ import MotoristaTrancoso from '@/pages/servicos/MotoristaTrancoso';
 import QuadradoTrancoso from '@/pages/servicos/QuadradoTrancoso';
 import RioVerdeTrancoso from '@/pages/servicos/RioVerdeTrancoso';
 import PitingaTrancoso from '@/pages/servicos/PitingaTrancoso';
+import DiaristaPortoSeguro from '@/pages/servicos/DiaristaPortoSeguro';
+import EletricistaPortoSeguro from '@/pages/servicos/EletricistaPortoSeguro';
+import PiscineiroPortoSeguro from '@/pages/servicos/PiscineiroPortoSeguro';
+import CozinheiroPortoSeguro from '@/pages/servicos/CozinheiroPortoSeguro';
+import JardineiroPortoSeguro from '@/pages/servicos/JardineiroPortoSeguro';
+import PedreiroPortoSeguro from '@/pages/servicos/PedreiroPortoSeguro';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -245,6 +251,37 @@ const AuthenticatedApp = () => {
         <Route path="/servicos/pitinga-trancoso" element={
           <LayoutWrapper currentPageName="PitingaTrancoso">
             <AnimatedPage><PitingaTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        {/* Porto Seguro */}
+        <Route path="/servicos/diarista-porto-seguro" element={
+          <LayoutWrapper currentPageName="DiaristaPortoSeguro">
+            <AnimatedPage><DiaristaPortoSeguro /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/eletricista-porto-seguro" element={
+          <LayoutWrapper currentPageName="EletricistaPortoSeguro">
+            <AnimatedPage><EletricistaPortoSeguro /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/piscineiro-porto-seguro" element={
+          <LayoutWrapper currentPageName="PiscineiroPortoSeguro">
+            <AnimatedPage><PiscineiroPortoSeguro /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/cozinheiro-porto-seguro" element={
+          <LayoutWrapper currentPageName="CozinheiroPortoSeguro">
+            <AnimatedPage><CozinheiroPortoSeguro /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/jardineiro-porto-seguro" element={
+          <LayoutWrapper currentPageName="JardineiroPortoSeguro">
+            <AnimatedPage><JardineiroPortoSeguro /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/servicos/pedreiro-porto-seguro" element={
+          <LayoutWrapper currentPageName="PedreiroPortoSeguro">
+            <AnimatedPage><PedreiroPortoSeguro /></AnimatedPage>
           </LayoutWrapper>
         } />
 

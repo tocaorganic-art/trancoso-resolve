@@ -26,6 +26,13 @@ const staticPages = [
   { path: '/servicos/quadrado-trancoso', priority: '0.85', changefreq: 'weekly' },
   { path: '/servicos/rio-verde-trancoso', priority: '0.85', changefreq: 'weekly' },
   { path: '/servicos/pitinga-trancoso', priority: '0.85', changefreq: 'weekly' },
+  // Porto Seguro
+  { path: '/servicos/diarista-porto-seguro', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/eletricista-porto-seguro', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/piscineiro-porto-seguro', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/cozinheiro-porto-seguro', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/jardineiro-porto-seguro', priority: '0.9', changefreq: 'weekly' },
+  { path: '/servicos/pedreiro-porto-seguro', priority: '0.9', changefreq: 'weekly' },
 ];
 
 // Landing pages SEO por categoria de serviço

@@ -634,6 +634,32 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Costa do Descobrimento */}
+        <section className="mb-10 md:mb-20">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 text-center">Atendemos toda a Costa do Descobrimento</h2>
+          <p className="text-center text-slate-500 mb-8 text-base">Profissionais verificados nos principais destinos da região</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Link to="/servicos/diarista-trancoso" className="group block bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
+              <div className="text-3xl mb-3">🌴</div>
+              <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-amber-700 transition-colors">Trancoso</h3>
+              <p className="text-slate-500 text-sm mb-4">Villas, pousadas e residências de alto padrão</p>
+              <span className="text-amber-700 text-sm font-semibold flex items-center gap-1">Ver serviços <ArrowRight className="w-4 h-4" /></span>
+            </Link>
+            <Link to="/servicos/diarista-porto-seguro" className="group block bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
+              <div className="text-3xl mb-3">⚓</div>
+              <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-amber-700 transition-colors">Porto Seguro</h3>
+              <p className="text-slate-500 text-sm mb-4">Centro histórico, resorts e casas de temporada</p>
+              <span className="text-amber-700 text-sm font-semibold flex items-center gap-1">Ver serviços <ArrowRight className="w-4 h-4" /></span>
+            </Link>
+            <Link to="/servicos/diarista-caraiva" className="group block bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
+              <div className="text-3xl mb-3">🌊</div>
+              <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-amber-700 transition-colors">Caraíva</h3>
+              <p className="text-slate-500 text-sm mb-4">Pousadas e casas no destino mais preservado do Sul da Bahia</p>
+              <span className="text-amber-700 text-sm font-semibold flex items-center gap-1">Ver serviços <ArrowRight className="w-4 h-4" /></span>
+            </Link>
+          </div>
+        </section>
+
         {/* CTA Prestadores */}
         <CTAPrestador vagasRestantes={vagasRestantes} />
       </div>
