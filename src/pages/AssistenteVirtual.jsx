@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
@@ -8,8 +8,22 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import LeadAssistenteModal from '@/components/leads/LeadAssistenteModal';
 
 export default function AssistenteVirtualPage() {
+  const [showLeadModal, setShowLeadModal] = useState(false);
+
+  useEffect(() => {
+    // Mostra modal de captura após 30s se não logado
+    let timer;
+    base44.auth.isAuthenticated().then(auth => {
+      if (!auth) {
+        timer = setTimeout(() => setShowLeadModal(true), 30000);
+      }
+    });
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     document.title = 'Assistente IA | Trancoso Resolve';
     const desc = 'Converse com o Toca TrIA, o assistente inteligente da Trancoso Resolve. Encontre o profissional certo para sua necessidade em segundos.';
@@ -35,6 +49,7 @@ export default function AssistenteVirtualPage() {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white overflow-hidden">
+      {showLeadModal && <LeadAssistenteModal onClose={() => setShowLeadModal(false)} />}
       {/* Hero Section */}
       <section className="pt-20 pb-32 px-4 md:px-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600 rounded-full opacity-10 blur-3xl"></div>

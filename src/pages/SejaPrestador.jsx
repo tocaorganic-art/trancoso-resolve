@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, BarChart2, Users, Star, Bot, Camera } from 'lucide-react';
+import LeadPrestadorForm from '@/components/leads/LeadPrestadorForm';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Testimonials from '@/components/home/Testimonials';
@@ -171,6 +172,11 @@ export default function SejaPrestadorPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* Formulário pré-cadastro prestador */}
+      <section className="container mx-auto px-4 max-w-3xl pb-8">
+        <LeadPrestadorForm />
       </section>
 
       {/* Links internos de suporte */}

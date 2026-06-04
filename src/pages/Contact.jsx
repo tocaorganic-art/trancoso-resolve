@@ -1,144 +1,161 @@
 import { useEffect, useState } from 'react';
-import { Mail, MessageSquare } from 'lucide-react';
+import { Mail, MessageSquare, MapPin, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { base44 } from '@/api/base44Client';
+
+const ASSUNTOS = ['Sou cliente', 'Sou prestador', 'Parceria', 'Imprensa', 'Outro'];
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [status, setStatus] = useState('idle');
 
   useEffect(() => {
     document.title = 'Contato | Trancoso Resolve';
-    
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.name = 'description';
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.content = 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Bahia.';
-
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (!ogTitle) {
-      ogTitle = document.createElement('meta');
-      ogTitle.setAttribute('property', 'og:title');
-      document.head.appendChild(ogTitle);
-    }
-    ogTitle.content = 'Contato | Trancoso Resolve';
-
-    let canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (!canonicalLink) {
-      canonicalLink = document.createElement('link');
-      canonicalLink.rel = 'canonical';
-      document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.href = `${window.location.origin}/Contact`;
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
+    meta.content = 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Bahia.';
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = `${window.location.origin}/Contact`;
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In production, this would send to a backend function
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
-    setFormData({ name: '', email: '', message: '' });
+    setStatus('loading');
+    try {
+      await base44.entities.LeadPreLancamento.create({
+        name: form.name,
+        email: form.email,
+        phone: form.phone || undefined,
+        message: `[${form.subject}] ${form.message}`,
+        service_interest: form.subject,
+        source: 'pagina-contato',
+        type: form.subject === 'Sou prestador' ? 'prestador' : 'cliente',
+      });
+      // Notificação interna em background
+      base44.functions.invoke('notifyNewLead', {
+        message: `Novo contato via /Contact\nNome: ${form.name}\nEmail: ${form.email}\nAssunto: ${form.subject}\nMensagem: ${form.message}`
+      }).catch(() => {});
+      setStatus('success');
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-slate-50 text-foreground">
       <div className="container mx-auto px-4 py-12 md:py-16 max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8 text-primary">Entre em Contato</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900">Entre em Contato</h1>
+        <p className="text-slate-500 mb-10">Nossa equipe está em Trancoso, Bahia — e responde rápido.</p>
 
-        <div className="grid md:grid-cols-2 gap-12 mb-12">
-          {/* Contact Methods */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-accent mb-6">Formas de Contato</h2>
+        <div className="grid md:grid-cols-2 gap-10 mb-12">
+          {/* Canais */}
+          <div className="space-y-5">
+            <h2 className="text-xl font-bold text-slate-800 mb-4">Formas de Contato</h2>
 
-            <div className="flex items-start gap-4 p-4 bg-accent/10 rounded-lg border border-accent/20">
-              <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+            <a href="mailto:suporte@trancosoresolve.com.br" className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-100 shadow-sm hover:border-amber-300 transition-colors group">
+              <Mail className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
               <div>
-                <h3 className="font-bold mb-2">Email</h3>
-                <a href="mailto:suporte@trancosoresolve.com.br" className="text-primary hover:underline">
-                  suporte@trancosoresolve.com.br
-                </a>
-                <p className="text-sm text-muted-foreground mt-1">Resposta em até 24 horas</p>
+                <p className="font-semibold text-slate-800 group-hover:text-amber-700 transition-colors">suporte@trancosoresolve.com.br</p>
+                <p className="text-xs text-slate-400 mt-0.5">Resposta em até 24 horas</p>
+              </div>
+            </a>
+
+            <a href="https://wa.me/5573998283579" target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-100 shadow-sm hover:border-green-400 transition-colors group">
+              <MessageSquare className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-semibold text-slate-800 group-hover:text-green-700 transition-colors">WhatsApp</p>
+                <p className="text-xs text-slate-400 mt-0.5">Atendimento em horário comercial</p>
+              </div>
+            </a>
+
+            <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+              <MapPin className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-semibold text-slate-800">Trancoso, Bahia, Brasil</p>
+                <p className="text-xs text-slate-400 mt-0.5">Segunda a sexta, 8h às 18h</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4 p-4 bg-accent/10 rounded-lg border border-accent/20">
-              <MessageSquare className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="font-bold mb-2">Redes Sociais</h3>
-                <div className="flex gap-3 flex-wrap">
-                  <a href="#" className="text-primary hover:underline text-sm">WhatsApp</a>
-                  <a href="#" className="text-primary hover:underline text-sm">Instagram</a>
-                  <a href="#" className="text-primary hover:underline text-sm">Facebook</a>
-                </div>
-                <p className="text-sm text-muted-foreground mt-1">Mensagens respondidas durante o horário comercial</p>
-              </div>
-            </div>
-
-            <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
-              <h3 className="font-bold mb-2 text-accent">Localização</h3>
-              <p className="text-sm">Trancoso, Bahia, Brasil</p>
-              <p className="text-sm text-muted-foreground mt-1">Atendimento de segunda a sexta, 8h às 18h</p>
+            <div className="p-4 bg-amber-50 rounded-xl border border-amber-100">
+              <p className="text-sm text-amber-800">
+                Precisa de ajuda rápida? Veja nosso{' '}
+                <a href="/Manual" className="font-semibold underline hover:text-amber-900">FAQ e Manual</a>.
+              </p>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div>
-            <h2 className="text-2xl font-bold text-accent mb-6">Envie uma Mensagem</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Nome</label>
-                <Input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Seu nome"
-                />
+          {/* Formulário */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h2 className="text-xl font-bold text-slate-800 mb-5">Envie uma Mensagem</h2>
+
+            {status === 'success' ? (
+              <div className="text-center py-8">
+                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                <h3 className="text-lg font-bold text-slate-900 mb-1">Mensagem enviada!</h3>
+                <p className="text-slate-500 text-sm">Obrigado por entrar em contato. Retornaremos em breve.</p>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <Input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="seu@email.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Mensagem</label>
-                <textarea
-                  required
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Deixe sua mensagem, dúvida ou sugestão..."
-                  rows="5"
-                  className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                />
-              </div>
-
-              <Button type="submit" className="w-full">
-                Enviar Mensagem
-              </Button>
-
-              {submitted && (
-                <div className="p-3 bg-green-500/20 border border-green-500 text-green-100 rounded">
-                  Mensagem enviada! Obrigado por entrar em contato.
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Nome *</label>
+                    <input
+                      type="text" required value={form.name}
+                      onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                      placeholder="Seu nome"
+                      className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Telefone</label>
+                    <input
+                      type="tel" value={form.phone}
+                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                      placeholder="(73) 9 0000-0000"
+                      className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    />
+                  </div>
                 </div>
-              )}
-            </form>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Email *</label>
+                  <input
+                    type="email" required value={form.email}
+                    onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                    placeholder="seu@email.com"
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Assunto *</label>
+                  <select
+                    required value={form.subject}
+                    onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  >
+                    <option value="">Selecione...</option>
+                    {ASSUNTOS.map(a => <option key={a} value={a}>{a}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Mensagem *</label>
+                  <textarea
+                    required value={form.message}
+                    onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                    placeholder="Deixe sua mensagem, dúvida ou sugestão..."
+                    rows={4}
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 resize-none"
+                  />
+                </div>
+                {status === 'error' && (
+                  <p className="text-red-600 text-sm">Erro ao enviar. Tente novamente.</p>
+                )}
+                <Button type="submit" disabled={status === 'loading'} className="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold">
+                  {status === 'loading' ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Enviando...</> : 'Enviar Mensagem'}
+                </Button>
+              </form>
+            )}
           </div>
-        </div>
-
-        <div className="p-6 bg-accent/10 rounded-lg border border-accent/20">
-          <h3 className="text-xl font-bold mb-3">Precisa de Ajuda Rápida?</h3>
-          <p className="mb-4">Verifique nossa página de <a href="/Manual" className="text-primary hover:underline">FAQ e Manual</a> para respostas às perguntas mais frequentes.</p>
         </div>
       </div>
     </div>
