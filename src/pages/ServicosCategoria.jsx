@@ -13,10 +13,6 @@ import LazyImage from "@/components/ui/LazyImage";
 import ProvidersMap from "@/components/map/ProvidersMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Search, Star, MapPin, ArrowLeft, Filter, Loader2, AlertCircle, List, Map, Navigation, X } from "lucide-react";
-
-// Componentes internos definidos neste arquivo
-// ProviderCard - linha 22
-// slugMap - linha 118
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
 import { getProviderMockImages, DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
