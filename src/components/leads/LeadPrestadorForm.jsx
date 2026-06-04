@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { trackPrestadorCadastro } from '@/utils/analytics.js';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Loader2, MessageCircle } from 'lucide-react';
 
@@ -24,6 +25,7 @@ export default function LeadPrestadorForm() {
         source: 'seja-prestador',
         type: 'prestador',
       });
+      trackPrestadorCadastro({ occupation: form.occupation });
       setStatus('success');
     } catch {
       setStatus('error');

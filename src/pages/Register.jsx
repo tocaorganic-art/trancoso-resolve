@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { trackClienteCadastro } from '@/utils/analytics';
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,7 @@ export default function Register() {
       if (result?.access_token) {
         base44.auth.setToken(result.access_token);
       }
+      trackClienteCadastro();
       window.location.href = "/CadastroTipo";
     } catch (err) {
       setError(err.message || "Invalid verification code");

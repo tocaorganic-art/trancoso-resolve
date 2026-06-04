@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { trackViewServico } from '@/utils/analytics';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { CheckCircle, ArrowRight, MapPin } from 'lucide-react';
@@ -26,6 +27,10 @@ export default function ServicoLocalPage({
   serviceLabel,
   locationLabel = 'Trancoso, Bahia',
 }) {
+  useEffect(() => {
+    trackViewServico({ title: h1 || title, category, city: locationLabel });
+  }, []);
+
   useEffect(() => {
     const seoTitle = title.includes('| Trancoso Resolve') ? title : `${title} | Trancoso Resolve`;
     const seoDesc = metaDescription || `Encontre ${serviceLabel || category} verificado em ${locationLabel}. Profissionais avaliados, atendimento rápido e seguro.`;

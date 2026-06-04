@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { trackContatoWhatsApp } from '@/utils/analytics';
 
 const WHATSAPP_NUMBER = '5573998283579';
 
@@ -28,6 +29,7 @@ export default function WhatsAppStickyBar({ serviceLabel }) {
         href={`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => trackContatoWhatsApp(serviceLabel || '')}
         className="flex items-center justify-center gap-2 w-full rounded-2xl py-4 text-white font-bold text-base shadow-lg active:scale-95 transition-transform"
         style={{ background: '#B45309' }}
       >

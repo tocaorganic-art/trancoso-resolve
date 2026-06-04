@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { trackSolicitacaoServico } from '@/utils/analytics';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
@@ -50,9 +51,15 @@ export default function BookingForm({ provider, services, user, onCancel }) {
       queryClient.setQueryData(['serviceRequests'], (old) => old ? [optimistic, ...old] : [optimistic]);
       return { previous };
     },
-    onSuccess: () => {
+    onSuccess: (_result, payload) => {
       setSuccess(true);
       queryClient.invalidateQueries({ queryKey: ['serviceRequests'] });
+      const selectedService = services?.find(s => s.id === payload.service_id);
+      trackSolicitacaoServico({
+        service_title: selectedService?.title || provider?.full_name || '',
+        category: selectedService?.category || '',
+        price: selectedService?.price || 0,
+      });
     },
     onError: (_err, _payload, context) => {
       if (context?.previous) queryClient.setQueryData(['serviceRequests'], context.previous);

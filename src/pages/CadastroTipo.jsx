@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { trackClienteCadastro, trackPrestadorCadastro } from '@/utils/analytics.js';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -102,8 +103,10 @@ export default function CadastroTipoPage() {
       if (userType === 'prestador') {
         // Grava flag para PermissionChecker fazer bypass enquanto banco propaga
         localStorage.setItem('user_type_prestador_pendente', Date.now().toString());
+        trackPrestadorCadastro();
         redirectPrestador(email, name);
       } else {
+        trackClienteCadastro();
         window.location.replace('/');
       }
     },

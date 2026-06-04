@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { trackLead } from '@/utils/analytics.js';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 
@@ -35,6 +36,7 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
       if (lead?.id) {
         base44.functions.invoke('notifyNewLead', { leadId: lead.id }).catch(() => {});
       }
+      trackLead({ service_interest: serviceInterest, source: source });
       setStatus('success');
     } catch {
       setStatus('error');
