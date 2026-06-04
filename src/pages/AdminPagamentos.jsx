@@ -102,7 +102,7 @@ export default function AdminPagamentosPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className="w-4 h-4 text-blue-600" />
+                <TrendingUp className="w-4 h-4 text-amber-600" />
                 <span className="text-xs text-slate-500">Comissão Plataforma (20%)</span>
               </div>
               <p className="text-xl font-bold text-slate-800">R$ {(totalPlatform / 100).toFixed(2)}</p>
@@ -186,7 +186,7 @@ export default function AdminPagamentosPage() {
                       <td className="px-4 py-3 text-slate-700">{provider?.full_name || payment.provider_id}</td>
                       <td className="px-4 py-3 text-right font-medium">R$ {((payment.amount_total || 0) / 100).toFixed(2)}</td>
                       <td className="px-4 py-3 text-right text-green-700">R$ {((payment.amount_provider || 0) / 100).toFixed(2)}</td>
-                      <td className="px-4 py-3 text-right text-blue-700">R$ {((payment.amount_platform || 0) / 100).toFixed(2)}</td>
+                      <td className="px-4 py-3 text-right text-amber-700">R$ {((payment.amount_platform || 0) / 100).toFixed(2)}</td>
                       <td className="px-4 py-3">
                         <StatusPagamentoBadge status={payment.status} />
                       </td>

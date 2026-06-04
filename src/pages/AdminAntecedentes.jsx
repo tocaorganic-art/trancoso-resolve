@@ -14,8 +14,8 @@ import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 
 const statusConfig = {
-  pendente: { label: "Pendente", color: "bg-orange-100 text-orange-700 border-orange-200", icon: Clock },
-  em_analise_manual: { label: "Em Análise Manual", color: "bg-blue-100 text-blue-700 border-blue-200", icon: AlertTriangle },
+  pendente: { label: "Pendente", color: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
+  em_analise_manual: { label: "Em Análise Manual", color: "bg-amber-100 text-amber-700 border-amber-200", icon: AlertTriangle },
   aprovado: { label: "Aprovado", color: "bg-green-100 text-green-700 border-green-200", icon: CheckCircle },
   reprovado: { label: "Reprovado", color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
 };
@@ -110,7 +110,7 @@ export default function AdminAntecedentesPage() {
   return (
     <div className="container mx-auto max-w-6xl py-8 px-4">
       <div className="mb-8 flex items-center gap-3">
-        <ShieldCheck className="w-7 h-7 text-blue-500" />
+        <ShieldCheck className="w-7 h-7 text-amber-600" />
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Verificações de Segurança</h1>
           <p className="text-slate-500 text-sm">Gerencie a verificação de antecedentes criminais dos prestadores.</p>
@@ -120,8 +120,8 @@ export default function AdminAntecedentesPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[
-          { key: "pendente", label: "Pendentes", color: "border-orange-200 bg-orange-50", text: "text-orange-700" },
-          { key: "em_analise_manual", label: "Em Análise", color: "border-blue-200 bg-blue-50", text: "text-blue-700" },
+          { key: "pendente", label: "Pendentes", color: "border-amber-200 bg-amber-50", text: "text-amber-700" },
+          { key: "em_analise_manual", label: "Em Análise", color: "border-amber-200 bg-amber-50", text: "text-amber-700" },
           { key: "aprovado", label: "Aprovados", color: "border-green-200 bg-green-50", text: "text-green-700" },
           { key: "reprovado", label: "Reprovados", color: "border-red-200 bg-red-50", text: "text-red-700" },
         ].map(({ key, label, color, text }) => (
@@ -260,7 +260,7 @@ export default function AdminAntecedentesPage() {
                               variant="outline"
                               onClick={() => reverificaMutation.mutate(p.id)}
                               disabled={isActing}
-                              className="text-xs text-blue-600 border-blue-200 hover:bg-blue-50"
+                              className="text-xs text-amber-700 border-amber-200 hover:bg-amber-50"
                             >
                               <RefreshCw className="w-3 h-3 mr-1" />
                               Reverificar
@@ -270,7 +270,7 @@ export default function AdminAntecedentesPage() {
                                 size="sm"
                                 onClick={() => aprovaMutation.mutate(p.id)}
                                 disabled={isActing}
-                                className="text-xs bg-green-600 hover:bg-green-700"
+                                className="text-xs bg-amber-600 hover:bg-amber-700"
                               >
                                 <CheckCircle className="w-3 h-3 mr-1" />
                                 Aprovar

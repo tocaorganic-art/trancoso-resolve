@@ -125,6 +125,23 @@ export default function Login() {
           <FacebookIcon className="w-5 h-5 mr-2" />
           Continuar com Facebook
         </Button>
+
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-300" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-slate-500">ou</span>
+          </div>
+        </div>
+
+        <Button
+          className="w-full h-12 text-sm font-medium bg-amber-600 hover:bg-amber-700"
+          onClick={() => base44.auth.redirectToLogin()}
+        >
+          <LogIn className="w-5 h-5 mr-2" />
+          Entrar com Email
+        </Button>
       </div>
     </AuthLayout>
   );

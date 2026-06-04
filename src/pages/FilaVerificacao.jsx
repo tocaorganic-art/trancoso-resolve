@@ -18,11 +18,11 @@ import { toast } from "sonner";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
 const statusConfig = {
-  "Em Análise": { color: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
-  "Aguardando Admin": { color: "bg-indigo-100 text-indigo-700 border-indigo-200", icon: ShieldCheck },
-  "Pendente": { color: "bg-orange-100 text-orange-700 border-orange-200", icon: AlertTriangle },
-  "Verificado": { color: "bg-blue-100 text-blue-700 border-blue-200", icon: BadgeCheck },
-  "Rejeitado": { color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
+"Em Análise": { color: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
+"Aguardando Admin": { color: "bg-amber-100 text-amber-700 border-amber-200", icon: ShieldCheck },
+"Pendente": { color: "bg-amber-100 text-amber-700 border-amber-200", icon: AlertTriangle },
+"Verificado": { color: "bg-green-100 text-green-700 border-green-200", icon: BadgeCheck },
+"Rejeitado": { color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
 };
 
 function StatusBadge({ status }) {
@@ -317,7 +317,7 @@ export default function FilaVerificacaoPage() {
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <ShieldCheck className="w-7 h-7 text-blue-500" />
+            <ShieldCheck className="w-7 h-7 text-amber-600" />
             <h1 className="text-2xl font-bold text-slate-900">Fila de Verificação</h1>
           </div>
           <p className="text-slate-500 text-sm">Analise os documentos enviados e aprove ou rejeite identidades.</p>
@@ -422,8 +422,8 @@ export default function FilaVerificacaoPage() {
                     <tr key={v.id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                            <span className="text-blue-600 font-semibold text-xs">
+                                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                            <span className="text-amber-700 font-semibold text-xs">
                               {v.user_name?.charAt(0)?.toUpperCase() || "?"}
                             </span>
                           </div>
@@ -455,14 +455,14 @@ export default function FilaVerificacaoPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
                           <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => { setSelected(v); setReviewOpen(true); }}
-                            className="text-xs hover:border-blue-400 hover:text-blue-600 transition-colors"
-                          >
-                            <Eye className="w-3.5 h-3.5 mr-1" />
-                            Ver
-                          </Button>
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={() => { setSelected(v); setReviewOpen(true); }}
+                                          className="text-xs hover:border-amber-400 hover:text-amber-700 transition-colors"
+                                        >
+                                          <Eye className="w-3.5 h-3.5 mr-1" />
+                                          Ver
+                                        </Button>
                           {isPending && (
                             <>
                               <Button
@@ -475,13 +475,13 @@ export default function FilaVerificacaoPage() {
                                 {isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <XOctagon className="w-3.5 h-3.5" />}
                               </Button>
                               <Button
-                                size="sm"
-                                disabled={isProcessing}
-                                onClick={() => handleAction(v.id, "aprovar", "")}
-                                className="text-xs bg-green-600 hover:bg-green-700 text-white"
-                              >
-                                {isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle className="w-3.5 h-3.5" />}
-                              </Button>
+                                              size="sm"
+                                              disabled={isProcessing}
+                                              onClick={() => handleAction(v.id, "aprovar", "")}
+                                              className="text-xs bg-amber-600 hover:bg-amber-700 text-white"
+                                            >
+                                              {isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle className="w-3.5 h-3.5" />}
+                                            </Button>
                             </>
                           )}
                         </div>

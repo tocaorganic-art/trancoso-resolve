@@ -27,7 +27,7 @@ export default function SubscriptionPaywall({ subscriptionStatus, isTrial, hasAn
   const showTrialButton = !hasAnySubscription && userEmail;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-8 text-center">
         <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
           <LockKeyhole className="w-8 h-8 text-red-500" />
@@ -73,17 +73,17 @@ export default function SubscriptionPaywall({ subscriptionStatus, isTrial, hasAn
           )}
 
           <Link to={createPageUrl("Planos")} className="block">
-            <Button className={`w-full font-bold h-12 text-base ${showTrialButton ? 'bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50' : 'bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600'}`} variant={showTrialButton ? "outline" : "default"}>
+            <Button className={`w-full font-bold h-12 text-base ${showTrialButton ? 'bg-white border-2 border-amber-600 text-amber-700 hover:bg-amber-50' : 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600'}`} variant={showTrialButton ? "outline" : "default"}>
               <CreditCard className="w-5 h-5 mr-2" />
               {showTrialButton ? "Ou assinar direto" : "Ativar assinatura"}
             </Button>
           </Link>
 
-          <div className="bg-blue-50 rounded-lg p-3 text-left">
-            <p className="text-xs font-semibold text-blue-700 mb-2 flex items-center gap-1">
+          <div className="bg-amber-50 rounded-lg p-3 text-left">
+            <p className="text-xs font-semibold text-amber-700 mb-2 flex items-center gap-1">
               <Zap className="w-3 h-3" /> O que você terá ao assinar:
             </p>
-            <ul className="text-xs text-blue-800 space-y-1">
+            <ul className="text-xs text-amber-800 space-y-1">
               <li>✓ Perfil visível para turistas e moradores</li>
               <li>✓ Receba pedidos de agendamento</li>
               <li>✓ Clientes podem chamar via WhatsApp</li>

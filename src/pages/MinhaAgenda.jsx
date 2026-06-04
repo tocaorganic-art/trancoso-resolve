@@ -3,7 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Calendar, AlertCircle, Inbox, CheckCircle, Clock, XCircle, AlertTriangle, Settings2 } from "lucide-react";
+import { Loader2, Calendar, AlertCircle, Inbox, CheckCircle, Clock, XCircle, AlertTriangle, Settings2, Link as LinkIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RequestDetailsModal from "@/components/agenda/RequestDetailsModal";
 import DisponibilidadeEditor from "@/components/agenda/DisponibilidadeEditor";
@@ -16,8 +18,7 @@ import PermissionChecker from "../components/auth/PermissionChecker";
 const RequestCard = ({ request, service, onClick }) => {
   return (
     <Card
-      className="hover:shadow-md transition-shadow cursor-pointer border-l-4"
-      style={{ borderLeftColor: request.status === 'Pendente' ? '#f59e0b' : '#3b82f6' }}
+      className="hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-amber-500"
       onClick={onClick}
     >
       <CardContent className="p-4 flex items-center justify-between">
@@ -148,18 +149,21 @@ function MinhaAgendaContent() {
   const isLoading = isUserLoading || isProviderLoading || (!!providerId && (isLoadingRequests || isLoadingServices));
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-blue-600" /></div>;
+    return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-amber-600" /></div>;
   }
 
   const renderRequestList = (requests) => {
     if (requests.length === 0) {
-      return (
-        <div className="text-center py-16 bg-slate-50 rounded-lg">
-          <Inbox className="w-12 h-12 mx-auto text-slate-400 mb-4" />
-          <h3 className="text-lg font-medium text-slate-600">Nenhuma solicitação aqui</h3>
-          <p className="text-sm text-slate-500">Quando você receber uma nova solicitação, ela aparecerá nesta seção.</p>
-        </div>
-      );
+    return (
+      <div className="text-center py-16 bg-amber-50 rounded-lg border border-amber-200">
+        <Calendar className="w-12 h-12 mx-auto text-amber-500 mb-4" />
+        <h3 className="text-lg font-medium text-amber-900">Nenhum agendamento ainda</h3>
+        <p className="text-sm text-amber-700 mb-4">Quando clientes solicitarem seus serviços, eles aparecerão aqui.</p>
+        <Link to={createPageUrl("MeusServicos")}>
+          <Button className="bg-amber-600 hover:bg-amber-700">Ver meus serviços</Button>
+        </Link>
+      </div>
+    );
     }
     return (
       <div className="space-y-4">
@@ -252,7 +256,7 @@ function MinhaAgendaContent() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Settings2 className="w-5 h-5 text-blue-600" />
+                <Settings2 className="w-5 h-5 text-amber-600" />
                 Configurar Minha Disponibilidade
               </CardTitle>
               <CardDescription>

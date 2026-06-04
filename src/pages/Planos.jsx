@@ -91,10 +91,10 @@ function PlanCard({
   loading, loadingAvulso, disabled, popular
 }) {
   return (
-    <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-cyan-400' : 'border border-slate-700'} ${disabled ? 'opacity-60' : ''}`}>
+    <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-amber-400' : 'border border-slate-700'} ${disabled ? 'opacity-60' : ''}`}>
       {popular && (
         <div className="absolute top-0 left-0 right-0 flex justify-center -translate-y-1/2 z-10">
-          <Badge className="bg-cyan-500 text-white font-bold text-xs px-3 py-1 shadow">
+          <Badge className="bg-amber-500 text-white font-bold text-xs px-3 py-1 shadow">
             <Star className="w-3 h-3 mr-1" /> Mais popular
           </Badge>
         </div>
@@ -134,7 +134,7 @@ function PlanCard({
             <>
               {/* Botão primário */}
               <Button
-                className={`w-full text-sm ${popular ? 'bg-cyan-500 hover:bg-cyan-600 text-white' : ''}`}
+                className={`w-full text-sm ${popular ? 'bg-amber-500 hover:bg-amber-600 text-white' : ''}`}
                 onClick={onCta}
                 disabled={loading}
               >
@@ -199,7 +199,7 @@ function AvulsoCard({ icon, title, price, onCta, loading }) {
           <li className="flex items-center gap-2" style={{ color: '#CBD5E1' }}><Check className="w-4 h-4 shrink-0" style={{ color: '#5DCAA5' }} /> Todos os recursos da plataforma</li>
         </ul>
         <Button
-          className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold"
+          className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold"
           onClick={onCta}
           disabled={loading}
         >
@@ -302,7 +302,7 @@ export default function PlanosPage() {
         {/* ─── PROVA SOCIAL ──────────────────────────────────────────────── */}
         <div className="text-center mb-8">
           <p className="text-slate-500 text-base flex items-center justify-center gap-2">
-            <Users className="w-5 h-5 text-blue-400" />
+            <Users className="w-5 h-5 text-amber-600" />
             {totalVerificados > 0
               ? <span>Junte-se a <strong className="text-slate-700">{totalVerificados}</strong> prestadores já verificados em Trancoso</span>
               : <span>Junte-se aos primeiros prestadores verificados de Trancoso</span>
@@ -311,15 +311,15 @@ export default function PlanosPage() {
         </div>
 
         {/* ─── BANNER SAZONALIDADE ──────────────────────────────────────── */}
-        <div className="mb-10 border-2 border-teal-400 bg-teal-50 rounded-2xl p-6 flex flex-col md:flex-row items-start gap-4">
-          <div className="w-12 h-12 bg-teal-400/20 rounded-xl flex items-center justify-center shrink-0">
-            <Calendar className="w-7 h-7 text-teal-600" />
+        <div className="mb-10 border-2 border-amber-400 bg-amber-50 rounded-2xl p-6 flex flex-col md:flex-row items-start gap-4">
+          <div className="w-12 h-12 bg-amber-400/20 rounded-xl flex items-center justify-center shrink-0">
+            <Calendar className="w-7 h-7 text-amber-600" />
           </div>
           <div>
-            <h2 className="text-lg font-extrabold text-teal-900 mb-1">
+            <h2 className="text-lg font-extrabold text-amber-900 mb-1">
               Trancoso tem temporada. Seu plano também pode ter.
             </h2>
-            <p className="text-teal-800 text-sm leading-relaxed">
+            <p className="text-amber-800 text-sm leading-relaxed">
               <strong>Alta temporada: dezembro a março e julho</strong> — quando a demanda por serviços dispara na região.<br />
               Se você trabalha por temporada, o <strong>Uso Avulso</strong> é a escolha certa: pague só quando precisar, sem mensalidade.
             </p>

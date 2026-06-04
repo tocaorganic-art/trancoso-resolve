@@ -109,6 +109,22 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
         }),
       });
 
+      // Atualizar status do ServiceProvider para "em_analise_manual"
+      await base44.entities.ServiceProvider.update(provider.id, {
+        status_verificacao: "em_analise_manual",
+      });
+
+      // Enviar email de notificacao para admin
+      try {
+        await base44.integrations.Core.SendEmail({
+          to: "tocaorganic@gmail.com",
+          subject: `Nova verificação de documento enviada por ${user.full_name}`,
+          body: `Prestador: ${user.full_name}\nEmail: ${user.email}\nDocumento: ${documentType}\nData: ${new Date().toLocaleString('pt-BR')}\n\nAcesse o painel administrativo para analisar.`,
+        });
+      } catch (emailError) {
+        console.error("Erro ao enviar email de notificacao:", emailError);
+      }
+
       setStep("done");
       onSuccess?.();
     } catch (error) {

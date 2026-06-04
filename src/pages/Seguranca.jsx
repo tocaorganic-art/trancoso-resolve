@@ -91,7 +91,7 @@ function TwoFAPanel({ user }) {
             onClick={handleToggle}
             disabled={loading || awaitingCode}
             variant={enabled ? 'outline' : 'default'}
-            className={enabled ? '' : 'bg-amber-700 hover:bg-amber-800 text-white'}
+            className={enabled ? '' : 'bg-amber-600 hover:bg-amber-700 text-white'}
           >
             {loading && <Loader2 className="w-4 h-4 mr-1 animate-spin" />}
             {enabled ? 'Desativar' : 'Ativar 2FA'}
@@ -114,7 +114,7 @@ function TwoFAPanel({ user }) {
                 className="text-center text-lg font-bold tracking-widest w-36"
               />
               <Button onClick={handleConfirmEnable} disabled={confirmCode.length !== 6 || loading}
-                className="bg-amber-700 hover:bg-amber-800 text-white">
+                className="bg-amber-600 hover:bg-amber-700 text-white">
                 Confirmar
               </Button>
               <Button variant="ghost" onClick={() => { setAwaitingCode(false); setConfirmCode(''); }}>
@@ -214,7 +214,7 @@ function DangerZonePanel({ user }) {
 const SecurityFeature = ({ icon, title, description }) => (
   <Card className="border-none shadow-lg text-center">
     <CardContent className="p-6">
-      <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
         {icon}
       </div>
       <h3 className="text-xl font-bold text-slate-800 mb-2">{title}</h3>
@@ -279,7 +279,7 @@ export default function SegurancaPage() {
 
         {/* ── Conteúdo público ── */}
         <div className="text-center mb-12">
-          <ShieldCheck className="w-16 h-16 mx-auto text-blue-600 mb-4" />
+          <ShieldCheck className="w-16 h-16 mx-auto text-amber-600 mb-4" />
           <h1 className="text-4xl font-extrabold text-slate-900 mb-4">Sua Segurança é Nossa Prioridade</h1>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
             Construímos uma comunidade de confiança em Trancoso. Veja as medidas que tomamos para garantir uma experiência segura para todos.
@@ -350,13 +350,13 @@ export default function SegurancaPage() {
                 { slug: 'cozinheiro-trancoso', label: 'Cozinheiro verificado' },
               ].map(item => (
                 <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
-                  <span className="inline-flex items-center gap-1 bg-green-50 hover:bg-green-100 border border-green-200 rounded-full px-3 py-1.5 text-xs font-medium text-green-800 transition-colors cursor-pointer">
+                  <span className="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-full px-3 py-1.5 text-xs font-medium text-amber-800 transition-colors cursor-pointer">
                     ✅ {item.label}
                   </span>
                 </Link>
               ))}
             </div>
-            <Link to={createPageUrl("ServicosCategoria")} className="text-sm text-cyan-600 hover:underline font-medium">
+            <Link to={createPageUrl("ServicosCategoria")} className="text-sm text-amber-700 hover:underline font-medium">
               Ver todos os profissionais verificados →
             </Link>
           </div>
@@ -367,12 +367,12 @@ export default function SegurancaPage() {
           <p className="text-slate-600 mb-6 max-w-lg mx-auto">Todos os profissionais listados passaram por verificação. Você tem a segurança que merece.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to={createPageUrl("ServicosCategoria")}>
-              <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold w-full sm:w-auto">
+              <Button size="lg" className="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 font-bold w-full sm:w-auto">
                 Ver Profissionais Verificados
               </Button>
             </Link>
             <Link to={createPageUrl("SejaPrestador")}>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-amber-300 text-amber-700 hover:bg-amber-50">
                 Seja um Prestador
               </Button>
             </Link>

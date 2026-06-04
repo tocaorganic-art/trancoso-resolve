@@ -141,9 +141,9 @@ export default function CadastroTipoPage() {
 
   if (isLoading || step === 'processando' || updateUserMutation.isPending) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-cyan-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-amber-100">
         <div className="text-center">
-          <Loader2 className="w-10 h-10 animate-spin text-blue-600 mx-auto mb-4" />
+          <Loader2 className="w-10 h-10 animate-spin text-amber-600 mx-auto mb-4" />
           <p className="text-slate-600 font-medium">Configurando sua conta...</p>
           <p className="text-slate-400 text-sm mt-1">Isso leva apenas alguns segundos.</p>
         </div>
@@ -154,7 +154,7 @@ export default function CadastroTipoPage() {
   // ─── Step 1: Tipo de conta (cliente ou prestador) ───
   if (step === 'tipo_conta') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-cyan-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-100 flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl text-center shadow-2xl border-none">
           <CardContent className="p-10">
             <h1 className="text-3xl font-bold text-slate-900 mb-4">
@@ -164,12 +164,12 @@ export default function CadastroTipoPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card
-                className="border-2 border-transparent hover:border-cyan-500 hover:shadow-lg transition-all cursor-pointer"
+                className="border-2 border-transparent hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer"
                 onClick={handleClienteClick}
               >
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <User className="w-8 h-8 text-cyan-700" />
+                  <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <User className="w-8 h-8 text-amber-700" />
                   </div>
                   <h2 className="text-xl font-semibold mb-2">Sou Cliente</h2>
                   <p className="text-slate-500">Quero encontrar e contratar os melhores serviços em Trancoso.</p>
@@ -177,16 +177,16 @@ export default function CadastroTipoPage() {
               </Card>
 
               <Card
-                className="border-2 border-transparent hover:border-orange-500 hover:shadow-lg transition-all cursor-pointer"
+                className="border-2 border-transparent hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer"
                 onClick={() => setStep('tipo_pessoa')}
               >
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Briefcase className="w-8 h-8 text-orange-700" />
+                  <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Briefcase className="w-8 h-8 text-amber-700" />
                   </div>
                   <h2 className="text-xl font-semibold mb-2">Sou Prestador / Empresa</h2>
                   <p className="text-slate-500">Quero oferecer serviços ou cadastrar meu negócio em Trancoso.</p>
-                  <div className="mt-3 flex items-center justify-center gap-1 text-orange-600 text-sm font-medium">
+                  <div className="mt-3 flex items-center justify-center gap-1 text-amber-700 text-sm font-medium">
                     Continuar <ChevronRight className="w-4 h-4" />
                   </div>
                 </CardContent>
@@ -204,7 +204,7 @@ export default function CadastroTipoPage() {
   const isEmpresaComPonto = (tipoPessoa === 'mei' || tipoPessoa === 'pj') && temPontoFisico;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-cyan-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-2xl border-none">
         <CardContent className="p-8 md:p-10">
           <button onClick={() => setStep('tipo_conta')} className="text-sm text-slate-500 hover:text-slate-700 mb-6 flex items-center gap-1">
@@ -259,11 +259,11 @@ export default function CadastroTipoPage() {
 
             {/* Aviso de redirecionamento para empresa */}
             {isEmpresaComPonto && (
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
-                <Building2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
+                <Building2 className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-semibold text-blue-900 mb-1">Detectamos que você é uma empresa com ponto físico em Trancoso.</p>
-                  <p className="text-xs text-blue-800">Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong>Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.</p>
+                  <p className="text-sm font-semibold text-amber-900 mb-1">Detectamos que você é uma empresa com ponto físico em Trancoso.</p>
+                  <p className="text-xs text-amber-800">Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong>Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.</p>
                 </div>
               </div>
             )}
@@ -271,17 +271,17 @@ export default function CadastroTipoPage() {
             {/* LGPD */}
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-left">
               <label className="flex items-start gap-3 cursor-pointer">
-                <input type="checkbox" checked={autorizouVerificacao} onChange={(e) => setAutorizouVerificacao(e.target.checked)} className="mt-1 accent-blue-600 w-4 h-4 shrink-0" />
+                <input type="checkbox" checked={autorizouVerificacao} onChange={(e) => setAutorizouVerificacao(e.target.checked)} className="mt-1 accent-amber-600 w-4 h-4 shrink-0" />
                 <span className="text-xs text-slate-700 leading-relaxed">
                   <span className="font-semibold text-slate-800 flex items-center gap-1 mb-1">
-                    <Shield className="w-3 h-3 text-blue-600" /> Autorização de Verificação (obrigatória)
+                    <Shield className="w-3 h-3 text-amber-600" /> Autorização de Verificação (obrigatória)
                   </span>
                   Autorizo a Trancoso Resolve a realizar consultas de antecedentes criminais e, quando aplicável, verificação de CNPJ na Receita Federal, usando meus dados exclusivamente para fins de validação cadastral, em conformidade com a LGPD.
                 </span>
               </label>
             </div>
 
-            <Button className="w-full" onClick={handlePrestadorSubmit} disabled={updateUserMutation.isPending}>
+            <Button className="w-full bg-amber-600 hover:bg-amber-700" onClick={handlePrestadorSubmit} disabled={updateUserMutation.isPending}>
               {updateUserMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
               {isEmpresaComPonto ? 'Continuar com Plano Empresas' : 'Cadastrar como Prestador'}
             </Button>
