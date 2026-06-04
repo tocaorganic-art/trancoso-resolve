@@ -57,7 +57,7 @@ import PiscineiroCaraiva from '@/pages/servicos/PiscineiroCaraiva';
 import CozinheiroCaraiva from '@/pages/servicos/CozinheiroCaraiva';
 import JardineiroCaraiva from '@/pages/servicos/JardineiroCaraiva';
 import PedreiroCaraiva from '@/pages/servicos/PedreiroCaraiva';
-import RelatorioDiarioPage from '@/pages/RelatorioDiario';
+import RelatorioDiarioPage from '@/pages/RelatorioDiarioPage';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
