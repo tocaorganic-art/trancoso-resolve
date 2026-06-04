@@ -6,8 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Upload, ShieldCheck, FileImage, CheckCircle2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
-import { analisarDocumento } from "@/functions/analisarDocumento";
-
 export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSuccess }) {
   const [step, setStep] = useState("form"); // form | uploading | analyzing | done
   const [documentType, setDocumentType] = useState("");
@@ -72,11 +70,11 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
         document_url_verso = resVerso.file_url;
       }
 
-      // 2. Criar registro de verificação
-      const verificacao = await base44.entities.Verificacao.create({
+      // 2. Criar registro de verificação (admin revisará manualmente)
+      await base44.entities.Verificacao.create({
         provider_id: user.id,
         verification_type: "identity",
-        status: "in_progress",
+        status: "pending",
         description: JSON.stringify({
           user_email: user.email,
           user_name: user.full_name,
@@ -86,18 +84,6 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
           upload_mode: uploadMode,
           submission_date: new Date().toISOString(),
         }),
-      });
-
-      setStep("analyzing");
-
-      // 3. Chamar IA para análise
-      await analisarDocumento({
-        verificacao_id: verificacao.id,
-        prestador_id: user.id,
-        document_url,
-        ...(document_url_verso && { document_url_verso }),
-        document_type: documentType,
-        user_full_name: user.full_name,
       });
 
       setStep("done");
@@ -303,15 +289,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
                 </div>
               </div>
             )}
-            {step === "analyzing" && (
-              <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
-                <Loader2 className="w-5 h-5 text-purple-600 animate-spin shrink-0" />
-                <div>
-                  <p className="text-sm font-medium text-purple-800">Analisando com IA…</p>
-                  <p className="text-xs text-purple-600">Verificando autenticidade do documento.</p>
-                </div>
-              </div>
-            )}
+
 
             <div className="flex gap-3 pt-2">
               <Button variant="outline" onClick={handleClose} disabled={step !== "form"} className="flex-1">
