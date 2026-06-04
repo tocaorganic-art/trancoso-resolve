@@ -54,8 +54,8 @@ export default function ServicoLocalPage({
           <span className="text-5xl mb-4 block" aria-hidden="true">{heroEmoji}</span>
           <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-5">{h1}</h1>
           <p className="text-lg text-slate-300 leading-relaxed mb-8 max-w-2xl">{intro}</p>
-          <Link to={searchUrl}>
-            <Button className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold text-base px-8 py-3">
+          <Link to={searchUrl} className="block sm:inline-block w-full sm:w-auto">
+            <Button className="w-full sm:w-auto bg-amber-700 hover:bg-amber-800 text-white font-bold text-base px-8 py-4 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
               {ctaButton} <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
@@ -86,10 +86,10 @@ export default function ServicoLocalPage({
         <LeadCaptureForm serviceInterest={category} serviceLabel={serviceLabel || category} />
 
         {/* CTA */}
-        <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-3xl p-8 md:p-12 text-center">
+        <section className="bg-gradient-to-r from-amber-700 to-amber-900 rounded-3xl p-8 md:p-12 text-center">
           <p className="text-white text-lg font-medium mb-6 max-w-xl mx-auto">{cta}</p>
-          <Link to={searchUrl}>
-            <Button className="bg-white text-blue-700 hover:bg-blue-50 font-bold text-base px-8">
+          <Link to={searchUrl} className="block sm:inline-block w-full sm:w-auto">
+            <Button className="w-full sm:w-auto bg-white text-amber-800 hover:bg-amber-50 font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
               {ctaButton} <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>

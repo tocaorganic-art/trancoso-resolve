@@ -449,7 +449,7 @@ export default function HomePage() {
         {/* Featured Services */}
         <section className="mb-10 md:mb-20">
           <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900 drop-shadow-sm">Profissionais verificados em Trancoso, na hora que você precisa.</h2>
+            <h2 className="text-lg md:text-2xl font-bold text-slate-900 drop-shadow-sm leading-tight">Profissionais verificados em Trancoso, na hora que você precisa.</h2>
             <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
               <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700" aria-label="Ver todos os serviços">
                 Ver todos
@@ -591,16 +591,18 @@ export default function HomePage() {
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 drop-shadow-sm">Como funciona a Trancoso Resolve</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col md:grid md:grid-cols-3 gap-4 md:gap-6">
             {[
               { step: '1', title: 'Você conta o que precisa', desc: 'Explique o tipo de serviço, bairro em Trancoso e melhor horário para contato.' },
               { step: '2', title: 'Nós conectamos aos prestadores certos', desc: 'Nosso sistema distribui seu pedido para prestadores qualificados na região.' },
               { step: '3', title: 'Você recebe contatos e escolhe', desc: 'Compare respostas, avalie e decida com quem quer fechar.' },
             ].map(item => (
-              <div key={item.step} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 text-center">
-                <div className="w-12 h-12 rounded-full bg-cyan-500 text-white font-bold text-xl flex items-center justify-center mx-auto mb-4">{item.step}</div>
-                <h3 className="font-bold text-lg text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+              <div key={item.step} className="bg-white rounded-2xl p-5 md:p-6 shadow-md border border-slate-100 flex items-start gap-4 md:block md:text-center">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-cyan-500 text-white font-bold text-lg md:text-xl flex items-center justify-center shrink-0 md:mx-auto md:mb-4">{item.step}</div>
+                <div>
+                  <h3 className="font-bold text-base md:text-lg text-slate-900 mb-1 md:mb-2">{item.title}</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -623,8 +625,8 @@ export default function HomePage() {
             ))}
           </ul>
           <div className="mt-8">
-            <Link to={createPageUrl("ServicosCategoria")}>
-              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold text-base px-8">
+            <Link to={createPageUrl("ServicosCategoria")} className="block sm:inline-block">
+              <Button className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
                 Encontrar profissional agora
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>

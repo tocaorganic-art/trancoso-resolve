@@ -69,19 +69,31 @@ export default function Layout({ children, currentPageName }) {
       '/MinhaAgenda': 'Minha Agenda - Trancoso Resolve',
       '/MeuPerfilPrestador': 'Meu Perfil de Prestador - Trancoso Resolve',
       '/MeusServicos': 'Meus Serviços - Trancoso Resolve',
-      '/DeployDashboard': 'Deploy Dashboard - Trancoso Resolve',
-      '/Chat': 'Minhas Conversas - Trancoso Resolve',
-      '/DiagnosticosCompletos': 'Diagnósticos Completos do Sistema | Trancoso Resolve',
-      '/ManutencaoSistema': 'Manutenção do Sistema | Trancoso Resolve',
-      '/MonitoringDashboard': 'Monitoramento | Trancoso Resolve'
+      '/Chat': 'Minhas Conversas | Trancoso Resolve',
+      '/About': 'Sobre Nós | Trancoso Resolve',
+      '/Contact': 'Contato | Trancoso Resolve',
+      '/Planos': 'Planos e Preços | Trancoso Resolve',
+      '/SejaPrestador': 'Seja um Prestador | Trancoso Resolve',
+      '/ComoFunciona': 'Como Funciona | Trancoso Resolve',
+      '/Assistentevirtual': 'Assistente IA | Trancoso Resolve',
+      '/login': 'Entrar | Trancoso Resolve',
+      '/register': 'Cadastrar | Trancoso Resolve'
     };
 
     const pageDescriptions = {
-      '/': 'Trancoso Resolve: Profissionais verificados que resolvem seus problemas em Trancoso. Faxina, eletricista, jardinagem, cozinheiro, passeios e muito mais.',
-      '/Home': 'Trancoso Resolve: Profissionais verificados que resolvem seus problemas em Trancoso. Faxina, eletricista, jardinagem, cozinheiro, passeios e muito mais.',
+      '/': 'Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada.',
+      '/Home': 'Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada.',
       '/ServicosCategoria': 'Navegue por categorias e encontre o profissional que resolve seu problema em Trancoso.',
       '/PrestadorPerfil': 'Veja o perfil detalhado e avaliações dos profissionais verificados em Trancoso.',
-      '/ServicoDetalhes': 'Conheça os detalhes de cada serviço e contrate com confiança em Trancoso.'
+      '/ServicoDetalhes': 'Conheça os detalhes de cada serviço e contrate com confiança em Trancoso.',
+      '/About': 'Conheça a Trancoso Resolve, a plataforma que conecta quem precisa de serviço a profissionais verificados em Trancoso, Bahia.',
+      '/Contact': 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Bahia.',
+      '/ComoFunciona': 'Veja como conectar sua necessidade ao profissional certo em Trancoso em 3 passos simples. Rápido, seguro e com profissionais verificados.',
+      '/SejaPrestador': 'Cadastre-se como prestador de serviços em Trancoso e receba clientes verificados. Eletricista, diarista, piscineiro, cozinheiro — sua agenda cheia começa aqui.',
+      '/Planos': 'Escolha o plano ideal para expandir seus serviços em Trancoso. Comece grátis e cresça com nossa plataforma de profissionais verificados.',
+      '/Assistentevirtual': 'Converse com o Toca TrIA, o assistente inteligente da Trancoso Resolve. Encontre o profissional certo para sua necessidade em segundos.',
+      '/login': 'Acesse sua conta na Trancoso Resolve para gerenciar pedidos, contratar serviços e conectar-se com profissionais verificados em Trancoso.',
+      '/register': 'Crie sua conta gratuita na Trancoso Resolve e acesse os melhores profissionais verificados de Trancoso, Bahia.',
     };
 
     const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
@@ -262,24 +274,21 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Mobile Navigation */}
             {mobileMenuOpen &&
-            <div className="md:hidden mt-2 pb-4 space-y-1 px-4 bg-slate-700 rounded" data-testid="mobile-menu-content-public">
+            <div className="md:hidden animate-fade-in pb-4 space-y-1 px-4 bg-slate-800 border-t border-slate-700" data-testid="mobile-menu-content-public">
                 {user ? (
                   <>
-                    <Link to={createPageUrl("ServicosCategoria")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
-                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>
-                      <ListOrdered className="w-4 h-4" /> Meus Pedidos
-                    </Link>
-                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>
-                      <Bot className="w-4 h-4" /> Assistente IA
-                    </Link>
+                    <Link to={createPageUrl("ServicosCategoria")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
+                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><ListOrdered className="w-4 h-4" /> Meus Pedidos</Link>
+                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><Bot className="w-4 h-4" /> Assistente IA</Link>
+                    {user.user_type === 'prestador' && <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Dashboard</Link>}
                   </>
                 ) : (
                   <>
-                    <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Como Funciona</Link>
-                    <Link to={createPageUrl("ServicosCategoria")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
-                    <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-amber-300 py-2" onClick={() => setMobileMenuOpen(false)}>Seja Prestador</Link>
-                    <div className="pt-2 border-t border-slate-600">
-                      <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="w-full bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200" size="sm">
+                    <Link to={createPageUrl("ServicosCategoria")} className="block text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
+                    <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
+                    <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Seja prestador</Link>
+                    <div className="pt-2 border-t border-slate-700">
+                      <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="w-full bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200 min-h-[44px]" size="sm">
                         Entrar
                       </Button>
                     </div>
@@ -315,14 +324,14 @@ export default function Layout({ children, currentPageName }) {
 
           <footer className="text-white py-8 mt-16 pb-safe bg-[hsl(var(--card))]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
-              <div className="flex justify-center gap-4 mb-4 flex-wrap">
-                <Link to={createPageUrl("About")} className="text-base font-medium text-slate-200 hover:text-white transition-colors">
+              <div className="flex justify-center gap-2 mb-4 flex-wrap">
+                <Link to={createPageUrl("About")} className="text-base font-medium text-slate-200 hover:text-white transition-colors min-h-[44px] flex items-center px-2">
                   Sobre
                 </Link>
-                <Link to={createPageUrl("Contact")} className="text-base font-medium text-slate-200 hover:text-white transition-colors">
+                <Link to={createPageUrl("Contact")} className="text-base font-medium text-slate-200 hover:text-white transition-colors min-h-[44px] flex items-center px-2">
                   Contato
                 </Link>
-                <Link to={createPageUrl("PoliticaPrivacidade")} className="text-base font-medium text-slate-200 hover:text-white transition-colors" data-testid="footer-privacy-link">
+                <Link to={createPageUrl("PoliticaPrivacidade")} className="text-base font-medium text-slate-200 hover:text-white transition-colors min-h-[44px] flex items-center px-2" data-testid="footer-privacy-link">
                   Política de Privacidade
                 </Link>
               </div>
@@ -404,7 +413,7 @@ export default function Layout({ children, currentPageName }) {
           }
           *:focus:not(:focus-visible) { outline: none; }
           a:not([class]) { text-decoration: underline; text-underline-offset: 2px; }
-          .skip-link { position: absolute; top: -40px; left: 0; background: #8B6914; color: white; padding: 8px 16px; z-index: 100; transition: top 0.3s; }
+          .skip-link { position: absolute; top: -40px; left: 0; background: #0A81D1; color: white; padding: 8px 16px; z-index: 100; transition: top 0.3s; }
           .skip-link:focus { top: 0; }
           @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
         `}</style>
@@ -427,7 +436,7 @@ export default function Layout({ children, currentPageName }) {
                       onClick={() => item.clearLogin && sessionStorage.removeItem('loginTimestamp')}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                       isActive(item.path) ?
-                      'bg-amber-700 text-white' :
+                      'bg-blue-500 text-white' :
                       'text-slate-300 hover:bg-slate-700'}`
                       }
                       data-testid={`admin-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
@@ -463,7 +472,7 @@ export default function Layout({ children, currentPageName }) {
                     onClick={() => {setMobileMenuOpen(false);item.clearLogin && sessionStorage.removeItem('loginTimestamp');}}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                     isActive(item.path) ?
-                    'bg-amber-700 text-white' :
+                    'bg-blue-500 text-white' :
                     'text-slate-300 hover:bg-slate-700'}`
                     }
                     data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}>

@@ -78,15 +78,15 @@ const ProviderCard = ({ provider }) => {
                 <p className="text-sm text-slate-600 mb-4 line-clamp-2 flex-grow">{provider.bio}</p>
             )}
 
-            <div className="flex items-center justify-between mb-4 mt-auto">
+            <div className="flex items-center justify-between mb-4 mt-auto flex-wrap gap-1">
                 {provider.location?.city && (
-                    <div className="flex items-center gap-1 text-sm text-slate-600">
+                    <div className="flex items-center gap-1 text-sm text-slate-600 shrink-0">
                         <MapPin className="w-4 h-4" />
-                        <span>{provider.location.city}</span>
+                        <span className="truncate max-w-[120px]">{provider.location.city}</span>
                     </div>
                 )}
                 {provider.price_range && (
-                    <Badge variant="outline">{provider.price_range}</Badge>
+                    <Badge variant="outline" className="shrink-0">{provider.price_range}</Badge>
                 )}
             </div>
 
@@ -101,7 +101,7 @@ const ProviderCard = ({ provider }) => {
             )}
 
             <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
-                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700">
+                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 py-3 min-h-[44px] transition-all duration-200 active:scale-95">
                     Ver Perfil Completo
                 </Button>
             </Link>
@@ -467,7 +467,7 @@ export default function ServicosCategoriaPage() {
               <ArrowLeft className="w-4 h-4 mr-2" /> Voltar
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold mb-2">
+          <h1 className="text-xl md:text-3xl font-bold mb-2">
             {selectedCategory === 'Todos' ? 'Serviços em Trancoso, BA' : `${selectedCategory} em Trancoso, BA`}
           </h1>
           <p className="text-blue-100">
@@ -573,7 +573,7 @@ export default function ServicosCategoriaPage() {
           </div>
         </div>
 
-        <div className={`grid gap-6 ${viewMode === 'list' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
+        <div className={`grid gap-4 md:gap-6 ${viewMode === 'list' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
           {renderContent()}
         </div>
       </div>

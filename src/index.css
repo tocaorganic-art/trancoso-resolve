@@ -171,6 +171,37 @@ button:focus-visible {
   --safe-area-inset-right: env(safe-area-inset-right, 0px);
 }
 
+/* ===== MICROINTERAÇÕES GLOBAIS — Botões CTA ===== */
+@layer utilities {
+  .btn-cta {
+    @apply transition-all duration-200 ease-in-out;
+  }
+  .btn-cta:hover {
+    @apply scale-105;
+  }
+  .btn-cta:active {
+    @apply scale-95;
+  }
+
+  /* Underline animado para links de menu */
+  .nav-link-animated {
+    position: relative;
+  }
+  .nav-link-animated::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: currentColor;
+    transition: width 0.2s ease-in-out;
+  }
+  .nav-link-animated:hover::after {
+    width: 100%;
+  }
+}
+
 @layer utilities {
   @keyframes fade-in {
     from {
@@ -186,48 +217,6 @@ button:focus-visible {
   .animate-fade-in {
     animation: fade-in 0.3s ease-out;
   }
-}
-
-/* ===== MICROINTERAÇÕES GLOBAIS ===== */
-/* Botões primários: hover scale + active press */
-button[class*="bg-amber"],
-button[class*="bg-cyan"],
-button[class*="bg-blue"],
-button[class*="bg-primary"],
-.btn-primary {
-  transition: all 0.2s ease-in-out;
-}
-button[class*="bg-amber"]:hover:not(:disabled),
-button[class*="bg-cyan"]:hover:not(:disabled),
-button[class*="bg-blue"]:hover:not(:disabled),
-button[class*="bg-primary"]:hover:not(:disabled) {
-  transform: scale(1.04);
-}
-button[class*="bg-amber"]:active:not(:disabled),
-button[class*="bg-cyan"]:active:not(:disabled),
-button[class*="bg-blue"]:active:not(:disabled),
-button[class*="bg-primary"]:active:not(:disabled) {
-  transform: scale(0.96);
-}
-
-/* Nav links: underline animado da esquerda para direita */
-.nav-link-animated {
-  position: relative;
-  padding-bottom: 2px;
-}
-.nav-link-animated::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #D4A843;
-  transition: width 0.25s ease-in-out;
-  border-radius: 1px;
-}
-.nav-link-animated:hover::after {
-  width: 100%;
 }
 
 @layer base {
