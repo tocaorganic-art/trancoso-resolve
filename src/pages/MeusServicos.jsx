@@ -123,7 +123,7 @@ function MeusServicosContent() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
       </div>
     );
   }
@@ -131,9 +131,9 @@ function MeusServicosContent() {
   if (!provider) {
     return (
       <div className="container mx-auto px-4 py-12">
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-amber-200 bg-amber-50">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+            <AlertCircle className="w-12 h-12 text-amber-600 mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Complete seu Perfil</h2>
             <p className="text-slate-600 mb-4">Primeiro você precisa completar seu perfil de prestador para cadastrar serviços.</p>
             <Link to={createPageUrl("MeuPerfilPrestador")}>
@@ -182,7 +182,7 @@ function MeusServicosContent() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <CardTitle className="text-base font-bold text-slate-100 leading-snug">{service.title}</CardTitle>
-                <Badge className={service.active ? "bg-green-700 text-green-100 font-semibold" : "bg-slate-600 text-slate-200 font-semibold"}>
+                <Badge className={service.active ? "bg-amber-100 text-amber-800 font-semibold" : "bg-slate-600 text-slate-200 font-semibold"}>
                   {service.active ? "Ativo" : "Inativo"}
                 </Badge>
               </div>
@@ -199,13 +199,13 @@ function MeusServicosContent() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex-1"
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white border-0"
                     onClick={() => toggleActiveMutation.mutate({ id: service.id, active: !service.active })}
                   >
                     {service.active ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
                     {service.active ? 'Desativar' : 'Ativar'}
                   </Button>
-                  <Button variant="outline" size="sm" className="flex-1" onClick={() => handleOpenEdit(service)}>
+                  <Button variant="outline" size="sm" className="flex-1 bg-amber-600 hover:bg-amber-700 text-white border-0" onClick={() => handleOpenEdit(service)}>
                     <Edit className="w-4 h-4 mr-1" />
                     Editar
                   </Button>

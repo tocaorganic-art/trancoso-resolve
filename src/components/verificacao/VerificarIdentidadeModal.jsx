@@ -145,7 +145,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
       <DialogContent className="sm:max-w-md">
          <DialogHeader>
            <DialogTitle className="flex items-center gap-2 text-slate-100">
-             <ShieldCheck className="w-5 h-5 text-amber-400" />
+             <ShieldCheck className="w-5 h-5 text-amber-500" />
              {(userType === 'mei' || userType === 'pj') && hasPhysicalLocation ? 'Verificar Identidade da Empresa' : 'Verificar Identidade'}
            </DialogTitle>
            <DialogDescription className="text-slate-300">
@@ -157,8 +157,8 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
 
         {step === "done" ? (
           <div className="flex flex-col items-center gap-4 py-6">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
+            <CheckCircle2 className="w-8 h-8 text-amber-600" />
             </div>
             <div className="text-center">
               <h3 className="font-semibold text-lg text-slate-100">Documento enviado!</h3>
@@ -206,7 +206,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
                   onClick={() => setUploadMode("inteiro")}
                   className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${
                     uploadMode === "inteiro"
-                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      ? "border-amber-500 bg-amber-50 text-amber-700"
                       : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
                   }`}
                 >
@@ -217,7 +217,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
                   onClick={() => setUploadMode("frente_verso")}
                   className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${
                     uploadMode === "frente_verso"
-                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      ? "border-amber-500 bg-amber-50 text-amber-700"
                       : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
                   }`}
                 >
@@ -242,7 +242,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
                   </div>
                 ) : (
                   <label htmlFor="doc-upload"
-                    className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
+                    className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all">
                     <FileImage className="w-10 h-10 text-slate-300 mb-2" />
                     <span className="text-sm font-medium text-slate-500">Clique para selecionar a foto</span>
                     <span className="text-xs text-slate-400 mt-1">JPG, PNG ou PDF (máx. 10MB)</span>
@@ -267,7 +267,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
                     </div>
                   ) : (
                     <label htmlFor="doc-frente"
-                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
+                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all">
                       <FileImage className="w-8 h-8 text-slate-300 mb-1" />
                       <span className="text-sm font-medium text-slate-500">Frente</span>
                       <input id="doc-frente" type="file" accept="image/*,application/pdf" className="hidden" onChange={handleFrenteChange} />
@@ -289,7 +289,7 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
                     </div>
                   ) : (
                     <label htmlFor="doc-verso"
-                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
+                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all">
                       <FileImage className="w-8 h-8 text-slate-300 mb-1" />
                       <span className="text-sm font-medium text-slate-500">Verso</span>
                       <input id="doc-verso" type="file" accept="image/*,application/pdf" className="hidden" onChange={handleVersoChange} />
@@ -311,11 +311,11 @@ export default function VerificarIdentidadeModal({ isOpen, onClose, user, onSucc
 
             {/* Estado de progresso */}
             {step === "uploading" && (
-              <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                <Loader2 className="w-5 h-5 text-blue-600 animate-spin shrink-0" />
+              <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg">
+                <Loader2 className="w-5 h-5 text-amber-600 animate-spin shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-blue-800">Enviando documento…</p>
-                  <p className="text-xs text-blue-600">Por favor, aguarde.</p>
+                  <p className="text-sm font-medium text-amber-800">Enviando documento…</p>
+                  <p className="text-xs text-amber-600">Por favor, aguarde.</p>
                 </div>
               </div>
             )}

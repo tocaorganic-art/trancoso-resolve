@@ -154,7 +154,7 @@ const ServiceCard = ({ service, provider }) => {
                 )}
                 {/* Badge de categoria sobre a imagem */}
                 <div className="absolute top-3 right-3">
-                    <Badge className="bg-cyan-500 text-white text-xs font-semibold px-2 py-0.5 shadow-md">
+                    <Badge className="bg-amber-600 text-white text-xs font-semibold px-2 py-0.5 shadow-md">
                         {service.category}
                     </Badge>
                 </div>
@@ -196,7 +196,7 @@ const ServiceCard = ({ service, provider }) => {
                         )}
                     </div>
                     <div className="text-right">
-                        <p className="text-lg font-extrabold text-cyan-600 dark:text-cyan-400 leading-tight">
+                        <p className="text-lg font-extrabold text-amber-700 dark:text-amber-400 leading-tight">
                             R$ {formatPrice(service.price)}
                         </p>
                         <p className="text-xs text-slate-500 dark:text-slate-400">por {service.price_unit || 'serviço'}</p>
@@ -205,7 +205,7 @@ const ServiceCard = ({ service, provider }) => {
 
                 {/* Botão Ver Detalhes */}
                 <Link to={createPageUrl("ServicoDetalhes", `?id=${service.id}`)} data-testid={`service-card-link-${service.id}`} aria-label={`Ver detalhes do serviço ${service.title}`}>
-                    <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold">
+                    <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold">
                         Solicitar
                     </Button>
                 </Link>
@@ -405,10 +405,10 @@ export default function HomePage() {
       {/* Pull-to-refresh indicator */}
       {pullDistance > 10 && (
         <div
-          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-blue-50 border-b border-blue-200 transition-all"
+          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-amber-50 border-b border-amber-200 transition-all"
           style={{ height: `${Math.min(pullDistance, threshold)}px` }}
         >
-          <div className={`flex items-center gap-2 text-blue-600 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
+          <div className={`flex items-center gap-2 text-amber-700 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
@@ -432,7 +432,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2"><BrainCircuit className="w-6 h-6 text-purple-600" /> Para Você</h2>
                     <Link to={createPageUrl("ServicosCategoria")}>
-                        <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700">Ver todos</Button>
+                        <Button variant="ghost" className="text-amber-700 hover:text-amber-800">Ver todos</Button>
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -453,7 +453,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-lg md:text-2xl font-bold text-slate-900 drop-shadow-sm leading-tight">Profissionais verificados em Trancoso, na hora que você precisa.</h2>
             <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
-              <Button variant="ghost" className="text-cyan-600 hover:text-cyan-700" aria-label="Ver todos os serviços">
+              <Button variant="ghost" className="text-amber-700 hover:text-amber-800" aria-label="Ver todos os serviços">
                 Ver todos
               </Button>
             </Link>
@@ -473,14 +473,14 @@ export default function HomePage() {
                     return <ServiceCard key={service.id} service={service} provider={provider} />;
                   })
                 ) : (
-                  <div className="col-span-full text-center py-12 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-100">
-                    <Sparkles className="w-12 h-12 mx-auto text-blue-400 mb-3" />
+                  <div className="col-span-full text-center py-12 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-100">
+                    <Sparkles className="w-12 h-12 mx-auto text-amber-400 mb-3" />
                     <h3 className="text-lg font-semibold text-slate-700 mb-2">Serviços em Destaque em Breve!</h3>
                     <p className="text-slate-500 mb-4 max-w-md mx-auto">
                       Estamos selecionando os melhores serviços para você. Enquanto isso, explore nossos profissionais.
                     </p>
                     <Link to={createPageUrl("ServicosCategoria")}>
-                      <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700">
+                      <Button className="bg-amber-600 hover:bg-amber-700">
                         Explorar Profissionais
                       </Button>
                     </Link>
@@ -507,7 +507,7 @@ export default function HomePage() {
             ) : topProviders.length > 0 ? (
                 topProviders.map((provider) => (
                   <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
-                    <Card className="border border-slate-200 shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500 focus-within:ring-offset-2 bg-white">
+                    <Card className="border border-slate-200 shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-amber-500 focus-within:ring-offset-2 bg-white">
                       <CardContent className="p-4">
                         <LazyImage
                           src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
@@ -575,9 +575,9 @@ export default function HomePage() {
                { slug: 'garcom-trancoso', label: 'Garçom', emoji: '🍽️' },
              ].map(item => (
                <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
-                 <div className="bg-white rounded-2xl p-4 text-center shadow-md hover:shadow-lg transition-all duration-300 border-2 border-slate-200 hover:border-cyan-400 cursor-pointer group h-full flex flex-col items-center justify-center">
+                 <div className="bg-white rounded-2xl p-4 text-center shadow-md hover:shadow-lg transition-all duration-300 border-2 border-slate-200 hover:border-amber-400 cursor-pointer group h-full flex flex-col items-center justify-center">
                    <span className="text-3xl block mb-2" aria-hidden="true">{item.emoji}</span>
-                   <span className="text-sm md:text-base font-bold text-slate-800 group-hover:text-cyan-600 transition-colors">{item.label}</span>
+                   <span className="text-sm md:text-base font-bold text-slate-800 group-hover:text-amber-700 transition-colors">{item.label}</span>
                    <span className="block text-xs font-medium text-slate-600 mt-1">em Trancoso</span>
                  </div>
                </Link>
@@ -600,7 +600,7 @@ export default function HomePage() {
               { step: '3', title: 'Você recebe contatos e escolhe', desc: 'Compare respostas, avalie e decida com quem quer fechar.' },
             ].map(item => (
               <div key={item.step} className="bg-white rounded-2xl p-5 md:p-6 shadow-md border border-slate-100 flex items-start gap-4 md:block md:text-center">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-cyan-500 text-white font-bold text-lg md:text-xl flex items-center justify-center shrink-0 md:mx-auto md:mb-4">{item.step}</div>
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-amber-600 text-white font-bold text-lg md:text-xl flex items-center justify-center shrink-0 md:mx-auto md:mb-4">{item.step}</div>
                 <div>
                   <h3 className="font-bold text-base md:text-lg text-slate-900 mb-1 md:mb-2">{item.title}</h3>
                   <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
@@ -611,7 +611,7 @@ export default function HomePage() {
         </section>
 
         {/* Por que usar */}
-        <section className="mb-10 md:mb-20 bg-gradient-to-br from-slate-50 to-cyan-50 rounded-3xl p-8 md:p-12 border border-slate-100">
+        <section className="mb-10 md:mb-20 bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-8 md:p-12 border border-amber-100">
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 drop-shadow-sm">Por que usar a Trancoso Resolve em Trancoso</h2>
           <ul className="space-y-4">
             {[
@@ -621,14 +621,14 @@ export default function HomePage() {
               'Sem custo para quem pede serviço: você pede, recebe retorno e escolhe.',
             ].map((item, i) => (
               <li key={i} className="flex items-start gap-3 text-slate-700">
-                <span className="w-6 h-6 rounded-full bg-cyan-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
+                <span className="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
                 <span className="text-base">{item}</span>
               </li>
             ))}
           </ul>
           <div className="mt-8">
             <Link to={createPageUrl("ServicosCategoria")} className="block sm:inline-block">
-              <Button className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
+              <Button className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
                 Encontrar profissional agora
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>

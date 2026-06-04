@@ -25,7 +25,7 @@ const ProviderCard = ({ provider }) => {
     return (
     <Card className="border-none shadow-lg hover:shadow-xl transition-all h-full flex flex-col overflow-hidden">
         {/* Foto de Capa */}
-        <div className="relative h-32 bg-gradient-to-r from-cyan-400 to-blue-500 shrink-0">
+        <div className="relative h-32 bg-gradient-to-r from-amber-700 to-amber-600 shrink-0">
             {provider.cover_photo_url ? (
                 <LazyImage
                     src={provider.cover_photo_url}
@@ -101,7 +101,7 @@ const ProviderCard = ({ provider }) => {
             )}
 
             <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
-                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 py-3 min-h-[44px] transition-all duration-200 active:scale-95">
+                <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 min-h-[44px] transition-all duration-200 active:scale-95">
                     Ver Perfil Completo
                 </Button>
             </Link>
@@ -379,7 +379,7 @@ export default function ServicosCategoriaPage() {
     if (isLoadingProviders) {
       return (
         <div className="text-center py-16">
-          <Loader2 className="w-8 h-8 mx-auto text-blue-500 animate-spin mb-4" />
+          <Loader2 className="w-8 h-8 mx-auto text-amber-500 animate-spin mb-4" />
           <p className="text-slate-500 text-lg">Carregando profissionais...</p>
         </div>
       );
@@ -398,7 +398,7 @@ export default function ServicosCategoriaPage() {
     if (searchQuery.trim() !== '' && isSearching) {
       return (
         <div className="text-center py-16">
-          <Loader2 className="w-8 h-8 mx-auto text-blue-500 animate-spin mb-4" />
+          <Loader2 className="w-8 h-8 mx-auto text-amber-500 animate-spin mb-4" />
           <p className="text-slate-500 text-lg">Buscando profissionais com IA...</p>
         </div>
       );
@@ -431,7 +431,7 @@ export default function ServicosCategoriaPage() {
               </Button>
             )}
             <Link to={createPageUrl("SejaPrestador")}>
-              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 gap-2">
+              <Button className="bg-amber-600 hover:bg-amber-700 text-white gap-2">
                 <Star className="w-4 h-4" /> Seja o Primeiro!
               </Button>
             </Link>
@@ -450,8 +450,8 @@ export default function ServicosCategoriaPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {pullDistance > 10 && (
-        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-blue-50 border-b border-blue-200 transition-all" style={{ height: `${Math.min(pullDistance, threshold)}px` }}>
-          <div className={`flex items-center gap-2 text-blue-600 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
+        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-amber-50 border-b border-amber-200 transition-all" style={{ height: `${Math.min(pullDistance, threshold)}px` }}>
+          <div className={`flex items-center gap-2 text-amber-700 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
@@ -460,7 +460,7 @@ export default function ServicosCategoriaPage() {
         </div>
       )}
       
-      <div className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-8 px-4">
+      <div className="bg-gradient-to-r from-amber-800 to-amber-600 text-white py-8 px-4">
         <div className="container mx-auto max-w-7xl">
           <Link to={createPageUrl("Home")}>
             <Button variant="ghost" className="text-white hover:bg-white/20 mb-4">
