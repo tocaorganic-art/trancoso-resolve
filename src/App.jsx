@@ -30,6 +30,7 @@ import PoliticaDevolucoesPage from '@/pages/PoliticaDevolucoes';
 import TermosDeServicoPage from '@/pages/TermosDeServico';
 import AssinaturaConfirmadaPage from '@/pages/AssinaturaConfirmada';
 import SeoDashboard from '@/pages/admin/SeoDashboard';
+import ConfiguracaoMarketing from '@/pages/admin/ConfiguracaoMarketing';
 import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
 import AdminMetricasPage from '@/pages/AdminMetricas';
 import EletricistaTrancoso from '@/pages/servicos/EletricistaTrancoso';
@@ -187,6 +188,9 @@ const AuthenticatedApp = () => {
         <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
           <Route path="/admin/seo" element={
             <AnimatedPage><SeoDashboard /></AnimatedPage>
+          } />
+          <Route path="/admin/marketing" element={
+            <AnimatedPage><ConfiguracaoMarketing /></AnimatedPage>
           } />
           <Route path="/admin/metricas" element={
             <LayoutWrapper currentPageName="AdminMetricas">
