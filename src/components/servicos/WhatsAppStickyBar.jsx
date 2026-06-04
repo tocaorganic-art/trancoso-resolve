@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const WHATSAPP_NUMBER = '5573988888888'; // Substitua pelo número real
+const WHATSAPP_NUMBER = '5573998283579';
 
 export default function WhatsAppStickyBar({ serviceLabel }) {
   const [visible, setVisible] = useState(false);
