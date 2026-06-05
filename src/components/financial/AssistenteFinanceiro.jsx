@@ -49,19 +49,19 @@ export default function AssistenteFinanceiro({ transacoes }) {
     `;
 
     try {
-      const response = await base44.functions.invoke('callOpenAI', {
-        messages: [{ role: 'user', content: prompt }],
-        response_json_schema: jsonSchema,
-      });
-      
-      setInsights(response.data);
-      toast.success("Análise financeira concluída!");
+       const response = await base44.integrations.Core.InvokeLLM({
+         prompt,
+         response_json_schema: jsonSchema,
+       });
+
+       setInsights(response);
+       toast.success("Análise financeira concluída!");
 
     } catch (error) {
-      console.error('Erro ao analisar finanças:', error);
-      toast.error("Ocorreu um erro ao gerar a análise.", { description: error.message || "Tente novamente mais tarde." });
+       console.error('Erro ao analisar finanças:', error);
+       toast.error("Ocorreu um erro ao gerar a análise.", { description: error.message || "Tente novamente mais tarde." });
     } finally {
-      setLoading(false);
+       setLoading(false);
     }
   };
 
