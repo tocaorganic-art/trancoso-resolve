@@ -88,12 +88,12 @@ function PlanCard({
   trialLabel, vagasLabel, vagasCor,
   benefits, ctaLabel, ctaNote,
   onCta, onCtaAvulso, ctaAvulsoLabel,
-  loading, loadingAvulso, disabled, popular
+  loading, loadingAvulso, disabled, popular, isAvulso
 }) {
   return (
     <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-amber-400' : 'border border-slate-700'} ${disabled ? 'opacity-60' : ''}`}>
       {popular && (
-        <div className="absolute top-0 left-0 right-0 flex justify-center -translate-y-1/2 z-10">
+        <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, whiteSpace: 'nowrap' }}>
           <Badge className="bg-amber-500 text-white font-bold text-xs px-3 py-1 shadow">
             <Star className="w-3 h-3 mr-1" /> Mais popular
           </Badge>
@@ -114,7 +114,14 @@ function PlanCard({
           </p>
         )}
         {vagasLabel && (
-          <Badge className={`mt-2 text-xs font-bold ${vagasCor}`}>{vagasLabel}</Badge>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'rgba(255,255,255,0.15)', borderRadius: 20,
+            padding: '4px 12px', fontSize: 13, fontWeight: 600, color: '#fff',
+            marginTop: 8
+          }}>
+            {vagasLabel}
+          </span>
         )}
       </div>
 
@@ -146,8 +153,13 @@ function PlanCard({
               {onCtaAvulso && (
                 <Button
                   variant="outline"
-                  className="w-full text-xs hover:bg-white/10"
-                  style={{ border: '1.5px solid rgba(255,255,255,0.6)', color: '#FFFFFF', background: 'transparent' }}
+                  className="w-full text-xs hover:opacity-90"
+                  style={{ 
+                    border: 'none', 
+                    color: '#fff', 
+                    background: '#0d9488',
+                    marginTop: 8
+                  }}
                   onClick={onCtaAvulso}
                   disabled={loadingAvulso}
                 >
@@ -165,9 +177,15 @@ function PlanCard({
 
               {/* Aviso cartão */}
               {trialLabel && (
-                <p className="text-center text-xs flex items-center justify-center gap-1 mt-1 pt-2 border-t border-white/10" style={{ color: '#94A3B8' }}>
-                  <Lock className="w-3 h-3" style={{ color: '#5DCAA5' }} /> Seu cartão é salvo no cadastro. Nenhuma cobrança durante o período gratuito.
-                </p>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  marginTop: 12, padding: '8px 12px',
+                  background: 'rgba(255,255,255,0.07)', borderRadius: 8,
+                  fontSize: 12, color: '#CBD5E1'
+                }}>
+                  <Lock className="w-3 h-3" style={{ color: '#5DCAA5' }} />
+                  Cartão salvo no cadastro — sem cobrança no período grátis.
+                </div>
               )}
 
               {ctaNote && <p className="text-xs text-center" style={{ color: '#94A3B8' }}>{ctaNote}</p>}
@@ -199,7 +217,8 @@ function AvulsoCard({ icon, title, price, onCta, loading }) {
           <li className="flex items-center gap-2" style={{ color: '#CBD5E1' }}><Check className="w-4 h-4 shrink-0" style={{ color: '#5DCAA5' }} /> Todos os recursos da plataforma</li>
         </ul>
         <Button
-          className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold"
+          className="w-full hover:opacity-90 text-white font-bold"
+          style={{ background: '#0d9488' }}
           onClick={onCta}
           disabled={loading}
         >
@@ -296,30 +315,48 @@ export default function PlanosPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-12">
+    <div className="bg-slate-900 min-h-screen py-12">
+      <style>{`
+        @media (max-width: 768px) {
+          .grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
       <div className="container mx-auto max-w-4xl px-4">
 
         {/* ─── PROVA SOCIAL ──────────────────────────────────────────────── */}
-        <div className="text-center mb-8">
-          <p className="text-slate-500 text-base flex items-center justify-center gap-2">
-            <Users className="w-5 h-5 text-amber-600" />
+        <div className="text-center mb-6">
+          <p className="text-slate-400 text-base flex items-center justify-center gap-2">
+            <Users className="w-5 h-5 text-amber-500" />
             {totalVerificados > 0
-              ? <span>Junte-se a <strong className="text-slate-700">{totalVerificados}</strong> prestadores já verificados em Trancoso</span>
-              : <span>Junte-se aos primeiros prestadores verificados de Trancoso</span>
+              ? <span>Junte-se a <strong className="text-slate-200">{totalVerificados}</strong> prestadores já verificados em Trancoso</span>
+              : <span className="text-slate-300">Junte-se aos primeiros prestadores verificados de Trancoso</span>
             }
           </p>
         </div>
 
+        {/* ─── MENU DE ÂNCORAS ──────────────────────────────────────────────── */}
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: 24,
+          padding: '12px 0', borderBottom: '1px solid #334155',
+          fontSize: 14, fontWeight: 500, marginBottom: 24
+        }}>
+          <a href="#prestadores" style={{color: '#f97316', textDecoration: 'none'}}>Prestadores</a>
+          <a href="#empresas" style={{color: '#f97316', textDecoration: 'none'}}>Empresas</a>
+          <a href="#avulso" style={{color: '#0d9488', textDecoration: 'none'}}>Uso Avulso</a>
+          <a href="#recursos" style={{color: '#6366f1', textDecoration: 'none'}}>Recursos</a>
+        </div>
+
         {/* ─── BANNER SAZONALIDADE ──────────────────────────────────────── */}
-        <div className="mb-10 border-2 border-amber-400 bg-amber-50 rounded-2xl p-6 flex flex-col md:flex-row items-start gap-4">
-          <div className="w-12 h-12 bg-amber-400/20 rounded-xl flex items-center justify-center shrink-0">
-            <Calendar className="w-7 h-7 text-amber-600" />
+        <div className="mb-10 border-2 border-amber-500 bg-amber-900/20 rounded-2xl p-6 flex flex-col md:flex-row items-start gap-4">
+          <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center shrink-0">
+            <Calendar className="w-7 h-7 text-amber-400" />
           </div>
           <div>
-            <h2 className="text-lg font-extrabold text-amber-900 mb-1">
+            <h2 className="text-lg font-extrabold text-amber-200 mb-1">
               Trancoso tem temporada. Seu plano também pode ter.
             </h2>
-            <p className="text-amber-800 text-sm leading-relaxed">
+            <p className="text-amber-100/80 text-sm leading-relaxed">
               <strong>Alta temporada: dezembro a março e julho</strong> — quando a demanda por serviços dispara na região.<br />
               Se você trabalha por temporada, o <strong>Uso Avulso</strong> é a escolha certa: pague só quando precisar, sem mensalidade.
             </p>
@@ -327,11 +364,12 @@ export default function PlanosPage() {
         </div>
 
         {/* ─── BLOCO 1: PRESTADORES ─────────────────────────────────────── */}
+        <section id="prestadores">
         <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Para Prestadores Individuais</p>
 
         {isPromoAtivaPrestador && (
           <div className="mb-4 text-center">
-            <span className="inline-block bg-amber-50 border border-amber-300 text-amber-800 text-sm font-semibold rounded-full px-4 py-1.5">
+            <span className="inline-block bg-amber-900/30 border border-amber-600 text-amber-200 text-sm font-semibold rounded-full px-4 py-1.5">
               🎉 Restam <strong>{vagasPrestador}</strong> {vagasPrestador === 1 ? 'vaga' : 'vagas'} com preço de lançamento!
             </span>
           </div>
@@ -382,13 +420,15 @@ export default function PlanosPage() {
             popular={true}
           />
         </div>
+        </section>
 
         {/* ─── BLOCO 2: EMPRESAS ────────────────────────────────────────── */}
+        <section id="empresas">
         <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Para Empresas</p>
 
         {isPromoAtivaEmpresa && (
           <div className="mb-4 text-center">
-            <span className="inline-block bg-amber-50 border border-amber-300 text-amber-800 text-sm font-semibold rounded-full px-4 py-1.5">
+            <span className="inline-block bg-amber-900/30 border border-amber-600 text-amber-200 text-sm font-semibold rounded-full px-4 py-1.5">
               🎉 Restam <strong>{vagasEmpresa}</strong> {vagasEmpresa === 1 ? 'vaga' : 'vagas'} no preço de lançamento para empresas!
             </span>
           </div>
@@ -438,12 +478,14 @@ export default function PlanosPage() {
             popular={true}
           />
         </div>
+        </section>
 
         {/* ─── SEÇÃO USO AVULSO ─────────────────────────────────────────── */}
+        <section id="avulso">
         <div className="mb-10">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Trabalha só na temporada?</h2>
-            <p className="text-slate-600 text-sm max-w-2xl mx-auto">
+            <h2 className="text-2xl font-extrabold text-slate-100 mb-2">Trabalha só na temporada?</h2>
+            <p className="text-slate-300 text-sm max-w-2xl mx-auto">
               A alta temporada em Trancoso concentra boa parte do movimento do ano — especialmente de dezembro a março e em julho. Se você ativa seu perfil só nesse período, o uso avulso permite pagar apenas os meses que importam, sem mensalidade.
             </p>
           </div>
@@ -469,20 +511,26 @@ export default function PlanosPage() {
             💡 Você pode reativar manualmente em qualquer mês. Nenhuma cobrança automática.
           </p>
         </div>
+        </section>
 
         {/* Transparência */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800 text-center mb-6">
+        <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-4 text-sm text-blue-200 text-center mb-6">
           <strong>Transparência total:</strong> Sem comissão sobre seus serviços. Você negocia diretamente com o cliente e fica com 100% do valor.
         </div>
 
-        <p className="text-center text-slate-500 text-sm mb-8">
-          Dúvidas? Entre em contato: <a href="mailto:suporte@trancosoresolve.com.br" className="underline"><strong>suporte@trancosoresolve.com.br</strong></a>
+        {/* ─── SEÇÃO RECURSOS ─────────────────────────────────────────── */}
+        <section id="recursos" className="mb-10">
+          <PositionamentoEstrategico />
+        </section>
+
+        <p className="text-center text-slate-400 text-sm mb-8">
+          Dúvidas? Entre em contato: <a href="mailto:suporte@trancosoresolve.com.br" className="underline text-slate-300"><strong>suporte@trancosoresolve.com.br</strong></a>
         </p>
 
         {/* Assinatura ativa */}
         {mySubscription && mySubscription.status === 'active' && (
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center mb-8">
-            <p className="text-sm text-slate-600 mb-1">
+          <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-center mb-8">
+            <p className="text-sm text-slate-300 mb-1">
               Sua assinatura está ativa
               {mySubscription.next_billing_date && ` — próxima cobrança em ${new Date(mySubscription.next_billing_date + 'T00:00:00').toLocaleDateString('pt-BR')}`}.
             </p>
@@ -493,16 +541,30 @@ export default function PlanosPage() {
         )}
 
         {/* ─── FAQ ──────────────────────────────────────────────────────── */}
-        <div className="mb-10">
-          <h2 className="text-xl font-bold text-slate-900 text-center mb-5">Perguntas Frequentes</h2>
-          <div className="space-y-3">
-            {FAQ_ITEMS.map((item, i) => (
-              <FaqItem key={i} q={item.q} a={item.a} />
-            ))}
-          </div>
-        </div>
-
-        <PositionamentoEstrategico />
+        <section style={{maxWidth: 680, margin: '48px auto', padding: '0 24px'}}>
+          <h2 style={{textAlign:'center', fontWeight:700, marginBottom:24, color: '#f1f5f9'}}>
+            Perguntas Frequentes
+          </h2>
+          {[
+            {q: 'Posso cancelar a qualquer momento?', 
+             r: 'Sim. Nos planos mensais você cancela quando quiser, sem multa. No uso avulso não há renovação automática.'},
+            {q: 'Como funciona o período gratuito?', 
+             r: 'Seu cartão é salvo no cadastro mas nenhuma cobrança é feita durante o período grátis. Você pode cancelar antes do fim sem pagar nada.'},
+            {q: 'Qual a diferença entre Prestador e Prestador Mensal?', 
+             r: 'O Plano Prestador tem preço de lançamento com 2 meses grátis inclusos. O Mensal tem ciclo padrão com 7 dias grátis e todos os recursos.'},
+            {q: 'O que é o Uso Avulso?', 
+             r: 'Ideal para quem trabalha só na alta temporada. Você paga apenas o mês que precisar, sem mensalidade fixa e sem renovação automática.'},
+          ].map(({q, r}) => (
+            <details key={q} style={{
+              borderBottom: '1px solid #334155', padding: '16px 0', cursor: 'pointer'
+            }}>
+              <summary style={{fontWeight:600, fontSize:15, listStyle:'none', color: '#f1f5f9'}}>
+                ▸ {q}
+              </summary>
+              <p style={{marginTop:8, color:'#94a3b8', fontSize:14, lineHeight:1.6}}>{r}</p>
+            </details>
+          ))}
+        </section>
       </div>
     </div>
   );
