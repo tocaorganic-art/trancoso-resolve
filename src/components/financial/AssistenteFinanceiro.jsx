@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Loader2, Sparkles, TrendingUp, Calendar, Scissors, AlertCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { callClaude } from '@/functions/callClaude';
 import { toast } from "sonner";
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -49,12 +50,13 @@ export default function AssistenteFinanceiro({ transacoes }) {
     `;
 
     try {
-       const response = await base44.integrations.Core.InvokeLLM({
-         prompt,
+       const response = await callClaude({
+         messages: [{ role: 'user', content: prompt }],
          response_json_schema: jsonSchema,
+         systemPrompt: 'Você é um assistente financeiro especializado em análise de dados para prestadores de serviços. Analise os dados fornecidos e retorne insights acionáveis em português do Brasil.'
        });
 
-       setInsights(response);
+       setInsights(response.data);
        toast.success("Análise financeira concluída!");
 
     } catch (error) {
