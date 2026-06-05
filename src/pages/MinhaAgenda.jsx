@@ -13,7 +13,7 @@ import PermissionChecker from "../components/auth/PermissionChecker";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const RequestCard = ({ request, service, onClick }) => {
+const RequestCard = ({ request, service, onConfirm, onReject }) => {
   const initial = request.client_name?.charAt(0).toUpperCase() || 'C';
   
   return (
@@ -22,8 +22,7 @@ const RequestCard = ({ request, service, onClick }) => {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      onClick={onClick}
-      className="cursor-pointer rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 mb-3"
+      className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 mb-3"
     >
       <div className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-full gradient-amber flex items-center justify-center font-bold text-white shrink-0">
@@ -41,13 +40,13 @@ const RequestCard = ({ request, service, onClick }) => {
       {request.status === 'Pendente' && (
         <div className="flex gap-2 mt-4">
           <button 
-            onClick={(e) => { e.stopPropagation(); handleConfirm(request.id); }}
+            onClick={() => onConfirm(request.id)}
             className="flex-1 py-2.5 rounded-xl gradient-amber text-white font-semibold text-sm"
           >
             Aceitar
           </button>
           <button 
-            onClick={(e) => { e.stopPropagation(); openModal(request); }}
+            onClick={() => onReject(request)}
             className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-medium text-sm"
           >
             Recusar
@@ -63,7 +62,6 @@ function MinhaAgendaContent() {
   const [activeTab, setActiveTab] = useState('Pendente');
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('Pendente');
 
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -194,7 +192,8 @@ function MinhaAgendaContent() {
             <RequestCard
               request={req}
               service={services?.[req.service_id]}
-              onClick={() => openModal(req)}
+              onConfirm={handleConfirm}
+              onReject={(req) => openModal(req)}
             />
           </motion.div>
         ))}
