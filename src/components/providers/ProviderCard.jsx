@@ -10,72 +10,51 @@ import { DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
 
 export default function ProviderCard({ provider }) {
     return (
-    <div style={{
-        borderRadius: 16,
-        overflow: 'hidden',
-        background: '#1a1a2e',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%'
-    }}>
-        {/* Imagem de capa reduzida */}
-        <div style={{
-            height: 80,
-            backgroundImage: provider.cover_photo_url ? `url(${provider.cover_photo_url})` : 'linear-gradient(135deg, #c2410c 0%, #9a3412 100%)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            position: 'relative',
-            flexShrink: 0
-        }}>
-            {provider.cover_photo_url && (
+    <div className="rounded-2xl overflow-hidden bg-[#1a1a2e] shadow-lg flex flex-col h-full border border-white/5">
+        {/* 1) IMAGEM DE CAPA no topo - altura fixa, sem sobreposição */}
+        <div className="h-28 w-full bg-gradient-to-br from-[#c2410c] to-[#9a3412] relative flex-shrink-0">
+            {provider.cover_photo_url ? (
                 <LazyImage
                     src={provider.cover_photo_url}
                     alt={`Foto de capa de ${provider.full_name}`}
                     className="w-full h-full object-cover"
-                    style={{ width: '100%', height: '100%' }}
                 />
-            )}
+            ) : null}
         </div>
 
-        {/* Corpo do card - avatar e info ABAIXO da capa */}
-        <div style={{ padding: '0 16px 16px', marginTop: -32 }}>
-
-            {/* Avatar com borda branca para separar da capa */}
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, marginBottom: 8 }}>
-                <div style={{
-                    width: 64, height: 64,
-                    borderRadius: '50%',
-                    border: '3px solid #fff',
-                    overflow: 'hidden',
-                    flexShrink: 0,
-                    background: '#374151'
-                }}>
+        {/* 2-7) CORPO DO CARD - todo conteúdo ABAIXO da capa, com padding adequado */}
+        <div className="p-4 flex flex-col gap-3 flex-grow">
+            
+            {/* Header com avatar + nome + ocupação + favorito */}
+            <div className="flex items-start gap-3">
+                {/* Avatar circular sobreposto na borda da capa (-mt-8) */}
+                <div className="w-16 h-16 rounded-full border-3 border-white overflow-hidden flex-shrink-0 bg-[#374151] -mt-8 relative z-10 shadow-md">
                     <LazyImage
                         src={provider.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.full_name)}&size=200`}
                         alt={`Foto de perfil de ${provider.full_name}`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        className="w-full h-full object-cover"
                     />
                 </div>
 
-                {/* Nome e profissão ao lado do avatar */}
-                <div style={{ paddingBottom: 4, minWidth: 0, flex: '1 1 auto' }}>
-                    <div style={{
-                        display: 'flex', alignItems: 'center', gap: 6,
-                        fontSize: 15, fontWeight: 700, color: '#fff',
-                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                        maxWidth: '100%'
-                    }}>
-                        {provider.full_name}
-                        {provider.verified && <span style={{color:'#3b82f6', fontSize:14}}>✔</span>}
+                {/* Nome e ocupação - à direita do avatar, NUNCA coberto */}
+                <div className="flex-1 min-w-0 pt-1">
+                    {/* Nome completo em branco bold */}
+                    <div className="flex items-center gap-1.5">
+                        <span className="text-base font-bold text-white truncate">
+                            {provider.full_name}
+                        </span>
+                        {provider.verified && (
+                            <span className="text-blue-400 text-sm" title="Verificado">✔</span>
+                        )}
                     </div>
-                    <div style={{ fontSize: 13, color: '#9ca3af', marginTop: 2 }}>
+                    {/* Ocupação em cinza abaixo do nome */}
+                    <div className="text-sm text-[#9ca3af] mt-0.5">
                         {provider.occupation}
                     </div>
                 </div>
 
-                {/* Botão de favorito alinhado à direita */}
-                <div style={{ paddingBottom: 4 }}>
+                {/* Botão de favorito no canto superior direito */}
+                <div className="flex-shrink-0">
                     <FavoriteButton 
                         id={provider.id} 
                         type="provider" 
@@ -85,85 +64,69 @@ export default function ProviderCard({ provider }) {
                 </div>
             </div>
 
-            {/* Avaliação */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                <span style={{color:'#f59e0b'}}>★</span>
-                <span style={{color:'#fff', fontWeight:600, fontSize:14}}>{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
+            {/* 5) Badges de avaliação */}
+            <div className="flex items-center gap-1.5">
+                <span className="text-amber-400 text-sm">★</span>
+                <span className="text-white font-semibold text-sm">
+                    {provider.rating ? provider.rating.toFixed(1) : 'Novo'}
+                </span>
                 {provider.total_reviews > 0 && (
-                    <span style={{color:'#6b7280', fontSize:13}}>({provider.total_reviews} avaliações)</span>
+                    <span className="text-[#6b7280] text-xs">
+                        ({provider.total_reviews} avaliações)
+                    </span>
                 )}
             </div>
 
-            {/* Descrição com truncate */}
+            {/* 6) Bio curta (line-clamp-2) */}
             {provider.bio && (
-                <p style={{
-                    fontSize: 13, color: '#d1d5db', lineHeight: 1.5,
-                    overflow: 'hidden',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    marginBottom: 12
-                }}>
+                <p className="text-sm text-[#d1d5db] leading-relaxed line-clamp-2">
                     {provider.bio}
                 </p>
             )}
 
-            {/* Localização e preço */}
-            <div style={{
-                display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', marginBottom: 10
-            }}>
+            {/* Localização e preço em pills */}
+            <div className="flex items-center justify-between gap-2 flex-wrap">
                 {provider.location?.city && (
-                    <span style={{fontSize:12, color:'#9ca3af'}}>📍 {provider.location.city}</span>
+                    <span className="inline-flex items-center gap-1 text-xs text-[#9ca3af]">
+                        📍 {provider.location.city}
+                    </span>
                 )}
                 {provider.price_range && (
-                    <span style={{fontSize:13, color:'#d1d5db', fontWeight:600}}>{provider.price_range}</span>
+                    <span className="inline-flex items-center text-sm text-[#d1d5db] font-semibold bg-white/5 px-2 py-0.5 rounded-full">
+                        {provider.price_range}
+                    </span>
                 )}
             </div>
 
             {/* Badge de disponibilidade */}
             {provider.availability && (
-                <div style={{ marginBottom: 12 }}>
-                    <span style={{
-                        padding: '4px 12px', borderRadius: 16, fontSize: 12, fontWeight: 600,
-                        background: provider.availability === 'Disponível' ? '#15803d' : '#dc2626',
-                        color: '#fff',
-                        display: 'inline-block'
-                    }}>
-                        {provider.availability === 'Disponível' ? '✓ Disponível' : '○ Ocupado'}
+                <div>
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                        provider.availability === 'Disponível' 
+                            ? 'bg-[#15803d] text-white' 
+                            : 'bg-[#dc2626] text-white'
+                    }`}>
+                        {provider.availability === 'Disponível' ? '✓' : '○'} {provider.availability}
                     </span>
                 </div>
             )}
 
-            {/* Badge Em Verificação - com fundo mais escuro */}
+            {/* Badge Em Verificação */}
             {provider.status_verificacao && provider.status_verificacao !== 'aprovado' && provider.status_verificacao !== 'reprovado' && (
-                <div style={{ marginBottom: 12 }}>
+                <div>
                     <BadgeEmVerificacao />
                 </div>
             )}
 
-            {/* Botão CTA */}
-            <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
-                <button style={{
-                    width: '100%', padding: '12px 0',
-                    background: 'linear-gradient(135deg, #f59e0b, #ea580c)',
-                    color: '#fff', fontWeight: 700, fontSize: 14,
-                    border: 'none', borderRadius: 12, cursor: 'pointer',
-                    transition: 'transform 0.2s, opacity 0.2s',
-                    boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
-                }}
-                onMouseEnter={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.opacity = '0.95'; }}
-                onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.opacity = '1'; }}
-                >
+            {/* 7) BOTÃO "Ver Perfil Completo" - gradiente âmbar padrão do site */}
+            <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} className="mt-auto">
+                <button className="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5">
                     Ver Perfil Completo →
                 </button>
             </Link>
 
-            {/* Nota de rodapé */}
-            <p style={{
-                textAlign: 'center', fontSize: 11,
-                color: '#6b7280', marginTop: 8
-            }}>
+            {/* 8) Aviso de perfil ilustrativo */}
+            <p className="text-center text-[10px] text-[#6b7280] mt-1">
                 {DEMO_PROFILE_WARNING}
             </p>
         </div>
