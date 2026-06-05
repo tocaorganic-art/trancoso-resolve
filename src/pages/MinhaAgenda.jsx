@@ -253,6 +253,7 @@ function MinhaAgendaContent() {
             </div>
           </div>
         </div>
+      </div>
 
       <Tabs defaultValue="Pendente">
         <TabsList 

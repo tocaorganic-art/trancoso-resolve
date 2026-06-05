@@ -166,6 +166,7 @@ function MeusServicosContent() {
             Novo Serviço
           </Button>
         </div>
+      </div>
 
       {services.length === 0 ? (
         <Card>
