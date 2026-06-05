@@ -284,17 +284,29 @@ export default function ServicosCategoriaPage() {
         </div>
       )}
       
-      <div className="bg-gradient-to-r from-amber-800 to-amber-600 text-white py-8 px-4">
-        <div className="container mx-auto max-w-7xl">
+      <div style={{
+        background: 'linear-gradient(135deg, #c2410c 0%, #9a3412 100%)',
+        padding: '32px 24px 24px',
+        position: 'relative'
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'rgba(0,0,0,0.25)'
+        }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
           <Link to={createPageUrl("Home")}>
-            <Button variant="ghost" className="text-white hover:bg-white/20 mb-4">
+            <Button variant="ghost" className="text-white hover:bg-white/20 mb-4" style={{ position: 'relative' }}>
               <ArrowLeft className="w-4 h-4 mr-2" /> Voltar
             </Button>
           </Link>
-          <h1 className="text-xl md:text-3xl font-bold mb-2">
+          <h1 style={{
+            color: '#fff', fontSize: 26, fontWeight: 800,
+            textShadow: '0 1px 4px rgba(0,0,0,0.4)',
+            marginBottom: 8
+          }}>
             {selectedCategory === 'Todos' ? 'Serviços em Trancoso, BA' : `${selectedCategory} em Trancoso, BA`}
           </h1>
-          <p className="text-blue-100">
+          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, marginTop: 4 }}>
             {isLoadingProviders ? "Carregando..." : (isSearching ? "Buscando com IA..." : `${filteredProviders.length} profissiona${filteredProviders.length !== 1 ? 'is' : 'l'} encontrado${filteredProviders.length !== 1 ? 's' : ''}`)}
           </p>
           {selectedCategory !== 'Todos' && slugMap[selectedCategory] && (
@@ -325,6 +337,18 @@ export default function ServicosCategoriaPage() {
           onSelectCategory={setSelectedCategory}
         />
 
+        <style>{`
+          .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 24px;
+          }
+          @media (max-width: 640px) {
+            .cards-grid { grid-template-columns: 1fr; }
+          }
+        `}</style>
+        
         <ProviderGrid
           filteredProviders={filteredProviders}
           isLoadingProviders={isLoadingProviders}

@@ -22,7 +22,13 @@ export default function FilterBar({
     onSelectCategory
 }) {
     return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div style={{
+        background: '#fff',
+        borderRadius: 16,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+        padding: '24px',
+        marginBottom: 32
+    }}>
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-2">
                 <Filter className="w-5 h-5 text-slate-600" />
@@ -45,7 +51,15 @@ export default function FilterBar({
             />
             
             <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger aria-label="Filtrar por faixa de preço">
+                <SelectTrigger aria-label="Filtrar por faixa de preço" style={{
+                    border: '1.5px solid #d1d5db',
+                    borderRadius: 8,
+                    padding: '10px 14px',
+                    fontSize: 14,
+                    color: '#111827',
+                    background: '#fff',
+                    fontWeight: 500
+                }}>
                     <SelectValue placeholder="Faixa de Preço" />
                 </SelectTrigger>
                 <SelectContent>
@@ -57,7 +71,15 @@ export default function FilterBar({
             </Select>
             
             <Select value={ratingFilter} onValueChange={setRatingFilter}>
-                <SelectTrigger aria-label="Filtrar por avaliação">
+                <SelectTrigger aria-label="Filtrar por avaliação" style={{
+                    border: '1.5px solid #d1d5db',
+                    borderRadius: 8,
+                    padding: '10px 14px',
+                    fontSize: 14,
+                    color: '#111827',
+                    background: '#fff',
+                    fontWeight: 500
+                }}>
                     <SelectValue placeholder="Avaliação" />
                 </SelectTrigger>
                 <SelectContent>
@@ -71,7 +93,15 @@ export default function FilterBar({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-slate-100">
             <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
-                <SelectTrigger aria-label="Filtrar por disponibilidade">
+                <SelectTrigger aria-label="Filtrar por disponibilidade" style={{
+                    border: '1.5px solid #d1d5db',
+                    borderRadius: 8,
+                    padding: '10px 14px',
+                    fontSize: 14,
+                    color: '#111827',
+                    background: '#fff',
+                    fontWeight: 500
+                }}>
                     <SelectValue placeholder="Disponibilidade" />
                 </SelectTrigger>
                 <SelectContent>
@@ -82,7 +112,15 @@ export default function FilterBar({
             </Select>
 
             <Select value={neighborhoodFilter} onValueChange={setNeighborhoodFilter}>
-                <SelectTrigger aria-label="Filtrar por bairro">
+                <SelectTrigger aria-label="Filtrar por bairro" style={{
+                    border: '1.5px solid #d1d5db',
+                    borderRadius: 8,
+                    padding: '10px 14px',
+                    fontSize: 14,
+                    color: '#111827',
+                    background: '#fff',
+                    fontWeight: 500
+                }}>
                     <SelectValue placeholder="Bairro / Região" />
                 </SelectTrigger>
                 <SelectContent>
@@ -102,7 +140,15 @@ export default function FilterBar({
                         setSearchQuery(''); setPriceFilter('all'); setRatingFilter('all');
                         setAvailabilityFilter('all'); setNeighborhoodFilter('all');
                     }}
-                    className="gap-2 text-slate-600"
+                    style={{
+                        border: '1.5px solid #d1d5db',
+                        borderRadius: 8,
+                        padding: '10px 14px',
+                        fontSize: 14,
+                        color: '#111827',
+                        background: '#fff',
+                        fontWeight: 500
+                    }}
                     aria-label="Limpar todos os filtros"
                 >
                     <X className="w-4 h-4" /> Limpar Filtros
