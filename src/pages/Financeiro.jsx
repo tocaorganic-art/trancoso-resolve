@@ -144,36 +144,48 @@ function FinanceiroContent() { // Renamed from FinanceiroPage
           </div>
         </div>
 
-        {/* KPIs Rápidos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <p className="text-sm font-medium text-slate-600 mb-1">Saldo Disponível</p>
-              <p className={`text-2xl font-bold ${saldo >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+        {/* KPIs Financeiros */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <Card className={`border-2 shadow-lg bg-white/90 backdrop-blur-sm transition-all ${
+            saldo < 0 ? 'border-red-400 bg-red-50/50' : 'border-green-400'
+          }`}>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-medium text-slate-600">Saldo Disponível</p>
+                {saldo < 0 && <AlertCircle className="w-5 h-5 text-red-500" />}
+              </div>
+              <p className={`text-3xl font-bold ${saldo >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                 R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </p>
+              {saldo < 0 && (
+                <p className="text-xs text-red-600 mt-2 font-medium">⚠️ Atenção: saldo negativo</p>
+              )}
             </CardContent>
           </Card>
           <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <p className="text-sm font-medium text-slate-600 mb-1">Total Faturado (mês)</p>
-              <p className="text-2xl font-bold text-green-600">
+            <CardContent className="p-5">
+              <p className="text-sm font-medium text-slate-600 mb-2">Total Faturado (mês)</p>
+              <p className="text-3xl font-bold text-green-600">
                 R$ {totalReceita.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Métricas de Reputação */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <p className="text-sm font-medium text-slate-600 mb-1">Serviços Concluídos</p>
-              <p className="text-2xl font-bold text-amber-600">{servicosConcluidos}</p>
+            <CardContent className="p-5">
+              <p className="text-sm font-medium text-slate-600 mb-2">Serviços Concluídos</p>
+              <p className="text-3xl font-bold text-amber-600">{servicosConcluidos}</p>
             </CardContent>
           </Card>
           <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <p className="text-sm font-medium text-slate-600 mb-1">Sua Avaliação Média</p>
+            <CardContent className="p-5">
+              <p className="text-sm font-medium text-slate-600 mb-2">Sua Avaliação Média</p>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-yellow-600">{mediaAvaliacao}</p>
-                <Star className="w-5 h-5 text-yellow-500 fill-current" />
+                <p className="text-3xl font-bold text-yellow-600">{mediaAvaliacao}</p>
+                <Star className="w-6 h-6 text-yellow-500 fill-current" />
               </div>
             </CardContent>
           </Card>
@@ -186,23 +198,39 @@ function FinanceiroContent() { // Renamed from FinanceiroPage
         </div>
       )}
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-          <TabsTrigger value="dashboard" className="gap-2">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-slate-800 border border-slate-700">
+          <TabsTrigger 
+            value="dashboard" 
+            className="gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300 hover:text-white transition-colors relative"
+          >
             <TrendingUp className="w-4 h-4" />
             Dashboard
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 transform transition-transform data-[state=active]:scale-x-100 scale-x-0" />
           </TabsTrigger>
-          <TabsTrigger value="transactions" className="gap-2">
+          <TabsTrigger 
+            value="transactions" 
+            className="gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300 hover:text-white transition-colors relative"
+          >
             <FileText className="w-4 h-4" />
             Transações
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 transform transition-transform data-[state=active]:scale-x-100 scale-x-0" />
           </TabsTrigger>
-          <TabsTrigger value="upload" className="gap-2">
+          <TabsTrigger 
+            value="upload" 
+            className="gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300 hover:text-white transition-colors relative"
+          >
             <Upload className="w-4 h-4" />
             Importar com IA
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 transform transition-transform data-[state=active]:scale-x-100 scale-x-0" />
           </TabsTrigger>
-          <TabsTrigger value="reports" className="gap-2">
+          <TabsTrigger 
+            value="reports" 
+            className="gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300 hover:text-white transition-colors relative"
+          >
             <Download className="w-4 h-4" />
             Relatórios
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 transform transition-transform data-[state=active]:scale-x-100 scale-x-0" />
           </TabsTrigger>
         </TabsList>
 

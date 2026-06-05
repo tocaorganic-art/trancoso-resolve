@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Loader2, Sparkles, TrendingUp, Calendar, Scissors, AlertCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
@@ -23,37 +23,67 @@ const jsonSchema = {
 export default function AssistenteFinanceiro({ transacoes }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [quickInsight, setQuickInsight] = useState(null);
+
+  // Gera insight rápido ao carregar
+  React.useEffect(() => {
+    if (transacoes && transacoes.length > 0) {
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const lastMonth = now.getMonth() - 1;
+
+      const currentMonthExpenses = transacoes
+        .filter(t => t.type === 'Despesa' && new Date(t.date).getMonth() === currentMonth)
+        .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+
+      const lastMonthExpenses = transacoes
+        .filter(t => t.type === 'Despesa' && new Date(t.date).getMonth() === lastMonth)
+        .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+
+      if (lastMonthExpenses > 0) {
+        const variation = ((currentMonthExpenses - lastMonthExpenses) / lastMonthExpenses) * 100;
+        if (Math.abs(variation) > 10) {
+          setQuickInsight({
+            text: variation > 0 
+              ? `⚠️ Suas despesas aumentaram ${variation.toFixed(0)}% este mês`
+              : `✅ Suas despesas diminuíram ${Math.abs(variation).toFixed(0)}% este mês`,
+            type: variation > 0 ? 'warning' : 'success'
+          });
+        }
+      }
+    }
+  }, [transacoes]);
 
   const analisarFinancas = async () => {
     if (!transacoes || transacoes.length === 0) {
       toast.info("Não há transações suficientes para análise.");
       return;
     }
-    
+
     setLoading(true);
     setInsights(null);
 
     const prompt = `
       Analise os seguintes dados de transações de um prestador de serviços em Trancoso e forneça insights.
-      
-      Dados das Transações (JSON):
-      ${JSON.stringify(transacoes.slice(0, 50), null, 2)} // Limita a 50 transações para não exceder o prompt
 
-      Com base nesses dados, calcule e retorne as seguintes informações em um objeto JSON, seguindo o schema fornecido:
+      Dados das Transações (JSON):
+      ${JSON.stringify(transacoes.slice(0, 50), null, 2)}
+
+      Com base nesses dados, calcule e retorne as seguintes informações em um objeto JSON:
       - receitaProjetada: Uma projeção de receita para o próximo mês.
       - crescimentoProjetado: A porcentagem de crescimento projetado em relação ao mês atual.
       - melhorDia: O dia da semana com maior faturamento médio.
       - receitaMelhorDia: O valor médio faturado nesse dia.
       - servicoMaisLucrativo: A categoria de serviço que gerou mais receita.
       - margemLucro: Simule uma margem de lucro de 60% sobre a categoria mais lucrativa.
-      - recomendacoes: Uma lista (array) com 3 recomendações acionáveis para o prestador aumentar o faturamento.
+      - recomendacoes: Uma lista (array) com 3 recomendações acionáveis.
     `;
 
     try {
        const response = await callClaude({
          messages: [{ role: 'user', content: prompt }],
          response_json_schema: jsonSchema,
-         systemPrompt: 'Você é um assistente financeiro especializado em análise de dados para prestadores de serviços. Analise os dados fornecidos e retorne insights acionáveis em português do Brasil.'
+         systemPrompt: 'Você é um assistente financeiro especializado em análise de dados. Retorne insights acionáveis em português do Brasil.'
        });
 
        setInsights(response.data);
@@ -68,16 +98,23 @@ export default function AssistenteFinanceiro({ transacoes }) {
   };
 
   return (
-    <Card className="bg-white rounded-lg shadow-md p-5 my-6 border">
+    <Card className="bg-slate-800/50 rounded-lg shadow-md p-5 my-6 border border-slate-700">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
-        <h3 className="font-semibold text-lg flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-blue-600"/>
-          Assistente Financeiro
-        </h3>
+        <div>
+          <h3 className="font-semibold text-lg flex items-center gap-2 text-white">
+            <Sparkles className="w-5 h-5 text-blue-400"/>
+            Assistente Financeiro
+          </h3>
+          {quickInsight && (
+            <p className={`text-sm mt-2 ${quickInsight.type === 'warning' ? 'text-red-400' : 'text-green-400'}`}>
+              {quickInsight.text}
+            </p>
+          )}
+        </div>
         <Button
           onClick={analisarFinancas}
           disabled={loading || !transacoes?.length}
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           {loading ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Analisando...</>

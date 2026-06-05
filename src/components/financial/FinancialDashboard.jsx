@@ -64,34 +64,37 @@ export default function FinancialDashboard({ transactions }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
       {/* Gráfico de Receita x Despesa */}
-      <Card className="border-none shadow-lg bg-white/95 backdrop-blur-sm">
+      <Card className="border border-slate-700 shadow-lg bg-slate-800/50 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="text-green-600" />
-            Receitas vs Despesas
+          <CardTitle className="flex items-center gap-2 text-slate-100">
+            <TrendingUp className="text-green-500" />
+            Comparativo Mensal — {chartData.length > 0 ? `${chartData[0].month} a ${chartData[chartData.length - 1].month}` : ''}
           </CardTitle>
-          <CardDescription>Comparativo mensal</CardDescription>
+          <CardDescription className="text-slate-400">Receitas vs Despesas</CardDescription>
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip formatter={(value) => `R$ ${value.toLocaleString('pt-BR')}`} />
+            <BarChart data={chartData} barGap={8}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="month" stroke="#94a3b8" />
+              <YAxis stroke="#94a3b8" />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', color: '#f1f5f9' }}
+                formatter={(value) => [`R$ ${value.toLocaleString('pt-BR')}`, '']}
+              />
               <Legend />
-              <Bar dataKey="receita" fill="#10b981" name="Receita" />
-              <Bar dataKey="despesa" fill="#ef4444" name="Despesa" />
+              <Bar dataKey="receita" fill="#10b981" name="Receita" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="despesa" fill="#ef4444" name="Despesa" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
 
       {/* Gráfico de Pizza - Categorias */}
-      <Card className="border-none shadow-lg bg-white/95 backdrop-blur-sm">
+      <Card className="border border-slate-700 shadow-lg bg-slate-800/50 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Despesas por Categoria</CardTitle>
-          <CardDescription>Distribuição dos gastos</CardDescription>
+          <CardTitle className="text-slate-100">Despesas por Categoria</CardTitle>
+          <CardDescription className="text-slate-400">Distribuição dos gastos</CardDescription>
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -100,8 +103,7 @@ export default function FinancialDashboard({ transactions }) {
                 data={categoryData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                innerRadius={60}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -110,28 +112,59 @@ export default function FinancialDashboard({ transactions }) {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => `R$ ${value.toLocaleString('pt-BR')}`} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', color: '#f1f5f9' }}
+                formatter={(value) => [`R$ ${value.toLocaleString('pt-BR')}`, '']}
+              />
+              <Legend 
+                layout="vertical" 
+                verticalAlign="middle" 
+                align="right"
+                formatter={(value) => <span className="text-slate-300">{value}</span>}
+              />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
 
       {/* Gráfico de Linha - Tendência */}
-      <Card className="border-none shadow-lg col-span-1 lg:col-span-2 bg-white/95 backdrop-blur-sm">
+      <Card className="border border-slate-700 shadow-lg col-span-1 lg:col-span-2 bg-slate-800/50 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Tendência Financeira</CardTitle>
-          <CardDescription>Evolução ao longo do tempo</CardDescription>
+          <CardTitle className="text-slate-100">Tendência Financeira</CardTitle>
+          <CardDescription className="text-slate-400">Evolução ao longo do tempo</CardDescription>
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip formatter={(value) => `R$ ${value.toLocaleString('pt-BR')}`} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="month" stroke="#94a3b8" />
+              <YAxis stroke="#94a3b8" />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', color: '#f1f5f9' }}
+                formatter={(value, name) => [
+                  `R$ ${value.toLocaleString('pt-BR')}`,
+                  name === 'receita' ? 'Receita' : 'Despesa'
+                ]}
+              />
               <Legend />
-              <Line type="monotone" dataKey="receita" stroke="#10b981" strokeWidth={2} name="Receita" />
-              <Line type="monotone" dataKey="despesa" stroke="#ef4444" strokeWidth={2} name="Despesa" />
+              <Line 
+                type="monotone" 
+                dataKey="receita" 
+                stroke="#10b981" 
+                strokeWidth={2} 
+                name="Receita"
+                fill="#10b981"
+                fillOpacity={0.15}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="despesa" 
+                stroke="#ef4444" 
+                strokeWidth={2} 
+                name="Despesa"
+                fill="#ef4444"
+                fillOpacity={0.15}
+              />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>
