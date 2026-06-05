@@ -1,71 +1,69 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Loader2, Calendar, AlertCircle, Inbox, CheckCircle, Clock, XCircle, AlertTriangle, Settings2, Link as LinkIcon } from "lucide-react";
+import { Loader2, Calendar, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RequestDetailsModal from "@/components/agenda/RequestDetailsModal";
 import DisponibilidadeEditor from "@/components/agenda/DisponibilidadeEditor";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 import PermissionChecker from "../components/auth/PermissionChecker";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const RequestCard = ({ request, service, onClick }) => {
+  const initial = request.client_name?.charAt(0).toUpperCase() || 'C';
+  
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02, y: -2 }}
+      whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
       onClick={onClick}
-      className="cursor-pointer"
+      className="cursor-pointer rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 mb-3"
     >
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.03)',
-        backdropFilter: 'blur(16px)',
-        borderRadius: 16,
-        padding: 20,
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
-        marginBottom: 12
-      }}>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4 flex-1">
-            <div className="hidden sm:flex flex-col items-center justify-center rounded-xl p-3 w-16 shrink-0" style={{
-              background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.08))',
-              border: '1px solid rgba(251, 191, 36, 0.2)'
-            }}>
-              <span className="text-xs font-bold text-amber-300 uppercase">{format(new Date(request.date), 'MMM', { locale: ptBR })}</span>
-              <span className="text-2xl font-extrabold text-white">{format(new Date(request.date), 'dd')}</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-white text-base truncate">{service?.title || 'Serviço não encontrado'}</h3>
-              <p className="text-sm text-slate-400 mt-0.5">Cliente: <span className="text-slate-300 font-medium">{request.client_name}</span></p>
-              <p className="text-xs text-slate-500 sm:hidden mt-1">{format(new Date(request.date), "dd/MM/yyyy")}</p>
-            </div>
-          </div>
-          <div className="text-right shrink-0">
-            <p className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
-              R$ {service?.price?.toFixed(2) || '0.00'}
-            </p>
-            <p className="text-xs text-slate-500 mt-0.5">por serviço</p>
-          </div>
+      <div className="flex items-center gap-3">
+        <div className="w-11 h-11 rounded-full gradient-amber flex items-center justify-center font-bold text-white shrink-0">
+          {initial}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-bold text-white truncate">{request.client_name}</p>
+          <p className="text-xs text-slate-400 truncate">{service?.title || 'Serviço'}</p>
         </div>
       </div>
+      <div className="mt-3 space-y-1 text-sm text-slate-300">
+        <p>📅 {format(new Date(request.date), "dd/MM/yyyy")}</p>
+        <p>📍 {request.location?.address || 'Endereço não informado'}</p>
+      </div>
+      {request.status === 'Pendente' && (
+        <div className="flex gap-2 mt-4">
+          <button 
+            onClick={(e) => { e.stopPropagation(); handleConfirm(request.id); }}
+            className="flex-1 py-2.5 rounded-xl gradient-amber text-white font-semibold text-sm"
+          >
+            Aceitar
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); openModal(request); }}
+            className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-medium text-sm"
+          >
+            Recusar
+          </button>
+        </div>
+      )}
     </motion.div>
   );
 };
 
 function MinhaAgendaContent() {
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState('Pendente');
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('Pendente');
 
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -173,58 +171,23 @@ function MinhaAgendaContent() {
   const renderRequestList = (requests, status) => {
     if (!requests || requests.length === 0) {
       return (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-          className="text-center py-16 rounded-2xl border"
-          style={{
-            background: 'rgba(251, 191, 36, 0.05)',
-            border: '1px solid rgba(251, 191, 36, 0.15)',
-            backdropFilter: 'blur(12px)'
-          }}
-        >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
-          >
-            <div 
-              className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-4"
-              style={{
-                background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.1))',
-                border: '1px solid rgba(251, 191, 36, 0.25)'
-              }}
-            >
-              <Calendar className="w-10 h-10 text-amber-400" />
-            </div>
-          </motion.div>
-          <h3 className="text-xl font-bold text-white mb-2">Nenhum agendamento {status === 'Pendente' ? 'pendente' : 'nesta categoria'}</h3>
-          <p className="text-slate-400 mb-6 max-w-md mx-auto">
+        <div className="text-center py-12">
+          <div className="text-4xl mb-3">📅</div>
+          <p className="font-bold text-white">Nenhum agendamento {status === 'Pendente' ? 'pendente' : 'nesta categoria'}</p>
+          <p className="text-sm text-slate-400 mt-1">
             {status === 'Pendente' 
-              ? 'Quando clientes solicitarem seus serviços, eles aparecerão aqui em tempo real.'
-              : 'Esta categoria está vazia no momento.'}
+              ? 'Quando clientes solicitarem, aparecerão aqui.'
+              : 'Esta categoria está vazia.'}
           </p>
-          {status === 'Pendente' && (
-            <Link to={createPageUrl("MeusServicos")}>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
-                  className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white shadow-lg"
-                >
-                  Ver meus serviços
-                </Button>
-              </motion.div>
-            </Link>
-          )}
-        </motion.div>
+        </div>
       );
     }
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         {requests.map((req, index) => (
           <motion.div
             key={req.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
           >
@@ -240,156 +203,81 @@ function MinhaAgendaContent() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 pt-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
-              <Calendar className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Minha Agenda</h1>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">Gerencie suas solicitações e configure sua disponibilidade</p>
-            </div>
-          </div>
+    <div className="bg-[#0a1628] min-h-screen pb-24">
+      {/* HEADER PADRÃO */}
+      <header className="px-5 pt-6 pb-2">
+        <h1 className="text-2xl font-extrabold text-white tracking-tight">Minha Agenda</h1>
+        <p className="text-sm text-slate-400 mt-1">Gerencie solicitações e disponibilidade</p>
+      </header>
+
+      <div className="px-5 mt-6">
+        {/* ABAS SIMPLIFICADAS */}
+        <div className="flex gap-2 bg-white/5 p-1 rounded-xl mb-6">
+          <button 
+            onClick={() => setActiveTab('Pendente')}
+            className={cn(
+              "flex-1 py-2 rounded-lg text-sm font-semibold transition",
+              activeTab === 'Pendente' 
+                ? "gradient-amber text-white" 
+                : "text-slate-400 hover:text-slate-200"
+            )}
+          >
+            Pendentes <span className="ml-1 px-1.5 rounded-full bg-white/20 text-xs">{requestsByStatus.Pendente.length}</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('Confirmado')}
+            className={cn(
+              "flex-1 py-2 rounded-lg text-sm font-semibold transition",
+              activeTab === 'Confirmado' 
+                ? "gradient-amber text-white" 
+                : "text-slate-400 hover:text-slate-200"
+            )}
+          >
+            Confirmados
+          </button>
+          <button 
+            onClick={() => setActiveTab('Disponibilidade')}
+            className={cn(
+              "flex-1 py-2 rounded-lg text-sm font-semibold transition",
+              activeTab === 'Disponibilidade' 
+                ? "gradient-amber text-white" 
+                : "text-slate-400 hover:text-slate-200"
+            )}
+          >
+            Horários
+          </button>
         </div>
-      </div>
 
-      <Tabs defaultValue="Pendente">
-        <TabsList 
-          className="grid w-full grid-cols-3 md:grid-cols-6 gap-2 mb-6 p-1.5"
-          style={{
-            background: 'rgba(30, 41, 59, 0.5)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: 16,
-            border: '1px solid rgba(255, 255, 255, 0.08)'
-          }}
-        >
-          <TabsTrigger 
-            value="Pendente" 
-            className="gap-1.5 relative overflow-hidden transition-all duration-300"
-            style={{
-              borderRadius: 12,
-              minHeight: 44
-            }}
-          >
-            <Clock className="w-4 h-4"/>
-            <span className="hidden sm:inline">Pendentes</span>
-            <Badge className="ml-1" style={{ background: 'rgba(251, 191, 36, 0.2)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.3)' }}>{requestsByStatus.Pendente.length}</Badge>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="Confirmado" 
-            className="gap-1.5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400 hover:text-white transition-all"
-          >
-            <CheckCircle className="w-4 h-4"/>
-            <span className="hidden sm:inline">Confirmados</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="Concluído" 
-            className="gap-1.5 hidden md:flex data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-cyan-600 data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400 hover:text-white transition-all"
-          >
-            <Calendar className="w-4 h-4"/>
-            <span className="hidden sm:inline">Concluídos</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="Rejeitado" 
-            className="gap-1.5 hidden md:flex data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-500 data-[state=active]:to-rose-600 data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400 hover:text-white transition-all"
-          >
-            <XCircle className="w-4 h-4"/>
-            <span className="hidden sm:inline">Rejeitados</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="Cancelado" 
-            className="gap-1.5 hidden md:flex data-[state=active]:bg-gradient-to-r data-[state=active]:from-slate-500 data-[state=active]:to-gray-600 data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400 hover:text-white transition-all"
-          >
-            <AlertTriangle className="w-4 h-4"/>
-            <span className="hidden sm:inline">Cancelados</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="Disponibilidade" 
-            className="gap-1.5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400 hover:text-white transition-all"
-          >
-            <Settings2 className="w-4 h-4"/>
-            <span className="hidden sm:inline">Horários</span>
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="Pendente">
+        {/* CONTEÚDO DAS ABAS */}
+        {activeTab === 'Pendente' && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
             {renderRequestList(requestsByStatus.Pendente, 'Pendente')}
           </motion.div>
-        </TabsContent>
-        <TabsContent value="Confirmado">
+        )}
+        {activeTab === 'Confirmado' && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.05 }}
           >
             {renderRequestList(requestsByStatus.Confirmado, 'Confirmado')}
           </motion.div>
-        </TabsContent>
-        <TabsContent value="Concluído">
+        )}
+        {activeTab === 'Disponibilidade' && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
+            className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4"
           >
-            {renderRequestList(requestsByStatus.Concluído, 'Concluído')}
+            <DisponibilidadeEditor providerId={providerId} />
           </motion.div>
-        </TabsContent>
-        <TabsContent value="Rejeitado">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.15 }}
-          >
-            {renderRequestList(requestsByStatus.Rejeitado, 'Rejeitado')}
-          </motion.div>
-        </TabsContent>
-        <TabsContent value="Cancelado">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-          >
-            {renderRequestList(requestsByStatus.Cancelado, 'Cancelado')}
-          </motion.div>
-        </TabsContent>
-
-        <TabsContent value="Disponibilidade">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.25 }}
-          >
-            <Card 
-              style={{
-                background: 'rgba(255, 255, 255, 0.02)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: 20
-              }}
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Settings2 className="w-5 h-5 text-amber-400" />
-                  Configurar Minha Disponibilidade
-                </CardTitle>
-                <CardDescription className="text-slate-400">
-                  Defina os dias e horários em que você está disponível. Clientes só poderão agendar nos horários que você liberar.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <DisponibilidadeEditor providerId={providerId} />
-              </CardContent>
-            </Card>
-          </motion.div>
-        </TabsContent>
-      </Tabs>
+        )}
+      </div>
 
       {selectedRequest && services && (
         <RequestDetailsModal

@@ -3,14 +3,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Edit, Trash2, Eye, EyeOff, AlertCircle } from "lucide-react";
+
+import { Loader2, Plus, Trash2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import LazyImage from "@/components/ui/LazyImage";
 import PermissionChecker from "@/components/auth/PermissionChecker";
 import ServiceFormModal from "@/components/services/ServiceFormModal";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export default function MeusServicosPage() {
   return (
@@ -130,108 +130,102 @@ function MeusServicosContent() {
 
   if (!provider) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <Card className="border-amber-200 bg-amber-50">
-          <CardContent className="p-8 text-center">
-            <AlertCircle className="w-12 h-12 text-amber-600 mx-auto mb-4" />
-            <h2 className="text-xl font-bold mb-2">Complete seu Perfil</h2>
-            <p className="text-slate-600 mb-4">Primeiro você precisa completar seu perfil de prestador para cadastrar serviços.</p>
-            <Link to={createPageUrl("MeuPerfilPrestador")}>
-              <Button>Completar Perfil</Button>
-            </Link>
-          </CardContent>
-        </Card>
+      <div className="px-5 py-12">
+        <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-8 text-center">
+          <AlertCircle className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-white mb-2">Complete seu Perfil</h2>
+          <p className="text-slate-400 mb-6">Primeiro você precisa completar seu perfil de prestador para cadastrar serviços.</p>
+          <Link to={createPageUrl("MeuPerfilPrestador")}>
+            <button className="px-6 py-3 rounded-xl gradient-amber text-white font-semibold">
+              Completar Perfil
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 pt-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
-              <Plus className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Meus Serviços</h1>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">Gerencie os serviços que você oferece</p>
-            </div>
-          </div>
-          <Button 
-            onClick={handleOpenCreate}
-            className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            Novo Serviço
-          </Button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#0a1628] pb-24">
+      {/* HEADER PADRÃO */}
+      <header className="px-5 pt-6 pb-2">
+        <h1 className="text-2xl font-extrabold text-white tracking-tight">Meus Serviços</h1>
+        <p className="text-sm text-slate-400 mt-1">Gerencie os serviços que você oferece</p>
+      </header>
 
-      {services.length === 0 ? (
-        <Card>
-          <CardContent className="p-12 text-center">
-            <div className="max-w-md mx-auto">
-              <AlertCircle className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">Nenhum serviço cadastrado</h3>
-              <p className="text-slate-600 mb-6">Comece cadastrando seu primeiro serviço para atrair clientes.</p>
-              <Button size="lg" onClick={handleOpenCreate}>
-                <Plus className="w-5 h-5 mr-2" />
-                Cadastrar Primeiro Serviço
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => (
-            <Card key={service.id} className="overflow-hidden rounded-2xl border border-slate-700">
-            {service.images?.[0] && (
-              <LazyImage src={service.images[0]} alt={service.title} className="h-48 w-full object-cover" />
-            )}
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <CardTitle className="text-base font-bold text-slate-100 leading-snug">{service.title}</CardTitle>
-                <Badge className={service.active ? "bg-amber-100 text-amber-800 font-semibold" : "bg-slate-600 text-slate-200 font-semibold"}>
-                  {service.active ? "Ativo" : "Inativo"}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-slate-300 mb-4 line-clamp-2 leading-relaxed">{service.description}</p>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-2xl font-extrabold text-amber-400">
-                  R$ {service.price?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
-                <span className="text-sm text-slate-400 font-medium">por {service.price_unit}</span>
-              </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white border-0"
-                    onClick={() => toggleActiveMutation.mutate({ id: service.id, active: !service.active })}
-                  >
-                    {service.active ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
-                    {service.active ? 'Desativar' : 'Ativar'}
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1 bg-amber-600 hover:bg-amber-700 text-white border-0" onClick={() => handleOpenEdit(service)}>
-                    <Edit className="w-4 h-4 mr-1" />
-                    Editar
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => { if (confirm('Tem certeza que deseja excluir este serviço?')) deleteMutation.mutate(service.id); }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+      <div className="px-5 mt-6">
+        <button 
+          onClick={handleOpenCreate}
+          className="w-full gradient-amber-hover text-white font-semibold py-3 rounded-xl mb-6 flex items-center justify-center gap-2"
+        >
+          <Plus className="w-5 h-5" />
+          Novo Serviço
+        </button>
+
+        {services.length === 0 ? (
+          <div className="text-center py-12">
+            <AlertCircle className="w-16 h-16 text-slate-500 mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-white">Nenhum serviço cadastrado</h3>
+            <p className="text-sm text-slate-400 mt-2 mb-6">Comece cadastrando seu primeiro serviço.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {services.map((service, index) => (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10 transition hover:scale-[1.02]"
+              >
+                {service.images?.[0] && (
+                  <LazyImage src={service.images[0]} alt={service.title} className="w-full h-44 object-cover" />
+                )}
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-base font-bold text-white">{service.title}</h3>
+                    <span className={cn(
+                      "text-xs font-semibold px-2.5 py-1 rounded-full border",
+                      service.active 
+                        ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" 
+                        : "bg-slate-500/15 text-slate-400 border-slate-500/30"
+                    )}>
+                      {service.active ? "Ativo" : "Inativo"}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-400 mt-2 line-clamp-2">{service.description}</p>
+                  <div className="flex items-end justify-between mt-4">
+                    <span className="text-2xl font-extrabold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+                      R$ {service.price?.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}
+                    </span>
+                    <span className="text-xs text-slate-500">por {service.price_unit}</span>
+                  </div>
+                  <div className="flex gap-2 mt-4">
+                    <button
+                      onClick={() => toggleActiveMutation.mutate({ id: service.id, active: !service.active })}
+                      className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-medium hover:bg-white/10 transition"
+                    >
+                      {service.active ? 'Desativar' : 'Ativar'}
+                    </button>
+                    <button
+                      onClick={() => handleOpenEdit(service)}
+                      className="flex-1 py-2.5 rounded-xl gradient-amber-hover text-white text-sm font-semibold"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => { if (confirm('Tem certeza?')) deleteMutation.mutate(service.id); }}
+                      className="px-4 py-2.5 rounded-xl bg-red-500/90 text-white hover:bg-red-600 transition"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <ServiceFormModal
         open={modalOpen}
