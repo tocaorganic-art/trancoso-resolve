@@ -114,8 +114,8 @@ function DashboardContent() {
     );
   }
 
-  // Paywall: sem assinatura ativa e sem flags temporárias
-  if (!subscription && !checkoutSuccess && !hasTempFlag) {
+  // Paywall: sem assinatura ativa e sem flags temporárias (exceto para admins)
+  if (!subscription && !checkoutSuccess && !hasTempFlag && user?.role !== 'admin') {
     const lastSub = allSubs?.[0];
     const isTrial = lastSub?.status === 'trial' || lastSub?.plan === 'trial';
     const hasAnySubscription = !!(allSubs && allSubs.length > 0);
@@ -128,8 +128,6 @@ function DashboardContent() {
       />
     );
   }
-
-  // Painel bloqueado - verificar componente SubscriptionPaywall para o ícone de cadeado
 
   const pendingRequests = serviceRequests?.filter(req => req.status === 'Pendente').length || 0;
   const confirmedServices = serviceRequests?.filter(req => req.status === 'Confirmado').length || 0;
