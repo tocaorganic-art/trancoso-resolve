@@ -147,16 +147,25 @@ function MeusServicosContent() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Meus Serviços</h1>
-          <p className="text-slate-600 mt-1">Gerencie os serviços que você oferece na plataforma</p>
+      <div className="mb-8 pt-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+              <Plus className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Meus Serviços</h1>
+              <p className="text-slate-600 dark:text-slate-400 text-sm">Gerencie os serviços que você oferece</p>
+            </div>
+          </div>
+          <Button 
+            onClick={handleOpenCreate}
+            className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Novo Serviço
+          </Button>
         </div>
-        <Button onClick={handleOpenCreate}>
-          <Plus className="w-5 h-5 mr-2" />
-          Novo Serviço
-        </Button>
-      </div>
 
       {services.length === 0 ? (
         <Card>

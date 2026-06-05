@@ -13,6 +13,7 @@ import GettingStartedGuide from "../components/dashboard/GettingStartedGuide";
 import PermissionChecker from "../components/auth/PermissionChecker";
 import SubscriptionPaywall from "../components/dashboard/SubscriptionPaywall";
 import CheckoutSuccessBanner from "../components/dashboard/CheckoutSuccessBanner";
+import { motion } from "framer-motion";
 
 export default function DashboardPage() {
   return (
@@ -140,9 +141,16 @@ function DashboardContent() {
     <div className="container mx-auto px-4 py-8">
     {checkoutSuccess && <CheckoutSuccessBanner />}
 
-    <div className="mb-8">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Painel do Prestador</h1>
-      <p className="text-slate-600 dark:text-slate-400">Bem-vindo(a) de volta, {user?.full_name || 'Prestador'}!</p>
+    <div className="mb-8 pt-4">
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+          <TrendingUp className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Painel do Prestador</h1>
+          <p className="text-slate-600 dark:text-slate-400 text-sm">Bem-vindo(a) de volta, {user?.full_name || 'Prestador'}!</p>
+        </div>
+      </div>
     </div>
       
       {/* Alerta: prestador sem telefone cadastrado */}
@@ -170,38 +178,126 @@ function DashboardContent() {
         <GettingStartedGuide />
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-         <Card className="border-none shadow-lg dark:bg-slate-800 dark:border-slate-700">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium dark:text-slate-100">Solicitações Pendentes</CardTitle>
-            <Clock className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold dark:text-slate-100">{pendingRequests}</div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Aguardando sua confirmação</p>
-          </CardContent>
-        </Card>
-        <Card className="border-none shadow-lg dark:bg-slate-800 dark:border-slate-700">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium dark:text-slate-100">Serviços Confirmados</CardTitle>
-            <CalendarCheck className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold dark:text-slate-100">{confirmedServices}</div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Agendados para os próximos dias</p>
-          </CardContent>
-        </Card>
-        <Card className="border-none shadow-lg bg-green-50 dark:bg-green-900/20">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-green-800 dark:text-green-300">Receita Total (Validada)</CardTitle>
-            <TrendingUp className="w-4 h-4 text-green-700 dark:text-green-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-700 dark:text-green-300">R$ {totalReceita.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>
-            <p className="text-xs text-green-600 dark:text-green-400">Total recebido dos serviços concluídos</p>
-          </CardContent>
-        </Card>
-      </div>
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, staggerChildren: 0.1 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <Card 
+            style={{
+              background: 'rgba(251, 191, 36, 0.08)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(251, 191, 36, 0.2)',
+              borderRadius: 20,
+              boxShadow: '0 8px 32px rgba(251, 191, 36, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+            }}
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <div>
+                <CardTitle className="text-sm font-medium text-amber-200">Solicitações Pendentes</CardTitle>
+              </div>
+              <div 
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.2))',
+                  border: '1px solid rgba(251, 191, 36, 0.25)'
+                }}
+              >
+                <Clock className="w-5 h-5 text-amber-400" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-extrabold text-white mb-1">{pendingRequests}</div>
+              <p className="text-xs text-amber-200/70">Aguardando sua confirmação</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <Card 
+            style={{
+              background: 'rgba(59, 130, 246, 0.08)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(59, 130, 246, 0.2)',
+              borderRadius: 20,
+              boxShadow: '0 8px 32px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+            }}
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <div>
+                <CardTitle className="text-sm font-medium text-blue-200">Serviços Confirmados</CardTitle>
+              </div>
+              <div 
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(37, 99, 235, 0.2))',
+                  border: '1px solid rgba(59, 130, 246, 0.25)'
+                }}
+              >
+                <CalendarCheck className="w-5 h-5 text-blue-400" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-extrabold text-white mb-1">{confirmedServices}</div>
+              <p className="text-xs text-blue-200/70">Agendados para os próximos dias</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+        >
+          <Card 
+            style={{
+              background: 'rgba(34, 197, 94, 0.08)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(34, 197, 94, 0.2)',
+              borderRadius: 20,
+              boxShadow: '0 8px 32px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+            }}
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <div>
+                <CardTitle className="text-sm font-medium text-green-200">Receita Total</CardTitle>
+              </div>
+              <div 
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(22, 163, 74, 0.2))',
+                  border: '1px solid rgba(34, 197, 94, 0.25)'
+                }}
+              >
+                <TrendingUp className="w-5 h-5 text-green-400" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div 
+                className="text-3xl font-extrabold mb-1"
+                style={{
+                  background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}
+              >
+                R$ {totalReceita.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              </div>
+              <p className="text-xs text-green-200/70">Total recebido dos serviços concluídos</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
       
       <div className="mt-10">
          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-4">Visão Geral Financeira</h2>
