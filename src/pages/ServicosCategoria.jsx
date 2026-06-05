@@ -272,7 +272,7 @@ export default function ServicosCategoriaPage() {
   }, [searchQuery, providers]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#0a1628]">
       {pullDistance > 10 && (
         <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-amber-50 border-b border-amber-200 transition-all" style={{ height: `${Math.min(pullDistance, threshold)}px` }}>
           <div className={`flex items-center gap-2 text-amber-700 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
@@ -284,34 +284,23 @@ export default function ServicosCategoriaPage() {
         </div>
       )}
       
-      <div style={{
-        background: 'linear-gradient(135deg, #c2410c 0%, #9a3412 100%)',
-        padding: '32px 24px 24px',
-        position: 'relative'
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'rgba(0,0,0,0.25)'
-        }} />
-        <div style={{ position: 'relative', zIndex: 1 }}>
+      {/* HERO HEADER - Corrigido: padding adequado, cor navy, contagem correta */}
+      <div className="bg-gradient-to-br from-[#0a1628] to-[#1e293b] text-white px-5 pt-6 pb-4">
+        <div className="max-w-7xl mx-auto">
           <Link to={createPageUrl("Home")}>
-            <Button variant="ghost" className="text-white hover:bg-white/20 mb-4" style={{ position: 'relative' }}>
-              <ArrowLeft className="w-4 h-4 mr-2" /> Voltar
+            <Button variant="ghost" className="text-white hover:bg-white/10 mb-4 -ml-2">
+              <ArrowLeft className="w-4 h-4 mr-2 text-amber-400" /> Voltar
             </Button>
           </Link>
-          <h1 style={{
-            color: '#fff', fontSize: 26, fontWeight: 800,
-            textShadow: '0 1px 4px rgba(0,0,0,0.4)',
-            marginBottom: 8
-          }}>
+          <h1 className="text-2xl md:text-3xl font-extrabold mb-2" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
             {selectedCategory === 'Todos' ? 'Serviços em Trancoso, BA' : `${selectedCategory} em Trancoso, BA`}
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, marginTop: 4 }}>
-            {isLoadingProviders ? "Carregando..." : (isSearching ? "Buscando com IA..." : `${filteredProviders.length} profissiona${filteredProviders.length !== 1 ? 'is' : 'l'} encontrado${filteredProviders.length !== 1 ? 's' : ''}`)}
+          <p className="text-slate-300 text-sm md:text-base">
+            {isLoadingProviders ? "Carregando..." : (isSearching ? "Buscando com IA..." : `${filteredProviders.length} profissional${filteredProviders.length !== 1 ? 'is' : 'l'} encontrado${filteredProviders.length !== 1 ? 's' : ''}`)}
           </p>
           {selectedCategory !== 'Todos' && slugMap[selectedCategory] && (
             <Link to={`/ServicoLanding?slug=${slugMap[selectedCategory]}`} className="inline-block mt-3">
-              <span className="text-xs bg-white/20 hover:bg-white/30 text-white rounded-full px-3 py-1 transition-colors">
+              <span className="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-full px-3 py-1 transition-colors border border-amber-500/30">
                 📄 Guia completo de {selectedCategory} em Trancoso →
               </span>
             </Link>
@@ -371,4 +360,4 @@ export default function ServicosCategoriaPage() {
       </div>
     </div>
   );
-}
+};

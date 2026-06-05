@@ -59,11 +59,12 @@ export default function ProviderCard({ provider }) {
                 </div>
 
                 {/* Nome e profissão ao lado do avatar */}
-                <div style={{ paddingBottom: 4, minWidth: 0, flex: 1 }}>
+                <div style={{ paddingBottom: 4, minWidth: 0, flex: '1 1 auto' }}>
                     <div style={{
                         display: 'flex', alignItems: 'center', gap: 6,
                         fontSize: 15, fontWeight: 700, color: '#fff',
-                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        maxWidth: '100%'
                     }}>
                         {provider.full_name}
                         {provider.verified && <span style={{color:'#3b82f6', fontSize:14}}>✔</span>}
@@ -124,11 +125,12 @@ export default function ProviderCard({ provider }) {
             {provider.availability && (
                 <div style={{ marginBottom: 12 }}>
                     <span style={{
-                        padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600,
-                        background: provider.availability === 'Disponível' ? '#dcfce7' : '#fee2e2',
-                        color: provider.availability === 'Disponível' ? '#15803d' : '#dc2626'
+                        padding: '4px 12px', borderRadius: 16, fontSize: 12, fontWeight: 600,
+                        background: provider.availability === 'Disponível' ? '#15803d' : '#dc2626',
+                        color: '#fff',
+                        display: 'inline-block'
                     }}>
-                        {provider.availability}
+                        {provider.availability === 'Disponível' ? '✓ Disponível' : '○ Ocupado'}
                     </span>
                 </div>
             )}
@@ -143,16 +145,17 @@ export default function ProviderCard({ provider }) {
             {/* Botão CTA */}
             <Link to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)}>
                 <button style={{
-                    width: '100%', padding: '11px 0',
-                    background: 'linear-gradient(135deg, #f97316, #ea580c)',
+                    width: '100%', padding: '12px 0',
+                    background: 'linear-gradient(135deg, #f59e0b, #ea580c)',
                     color: '#fff', fontWeight: 700, fontSize: 14,
-                    border: 'none', borderRadius: 10, cursor: 'pointer',
-                    transition: 'opacity 0.2s'
+                    border: 'none', borderRadius: 12, cursor: 'pointer',
+                    transition: 'transform 0.2s, opacity 0.2s',
+                    boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
                 }}
-                onMouseEnter={e => e.target.style.opacity = '0.9'}
-                onMouseLeave={e => e.target.style.opacity = '1'}
+                onMouseEnter={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.opacity = '0.95'; }}
+                onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.opacity = '1'; }}
                 >
-                    Ver Perfil Completo
+                    Ver Perfil Completo →
                 </button>
             </Link>
 
