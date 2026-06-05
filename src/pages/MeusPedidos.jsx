@@ -134,7 +134,7 @@ export default function MeusPedidosPage() {
   const paymentByRequestId = Object.fromEntries((payments || []).map(p => [p.request_id, p]));
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="bg-[#0a1628] min-h-screen pb-24">
       {reviewingRequest && (
         <ReviewModal
           request={reviewingRequest.request}
@@ -143,15 +143,13 @@ export default function MeusPedidosPage() {
           onClose={() => setReviewingRequest(null)}
         />
       )}
-      <div className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-slate-900">Meus Pedidos</h1>
-          <p className="text-slate-600">Acompanhe, confirme e avalie suas solicitações de serviço.</p>
-        </div>
-      </div>
-      <div className="container mx-auto px-4 py-8">
+      <header className="px-5 pt-6 pb-2">
+        <h1 className="text-2xl font-extrabold text-white tracking-tight">Meus Pedidos</h1>
+        <p className="text-sm text-slate-400 mt-1">Acompanhe, confirme e avalie suas solicitações 🌴</p>
+      </header>
+      <div className="px-5 mt-6">
         {requests && requests.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {requests.map(req => {
               const provider = providers.find(p => p.id === req.provider_id);
               const hasReview = reviewedRequestIds.has(req.id);
@@ -170,14 +168,14 @@ export default function MeusPedidosPage() {
             })}
           </div>
         ) : (
-          <Card className="text-center py-16">
-            <Info className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-800">Nenhum pedido encontrado</h3>
-            <p className="text-slate-500 mt-2 mb-6">Você ainda não fez nenhuma solicitação de serviço.</p>
+          <div className="text-center py-12 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+            <Info className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white">Nenhum pedido encontrado</h3>
+            <p className="text-slate-400 mt-2 mb-6">Por enquanto, nada por aqui 🌴 — assim que pintar algo, te aviso!</p>
             <Link to={createPageUrl("Home")}>
-              <Button>Encontrar Serviços</Button>
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">Bora resolver</Button>
             </Link>
-          </Card>
+          </div>
         )}
       </div>
     </div>

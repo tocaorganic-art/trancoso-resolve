@@ -141,10 +141,10 @@ export default function CadastroTipoPage() {
 
   if (isLoading || step === 'processando' || updateUserMutation.isPending) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-amber-100">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a1628]">
         <div className="text-center">
-          <Loader2 className="w-10 h-10 animate-spin text-amber-600 mx-auto mb-4" />
-          <p className="text-slate-600 font-medium">Configurando sua conta...</p>
+          <Loader2 className="w-10 h-10 animate-spin text-amber-400 mx-auto mb-4" />
+          <p className="text-white font-medium">Configurando sua conta...</p>
           <p className="text-slate-400 text-sm mt-1">Isso leva apenas alguns segundos.</p>
         </div>
       </div>
@@ -154,46 +154,46 @@ export default function CadastroTipoPage() {
   // ─── Step 1: Tipo de conta (cliente ou prestador) ───
   if (step === 'tipo_conta') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl text-center shadow-2xl border-none">
+      <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl text-center shadow-2xl border-white/10 bg-white/5 backdrop-blur-sm">
           <CardContent className="p-10">
-            <h1 className="text-3xl font-bold text-slate-900 mb-4">
+            <h1 className="text-3xl font-bold text-white mb-4">
               {user?.user_type && user.user_type !== 'indefinido' ? 'Alterar tipo de conta' : 'Bem-vindo(a) ao Trancoso Resolve!'}
             </h1>
-            <p className="text-slate-600 mb-10 text-lg">Para começar, nos diga como você gostaria de usar a plataforma.</p>
+            <p className="text-slate-400 mb-10 text-lg">Para começar, nos diga como você gostaria de usar a plataforma.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card
-                className="border-2 border-transparent hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer"
+                className="border-2 border-white/10 hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer bg-white/5"
                 onClick={handleClienteClick}
               >
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <User className="w-8 h-8 text-amber-700" />
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-500">
+                    <User className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="text-xl font-semibold mb-2">Sou Cliente</h2>
-                  <p className="text-slate-500">Quero encontrar e contratar os melhores serviços em Trancoso.</p>
+                  <h2 className="text-xl font-semibold mb-2 text-white">Sou Cliente</h2>
+                  <p className="text-slate-400">Quero encontrar e contratar os melhores serviços em Trancoso.</p>
                 </CardContent>
               </Card>
 
               <Card
-                className="border-2 border-transparent hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer"
+                className="border-2 border-white/10 hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer bg-white/5"
                 onClick={() => setStep('tipo_pessoa')}
               >
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Briefcase className="w-8 h-8 text-amber-700" />
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-500">
+                    <Briefcase className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="text-xl font-semibold mb-2">Sou Prestador / Empresa</h2>
-                  <p className="text-slate-500">Quero oferecer serviços ou cadastrar meu negócio em Trancoso.</p>
-                  <div className="mt-3 flex items-center justify-center gap-1 text-amber-700 text-sm font-medium">
+                  <h2 className="text-xl font-semibold mb-2 text-white">Sou Prestador / Empresa</h2>
+                  <p className="text-slate-400">Quero oferecer serviços ou cadastrar meu negócio em Trancoso.</p>
+                  <div className="mt-3 flex items-center justify-center gap-1 text-amber-400 text-sm font-medium">
                     Continuar <ChevronRight className="w-4 h-4" />
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {updateUserMutation.isPending && <p className="mt-8 text-slate-500">Salvando sua escolha...</p>}
+            {updateUserMutation.isPending && <p className="mt-8 text-slate-400">Salvando sua escolha...</p>}
           </CardContent>
         </Card>
       </div>
@@ -204,21 +204,21 @@ export default function CadastroTipoPage() {
   const isEmpresaComPonto = (tipoPessoa === 'mei' || tipoPessoa === 'pj') && temPontoFisico;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl shadow-2xl border-none">
+    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl shadow-2xl border-white/10 bg-white/5 backdrop-blur-sm">
         <CardContent className="p-8 md:p-10">
-          <button onClick={() => setStep('tipo_conta')} className="text-sm text-slate-500 hover:text-slate-700 mb-6 flex items-center gap-1">
+          <button onClick={() => setStep('tipo_conta')} className="text-sm text-slate-400 hover:text-white mb-6 flex items-center gap-1">
             ← Voltar
           </button>
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Dados do seu cadastro</h1>
-          <p className="text-slate-600 mb-6 text-sm">Essas informações são necessárias para verificação e definição do plano correto.</p>
+          <h1 className="text-2xl font-bold text-white mb-2">Dados do seu cadastro</h1>
+          <p className="text-slate-400 mb-6 text-sm">Essas informações são necessárias para verificação e definição do plano correto.</p>
 
           <div className="space-y-4">
             <div>
-              <Label>Tipo de pessoa <span className="text-red-500">*</span></Label>
+              <Label className="text-white">Tipo de pessoa <span className="text-red-400">*</span></Label>
               <Select value={tipoPessoa} onValueChange={setTipoPessoa}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
+                <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
+                <SelectContent className="bg-slate-900 border-white/10">
                   <SelectItem value="pf">Pessoa Física (CPF)</SelectItem>
                   <SelectItem value="mei">MEI – Microempreendedor Individual</SelectItem>
                   <SelectItem value="pj">Empresa / PJ (CNPJ)</SelectItem>
@@ -227,30 +227,30 @@ export default function CadastroTipoPage() {
             </div>
 
             <div>
-              <Label htmlFor="cpf_cad">CPF do responsável <span className="text-red-500">*</span></Label>
-              <Input id="cpf_cad" placeholder="000.000.000-00" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))} />
+              <Label htmlFor="cpf_cad" className="text-white">CPF do responsável <span className="text-red-400">*</span></Label>
+              <Input id="cpf_cad" placeholder="000.000.000-00" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
             </div>
 
             {(tipoPessoa === 'mei' || tipoPessoa === 'pj') && (
               <>
                 <div>
-                  <Label htmlFor="cnpj_cad">CNPJ <span className="text-red-500">*</span></Label>
-                  <Input id="cnpj_cad" placeholder="00.000.000/0000-00" value={cnpj} onChange={(e) => setCnpj(formatCnpj(e.target.value))} />
+                  <Label htmlFor="cnpj_cad" className="text-white">CNPJ <span className="text-red-400">*</span></Label>
+                  <Input id="cnpj_cad" placeholder="00.000.000/0000-00" value={cnpj} onChange={(e) => setCnpj(formatCnpj(e.target.value))} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <Label>Razão Social</Label>
-                    <Input placeholder="Opcional" value={razaoSocial} onChange={(e) => setRazaoSocial(e.target.value)} />
+                    <Label className="text-white">Razão Social</Label>
+                    <Input placeholder="Opcional" value={razaoSocial} onChange={(e) => setRazaoSocial(e.target.value)} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
                   </div>
                   <div>
-                    <Label>Nome Fantasia</Label>
-                    <Input placeholder="Opcional" value={nomFantasia} onChange={(e) => setNomeFantasia(e.target.value)} />
+                    <Label className="text-white">Nome Fantasia</Label>
+                    <Input placeholder="Opcional" value={nomFantasia} onChange={(e) => setNomeFantasia(e.target.value)} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <input type="checkbox" id="ponto_fisico_cad" checked={temPontoFisico} onChange={(e) => setTemPontoFisico(e.target.checked)} className="mt-0.5 accent-amber-600 w-4 h-4 shrink-0" />
-                  <label htmlFor="ponto_fisico_cad" className="text-sm text-slate-700 cursor-pointer">
-                    <span className="font-semibold block mb-0.5">Possuo ponto físico em Trancoso</span>
+                <div className="flex items-start gap-3 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <input type="checkbox" id="ponto_fisico_cad" checked={temPontoFisico} onChange={(e) => setTemPontoFisico(e.target.checked)} className="mt-0.5 accent-amber-400 w-4 h-4 shrink-0" />
+                  <label htmlFor="ponto_fisico_cad" className="text-sm text-slate-300 cursor-pointer">
+                    <span className="font-semibold block mb-0.5 text-white">Possuo ponto físico em Trancoso</span>
                     Loja, restaurante, pousada, bar, beach club, clínica ou estabelecimento físico.
                   </label>
                 </div>
@@ -259,29 +259,29 @@ export default function CadastroTipoPage() {
 
             {/* Aviso de redirecionamento para empresa */}
             {isEmpresaComPonto && (
-              <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
-                <Building2 className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
+                <Building2 className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-semibold text-amber-900 mb-1">Detectamos que você é uma empresa com ponto físico em Trancoso.</p>
-                  <p className="text-xs text-amber-800">Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong>Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.</p>
+                  <p className="text-sm font-semibold text-white mb-1">Detectamos que você é uma empresa com ponto físico em Trancoso.</p>
+                  <p className="text-xs text-slate-300">Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong className="text-amber-400">Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.</p>
                 </div>
               </div>
             )}
 
             {/* LGPD */}
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-left">
+            <div className="p-4 bg-white/5 border border-white/10 rounded-xl text-left">
               <label className="flex items-start gap-3 cursor-pointer">
-                <input type="checkbox" checked={autorizouVerificacao} onChange={(e) => setAutorizouVerificacao(e.target.checked)} className="mt-1 accent-amber-600 w-4 h-4 shrink-0" />
-                <span className="text-xs text-slate-700 leading-relaxed">
-                  <span className="font-semibold text-slate-800 flex items-center gap-1 mb-1">
-                    <Shield className="w-3 h-3 text-amber-600" /> Autorização de Verificação (obrigatória)
+                <input type="checkbox" checked={autorizouVerificacao} onChange={(e) => setAutorizouVerificacao(e.target.checked)} className="mt-1 accent-amber-400 w-4 h-4 shrink-0" />
+                <span className="text-xs text-slate-300 leading-relaxed">
+                  <span className="font-semibold text-white flex items-center gap-1 mb-1">
+                    <Shield className="w-3 h-3 text-amber-400" /> Autorização de Verificação (obrigatória)
                   </span>
                   Autorizo a Trancoso Resolve a realizar consultas de antecedentes criminais e, quando aplicável, verificação de CNPJ na Receita Federal, usando meus dados exclusivamente para fins de validação cadastral, em conformidade com a LGPD.
                 </span>
               </label>
             </div>
 
-            <Button className="w-full bg-amber-600 hover:bg-amber-700" onClick={handlePrestadorSubmit} disabled={updateUserMutation.isPending}>
+            <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={handlePrestadorSubmit} disabled={updateUserMutation.isPending}>
               {updateUserMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
               {isEmpresaComPonto ? 'Continuar com Plano Empresas' : 'Cadastrar como Prestador'}
             </Button>
