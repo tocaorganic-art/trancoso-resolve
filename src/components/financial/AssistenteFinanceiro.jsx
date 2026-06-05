@@ -23,33 +23,30 @@ const jsonSchema = {
 export default function AssistenteFinanceiro({ transacoes }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [quickInsight, setQuickInsight] = useState(null);
+  const [variacaoDespesas, setVariacaoDespesas] = useState(null);
 
-  // Gera insight rápido ao carregar
+  // Calcula variação de despesas ao carregar
   React.useEffect(() => {
     if (transacoes && transacoes.length > 0) {
       const now = new Date();
-      const currentMonth = now.getMonth();
-      const lastMonth = now.getMonth() - 1;
+      const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
 
-      const currentMonthExpenses = transacoes
-        .filter(t => t.type === 'Despesa' && new Date(t.date).getMonth() === currentMonth)
+      const despesaAtual = transacoes
+        .filter(t => t.type === 'Despesa' && new Date(t.date) >= currentMonthStart)
         .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
 
-      const lastMonthExpenses = transacoes
-        .filter(t => t.type === 'Despesa' && new Date(t.date).getMonth() === lastMonth)
+      const despesaAnterior = transacoes
+        .filter(t => t.type === 'Despesa' && new Date(t.date) >= previousMonthStart && new Date(t.date) <= previousMonthEnd)
         .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
 
-      if (lastMonthExpenses > 0) {
-        const variation = ((currentMonthExpenses - lastMonthExpenses) / lastMonthExpenses) * 100;
-        if (Math.abs(variation) > 10) {
-          setQuickInsight({
-            text: variation > 0 
-              ? `⚠️ Suas despesas aumentaram ${variation.toFixed(0)}% este mês`
-              : `✅ Suas despesas diminuíram ${Math.abs(variation).toFixed(0)}% este mês`,
-            type: variation > 0 ? 'warning' : 'success'
-          });
-        }
+      if (despesaAnterior > 0) {
+        const variacao = ((despesaAtual - despesaAnterior) / despesaAnterior) * 100;
+        setVariacaoDespesas({
+          valor: Math.abs(variacao).toFixed(1),
+          aumentou: variacao > 0
+        });
       }
     }
   }, [transacoes]);
@@ -99,22 +96,26 @@ export default function AssistenteFinanceiro({ transacoes }) {
 
   return (
     <Card className="bg-slate-800/50 rounded-lg shadow-md p-5 my-6 border border-slate-700">
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
-        <div>
-          <h3 className="font-semibold text-lg flex items-center gap-2 text-white">
-            <Sparkles className="w-5 h-5 text-blue-400"/>
-            Assistente Financeiro
-          </h3>
-          {quickInsight && (
-            <p className={`text-sm mt-2 ${quickInsight.type === 'warning' ? 'text-red-400' : 'text-green-400'}`}>
-              {quickInsight.text}
-            </p>
-          )}
-        </div>
+      <div className="mb-4">
+        <h3 className="font-semibold text-lg flex items-center gap-2 text-white mb-3">
+          <Sparkles className="w-5 h-5 text-blue-400"/>
+          Assistente Financeiro
+        </h3>
+        
+        {variacaoDespesas && (
+          <div className={`text-sm p-3 rounded-lg mb-3 ${
+            variacaoDespesas.aumentou 
+              ? 'bg-red-900/20 border border-red-800/30 text-red-300' 
+              : 'bg-green-900/20 border border-green-800/30 text-green-300'
+          }`}>
+            {variacaoDespesas.aumentou ? '⚠️' : '✅'} Suas despesas {variacaoDespesas.aumentou ? 'aumentaram' : 'reduziram'} {variacaoDespesas.valor}% em relação ao mês anterior.
+          </div>
+        )}
+
         <Button
           onClick={analisarFinancas}
           disabled={loading || !transacoes?.length}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
         >
           {loading ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Analisando...</>

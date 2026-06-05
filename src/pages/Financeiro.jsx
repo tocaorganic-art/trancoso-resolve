@@ -116,6 +116,19 @@ function FinanceiroContent() { // Renamed from FinanceiroPage
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <style>{`
+        .kpi-section-reputacao { 
+          margin-top: 8px; 
+          padding-top: 8px; 
+          border-top: 1px solid rgba(255,255,255,0.1); 
+        }
+        .chart-card { 
+          background: #0f1b2d; 
+          border: 1px solid #2a3a50; 
+          border-radius: 12px; 
+        }
+      `}</style>
+      
       {/* Header */}
       <div className="mb-8">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
@@ -144,8 +157,8 @@ function FinanceiroContent() { // Renamed from FinanceiroPage
           </div>
         </div>
 
-        {/* KPIs Financeiros */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        {/* KPIs Financeiros - Linha 1 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <Card className={`border-2 shadow-lg bg-white/90 backdrop-blur-sm transition-all ${
             saldo < 0 ? 'border-red-400 bg-red-50/50' : 'border-green-400'
           }`}>
@@ -172,8 +185,9 @@ function FinanceiroContent() { // Renamed from FinanceiroPage
           </Card>
         </div>
 
-        {/* Métricas de Reputação */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {/* Métricas de Reputação - Linha 2 */}
+        <div className="kpi-section-reputacao grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 md:col-span-2">Reputação</p>
           <Card className="border-none shadow-lg bg-white/90 backdrop-blur-sm">
             <CardContent className="p-5">
               <p className="text-sm font-medium text-slate-600 mb-2">Serviços Concluídos</p>

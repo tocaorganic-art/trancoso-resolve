@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -104,9 +104,10 @@ export default function FinancialDashboard({ transactions }) {
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
-                outerRadius={80}
+                outerRadius={90}
                 fill="#8884d8"
                 dataKey="value"
+                label={false}
               >
                 {categoryData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -118,8 +119,8 @@ export default function FinancialDashboard({ transactions }) {
               />
               <Legend 
                 layout="vertical" 
-                verticalAlign="middle" 
-                align="right"
+                align="right" 
+                verticalAlign="middle"
                 formatter={(value) => <span className="text-slate-300">{value}</span>}
               />
             </PieChart>
@@ -127,7 +128,7 @@ export default function FinancialDashboard({ transactions }) {
         </CardContent>
       </Card>
 
-      {/* Gráfico de Linha - Tendência */}
+      {/* Gráfico de Área - Tendência */}
       <Card className="border border-slate-700 shadow-lg col-span-1 lg:col-span-2 bg-slate-800/50 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-slate-100">Tendência Financeira</CardTitle>
@@ -135,7 +136,7 @@ export default function FinancialDashboard({ transactions }) {
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
+            <AreaChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis dataKey="month" stroke="#94a3b8" />
               <YAxis stroke="#94a3b8" />
@@ -147,7 +148,7 @@ export default function FinancialDashboard({ transactions }) {
                 ]}
               />
               <Legend />
-              <Line 
+              <Area 
                 type="monotone" 
                 dataKey="receita" 
                 stroke="#10b981" 
@@ -156,7 +157,7 @@ export default function FinancialDashboard({ transactions }) {
                 fill="#10b981"
                 fillOpacity={0.15}
               />
-              <Line 
+              <Area 
                 type="monotone" 
                 dataKey="despesa" 
                 stroke="#ef4444" 
@@ -165,7 +166,7 @@ export default function FinancialDashboard({ transactions }) {
                 fill="#ef4444"
                 fillOpacity={0.15}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
