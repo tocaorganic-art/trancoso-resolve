@@ -93,9 +93,9 @@ export default function ServicoLocalPage({
   const searchUrl = createPageUrl('ServicosCategoria', `?cat=${encodeURIComponent(category)}`);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-900">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-14 px-4">
+      <section className="bg-gradient-to-br from-[#0a1628] to-[#1e293b] text-white py-14 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="flex items-center gap-2 text-amber-400 text-sm font-medium mb-4">
             <MapPin className="w-4 h-4" />
@@ -105,7 +105,7 @@ export default function ServicoLocalPage({
           <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-5">{h1}</h1>
           <p className="text-lg text-slate-300 leading-relaxed mb-8 max-w-2xl">{intro}</p>
           <Link to={searchUrl} className="block sm:inline-block w-full sm:w-auto">
-            <Button className="w-full sm:w-auto bg-amber-700 hover:bg-amber-800 text-white font-bold text-base px-8 py-4 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
+            <Button className="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-base px-8 py-4 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg">
               {ctaButton} <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
@@ -123,28 +123,28 @@ export default function ServicoLocalPage({
 
         {/* Serviços */}
         <section>
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">{servicesTitle}</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">{servicesTitle}</h2>
           <ul className="space-y-3">
             {services.map((item, i) => (
-              <li key={i} className="flex items-start gap-3 bg-white rounded-xl px-5 py-4 shadow-sm border border-slate-100">
-                <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-                <span className="text-slate-700 text-base">{item}</span>
+              <li key={i} className="flex items-start gap-3 bg-slate-800/50 backdrop-blur-sm rounded-xl px-5 py-4 border border-slate-700">
+                <CheckCircle className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
+                <span className="text-slate-200 text-base">{item}</span>
               </li>
             ))}
           </ul>
         </section>
 
         {/* Como funciona */}
-        <section className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{howTitle}</h2>
-          <p className="text-slate-600 text-base leading-relaxed">{howText}</p>
+        <section className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">{howTitle}</h2>
+          <p className="text-slate-300 text-base leading-relaxed">{howText}</p>
         </section>
 
         {/* CTA */}
-        <section className="bg-gradient-to-r from-amber-700 to-amber-900 rounded-3xl p-8 md:p-12 text-center">
+        <section className="bg-gradient-to-r from-amber-600 to-amber-800 rounded-3xl p-8 md:p-12 text-center shadow-xl">
           <p className="text-white text-lg font-medium mb-6 max-w-xl mx-auto">{cta}</p>
           <Link to={searchUrl} className="block sm:inline-block w-full sm:w-auto">
-            <Button className="w-full sm:w-auto bg-white text-amber-800 hover:bg-amber-50 font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
+            <Button className="w-full sm:w-auto bg-white text-amber-800 hover:bg-amber-50 font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg">
               {ctaButton} <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
@@ -152,8 +152,8 @@ export default function ServicoLocalPage({
 
         {/* SEO Text Block */}
         {seoText && (
-          <section className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-            <div className="prose prose-slate max-w-none text-slate-600 text-sm leading-relaxed space-y-4">
+          <section className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
+            <div className="prose prose-slate max-w-none text-slate-300 text-sm leading-relaxed space-y-4">
               {seoText.map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}

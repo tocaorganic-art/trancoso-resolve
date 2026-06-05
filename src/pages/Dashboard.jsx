@@ -138,7 +138,7 @@ function DashboardContent() {
     .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-[#0a1628] pb-24">
     {checkoutSuccess && <CheckoutSuccessBanner />}
 
     <div className="mb-8 pt-4">
@@ -147,22 +147,22 @@ function DashboardContent() {
           <TrendingUp className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Painel do Prestador</h1>
-          <p className="text-slate-600 dark:text-slate-400 text-sm">Bem-vindo(a) de volta, {user?.full_name || 'Prestador'}!</p>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">Painel do Prestador</h1>
+          <p className="text-slate-400 text-sm">Bem-vindo(a) de volta, {user?.full_name || 'Prestador'}! 🌴</p>
         </div>
       </div>
     </div>
       
       {/* Alerta: prestador sem telefone cadastrado */}
       {user && !user.phone && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-900/50 rounded-xl p-4 mb-6 flex items-start gap-3">
-          <span className="text-amber-500 text-xl mt-0.5">⚠️</span>
+        <div className="bg-amber-900/20 border border-amber-700/50 rounded-xl p-4 mb-6 flex items-start gap-3">
+          <span className="text-amber-400 text-xl mt-0.5">⚠️</span>
           <div className="flex-1">
-            <p className="font-semibold text-amber-800 dark:text-amber-300 text-sm">Complete seu perfil — WhatsApp obrigatório</p>
-            <p className="text-amber-700 dark:text-amber-200 text-xs mt-0.5">Clientes não conseguem entrar em contato sem seu número de WhatsApp cadastrado no perfil de prestador.</p>
+            <p className="font-semibold text-amber-300 text-sm">Complete seu perfil — WhatsApp obrigatório</p>
+            <p className="text-amber-200/80 text-xs mt-0.5">Clientes não conseguem entrar em contato sem seu WhatsApp.</p>
           </div>
           <Link to={createPageUrl("MeuPerfilPrestador")}>
-            <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shrink-0">Completar</Button>
+            <Button size="sm" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shrink-0">Completar</Button>
           </Link>
         </div>
       )}
@@ -175,7 +175,9 @@ function DashboardContent() {
       )}
 
       {serviceRequests?.length === 0 && (
-        <GettingStartedGuide />
+        <div className="mb-6">
+          <GettingStartedGuide />
+        </div>
       )}
 
       <motion.div 
@@ -300,7 +302,7 @@ function DashboardContent() {
       </motion.div>
       
       <div className="mt-10">
-         <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-4">Visão Geral Financeira</h2>
+         <h2 className="text-xl font-bold text-white mb-4">Visão Geral Financeira 💰</h2>
          {(transactions && transactions.length > 0) ? (
             <>
                 <AssistenteFinanceiro transacoes={transactions} />

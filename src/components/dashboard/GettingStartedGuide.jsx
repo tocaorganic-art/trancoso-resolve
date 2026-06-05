@@ -31,29 +31,29 @@ export default function GettingStartedGuide({ onDismiss }) {
   ];
 
   return (
-    <Card className="mb-8 bg-blue-50 border-blue-200 relative">
+    <Card className="mb-8 bg-slate-800/50 backdrop-blur-sm border-slate-700 relative">
       <Button
         variant="ghost"
         size="icon"
-        className="absolute top-2 right-2 text-slate-500 hover:bg-blue-100"
+        className="absolute top-2 right-2 text-slate-400 hover:bg-slate-700"
         onClick={onDismiss}
       >
         <X className="w-4 h-4" />
       </Button>
       <CardContent className="p-6">
-        <h3 className="text-xl font-bold text-slate-800 mb-2">Bem-vindo(a) ao seu Painel!</h3>
-        <p className="text-slate-600 mb-6">Siga estes passos para configurar sua conta e começar a receber solicitações de serviço.</p>
+        <h3 className="text-xl font-bold text-white mb-2">Bem-vindo(a) ao seu Painel! 🌴</h3>
+        <p className="text-slate-300 mb-6">Siga estes passos para configurar sua conta e começar a receber solicitações.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((step, index) => (
-            <Card key={index} className="bg-white shadow-md">
+            <Card key={index} className="bg-slate-800 border-slate-700 shadow-lg">
               <CardContent className="p-6 flex flex-col items-center text-center">
-                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center mb-4">
                   {step.icon}
                 </div>
-                <h4 className="font-semibold text-md mb-2">{step.title}</h4>
-                <p className="text-sm text-slate-500 mb-4 flex-grow">{step.description}</p>
+                <h4 className="font-semibold text-md text-white mb-2">{step.title}</h4>
+                <p className="text-sm text-slate-300 mb-4 flex-grow">{step.description}</p>
                 <Link to={step.link}>
-                  <Button variant="outline" size="sm" className="w-full">
+                  <Button size="sm" className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white">
                     {step.cta} <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
