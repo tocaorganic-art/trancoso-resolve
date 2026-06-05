@@ -59,9 +59,9 @@ const RequestCard = ({ request, service, onConfirm, onReject }) => {
 
 function MinhaAgendaContent() {
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState('Pendente');
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('Pendente');
 
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['currentUser'],
