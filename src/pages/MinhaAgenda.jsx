@@ -79,10 +79,16 @@ function MinhaAgendaContent() {
 
   const providerId = myProvider?.id;
 
+  // CORREÇÃO CRÍTICA: Filtrar por provider_email (não por provider_id)
+  // provider_id é o ID da entidade ServiceProvider, mas provider_email é o email do usuário logado
   const { data: serviceRequests, isLoading: isLoadingRequests } = useQuery({
-    queryKey: ['serviceRequests', providerId],
-    queryFn: () => base44.entities.ServiceRequest.filter({ provider_id: providerId }, '-created_date'),
-    enabled: !!providerId,
+    queryKey: ['serviceRequests', user?.email],
+    queryFn: async () => {
+      // Buscar todas as solicitações onde o prestador é o usuário logado (por email)
+      const allRequests = await base44.entities.ServiceRequest.filter({}, '-created_date');
+      return allRequests.filter(req => req.provider_email === user.email);
+    },
+    enabled: !!user?.email && !!providerId,
     refetchInterval: 5000, // Refresh a cada 5 segundos para atualizações em tempo real
   });
 
@@ -102,9 +108,9 @@ function MinhaAgendaContent() {
   const updateRequestMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.ServiceRequest.update(id, data),
     onMutate: async ({ id, data }) => {
-      await queryClient.cancelQueries({ queryKey: ['serviceRequests', user?.id] });
-      const previous = queryClient.getQueryData(['serviceRequests', user?.id]);
-      queryClient.setQueryData(['serviceRequests', user?.id], (old) =>
+      await queryClient.cancelQueries({ queryKey: ['serviceRequests', user?.email] });
+      const previous = queryClient.getQueryData(['serviceRequests', user?.email]);
+      queryClient.setQueryData(['serviceRequests', user?.email], (old) =>
         (old || []).map((r) => r.id === id ? { ...r, ...data } : r)
       );
       return { previous };
@@ -116,7 +122,7 @@ function MinhaAgendaContent() {
     },
     onError: (error, _vars, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(['serviceRequests', user?.id], context.previous);
+        queryClient.setQueryData(['serviceRequests', user?.email], context.previous);
       }
       toast.error("Erro ao atualizar solicitação.", { description: error.message });
     },

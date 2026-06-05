@@ -16,7 +16,8 @@
     },
     "client_email": {
       "type": "string",
-      "format": "email"
+      "format": "email",
+      "description": "Email do cliente"
     },
     "service_id": {
       "type": "string",
@@ -24,7 +25,12 @@
     },
     "provider_id": {
       "type": "string",
-      "description": "ID do prestador"
+      "description": "ID do prestador (ServiceProvider)"
+    },
+    "provider_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email do prestador dono do servi\u00e7o"
     },
     "date": {
       "type": "string",
@@ -122,6 +128,9 @@
           "data.client_email": "{{user.email}}"
         },
         {
+          "data.provider_email": "{{user.email}}"
+        },
+        {
           "data.provider_id": "{{user.id}}"
         },
         {
@@ -135,6 +144,9 @@
       "$or": [
         {
           "created_by": "{{user.email}}"
+        },
+        {
+          "data.provider_email": "{{user.email}}"
         },
         {
           "data.provider_id": "{{user.id}}"
