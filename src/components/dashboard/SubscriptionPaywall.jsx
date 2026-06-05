@@ -29,8 +29,8 @@ export default function SubscriptionPaywall({ subscriptionStatus, isTrial, hasAn
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-8 text-center">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
-          <LockKeyhole className="w-8 h-8 text-red-500" />
+        <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-5">
+          <LockKeyhole className="w-8 h-8 text-amber-600" />
         </div>
 
         <h1 className="text-2xl font-bold text-slate-900 mb-3">

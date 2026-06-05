@@ -129,6 +129,8 @@ function DashboardContent() {
     );
   }
 
+  // Painel bloqueado - verificar componente SubscriptionPaywall para o ícone de cadeado
+
   const pendingRequests = serviceRequests?.filter(req => req.status === 'Pendente').length || 0;
   const confirmedServices = serviceRequests?.filter(req => req.status === 'Confirmado').length || 0;
 

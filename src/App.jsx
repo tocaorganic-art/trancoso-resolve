@@ -58,6 +58,7 @@ import CozinheiroCaraiva from '@/pages/servicos/CozinheiroCaraiva';
 import JardineiroCaraiva from '@/pages/servicos/JardineiroCaraiva';
 import PedreiroCaraiva from '@/pages/servicos/PedreiroCaraiva';
 import RelatorioDiarioPage from '@/pages/RelatorioDiarioPage';
+import ServicosCategoria from '@/pages/ServicosCategoria';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -363,6 +364,11 @@ const AuthenticatedApp = () => {
 
         <Route path="/RelatorioDiario" element={
           <AnimatedPage><RelatorioDiarioPage /></AnimatedPage>
+        } />
+        <Route path="/ServicosCategoria" element={
+          <LayoutWrapper currentPageName="ServicosCategoria">
+            <AnimatedPage><ServicosCategoria /></AnimatedPage>
+          </LayoutWrapper>
         } />
 
         <Route path="*" element={<PageNotFound />} />

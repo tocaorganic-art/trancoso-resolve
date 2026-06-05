@@ -74,7 +74,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
         <DialogTitle className="sr-only">Complete seu cadastro</DialogTitle>
         <DialogDescription className="sr-only">Preencha seus dados para se conectar com prestadores verificados da comunidade de Trancoso.</DialogDescription>
         {/* Header */}
-        <div className="px-4 md:px-5 py-4 md:py-5 text-white relative sticky top-0 z-10" style={{ background: 'linear-gradient(135deg, #00AEEF, #0072FF)' }}>
+        <div className="px-4 md:px-5 py-4 md:py-5 text-white relative sticky top-0 z-10 bg-amber-800">
           <button
             onClick={handleClose}
             className="absolute top-3 right-3 bg-white/20 hover:bg-white/30 rounded-full p-1 transition-colors"
@@ -144,8 +144,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
 
           <Button
             type="submit"
-            className="w-full font-bold h-10 md:h-12 rounded-full text-sm md:text-base mt-1 md:mt-2"
-            style={{ background: 'linear-gradient(135deg, #00AEEF, #00C853)', border: 'none' }}
+            className="w-full font-bold h-10 md:h-12 rounded-full text-sm md:text-base mt-1 md:mt-2 bg-amber-600 hover:bg-amber-700 border-none"
             disabled={mutation.isPending}
           >
             {mutation.isPending ? (
