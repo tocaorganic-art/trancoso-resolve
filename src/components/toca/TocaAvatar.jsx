@@ -257,7 +257,7 @@ export default function TocaAvatar() {
             {/* Botão de áudio como fallback */}
             <div className="pt-2 border-t border-white/10">
               <Button
-                onClick={handleAudioPlayPause}
+                onClick={handlePlayPause}
                 variant="outline"
                 className="border-white/20 text-white hover:bg-white/10 text-sm"
                 aria-label="Ouvir em áudio"
