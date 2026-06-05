@@ -4,14 +4,25 @@ import { Search, Calendar, Smile, UserCheck, Briefcase, BarChart, Shield, Star, 
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
+import TocaAvatar from '@/components/toca/TocaAvatar';
 
 const ProcessStep = ({ icon, title, description }) => (
   <div className="flex flex-col items-center text-center">
-    <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
+    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center mb-4 shadow-lg">
       {icon}
     </div>
-    <h3 className="font-bold text-lg mb-2 text-slate-800">{title}</h3>
+    <h3 className="font-bold text-lg mb-2 text-[#0a1628]">{title}</h3>
     <p className="text-slate-600">{description}</p>
+  </div>
+);
+
+const ProcessStepPrestador = ({ icon, title, description }) => (
+  <div className="flex flex-col items-center text-center">
+    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center mb-4 shadow-lg">
+      {icon}
+    </div>
+    <h3 className="font-bold text-lg mb-2 text-white">{title}</h3>
+    <p className="text-slate-300">{description}</p>
   </div>
 );
 
@@ -115,16 +126,21 @@ export default function ComoFuncionaPage() {
     <div className="bg-slate-50">
       <div className="container mx-auto py-16 px-4">
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-extrabold text-slate-900 mb-4">Simples, Rápido e Confiável</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#0a1628] mb-4">Simples, Rápido e Confiável</h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Conectamos você aos melhores profissionais de Trancoso. Entenda como transformamos suas necessidades em soluções.
           </p>
         </div>
 
+        {/* Avatar da Toca - Anfitriã Virtual */}
+        <section className="mb-16">
+          <TocaAvatar />
+        </section>
+
         {/* Para Clientes */}
         <section className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-10 text-slate-800">Para Clientes: Sua Solução em 3 Passos</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-[#0a1628]">Para Clientes: Sua Solução em 3 Passos</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <ProcessStep 
               icon={<Search className="w-8 h-8" />} 
               title="1. Encontre o Serviço" 
@@ -144,20 +160,20 @@ export default function ComoFuncionaPage() {
         </section>
 
         {/* Para Prestadores */}
-        <section className="mb-20 bg-white p-12 rounded-2xl shadow-lg">
-          <h2 className="text-3xl font-bold text-center mb-10 text-slate-800">Para Prestadores: Transforme seu Talento em Negócio</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <ProcessStep 
+        <section className="mb-20 bg-gradient-to-br from-[#0a1628] to-[#1e293b] p-8 md:p-12 rounded-2xl shadow-xl border border-white/10">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-white">Para Prestadores: Transforme seu Talento em Negócio</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            <ProcessStepPrestador 
               icon={<UserCheck className="w-8 h-8" />} 
               title="1. Crie seu Perfil" 
               description="Cadastre-se gratuitamente, adicione seus serviços, fotos e defina seus preços. Um perfil completo atrai mais clientes." 
             />
-            <ProcessStep 
+            <ProcessStepPrestador 
               icon={<Briefcase className="w-8 h-8" />} 
               title="2. Receba Propostas" 
               description="Seja notificado sobre novas solicitações de serviço. Gerencie sua agenda, confirme os trabalhos e comunique-se com os clientes." 
             />
-            <ProcessStep 
+            <ProcessStepPrestador 
               icon={<BarChart className="w-8 h-8" />} 
               title="3. Cresça seu Negócio" 
               description="Receba pagamentos diretamente dos clientes, construa uma reputação com boas avaliações e use nosso painel para acompanhar seu desempenho." 
@@ -165,7 +181,7 @@ export default function ComoFuncionaPage() {
           </div>
           <div className="text-center mt-12">
              <Link to={createPageUrl("SejaPrestador")}>
-                <Button size="lg" className="bg-orange-500 hover:bg-orange-600">Quero ser um Prestador</Button>
+                <Button size="lg" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold shadow-lg">Quero ser um Prestador</Button>
             </Link>
           </div>
         </section>
