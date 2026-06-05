@@ -1,19 +1,43 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Search, DollarSign, TrendingUp, Clock, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import StatusPagamentoBadge from '@/components/pagamento/StatusPagamentoBadge';
 
+const statusColors = {
+  'captured': { bg: '#dcfce7', color: '#15803d', label: '✅ Pago' },
+  'requires_payment_method': { bg: '#fef9c3', color: '#854d0e', label: 'Aguardando Pagamento' },
+  'requires_capture': { bg: '#dbeafe', color: '#1d4ed8', label: '💰 Em Custódia' },
+  'canceled': { bg: '#f3f4f6', color: '#6b7280', label: 'Cancelado' },
+  'disputed': { bg: '#fee2e2', color: '#dc2626', label: '⚠️ Em Disputa' },
+  'refunded': { bg: '#f3e8ff', color: '#6b21a8', label: 'Reembolsado' },
+};
+
+function StatusBadge({ status }) {
+  const cfg = statusColors[status] || { bg: '#f3f4f6', color: '#6b7280', label: status };
+  return (
+    <span style={{
+      padding: '4px 12px',
+      borderRadius: 20,
+      fontSize: 12,
+      fontWeight: 600,
+      background: cfg.bg,
+      color: cfg.color,
+      display: 'inline-block'
+    }}>
+      {cfg.label}
+    </span>
+  );
+}
+
 export default function AdminPagamentosPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -70,6 +94,14 @@ export default function AdminPagamentosPage() {
     return matchSearch && matchStatus;
   });
 
+  // Paginação
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filtered.length);
+  const paginatedData = filtered.slice(startIndex, endIndex);
+  const prevPage = () => setPage(p => Math.max(1, p - 1));
+  const nextPage = () => setPage(p => Math.min(totalPages, p + 1));
+
   // Métricas
   const totalCaptured = filtered.filter(p => p.status === 'captured').reduce((s, p) => s + (p.amount_total || 0), 0);
   const totalPlatform = filtered.filter(p => p.status === 'captured').reduce((s, p) => s + (p.amount_platform || 0), 0);
@@ -79,122 +111,219 @@ export default function AdminPagamentosPage() {
   const providerMap = Object.fromEntries(providers.map(p => [p.id, p]));
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="bg-white shadow-sm">
+    <div className="min-h-screen bg-slate-950">
+      <style>{`
+        @media (max-width: 768px) {
+          .kpi-grid { grid-template-columns: 1fr 1fr !important; }
+          .table-container { overflow-x: auto; }
+          .filter-bar { flex-direction: column; }
+        }
+      `}</style>
+      
+      <div className="bg-slate-900 border-b border-slate-800">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-slate-900">Dashboard de Pagamentos</h1>
-          <p className="text-slate-500 text-sm">Monitoramento de transações e split</p>
+          <h1 className="text-2xl font-bold text-white">Dashboard de Pagamentos</h1>
+          <p className="text-slate-400 text-sm">Monitoramento de transações e split</p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Cards de métricas */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="pt-4">
+        <div className="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card style={{ background: '#111827', borderRadius: 12, padding: '20px 24px', borderLeft: '4px solid #22c55e', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <CardContent className="p-0">
               <div className="flex items-center gap-2 mb-1">
-                <DollarSign className="w-4 h-4 text-green-600" />
-                <span className="text-xs text-slate-500">Volume Capturado</span>
+                <DollarSign className="w-4 h-4 text-green-500" />
+                <span className="text-xs text-slate-400">Volume Capturado</span>
               </div>
-              <p className="text-xl font-bold text-slate-800">R$ {(totalCaptured / 100).toFixed(2)}</p>
+              {totalCaptured === 0 ? (
+                <span style={{color:'#4b5563', fontSize:13}}>Nenhuma transação ainda</span>
+              ) : (
+                <p className="text-xl font-bold text-white">R$ {(totalCaptured / 100).toFixed(2)}</p>
+              )}
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="pt-4">
+          <Card style={{ background: '#111827', borderRadius: 12, padding: '20px 24px', borderLeft: '4px solid #3b82f6', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <CardContent className="p-0">
               <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className="w-4 h-4 text-amber-600" />
-                <span className="text-xs text-slate-500">Comissão Plataforma (20%)</span>
+                <TrendingUp className="w-4 h-4 text-blue-500" />
+                <span className="text-xs text-slate-400">Comissão Plataforma (20%)</span>
               </div>
-              <p className="text-xl font-bold text-slate-800">R$ {(totalPlatform / 100).toFixed(2)}</p>
+              {totalPlatform === 0 ? (
+                <span style={{color:'#4b5563', fontSize:13}}>Nenhuma transação ainda</span>
+              ) : (
+                <p className="text-xl font-bold text-white">R$ {(totalPlatform / 100).toFixed(2)}</p>
+              )}
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="pt-4">
+          <Card style={{ background: '#111827', borderRadius: 12, padding: '20px 24px', borderLeft: '4px solid #f59e0b', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <CardContent className="p-0">
               <div className="flex items-center gap-2 mb-1">
                 <Clock className="w-4 h-4 text-amber-500" />
-                <span className="text-xs text-slate-500">Em Custódia</span>
+                <span className="text-xs text-slate-400">Em Custódia</span>
               </div>
-              <p className="text-xl font-bold text-slate-800">{pendingCapture}</p>
+              {pendingCapture === 0 ? (
+                <span style={{color:'#4b5563', fontSize:13}}>Nenhuma transação ainda</span>
+              ) : (
+                <p className="text-xl font-bold text-white">{pendingCapture}</p>
+              )}
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="pt-4">
+          <Card style={{ background: '#111827', borderRadius: 12, padding: '20px 24px', borderLeft: '4px solid #ef4444', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <CardContent className="p-0">
               <div className="flex items-center gap-2 mb-1">
                 <AlertTriangle className="w-4 h-4 text-red-500" />
-                <span className="text-xs text-slate-500">Em Disputa</span>
+                <span className="text-xs text-slate-400">Em Disputa</span>
               </div>
-              <p className="text-xl font-bold text-red-600">{disputed}</p>
+              {disputed === 0 ? (
+                <span style={{color:'#4b5563', fontSize:13}}>Nenhuma transação ainda</span>
+              ) : (
+                <p className="text-xl font-bold text-red-500">{disputed}</p>
+              )}
             </CardContent>
           </Card>
         </div>
 
         {/* Filtros */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input
-              placeholder="Buscar por email, ID da solicitação..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="requires_payment_method">Aguardando Pagamento</SelectItem>
-              <SelectItem value="requires_capture">Em Custódia</SelectItem>
-              <SelectItem value="captured">Capturado</SelectItem>
-              <SelectItem value="canceled">Cancelado</SelectItem>
-              <SelectItem value="disputed">Em Disputa</SelectItem>
-              <SelectItem value="refunded">Reembolsado</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="filter-bar flex flex-col sm:flex-row gap-3 items-center">
+          <input
+            placeholder="Buscar por email, ID da solicitação..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              flex: 1,
+              padding: '10px 16px',
+              borderRadius: 8,
+              border: '1px solid #374151',
+              background: '#1f2937',
+              color: '#fff',
+              fontSize: 14,
+              width: '100%'
+            }}
+          />
+          <select
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+            style={{
+              padding: '10px 16px',
+              borderRadius: 8,
+              border: '1px solid #374151',
+              background: '#1f2937',
+              color: '#fff',
+              fontSize: 14,
+              minWidth: 140
+            }}
+          >
+            <option value="all">Todos os status</option>
+            <option value="requires_payment_method">Aguardando Pagamento</option>
+            <option value="requires_capture">Em Custódia</option>
+            <option value="captured">Capturado</option>
+            <option value="canceled">Cancelado</option>
+            <option value="disputed">Em Disputa</option>
+            <option value="refunded">Reembolsado</option>
+          </select>
         </div>
 
         {/* Tabela */}
-        <Card>
+        <Card className="table-container" style={{ background: '#0b1120', border: '1px solid #1e293b' }}>
           <CardContent className="p-0 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50 border-b">
-                <tr>
-                  <th className="text-left px-4 py-3 text-slate-600 font-medium">Data</th>
-                  <th className="text-left px-4 py-3 text-slate-600 font-medium">Cliente</th>
-                  <th className="text-left px-4 py-3 text-slate-600 font-medium">Prestador</th>
-                  <th className="text-right px-4 py-3 text-slate-600 font-medium">Total</th>
-                  <th className="text-right px-4 py-3 text-slate-600 font-medium">Prestador (80%)</th>
-                  <th className="text-right px-4 py-3 text-slate-600 font-medium">Plataforma (20%)</th>
-                  <th className="text-left px-4 py-3 text-slate-600 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="text-center py-12 text-slate-400">Nenhum pagamento encontrado</td>
+            {filtered.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '48px 24px', color: '#6b7280' }}>
+                <span style={{ fontSize: 40 }}>💳</span>
+                <p style={{ marginTop: 12, fontSize: 16, fontWeight: 600, color: '#9ca3af' }}>Nenhuma transação encontrada</p>
+                <p style={{ fontSize: 13 }}>As transações aparecerão aqui assim que ocorrerem.</p>
+              </div>
+            ) : (
+              <table className="w-full text-sm">
+                <thead>
+                  <tr style={{ background: '#1f2937' }}>
+                    <th style={{ color: '#9ca3af', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'left', padding: '12px 16px' }}>Data</th>
+                    <th style={{ color: '#9ca3af', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'left', padding: '12px 16px' }}>Cliente</th>
+                    <th style={{ color: '#9ca3af', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'left', padding: '12px 16px' }}>Prestador</th>
+                    <th style={{ color: '#9ca3af', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'right', padding: '12px 16px' }}>Total</th>
+                    <th style={{ color: '#9ca3af', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'right', padding: '12px 16px' }}>Prestador (80%)</th>
+                    <th style={{ color: '#9ca3af', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'right', padding: '12px 16px' }}>Plataforma (20%)</th>
+                    <th style={{ color: '#9ca3af', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'left', padding: '12px 16px' }}>Status</th>
                   </tr>
-                ) : filtered.map(payment => {
-                  const provider = providerMap[payment.provider_id];
-                  return (
-                    <tr key={payment.id} className="hover:bg-slate-50">
-                      <td className="px-4 py-3 text-slate-600">
-                        {format(new Date(payment.created_date), 'dd/MM/yy HH:mm', { locale: ptBR })}
-                      </td>
-                      <td className="px-4 py-3 text-slate-700">{payment.client_email}</td>
-                      <td className="px-4 py-3 text-slate-700">{provider?.full_name || payment.provider_id}</td>
-                      <td className="px-4 py-3 text-right font-medium">R$ {((payment.amount_total || 0) / 100).toFixed(2)}</td>
-                      <td className="px-4 py-3 text-right text-green-700">R$ {((payment.amount_provider || 0) / 100).toFixed(2)}</td>
-                      <td className="px-4 py-3 text-right text-amber-700">R$ {((payment.amount_platform || 0) / 100).toFixed(2)}</td>
-                      <td className="px-4 py-3">
-                        <StatusPagamentoBadge status={payment.status} />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginatedData.map((payment, index) => {
+                    const provider = providerMap[payment.provider_id];
+                    return (
+                      <tr 
+                        key={payment.id} 
+                        style={{ 
+                          background: index % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.03)',
+                          transition: 'background 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = index % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.03)'}
+                      >
+                        <td style={{ padding: '12px 16px', color: '#9ca3af', textAlign: 'left' }}>
+                          {format(new Date(payment.created_date), 'dd/MM/yy HH:mm', { locale: ptBR })}
+                        </td>
+                        <td style={{ padding: '12px 16px', color: '#e5e7eb', textAlign: 'left' }}>{payment.client_email}</td>
+                        <td style={{ padding: '12px 16px', color: '#e5e7eb', textAlign: 'left' }}>{provider?.full_name || payment.provider_id}</td>
+                        <td style={{ padding: '12px 16px', color: '#f9fafb', fontWeight: 600, textAlign: 'right' }}>R$ {((payment.amount_total || 0) / 100).toFixed(2)}</td>
+                        <td style={{ padding: '12px 16px', color: '#86efac', textAlign: 'right' }}>R$ {((payment.amount_provider || 0) / 100).toFixed(2)}</td>
+                        <td style={{ padding: '12px 16px', color: '#fcd34d', textAlign: 'right' }}>R$ {((payment.amount_platform || 0) / 100).toFixed(2)}</td>
+                        <td style={{ padding: '12px 16px', textAlign: 'left' }}>
+                          <StatusBadge status={payment.status} />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+            
+            {/* Paginação */}
+            {filtered.length > 0 && (
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: 16,
+                padding: '12px 16px',
+                borderTop: '1px solid #374151',
+                color: '#9ca3af',
+                fontSize: 13
+              }}>
+                <span>Mostrando {startIndex + 1}–{endIndex} de {filtered.length} transações</span>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button 
+                    onClick={prevPage} 
+                    disabled={page === 1}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: 6,
+                      border: '1px solid #374151',
+                      background: page === 1 ? '#1f2937' : 'transparent',
+                      color: page === 1 ? '#6b7280' : '#fff',
+                      cursor: page === 1 ? 'not-allowed' : 'pointer',
+                      opacity: page === 1 ? 0.5 : 1
+                    }}
+                  >
+                    ← Anterior
+                  </button>
+                  <button 
+                    onClick={nextPage} 
+                    disabled={page === totalPages}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: 6,
+                      border: '1px solid #374151',
+                      background: page === totalPages ? '#1f2937' : 'transparent',
+                      color: page === totalPages ? '#6b7280' : '#fff',
+                      cursor: page === totalPages ? 'not-allowed' : 'pointer',
+                      opacity: page === totalPages ? 0.5 : 1
+                    }}
+                  >
+                    Próxima →
+                  </button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
