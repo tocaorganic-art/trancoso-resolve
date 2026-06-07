@@ -51,8 +51,8 @@ export default function Layout({ children, currentPageName }) {
     document.documentElement.lang = 'pt-BR';
 
     const pageTitles = {
-      '/': 'Trancoso Resolve - Serviços Confiáveis em Trancoso',
-      '/Home': 'Trancoso Resolve - Serviços Confiáveis em Trancoso',
+      '/': 'Trancoso Resolve - Serviços Confiáveis em Trancoso, Porto Seguro e Caraíva',
+      '/Home': 'Trancoso Resolve - Serviços Confiáveis em Trancoso, Porto Seguro e Caraíva',
       '/ServicosCategoria': 'Buscar Serviços - Trancoso Resolve',
       '/PrestadorPerfil': 'Perfil do Prestador - Trancoso Resolve',
       '/ServicoDetalhes': 'Detalhes do Serviço - Trancoso Resolve',
@@ -82,8 +82,8 @@ export default function Layout({ children, currentPageName }) {
     };
 
     const pageDescriptions = {
-      '/': 'Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada.',
-      '/Home': 'Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada.',
+      '/': 'Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.',
+      '/Home': 'Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.',
       '/ServicosCategoria': 'Navegue por categorias e encontre o profissional que resolve seu problema em Trancoso.',
       '/PrestadorPerfil': 'Veja o perfil detalhado e avaliações dos profissionais verificados em Trancoso.',
       '/ServicoDetalhes': 'Conheça os detalhes de cada serviço e contrate com confiança em Trancoso.',

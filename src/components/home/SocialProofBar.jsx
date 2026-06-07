@@ -18,7 +18,7 @@ export default function SocialProofBar({ totalVerificados = 0 }) {
           {metrics.map((m, i) => {
             const Icon = m.icon;
             return (
-              <React.Fragment key={i}>
+              <React.Fragment key={m.value}>
                 {i > 0 && <div className="hidden md:block w-px h-8 bg-slate-200" />}
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-amber-50 flex items-center justify-center shrink-0">

@@ -220,12 +220,12 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, BA";
+    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, Porto Seguro e Caraíva";
 
     // Meta description otimizada
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada.";
+    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.";
 
     // Canonical + OG URL da Home
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -266,7 +266,7 @@ export default function HomePage() {
           ],
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
-            "name": "Serviços em Trancoso",
+            "name": "Serviços na Costa do Descobrimento",
             "itemListElement": [
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diarista em Trancoso" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Eletricista em Trancoso" } },
