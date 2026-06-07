@@ -1,54 +1,39 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Star, Utensils, Anchor, Sun, Heart } from "lucide-react";
 import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import { useDestinationSeo } from "@/hooks/useDestinationSeo";
+
+const HERO_IMAGE = "https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&w=1600&q=80";
+
+const servicos = [
+  { slug: 'diarista-porto-seguro', label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-porto-seguro' },
+  { slug: 'eletricista-porto-seguro', label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-porto-seguro' },
+  { slug: 'piscineiro-porto-seguro', label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-porto-seguro' },
+  { slug: 'cozinheiro-porto-seguro', label: 'Cozinheiro', emoji: '👨‍🍳', path: '/servicos/cozinheiro-porto-seguro' },
+  { slug: 'jardineiro-porto-seguro', label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-porto-seguro' },
+  { slug: 'pedreiro-porto-seguro', label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-porto-seguro' },
+];
 
 export default function DestinoPortoSeguro() {
-  useEffect(() => {
-    document.title = "Porto Seguro Bahia | Serviços e Profissionais Verificados — Trancoso Resolve";
-
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Encontre profissionais verificados em Porto Seguro, BA: diaristas, eletricistas, piscineiros, cozinheiros, jardineiros e muito mais. Atendimento para hotéis, resorts e residências de alto padrão.";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = "https://www.trancosoresolve.com.br/destinos/porto-seguro";
-
-    const existingSchema = document.getElementById('schema-destino-porto-seguro');
-    if (existingSchema) existingSchema.remove();
-    const schema = document.createElement('script');
-    schema.id = 'schema-destino-porto-seguro';
-    schema.type = 'application/ld+json';
-    schema.text = JSON.stringify({
+  useDestinationSeo({
+    title: "Porto Seguro Bahia | Serviços e Profissionais Verificados — Trancoso Resolve",
+    description: "Encontre profissionais verificados em Porto Seguro, BA: diaristas, eletricistas, piscineiros, cozinheiros e jardineiros para hotéis, resorts e residências de alto padrão.",
+    canonical: "https://www.trancosoresolve.com.br/destinos/porto-seguro",
+    schemaId: "schema-destino-porto-seguro",
+    schema: {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Trancoso Resolve — Serviços em Porto Seguro",
       "description": "Marketplace de serviços locais em Porto Seguro, Bahia. Profissionais verificados para hotéis, resorts e residências.",
       "url": "https://www.trancosoresolve.com.br/destinos/porto-seguro",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Porto Seguro",
-        "addressRegion": "BA",
-        "addressCountry": "BR"
-      },
+      "address": { "@type": "PostalAddress", "addressLocality": "Porto Seguro", "addressRegion": "BA", "addressCountry": "BR" },
       "geo": { "@type": "GeoCoordinates", "latitude": -16.4497, "longitude": -39.0648 },
       "areaServed": { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" }
-    });
-    document.head.appendChild(schema);
-    return () => { const s = document.getElementById('schema-destino-porto-seguro'); if (s) s.remove(); };
-  }, []);
-
-  const servicos = [
-    { label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-porto-seguro' },
-    { label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-porto-seguro' },
-    { label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-porto-seguro' },
-    { label: 'Cozinheiro', emoji: '👨‍🍳', path: '/servicos/cozinheiro-porto-seguro' },
-    { label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-porto-seguro' },
-    { label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-porto-seguro' },
-  ];
+    },
+  });
 
   return (
     <div className="bg-slate-50 overflow-x-hidden">
@@ -56,7 +41,7 @@ export default function DestinoPortoSeguro() {
       <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white py-20 md:py-32 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80')" }}
+          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
           aria-hidden="true"
         />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
@@ -134,7 +119,7 @@ export default function DestinoPortoSeguro() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {servicos.map((s) => (
-              <Link key={s.label} to={s.path}>
+              <Link key={s.slug} to={s.path}>
                 <div className="bg-white rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-200 border border-slate-100 hover:border-amber-300 group h-full flex flex-col items-center justify-center">
                   <span className="text-2xl block mb-2" aria-hidden="true">{s.emoji}</span>
                   <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700 transition-colors">{s.label}</span>
@@ -168,10 +153,10 @@ export default function DestinoPortoSeguro() {
           <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { nome: 'Trancoso', emoji: '🏄', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
-              { nome: 'Caraíva', emoji: '🌊', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
+              { slug: 'trancoso', nome: 'Trancoso', emoji: '🏄', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
+              { slug: 'caraiva', nome: 'Caraíva', emoji: '🌊', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
             ].map((d) => (
-              <Link key={d.nome} to={d.path}>
+              <Link key={d.slug} to={d.path}>
                 <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border border-slate-100 hover:border-amber-300 group flex gap-4 items-start">
                   <span className="text-3xl">{d.emoji}</span>
                   <div>

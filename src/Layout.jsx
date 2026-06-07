@@ -79,9 +79,6 @@ export default function Layout({ children, currentPageName }) {
       '/Assistentevirtual': 'Assistente IA | Trancoso Resolve',
       '/login': 'Entrar | Trancoso Resolve',
       '/register': 'Cadastrar | Trancoso Resolve',
-      '/destinos/trancoso': 'Trancoso Bahia | Serviços Verificados — Trancoso Resolve',
-      '/destinos/porto-seguro': 'Porto Seguro Bahia | Serviços Verificados — Trancoso Resolve',
-      '/destinos/caraiva': 'Caraíva Bahia | Serviços Verificados — Trancoso Resolve',
     };
 
     const pageDescriptions = {
@@ -98,9 +95,6 @@ export default function Layout({ children, currentPageName }) {
       '/Assistentevirtual': 'Converse com o Toca TrIA, o assistente inteligente da Trancoso Resolve. Encontre o profissional certo para sua necessidade em segundos.',
       '/login': 'Acesse sua conta na Trancoso Resolve para gerenciar pedidos, contratar serviços e conectar-se com profissionais verificados em Trancoso.',
       '/register': 'Crie sua conta gratuita na Trancoso Resolve e acesse os melhores profissionais verificados de Trancoso, Bahia.',
-      '/destinos/trancoso': 'Encontre diaristas, eletricistas, piscineiros e chefs verificados em Trancoso. Profissionais avaliados para sua villa, pousada ou residência no Quadrado.',
-      '/destinos/porto-seguro': 'Encontre profissionais verificados em Porto Seguro, BA. Diaristas, eletricistas, piscineiros e mais para hotéis, resorts e residências de alto padrão.',
-      '/destinos/caraiva': 'Encontre profissionais verificados em Caraíva, BA. Equipes especializadas na logística especial da vila sem carros mais charmosa da Bahia.',
     };
 
     const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
@@ -232,15 +226,15 @@ export default function Layout({ children, currentPageName }) {
                   <DropdownMenuContent align="start" className="w-52">
                     <DropdownMenuLabel>Nossas Cidades</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <Link to="/destinos/trancoso">
-                      <DropdownMenuItem className="cursor-pointer">🏄 Trancoso</DropdownMenuItem>
-                    </Link>
-                    <Link to="/destinos/porto-seguro">
-                      <DropdownMenuItem className="cursor-pointer">⚓ Porto Seguro</DropdownMenuItem>
-                    </Link>
-                    <Link to="/destinos/caraiva">
-                      <DropdownMenuItem className="cursor-pointer">🌊 Caraíva</DropdownMenuItem>
-                    </Link>
+                    <DropdownMenuItem asChild>
+                      <Link to="/destinos/trancoso">🏄 Trancoso</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/destinos/porto-seguro">⚓ Porto Seguro</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/destinos/caraiva">🌊 Caraíva</Link>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
 

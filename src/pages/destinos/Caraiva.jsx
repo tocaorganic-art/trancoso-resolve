@@ -1,54 +1,39 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Star, Waves, TreePine, Heart, Leaf } from "lucide-react";
 import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import { useDestinationSeo } from "@/hooks/useDestinationSeo";
+
+const HERO_IMAGE = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80";
+
+const servicos = [
+  { slug: 'diarista-caraiva', label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-caraiva' },
+  { slug: 'eletricista-caraiva', label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-caraiva' },
+  { slug: 'piscineiro-caraiva', label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-caraiva' },
+  { slug: 'cozinheiro-caraiva', label: 'Cozinheiro', emoji: '👨‍🍳', path: '/servicos/cozinheiro-caraiva' },
+  { slug: 'jardineiro-caraiva', label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-caraiva' },
+  { slug: 'pedreiro-caraiva', label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-caraiva' },
+];
 
 export default function DestinoCaraiva() {
-  useEffect(() => {
-    document.title = "Caraíva Bahia | Serviços e Profissionais Verificados — Trancoso Resolve";
-
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Encontre profissionais verificados em Caraíva, BA: diaristas, eletricistas, piscineiros, cozinheiros e jardineiros. Atendimento na vila sem carros mais charmosa da Bahia.";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = "https://www.trancosoresolve.com.br/destinos/caraiva";
-
-    const existingSchema = document.getElementById('schema-destino-caraiva');
-    if (existingSchema) existingSchema.remove();
-    const schema = document.createElement('script');
-    schema.id = 'schema-destino-caraiva';
-    schema.type = 'application/ld+json';
-    schema.text = JSON.stringify({
+  useDestinationSeo({
+    title: "Caraíva Bahia | Serviços e Profissionais Verificados — Trancoso Resolve",
+    description: "Encontre profissionais verificados em Caraíva, BA: diaristas, eletricistas, piscineiros, cozinheiros e jardineiros. Atendimento na vila sem carros mais charmosa da Bahia.",
+    canonical: "https://www.trancosoresolve.com.br/destinos/caraiva",
+    schemaId: "schema-destino-caraiva",
+    schema: {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Trancoso Resolve — Serviços em Caraíva",
       "description": "Marketplace de serviços locais em Caraíva, Bahia. Profissionais verificados para a vila sem carros mais charmosa do Brasil.",
       "url": "https://www.trancosoresolve.com.br/destinos/caraiva",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Caraíva",
-        "addressRegion": "BA",
-        "addressCountry": "BR"
-      },
+      "address": { "@type": "PostalAddress", "addressLocality": "Caraíva", "addressRegion": "BA", "addressCountry": "BR" },
       "geo": { "@type": "GeoCoordinates", "latitude": -16.7667, "longitude": -39.2167 },
       "areaServed": { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
-    });
-    document.head.appendChild(schema);
-    return () => { const s = document.getElementById('schema-destino-caraiva'); if (s) s.remove(); };
-  }, []);
-
-  const servicos = [
-    { label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-caraiva' },
-    { label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-caraiva' },
-    { label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-caraiva' },
-    { label: 'Cozinheiro', emoji: '👨‍🍳', path: '/servicos/cozinheiro-caraiva' },
-    { label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-caraiva' },
-    { label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-caraiva' },
-  ];
+    },
+  });
 
   return (
     <div className="bg-slate-50 overflow-x-hidden">
@@ -56,7 +41,7 @@ export default function DestinoCaraiva() {
       <section className="relative bg-gradient-to-br from-slate-900 via-green-900 to-slate-800 text-white py-20 md:py-32 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80')" }}
+          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
           aria-hidden="true"
         />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
@@ -134,7 +119,7 @@ export default function DestinoCaraiva() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {servicos.map((s) => (
-              <Link key={s.label} to={s.path}>
+              <Link key={s.slug} to={s.path}>
                 <div className="bg-white rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-200 border border-slate-100 hover:border-amber-300 group h-full flex flex-col items-center justify-center">
                   <span className="text-2xl block mb-2" aria-hidden="true">{s.emoji}</span>
                   <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700 transition-colors">{s.label}</span>
@@ -171,10 +156,10 @@ export default function DestinoCaraiva() {
           <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { nome: 'Trancoso', emoji: '🏄', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
-              { nome: 'Porto Seguro', emoji: '⚓', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
+              { slug: 'trancoso', nome: 'Trancoso', emoji: '🏄', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
+              { slug: 'porto-seguro', nome: 'Porto Seguro', emoji: '⚓', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
             ].map((d) => (
-              <Link key={d.nome} to={d.path}>
+              <Link key={d.slug} to={d.path}>
                 <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border border-slate-100 hover:border-amber-300 group flex gap-4 items-start">
                   <span className="text-3xl">{d.emoji}</span>
                   <div>

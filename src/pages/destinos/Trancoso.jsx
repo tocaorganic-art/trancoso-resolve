@@ -1,64 +1,49 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Star, Utensils, Waves, Sun, Heart } from "lucide-react";
 import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import { useDestinationSeo } from "@/hooks/useDestinationSeo";
+
+const HERO_IMAGE = "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=80";
+
+const servicos = [
+  { slug: 'diarista-trancoso', label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-trancoso' },
+  { slug: 'eletricista-trancoso', label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-trancoso' },
+  { slug: 'piscineiro-trancoso', label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-trancoso' },
+  { slug: 'chef-trancoso', label: 'Chef Particular', emoji: '👨‍🍳', path: '/servicos/chef-trancoso' },
+  { slug: 'jardineiro-trancoso', label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-trancoso' },
+  { slug: 'encanador-trancoso', label: 'Encanador', emoji: '🔧', path: '/servicos/encanador-trancoso' },
+  { slug: 'pedreiro-trancoso', label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-trancoso' },
+  { slug: 'pintor-trancoso', label: 'Pintor', emoji: '🖌️', path: '/servicos/pintor-trancoso' },
+  { slug: 'seguranca-trancoso', label: 'Segurança', emoji: '🛡️', path: '/servicos/seguranca-trancoso' },
+  { slug: 'motorista-trancoso', label: 'Motorista', emoji: '🚗', path: '/servicos/motorista-trancoso' },
+];
+
+const bairros = [
+  { slug: 'quadrado-trancoso', nome: 'Quadrado de Trancoso', path: '/servicos/quadrado-trancoso' },
+  { slug: 'rio-verde-trancoso', nome: 'Rio Verde', path: '/servicos/rio-verde-trancoso' },
+  { slug: 'pitinga-trancoso', nome: 'Pitinga', path: '/servicos/pitinga-trancoso' },
+];
 
 export default function DestinoTrancoso() {
-  useEffect(() => {
-    document.title = "Trancoso Bahia | Serviços e Profissionais Verificados — Trancoso Resolve";
-
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Encontre profissionais verificados em Trancoso, BA: diaristas, eletricistas, piscineiros, chefs, jardineiros e muito mais. Atendimento para villas, pousadas e casas no Quadrado.";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = "https://www.trancosoresolve.com.br/destinos/trancoso";
-
-    const existingSchema = document.getElementById('schema-destino-trancoso');
-    if (existingSchema) existingSchema.remove();
-    const schema = document.createElement('script');
-    schema.id = 'schema-destino-trancoso';
-    schema.type = 'application/ld+json';
-    schema.text = JSON.stringify({
+  useDestinationSeo({
+    title: "Trancoso Bahia | Serviços e Profissionais Verificados — Trancoso Resolve",
+    description: "Encontre diaristas, eletricistas, piscineiros, chefs e mais em Trancoso, BA. Profissionais verificados para sua villa, pousada ou residência no Quadrado.",
+    canonical: "https://www.trancosoresolve.com.br/destinos/trancoso",
+    schemaId: "schema-destino-trancoso",
+    schema: {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Trancoso Resolve — Serviços em Trancoso",
       "description": "Marketplace de serviços locais em Trancoso, Bahia. Profissionais verificados para villas, pousadas e residências.",
       "url": "https://www.trancosoresolve.com.br/destinos/trancoso",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Trancoso",
-        "addressRegion": "BA",
-        "addressCountry": "BR"
-      },
+      "address": { "@type": "PostalAddress", "addressLocality": "Trancoso", "addressRegion": "BA", "addressCountry": "BR" },
       "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
       "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" }
-    });
-    document.head.appendChild(schema);
-    return () => { const s = document.getElementById('schema-destino-trancoso'); if (s) s.remove(); };
-  }, []);
-
-  const servicos = [
-    { slug: 'diarista-trancoso', label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-trancoso' },
-    { slug: 'eletricista-trancoso', label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-trancoso' },
-    { slug: 'piscineiro-trancoso', label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-trancoso' },
-    { slug: 'chef-trancoso', label: 'Chef Particular', emoji: '👨‍🍳', path: '/servicos/chef-trancoso' },
-    { slug: 'jardineiro-trancoso', label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-trancoso' },
-    { slug: 'encanador-trancoso', label: 'Encanador', emoji: '🔧', path: '/servicos/encanador-trancoso' },
-    { slug: 'pedreiro-trancoso', label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-trancoso' },
-    { slug: 'pintor-trancoso', label: 'Pintor', emoji: '🖌️', path: '/servicos/pintor-trancoso' },
-    { slug: 'seguranca-trancoso', label: 'Segurança', emoji: '🛡️', path: '/servicos/seguranca-trancoso' },
-    { slug: 'motorista-trancoso', label: 'Motorista', emoji: '🚗', path: '/servicos/motorista-trancoso' },
-  ];
-
-  const bairros = [
-    { nome: 'Quadrado de Trancoso', slug: 'quadrado-trancoso', path: '/servicos/quadrado-trancoso' },
-    { nome: 'Rio Verde', slug: 'rio-verde-trancoso', path: '/servicos/rio-verde-trancoso' },
-    { nome: 'Pitinga', slug: 'pitinga-trancoso', path: '/servicos/pitinga-trancoso' },
-  ];
+    },
+  });
 
   return (
     <div className="bg-slate-50 overflow-x-hidden">
@@ -66,7 +51,7 @@ export default function DestinoTrancoso() {
       <section className="relative bg-gradient-to-br from-slate-900 via-amber-900 to-slate-800 text-white py-20 md:py-32 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80')" }}
+          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
           aria-hidden="true"
         />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
@@ -176,10 +161,10 @@ export default function DestinoTrancoso() {
           <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { nome: 'Porto Seguro', emoji: '⚓', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
-              { nome: 'Caraíva', emoji: '🌊', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
+              { slug: 'porto-seguro', nome: 'Porto Seguro', emoji: '⚓', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
+              { slug: 'caraiva', nome: 'Caraíva', emoji: '🌊', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
             ].map((d) => (
-              <Link key={d.nome} to={d.path}>
+              <Link key={d.slug} to={d.path}>
                 <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border border-slate-100 hover:border-amber-300 group flex gap-4 items-start">
                   <span className="text-3xl">{d.emoji}</span>
                   <div>
