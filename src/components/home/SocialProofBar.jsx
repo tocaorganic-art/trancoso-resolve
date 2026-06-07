@@ -1,5 +1,5 @@
 import React from "react";
-import { ShieldCheck, CreditCard, Users } from "lucide-react";
+import { ShieldCheck, CreditCard, Users, MapPin } from "lucide-react";
 
 export default function SocialProofBar({ totalVerificados = 0 }) {
   const prestadoresDisplay = totalVerificados > 0 ? totalVerificados : 19;
@@ -7,13 +7,14 @@ export default function SocialProofBar({ totalVerificados = 0 }) {
   const metrics = [
     { icon: Users, value: `${prestadoresDisplay} profissionais`, label: "cadastrados na plataforma" },
     { icon: ShieldCheck, value: "Prestadores verificados", label: "com antecedentes checados" },
+    { icon: MapPin, value: "3 destinos", label: "Trancoso, Porto Seguro e Caraíva" },
     { icon: CreditCard, value: "Pagamento seguro", label: "para todos os serviços" },
   ];
 
   return (
     <div className="bg-white border-b border-slate-200 py-5 px-4" aria-label="Estatísticas da plataforma">
-      <div className="container mx-auto max-w-4xl">
-        <div className="flex items-center justify-center gap-6 md:gap-12 flex-wrap">
+      <div className="container mx-auto max-w-5xl">
+        <div className="flex items-center justify-center gap-4 md:gap-10 flex-wrap">
           {metrics.map((m, i) => {
             const Icon = m.icon;
             return (

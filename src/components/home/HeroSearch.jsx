@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Search, Home, Zap, Wrench, Leaf, UtensilsCrossed, Hammer, Paintbrush, ShieldCheck } from "lucide-react";
+import { Search, Home, Zap, Wrench, Leaf, UtensilsCrossed, Hammer, Paintbrush, ShieldCheck, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -14,6 +14,12 @@ const QUICK_CATEGORIES = [
   { label: "Garçom", icon: UtensilsCrossed, cat: "Garçom" },
   { label: "Pedreiro", icon: Hammer, cat: "Pedreiro" },
   { label: "Pintor", icon: Paintbrush, cat: "Pintor" },
+];
+
+const DESTINOS = [
+  { label: "Trancoso", emoji: "🏄", path: "/destinos/trancoso" },
+  { label: "Porto Seguro", emoji: "⚓", path: "/destinos/porto-seguro" },
+  { label: "Caraíva", emoji: "🌊", path: "/destinos/caraiva" },
 ];
 
 export default function HeroSearch() {
@@ -37,17 +43,31 @@ export default function HeroSearch() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
           <ShieldCheck className="w-3.5 h-3.5" />
-          Profissionais verificados em Trancoso, Bahia
+          Profissionais verificados em Trancoso, Porto Seguro e Caraíva
         </div>
 
         {/* Headline */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4 drop-shadow-lg">
-          Precisa resolver algo{" "}
-          <span className="text-amber-400">em Trancoso?</span>
+          Precisa resolver algo na{" "}
+          <span className="text-amber-400">Costa do Descobrimento?</span>
         </h1>
-        <p className="text-base md:text-lg text-slate-300 mb-10 max-w-xl mx-auto leading-relaxed">
-          Encontre profissionais verificados para qualquer serviço — rápido e sem complicação.
+        <p className="text-base md:text-lg text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
+          Encontre profissionais verificados em Trancoso, Porto Seguro e Caraíva — rápido e sem complicação.
         </p>
+
+        {/* Destinos chips */}
+        <div className="flex gap-2 justify-center mb-8">
+          {DESTINOS.map((d) => (
+            <Link
+              key={d.path}
+              to={d.path}
+              className="flex items-center gap-1.5 bg-white/10 hover:bg-amber-500/20 border border-white/20 hover:border-amber-400/50 text-white text-xs font-semibold px-3 py-2 rounded-full transition-all"
+            >
+              <MapPin className="w-3 h-3 text-amber-400" />
+              {d.emoji} {d.label}
+            </Link>
+          ))}
+        </div>
 
         {/* Search */}
         <form onSubmit={handleSearch} className="flex gap-2 w-full max-w-xl mx-auto mb-8">

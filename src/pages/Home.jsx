@@ -248,7 +248,7 @@ export default function HomePage() {
         {
           "@type": "LocalBusiness",
           "name": "Trancoso Resolve",
-          "description": "Marketplace de serviços locais em Trancoso, Bahia. Profissionais verificados para limpeza, elétrica, jardinagem, cozinha, encanamento e muito mais.",
+          "description": "Marketplace de serviços locais em Trancoso, Porto Seguro e Caraíva. Profissionais verificados para limpeza, elétrica, jardinagem, cozinha, encanamento e muito mais na Costa do Descobrimento.",
           "url": `${window.location.origin}`,
           "logo": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
           "image": "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png",
@@ -259,7 +259,11 @@ export default function HomePage() {
             "addressCountry": "BR"
           },
           "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
-          "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+          "areaServed": [
+            { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+            { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
+            { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
+          ],
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
             "name": "Serviços em Trancoso",

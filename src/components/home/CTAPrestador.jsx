@@ -27,10 +27,10 @@ export default function CTAPrestador({ vagasRestantes = 0 }) {
             </div>
           )}
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight">
-            Está na hora do seu serviço aparecer em Trancoso.
+            Faça parte da nossa rede em Trancoso, Porto Seguro e Caraíva.
           </h2>
           <p className="text-slate-300 text-sm md:text-base mb-6 leading-relaxed">
-            50 vagas com preço de lançamento. Perfil verificado, agenda integrada e clientes reais. Comece com 2 meses grátis.
+            Cadastre-se como prestador de serviços de qualidade na Costa do Descobrimento. Perfil verificado, agenda integrada e clientes reais. Comece com 2 meses grátis.
           </p>
           <Link to="/SejaPrestador">
             <Button className="bg-cyan-500 hover:bg-cyan-400 text-white font-bold px-6 py-3">
