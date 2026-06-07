@@ -59,6 +59,9 @@ import JardineiroCaraiva from '@/pages/servicos/JardineiroCaraiva';
 import PedreiroCaraiva from '@/pages/servicos/PedreiroCaraiva';
 import RelatorioDiarioPage from '@/pages/RelatorioDiarioPage';
 import ServicosCategoria from '@/pages/ServicosCategoria';
+import DestinoTrancoso from '@/pages/destinos/Trancoso';
+import DestinoPortoSeguro from '@/pages/destinos/PortoSeguro';
+import DestinoCaraiva from '@/pages/destinos/Caraiva';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -361,6 +364,22 @@ const AuthenticatedApp = () => {
         <Route path="/servicos-cozinheiro-caraiva" element={<LayoutWrapper currentPageName="CozinheiroCaraiva"><AnimatedPage><CozinheiroCaraiva /></AnimatedPage></LayoutWrapper>} />
         <Route path="/servicos-jardineiro-caraiva" element={<LayoutWrapper currentPageName="JardineiroCaraiva"><AnimatedPage><JardineiroCaraiva /></AnimatedPage></LayoutWrapper>} />
         <Route path="/servicos-pedreiro-caraiva" element={<LayoutWrapper currentPageName="PedreiroCaraiva"><AnimatedPage><PedreiroCaraiva /></AnimatedPage></LayoutWrapper>} />
+
+        <Route path="/destinos/trancoso" element={
+          <LayoutWrapper currentPageName="DestinoTrancoso">
+            <AnimatedPage><DestinoTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/destinos/porto-seguro" element={
+          <LayoutWrapper currentPageName="DestinoPortoSeguro">
+            <AnimatedPage><DestinoPortoSeguro /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/destinos/caraiva" element={
+          <LayoutWrapper currentPageName="DestinoCaraiva">
+            <AnimatedPage><DestinoCaraiva /></AnimatedPage>
+          </LayoutWrapper>
+        } />
 
         <Route path="/RelatorioDiario" element={
           <AnimatedPage><RelatorioDiarioPage /></AnimatedPage>

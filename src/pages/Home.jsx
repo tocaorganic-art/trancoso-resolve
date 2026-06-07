@@ -646,6 +646,7 @@ export default function HomePage() {
                 cidade: 'Trancoso',
                 emoji: '🏄',
                 desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.',
+                destinoHref: '/destinos/trancoso',
                 links: [
                   { label: 'Diarista Trancoso', href: '/servicos/diarista-trancoso' },
                   { label: 'Eletricista Trancoso', href: '/servicos/eletricista-trancoso' },
@@ -656,6 +657,7 @@ export default function HomePage() {
                 cidade: 'Porto Seguro',
                 emoji: '⚓',
                 desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.',
+                destinoHref: '/destinos/porto-seguro',
                 links: [
                   { label: 'Diarista Porto Seguro', href: '/servicos/diarista-porto-seguro' },
                   { label: 'Eletricista Porto Seguro', href: '/servicos/eletricista-porto-seguro' },
@@ -666,6 +668,7 @@ export default function HomePage() {
                 cidade: 'Caraíva',
                 emoji: '🌊',
                 desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.',
+                destinoHref: '/destinos/caraiva',
                 links: [
                   { label: 'Diarista Caraíva', href: '/servicos/diarista-caraiva' },
                   { label: 'Eletricista Caraíva', href: '/servicos/eletricista-caraiva' },
@@ -673,11 +676,11 @@ export default function HomePage() {
                 ],
               },
             ].map((dest) => (
-              <div key={dest.cidade} className="bg-white rounded-2xl p-6 shadow-sm border border-amber-100">
+              <div key={dest.cidade} className="bg-white rounded-2xl p-6 shadow-sm border border-amber-100 flex flex-col">
                 <div className="text-3xl mb-3">{dest.emoji}</div>
                 <h3 className="font-bold text-lg text-slate-900 mb-2">{dest.cidade}</h3>
-                <p className="text-slate-500 text-sm mb-4 leading-relaxed">{dest.desc}</p>
-                <ul className="space-y-2">
+                <p className="text-slate-500 text-sm mb-4 leading-relaxed flex-grow">{dest.desc}</p>
+                <ul className="space-y-2 mb-4">
                   {dest.links.map((link) => (
                     <li key={link.href}>
                       <Link to={link.href} className="text-amber-700 hover:text-amber-900 text-sm font-medium flex items-center gap-1 group">
@@ -687,6 +690,10 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ul>
+                <Link to={dest.destinoHref} className="text-xs font-semibold text-amber-600 hover:text-amber-800 flex items-center gap-1 border-t border-amber-100 pt-3 transition-colors group">
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  Ver página de {dest.cidade}
+                </Link>
               </div>
             ))}
           </div>
