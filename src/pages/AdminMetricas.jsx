@@ -10,7 +10,6 @@ import TabVisaoGeral from "@/components/admin/metricas/TabVisaoGeral";
 import TabSEO from "@/components/admin/metricas/TabSEO";
 import TabLeads from "@/components/admin/metricas/TabLeads";
 import TabPrestadores from "@/components/admin/metricas/TabPrestadores";
-import { generateWeeklyReport } from "@/functions/generateWeeklyReport";
 
 export default function AdminMetricas() {
   const navigate = useNavigate();
@@ -70,7 +69,7 @@ export default function AdminMetricas() {
   const handleSendReport = async () => {
     setSendingReport(true);
     try {
-      await generateWeeklyReport({});
+      await base44.functions.invoke('generateWeeklyReport', {});
       toast.success("Relatório semanal enviado para tocaorganic@gmail.com!");
     } catch {
       toast.error("Erro ao gerar relatório.");

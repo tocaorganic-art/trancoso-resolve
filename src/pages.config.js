@@ -1,33 +1,37 @@
+import { lazy } from 'react';
 import Home from './pages/Home';
-import Financeiro from './pages/Financeiro';
-import Manual from './pages/Manual';
-import Planos from './pages/Planos';
-import AdminAssinaturas from './pages/AdminAssinaturas';
-import ServicosCategoria from './pages/ServicosCategoria';
-import PrestadorPerfil from './pages/PrestadorPerfil';
-import CadastroTipo from './pages/CadastroTipo';
-import MeuPerfilPrestador from './pages/MeuPerfilPrestador';
-import MinhaAgenda from './pages/MinhaAgenda';
-import MeusPedidos from './pages/MeusPedidos';
-import Dashboard from './pages/Dashboard';
-import PoliticaPrivacidade from './pages/PoliticaPrivacidade';
-import SejaPrestador from './pages/SejaPrestador';
-import ComoFunciona from './pages/ComoFunciona';
-import Seguranca from './pages/Seguranca';
-import Assistentevirtual from './pages/Assistentevirtual';
-import GeradorDeImagem from './pages/GeradorDeImagem';
-import ServicoDetalhes from './pages/ServicoDetalhes';
-import MeusServicos from './pages/MeusServicos.jsx';
-import DiagnosticosCompletos from './pages/DiagnosticosCompletos';
-import ManutencaoSistema from './pages/ManutencaoSistema';
-import MonitoringDashboard from './pages/MonitoringDashboard';
-import AdminControleFinanceiro from './pages/AdminControleFinanceiro';
-import AdminUserManagement from './pages/AdminUserManagement';
-import Base44ReportViewer from './pages/Base44ReportViewer';
-import Base44Templates from './pages/Base44Templates';
-import DeployDashboard from './pages/DeployDashboard';
-import Chat from './pages/Chat';
 import __Layout from './Layout.jsx';
+
+// Home permanece eager (rota principal, crítica para LCP).
+// Demais páginas são carregadas sob demanda (code-splitting) para reduzir o bundle inicial.
+const Financeiro = lazy(() => import('./pages/Financeiro'));
+const Manual = lazy(() => import('./pages/Manual'));
+const Planos = lazy(() => import('./pages/Planos'));
+const AdminAssinaturas = lazy(() => import('./pages/AdminAssinaturas'));
+const ServicosCategoria = lazy(() => import('./pages/ServicosCategoria'));
+const PrestadorPerfil = lazy(() => import('./pages/PrestadorPerfil'));
+const CadastroTipo = lazy(() => import('./pages/CadastroTipo'));
+const MeuPerfilPrestador = lazy(() => import('./pages/MeuPerfilPrestador'));
+const MinhaAgenda = lazy(() => import('./pages/MinhaAgenda'));
+const MeusPedidos = lazy(() => import('./pages/MeusPedidos'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const PoliticaPrivacidade = lazy(() => import('./pages/PoliticaPrivacidade'));
+const SejaPrestador = lazy(() => import('./pages/SejaPrestador'));
+const ComoFunciona = lazy(() => import('./pages/ComoFunciona'));
+const Seguranca = lazy(() => import('./pages/Seguranca'));
+const Assistentevirtual = lazy(() => import('./pages/Assistentevirtual'));
+const GeradorDeImagem = lazy(() => import('./pages/GeradorDeImagem'));
+const ServicoDetalhes = lazy(() => import('./pages/ServicoDetalhes'));
+const MeusServicos = lazy(() => import('./pages/MeusServicos.jsx'));
+const DiagnosticosCompletos = lazy(() => import('./pages/DiagnosticosCompletos'));
+const ManutencaoSistema = lazy(() => import('./pages/ManutencaoSistema'));
+const MonitoringDashboard = lazy(() => import('./pages/MonitoringDashboard'));
+const AdminControleFinanceiro = lazy(() => import('./pages/AdminControleFinanceiro'));
+const AdminUserManagement = lazy(() => import('./pages/AdminUserManagement'));
+const Base44ReportViewer = lazy(() => import('./pages/Base44ReportViewer'));
+const Base44Templates = lazy(() => import('./pages/Base44Templates'));
+const DeployDashboard = lazy(() => import('./pages/DeployDashboard'));
+const Chat = lazy(() => import('./pages/Chat'));
 
 
 export const PAGES = {

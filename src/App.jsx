@@ -8,6 +8,7 @@ import AndroidBackHandler from '@/components/android/AndroidBackHandler'
 import AndroidBottomTabsPreserver from '@/components/android/AndroidBottomTabsPreserver'
 import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -15,53 +16,55 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import Login from '@/pages/Login';
 import { Navigate } from 'react-router-dom';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import FilaVerificacaoPage from '@/pages/FilaVerificacao';
-import AdminPagamentosPage from '@/pages/AdminPagamentos';
-import PreLancamentoPage from '@/pages/PreLancamento';
-import AdminAntecedentesPage from '@/pages/AdminAntecedentes';
-import ServicoLandingPage from '@/pages/ServicoLanding';
-import SolicitacaoConfirmadaPage from '@/pages/SolicitacaoConfirmada';
-import AboutPage from '@/pages/About';
-import ContactPage from '@/pages/Contact';
-import AssistenteVirtualPage from '@/pages/AssistenteVirtual';
-import VerificacaoDocumentoPage from '@/pages/VerificacaoDocumento';
-import VerificacaoAntecedentesPage from '@/pages/VerificacaoAntecedentes';
-import PoliticaDevolucoesPage from '@/pages/PoliticaDevolucoes';
-import TermosDeServicoPage from '@/pages/TermosDeServico';
-import AssinaturaConfirmadaPage from '@/pages/AssinaturaConfirmada';
-import SeoDashboard from '@/pages/admin/SeoDashboard';
-import ConfiguracaoMarketing from '@/pages/admin/ConfiguracaoMarketing';
-import DiaristaTrancoso from '@/pages/servicos/DiaristaTrancoso';
-import AdminMetricasPage from '@/pages/AdminMetricas';
-import EletricistaTrancoso from '@/pages/servicos/EletricistaTrancoso';
-import PiscineiroTrancoso from '@/pages/servicos/PiscineiroTrancoso';
-import PedreiroTrancoso from '@/pages/servicos/PedreiroTrancoso';
-import PintorTrancoso from '@/pages/servicos/PintorTrancoso';
-import JardineiroTrancoso from '@/pages/servicos/JardineiroTrancoso';
-import EncanadorTrancoso from '@/pages/servicos/EncanadorTrancoso';
-import ChefTrancoso from '@/pages/servicos/ChefTrancoso';
-import SegurancaTrancoso from '@/pages/servicos/SegurancaTrancoso';
-import MotoristaTrancoso from '@/pages/servicos/MotoristaTrancoso';
-import QuadradoTrancoso from '@/pages/servicos/QuadradoTrancoso';
-import RioVerdeTrancoso from '@/pages/servicos/RioVerdeTrancoso';
-import PitingaTrancoso from '@/pages/servicos/PitingaTrancoso';
-import DiaristaPortoSeguro from '@/pages/servicos/DiaristaPortoSeguro';
-import EletricistaPortoSeguro from '@/pages/servicos/EletricistaPortoSeguro';
-import PiscineiroPortoSeguro from '@/pages/servicos/PiscineiroPortoSeguro';
-import CozinheiroPortoSeguro from '@/pages/servicos/CozinheiroPortoSeguro';
-import JardineiroPortoSeguro from '@/pages/servicos/JardineiroPortoSeguro';
-import PedreiroPortoSeguro from '@/pages/servicos/PedreiroPortoSeguro';
-import DiaristaCaraiva from '@/pages/servicos/DiaristaCaraiva';
-import EletricistaCaraiva from '@/pages/servicos/EletricistaCaraiva';
-import PiscineiroCaraiva from '@/pages/servicos/PiscineiroCaraiva';
-import CozinheiroCaraiva from '@/pages/servicos/CozinheiroCaraiva';
-import JardineiroCaraiva from '@/pages/servicos/JardineiroCaraiva';
-import PedreiroCaraiva from '@/pages/servicos/PedreiroCaraiva';
-import RelatorioDiarioPage from '@/pages/RelatorioDiarioPage';
-import ServicosCategoria from '@/pages/ServicosCategoria';
-import DestinoTrancoso from '@/pages/destinos/Trancoso';
-import DestinoPortoSeguro from '@/pages/destinos/PortoSeguro';
-import DestinoCaraiva from '@/pages/destinos/Caraiva';
+
+// Páginas carregadas sob demanda (code-splitting) para reduzir o bundle inicial.
+const FilaVerificacaoPage = lazy(() => import('@/pages/FilaVerificacao'));
+const AdminPagamentosPage = lazy(() => import('@/pages/AdminPagamentos'));
+const PreLancamentoPage = lazy(() => import('@/pages/PreLancamento'));
+const AdminAntecedentesPage = lazy(() => import('@/pages/AdminAntecedentes'));
+const ServicoLandingPage = lazy(() => import('@/pages/ServicoLanding'));
+const SolicitacaoConfirmadaPage = lazy(() => import('@/pages/SolicitacaoConfirmada'));
+const AboutPage = lazy(() => import('@/pages/About'));
+const ContactPage = lazy(() => import('@/pages/Contact'));
+const AssistenteVirtualPage = lazy(() => import('@/pages/AssistenteVirtual'));
+const VerificacaoDocumentoPage = lazy(() => import('@/pages/VerificacaoDocumento'));
+const VerificacaoAntecedentesPage = lazy(() => import('@/pages/VerificacaoAntecedentes'));
+const PoliticaDevolucoesPage = lazy(() => import('@/pages/PoliticaDevolucoes'));
+const TermosDeServicoPage = lazy(() => import('@/pages/TermosDeServico'));
+const AssinaturaConfirmadaPage = lazy(() => import('@/pages/AssinaturaConfirmada'));
+const SeoDashboard = lazy(() => import('@/pages/admin/SeoDashboard'));
+const ConfiguracaoMarketing = lazy(() => import('@/pages/admin/ConfiguracaoMarketing'));
+const DiaristaTrancoso = lazy(() => import('@/pages/servicos/DiaristaTrancoso'));
+const AdminMetricasPage = lazy(() => import('@/pages/AdminMetricas'));
+const EletricistaTrancoso = lazy(() => import('@/pages/servicos/EletricistaTrancoso'));
+const PiscineiroTrancoso = lazy(() => import('@/pages/servicos/PiscineiroTrancoso'));
+const PedreiroTrancoso = lazy(() => import('@/pages/servicos/PedreiroTrancoso'));
+const PintorTrancoso = lazy(() => import('@/pages/servicos/PintorTrancoso'));
+const JardineiroTrancoso = lazy(() => import('@/pages/servicos/JardineiroTrancoso'));
+const EncanadorTrancoso = lazy(() => import('@/pages/servicos/EncanadorTrancoso'));
+const ChefTrancoso = lazy(() => import('@/pages/servicos/ChefTrancoso'));
+const SegurancaTrancoso = lazy(() => import('@/pages/servicos/SegurancaTrancoso'));
+const MotoristaTrancoso = lazy(() => import('@/pages/servicos/MotoristaTrancoso'));
+const QuadradoTrancoso = lazy(() => import('@/pages/servicos/QuadradoTrancoso'));
+const RioVerdeTrancoso = lazy(() => import('@/pages/servicos/RioVerdeTrancoso'));
+const PitingaTrancoso = lazy(() => import('@/pages/servicos/PitingaTrancoso'));
+const DiaristaPortoSeguro = lazy(() => import('@/pages/servicos/DiaristaPortoSeguro'));
+const EletricistaPortoSeguro = lazy(() => import('@/pages/servicos/EletricistaPortoSeguro'));
+const PiscineiroPortoSeguro = lazy(() => import('@/pages/servicos/PiscineiroPortoSeguro'));
+const CozinheiroPortoSeguro = lazy(() => import('@/pages/servicos/CozinheiroPortoSeguro'));
+const JardineiroPortoSeguro = lazy(() => import('@/pages/servicos/JardineiroPortoSeguro'));
+const PedreiroPortoSeguro = lazy(() => import('@/pages/servicos/PedreiroPortoSeguro'));
+const DiaristaCaraiva = lazy(() => import('@/pages/servicos/DiaristaCaraiva'));
+const EletricistaCaraiva = lazy(() => import('@/pages/servicos/EletricistaCaraiva'));
+const PiscineiroCaraiva = lazy(() => import('@/pages/servicos/PiscineiroCaraiva'));
+const CozinheiroCaraiva = lazy(() => import('@/pages/servicos/CozinheiroCaraiva'));
+const JardineiroCaraiva = lazy(() => import('@/pages/servicos/JardineiroCaraiva'));
+const PedreiroCaraiva = lazy(() => import('@/pages/servicos/PedreiroCaraiva'));
+const RelatorioDiarioPage = lazy(() => import('@/pages/RelatorioDiarioPage'));
+const ServicosCategoria = lazy(() => import('@/pages/ServicosCategoria'));
+const DestinoTrancoso = lazy(() => import('@/pages/destinos/Trancoso'));
+const DestinoPortoSeguro = lazy(() => import('@/pages/destinos/PortoSeguro'));
+const DestinoCaraiva = lazy(() => import('@/pages/destinos/Caraiva'));
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -84,6 +87,13 @@ const AnimatedPage = ({ children }) => (
   </motion.div>
 );
 
+// Fallback exibido enquanto um chunk de rota (lazy) é carregado.
+const RouteFallback = () => (
+  <div className="fixed inset-0 flex items-center justify-center bg-white">
+    <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
+  </div>
+);
+
 const AuthenticatedApp = () => {
   const { isLoadingAuth, authError } = useAuth();
   const location = useLocation();
@@ -101,6 +111,7 @@ const AuthenticatedApp = () => {
   }
 
   return (
+    <Suspense fallback={<RouteFallback />}>
     <AnimatePresence mode="wait">
     <Routes location={location} key={location.pathname}>
       <Route path="/login" element={<Login />} />
@@ -393,6 +404,7 @@ const AuthenticatedApp = () => {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatePresence>
+    </Suspense>
   );
 };
 
