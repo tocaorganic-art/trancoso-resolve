@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Search, Home, Zap, Wrench, Leaf, UtensilsCrossed, Hammer, Paintbrush, ShieldCheck, MapPin } from "lucide-react";

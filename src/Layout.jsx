@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Menu, X, FileText, User, MessageCircle, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered, Image, ChevronDown, MapPin } from
+  TrendingUp, CreditCard, Menu, X, FileText, User, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered, ChevronDown, MapPin } from
 "lucide-react";
 
 import RoutePreloader from "./components/optimization/RoutePreloader";
@@ -210,7 +210,7 @@ export default function Layout({ children, currentPageName }) {
           <nav className="bg-slate-800 shadow-slate-900 sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchpriority="high" />
+                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchPriority="high" />
                 <span className="font-bold text-sm md:text-lg text-white truncate hidden xs:inline sm:inline drop-shadow-md">Trancoso Resolve</span>
               </Link>
 
