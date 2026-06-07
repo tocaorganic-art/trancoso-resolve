@@ -13,6 +13,10 @@ const staticPages = [
   { path: '/PoliticaPrivacidade', priority: '0.3', changefreq: 'yearly' },
   { path: '/About', priority: '0.8', changefreq: 'monthly' },
   { path: '/Contact', priority: '0.7', changefreq: 'monthly' },
+  // Páginas de destino (hubs por cidade)
+  { path: '/destinos/trancoso', priority: '0.95', changefreq: 'weekly' },
+  { path: '/destinos/porto-seguro', priority: '0.95', changefreq: 'weekly' },
+  { path: '/destinos/caraiva', priority: '0.95', changefreq: 'weekly' },
   { path: '/servicos/diarista-trancoso', priority: '0.9', changefreq: 'weekly' },
   { path: '/servicos/eletricista-trancoso', priority: '0.9', changefreq: 'weekly' },
   { path: '/servicos/piscineiro-trancoso', priority: '0.9', changefreq: 'weekly' },
