@@ -236,15 +236,15 @@ export default function ComoFuncionaPage() {
 
         {/* FAQ */}
         <section className="mb-16">
-           <h2 className="text-3xl font-bold text-center mb-10 text-slate-800">Dúvidas Frequentes sobre Contratar em Trancoso</h2>
+           <h2 className="text-3xl font-bold text-center mb-10 text-foreground">Dúvidas Frequentes sobre Contratar em Trancoso</h2>
            <div className="max-w-3xl mx-auto space-y-4">
             {faqs.map((faq, index) => (
-              <Card key={index} className="border-slate-200">
+              <Card key={index} className="border-border">
                 <CardHeader>
                   <CardTitle className="text-base">{faq.q}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-slate-600">{faq.a}</p>
+                  <p className="text-muted-foreground">{faq.a}</p>
                 </CardContent>
               </Card>
             ))}
@@ -252,12 +252,12 @@ export default function ComoFuncionaPage() {
         </section>
 
         {/* CTA Final */}
-        <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-2xl p-10 text-center text-white">
+        <section className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-10 text-center text-white">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">Pronto para Resolver?</h2>
-          <p className="text-blue-100 mb-6 max-w-md mx-auto">Encontre profissionais verificados em Trancoso agora mesmo.</p>
+          <p className="text-orange-100 mb-6 max-w-md mx-auto">Encontre profissionais verificados em Trancoso agora mesmo.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to={createPageUrl("ServicosCategoria")}>
-              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-bold w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50 font-bold w-full sm:w-auto">
                 <Search className="w-5 h-5 mr-2" />
                 Buscar Profissional
               </Button>

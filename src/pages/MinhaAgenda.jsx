@@ -19,18 +19,18 @@ const RequestCard = ({ request, service, onConfirm, onReject }) => {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 mb-3"
+      className="rounded-2xl bg-card border border-border p-4 mb-3"
     >
       <div className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-full gradient-amber flex items-center justify-center font-bold text-white shrink-0">
           {initial}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-white truncate">{request.client_name}</p>
-          <p className="text-xs text-slate-400 truncate">{service?.title || 'Serviço'}</p>
+          <p className="font-bold text-foreground truncate">{request.client_name}</p>
+          <p className="text-xs text-muted-foreground truncate">{service?.title || 'Serviço'}</p>
         </div>
       </div>
-      <div className="mt-3 space-y-1 text-sm text-slate-300">
+      <div className="mt-3 space-y-1 text-sm text-muted-foreground">
         <p>📅 {format(new Date(request.date), "dd/MM/yyyy")}</p>
         <p>📍 {request.location?.address || 'Endereço não informado'}</p>
       </div>
@@ -42,9 +42,9 @@ const RequestCard = ({ request, service, onConfirm, onReject }) => {
           >
             Aceitar
           </button>
-          <button 
+          <button
             onClick={() => onReject(request)}
-            className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-medium text-sm"
+            className="flex-1 py-2.5 rounded-xl bg-muted border border-border text-muted-foreground font-medium text-sm"
           >
             Recusar
           </button>

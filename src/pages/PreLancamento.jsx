@@ -258,8 +258,8 @@ export default function PreLancamento() {
     }}>
       <style>{`
         @keyframes pulse-dot {
-          0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(96,165,250,0.7); }
-          50% { opacity: 0.8; transform: scale(1.4); box-shadow: 0 0 0 8px rgba(96,165,250,0); }
+          0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(232,87,26,0.7); }
+          50% { opacity: 0.8; transform: scale(1.4); box-shadow: 0 0 0 8px rgba(232,87,26,0); }
         }
         .pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
         .btn-cta {
@@ -320,12 +320,12 @@ export default function PreLancamento() {
           box-sizing: border-box;
         }
         .pl-input::placeholder { color: rgba(255,255,255,0.38); }
-        .pl-input:focus, .pl-select:focus { border-color: #60a5fa; background: rgba(255,255,255,0.13); }
+        .pl-input:focus, .pl-select:focus { border-color: #E8571A; background: rgba(255,255,255,0.13); }
         .pl-select option { background: #0f2040; color: #fff; }
         .pl-select { cursor: pointer; appearance: none; }
         .sec-divider {
           height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(96,165,250,0.35) 30%, rgba(96,165,250,0.55) 50%, rgba(96,165,250,0.35) 70%, transparent);
+          background: linear-gradient(90deg, transparent, rgba(232,87,26,0.35) 30%, rgba(232,87,26,0.55) 50%, rgba(232,87,26,0.35) 70%, transparent);
         }
         @media (max-width: 480px) {
           .hero-title { font-size: 1.85rem !important; }
@@ -368,13 +368,13 @@ export default function PreLancamento() {
 
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(96,165,250,0.12)",
-            border: "1px solid rgba(96,165,250,0.4)",
+            background: "rgba(232,87,26,0.12)",
+            border: "1px solid rgba(232,87,26,0.4)",
             borderRadius: 999, padding: "6px 16px 6px 10px",
-            fontSize: "0.78rem", fontWeight: 700, color: "#93c5fd",
+            fontSize: "0.78rem", fontWeight: 700, color: "#E8571A",
             marginBottom: 24, letterSpacing: "0.3px",
           }}>
-            <span className="pulse-dot" style={{ width: 9, height: 9, borderRadius: "50%", background: "#60a5fa", display: "inline-block", flexShrink: 0 }} />
+            <span className="pulse-dot" style={{ width: 9, height: 9, borderRadius: "50%", background: "#E8571A", display: "inline-block", flexShrink: 0 }} />
             Pré-lançamento · Vagas de Fundador
           </div>
 
@@ -439,7 +439,7 @@ export default function PreLancamento() {
               <div style={{
                 height: "100%",
                 width: `${progressoPct}%`,
-                background: "linear-gradient(90deg, #1d4ed8, #60a5fa)",
+                background: "linear-gradient(90deg, #C1440E, #E8571A)",
                 borderRadius: 999,
                 transition: "width 0.8s ease",
               }} />
@@ -467,14 +467,14 @@ export default function PreLancamento() {
                 <div key={b.title} style={{
                   display: "flex", gap: 14, alignItems: "flex-start",
                   background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(96,165,250,0.18)",
+                  border: "1px solid rgba(232,87,26,0.25)",
                   backdropFilter: "blur(6px)",
                   borderRadius: 14, padding: "16px 18px",
                 }}>
                   <div style={{
                     width: 46, height: 46, borderRadius: 12, flexShrink: 0,
-                    background: "rgba(29,78,216,0.2)",
-                    border: "1px solid rgba(96,165,250,0.35)",
+                    background: "rgba(232,87,26,0.15)",
+                    border: "1px solid rgba(232,87,26,0.4)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: "1.3rem",
                   }}>{b.emoji}</div>
@@ -520,10 +520,10 @@ export default function PreLancamento() {
                   <div key={item} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{
                       width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
-                      background: "rgba(96,165,250,0.15)",
-                      border: "1px solid rgba(96,165,250,0.5)",
+                      background: "rgba(232,87,26,0.15)",
+                      border: "1px solid rgba(232,87,26,0.5)",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: "0.72rem", color: "#60a5fa", fontWeight: 900,
+                      fontSize: "0.72rem", color: "#E8571A", fontWeight: 900,
                     }}>✓</span>
                     <span style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.9)" }}>{item}</span>
                   </div>
@@ -566,10 +566,10 @@ export default function PreLancamento() {
                 }}>
                   <div style={{
                     width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-                    background: "linear-gradient(135deg, #1d4ed8, #2563eb)",
+                    background: "linear-gradient(135deg, #C1440E, #E8571A)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontWeight: 900, fontSize: "1.1rem", color: "#fff",
-                    boxShadow: "0 4px 16px rgba(29,78,216,0.45)",
+                    boxShadow: "0 4px 16px rgba(232,87,26,0.45)",
                   }}>{p.num}</div>
                   <div>
                     <p style={{ fontWeight: 700, fontSize: "1rem", color: "#fff", marginBottom: 6 }}>{p.title}</p>
@@ -749,7 +749,7 @@ const secLabel = {
   fontWeight: 700,
   letterSpacing: "1.8px",
   textTransform: "uppercase",
-  color: "#60a5fa",
+  color: "#E8571A",
   textAlign: "center",
   marginBottom: 8,
 };

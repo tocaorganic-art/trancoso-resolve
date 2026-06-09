@@ -45,15 +45,15 @@ function RequestCard({ request, provider, onReviewClick, hasReview, payment, onP
 
         {/* Informações de pagamento */}
         {payment && (
-          <div className="border rounded-lg p-3 bg-slate-50 space-y-2">
+          <div className="border border-border rounded-lg p-3 bg-muted space-y-2">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <CreditCard className="w-4 h-4" />
                 Pagamento
               </div>
               <StatusPagamentoBadge status={payment.status} />
             </div>
-            <div className="text-sm text-slate-600">
+            <div className="text-sm text-muted-foreground">
               <span>Total: <strong>R$ {((payment.amount_total || 0) / 100).toFixed(2)}</strong></span>
             </div>
             {payment.status === 'requires_capture' && payment.auto_capture_after && (
@@ -77,7 +77,7 @@ function RequestCard({ request, provider, onReviewClick, hasReview, payment, onP
       {(request.status === 'Concluído' || hasReview) && (
         <div className="p-4 pt-0">
           <Button
-            className="w-full border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300"
+            className="w-full border-border text-foreground"
             variant={hasReview ? "secondary" : "outline"}
             onClick={() => !hasReview && onReviewClick(request, provider)}
             disabled={hasReview}
@@ -134,7 +134,7 @@ export default function MeusPedidosPage() {
   const paymentByRequestId = Object.fromEntries((payments || []).map(p => [p.request_id, p]));
 
   return (
-    <div className="bg-[#0a1628] min-h-screen pb-24">
+    <div className="bg-background min-h-screen pb-24">
       {reviewingRequest && (
         <ReviewModal
           request={reviewingRequest.request}
@@ -144,8 +144,8 @@ export default function MeusPedidosPage() {
         />
       )}
       <header className="px-5 pt-6 pb-2">
-        <h1 className="text-2xl font-extrabold text-white tracking-tight">Meus Pedidos</h1>
-        <p className="text-sm text-slate-400 mt-1">Acompanhe, confirme e avalie suas solicitações 🌴</p>
+        <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Meus Pedidos</h1>
+        <p className="text-sm text-muted-foreground mt-1">Acompanhe, confirme e avalie suas solicitações</p>
       </header>
       <div className="px-5 mt-6">
         {requests && requests.length > 0 ? (
@@ -168,12 +168,12 @@ export default function MeusPedidosPage() {
             })}
           </div>
         ) : (
-          <div className="text-center py-12 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-            <Info className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white">Nenhum pedido encontrado</h3>
-            <p className="text-slate-400 mt-2 mb-6">Por enquanto, nada por aqui 🌴 — assim que pintar algo, te aviso!</p>
+          <div className="text-center py-12 rounded-2xl bg-card border border-border">
+            <Info className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-foreground">Nenhum pedido encontrado</h3>
+            <p className="text-muted-foreground mt-2 mb-6">Por enquanto, nada por aqui — assim que pintar algo, te aviso!</p>
             <Link to={createPageUrl("Home")}>
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">Bora resolver</Button>
+              <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">Bora resolver</Button>
             </Link>
           </div>
         )}

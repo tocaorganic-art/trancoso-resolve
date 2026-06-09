@@ -219,18 +219,18 @@ export default function GeradorDeImagemPage() {
           {/* Resultado */}
           <Card className="border-none shadow-lg">
             <CardContent className="p-5">
-              <p className="text-sm font-semibold text-slate-700 mb-3">Resultado</p>
+              <p className="text-sm font-semibold text-foreground mb-3">Resultado</p>
               {!generatedImage && !isGenerating && (
-                <div className="aspect-square bg-slate-100 rounded-xl flex flex-col items-center justify-center text-slate-400">
+                <div className="aspect-square bg-muted rounded-xl flex flex-col items-center justify-center text-muted-foreground">
                   <ImageIcon className="w-14 h-14 mb-3 opacity-50" />
                   <p className="text-sm">Sua imagem aparecerá aqui</p>
                 </div>
               )}
               {isGenerating && (
-                <div className="aspect-square bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl flex flex-col items-center justify-center">
-                  <Loader2 className="w-14 h-14 text-purple-600 animate-spin mb-3" />
-                  <p className="text-sm text-purple-700 font-semibold">Criando sua arte…</p>
-                  <p className="text-xs text-purple-500 mt-1">Isso leva alguns segundos</p>
+                <div className="aspect-square bg-muted rounded-xl flex flex-col items-center justify-center">
+                  <Loader2 className="w-14 h-14 text-brand-primary animate-spin mb-3" />
+                  <p className="text-sm text-foreground font-semibold">Criando sua arte…</p>
+                  <p className="text-xs text-muted-foreground mt-1">Isso leva alguns segundos</p>
                 </div>
               )}
               {generatedImage && !isGenerating && (

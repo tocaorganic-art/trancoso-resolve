@@ -59,13 +59,13 @@ export default function AdminPagamentosPage() {
 
   // Aguarda usuário carregar (undefined = ainda carregando)
   if (user === undefined) {
-    return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
+    return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-brand-primary" /></div>;
   }
 
   // Usuário não autenticado → redireciona para login
   if (user === null) {
     base44.auth.redirectToLogin(window.location.pathname);
-    return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
+    return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-brand-primary" /></div>;
   }
 
   // Usuário autenticado mas sem role admin
@@ -73,9 +73,9 @@ export default function AdminPagamentosPage() {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-4 text-center px-4">
         <AlertTriangle className="w-16 h-16 text-red-400" />
-        <h2 className="text-2xl font-bold text-slate-800">Acesso Restrito</h2>
-        <p className="text-slate-500 max-w-sm">Esta página é exclusiva para administradores da plataforma.</p>
-        <button onClick={() => base44.auth.redirectToLogin()} className="text-sm text-blue-600 underline">Entrar com outra conta</button>
+        <h2 className="text-2xl font-bold text-foreground">Acesso Restrito</h2>
+        <p className="text-muted-foreground max-w-sm">Esta página é exclusiva para administradores da plataforma.</p>
+        <button onClick={() => base44.auth.redirectToLogin()} className="text-sm text-orange-600 underline">Entrar com outra conta</button>
       </div>
     );
   }
@@ -110,7 +110,7 @@ export default function AdminPagamentosPage() {
   const providerMap = Object.fromEntries(providers.map(p => [p.id, p]));
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background">
       <style>{`
         @media (max-width: 768px) {
           .kpi-grid { grid-template-columns: 1fr 1fr !important; }
@@ -118,11 +118,11 @@ export default function AdminPagamentosPage() {
           .filter-bar { flex-direction: column; }
         }
       `}</style>
-      
-      <div className="bg-slate-900 border-b border-slate-800">
+
+      <div className="bg-card border-b border-border">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-white">Dashboard de Pagamentos</h1>
-          <p className="text-slate-400 text-sm">Monitoramento de transações e split</p>
+          <h1 className="text-2xl font-bold text-foreground">Dashboard de Pagamentos</h1>
+          <p className="text-muted-foreground text-sm">Monitoramento de transações e split</p>
         </div>
       </div>
 

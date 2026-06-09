@@ -165,53 +165,53 @@ ${tarefasPendentes.map((t, i) => `### ${i + 1}. ${t.descricao}
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
+    <div className="min-h-screen bg-background p-6">
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-800 to-amber-600 text-white rounded-2xl p-8 mb-8">
+        <div className="bg-gradient-to-r from-orange-800 to-orange-600 text-white rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-4">
             <FileText className="w-8 h-8" />
             <h1 className="text-3xl font-bold">Relatório Diário de Desenvolvimento</h1>
           </div>
-          <p className="text-amber-100 text-lg">Data: {new Date(dataHoje).toLocaleDateString('pt-BR')}</p>
-          <p className="text-amber-50 text-sm mt-1">Projeto: Trancoso Resolve - Refatoração de Identidade Visual</p>
+          <p className="text-orange-100 text-lg">Data: {new Date(dataHoje).toLocaleDateString('pt-BR')}</p>
+          <p className="text-orange-50 text-sm mt-1">Projeto: Trancoso Resolve - Refatoração de Identidade Visual</p>
         </div>
 
         {/* Métricas */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-4 flex items-center gap-3">
-              <Code className="w-8 h-8 text-amber-600" />
+              <Code className="w-8 h-8 text-orange-600" />
               <div>
                 <p className="text-2xl font-bold">{metricas.arquivosModificados}</p>
-                <p className="text-sm text-slate-500">Arquivos</p>
+                <p className="text-sm text-muted-foreground">Arquivos</p>
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 flex items-center gap-3">
-              <Palette className="w-8 h-8 text-amber-600" />
+              <Palette className="w-8 h-8 text-orange-600" />
               <div>
                 <p className="text-2xl font-bold">{metricas.substituicoesCores}</p>
-                <p className="text-sm text-slate-500">Substituições</p>
+                <p className="text-sm text-muted-foreground">Substituições</p>
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 flex items-center gap-3">
-              <Layout className="w-8 h-8 text-amber-600" />
+              <Layout className="w-8 h-8 text-orange-600" />
               <div>
                 <p className="text-2xl font-bold">{metricas.componentesAtualizados}</p>
-                <p className="text-sm text-slate-500">Componentes</p>
+                <p className="text-sm text-muted-foreground">Componentes</p>
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 flex items-center gap-3">
-              <Clock className="w-8 h-8 text-slate-400" />
+              <Clock className="w-8 h-8 text-muted-foreground" />
               <div>
                 <p className="text-2xl font-bold">{metricas.pendencias}</p>
-                <p className="text-sm text-slate-500">Pendências</p>
+                <p className="text-sm text-muted-foreground">Pendências</p>
               </div>
             </CardContent>
           </Card>
@@ -219,7 +219,7 @@ ${tarefasPendentes.map((t, i) => `### ${i + 1}. ${t.descricao}
 
         {/* Tarefas Concluídas */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
             <CheckCircle2 className="w-6 h-6 text-green-600" />
             Concluído Hoje
           </h2>
@@ -227,7 +227,7 @@ ${tarefasPendentes.map((t, i) => `### ${i + 1}. ${t.descricao}
             {tarefasConcluidas.map((tarefa, idx) => {
               const Icon = tarefa.icon;
               return (
-                <Card key={idx} className="border-slate-200">
+                <Card key={idx} className="border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-center gap-2">
                       <Icon className={`w-5 h-5 text-${tarefa.cor}-600`} />
