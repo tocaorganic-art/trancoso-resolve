@@ -14,7 +14,7 @@ import SocialProofBar from "@/components/home/SocialProofBar";
 import CTAPrestador from "@/components/home/CTAPrestador";
 import {
   Sparkles, UtensilsCrossed, Hammer, Leaf,
-  Baby, Zap, Star, AlertCircle, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight
+  Baby, Zap, Star, AlertCircle, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight, MapPin, CheckCircle, Paintbrush
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
@@ -154,15 +154,15 @@ const ServiceCard = ({ service, provider }) => {
                 )}
                 {/* Badge de categoria sobre a imagem */}
                 <div className="absolute top-3 right-3">
-                    <Badge className="bg-amber-600 text-white text-xs font-semibold px-2 py-0.5 shadow-md">
+                    <Badge className="bg-orange-500 text-white text-xs font-semibold px-2 py-0.5 shadow-md rounded-pill">
                         {service.category}
                     </Badge>
                 </div>
                 {/* Selo "Novo" se não tiver avaliações */}
                 {isNew && (
                     <div className="absolute top-3 left-3">
-                        <Badge className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 shadow-md">
-                            ⭐ Novo
+                        <Badge className="bg-sand text-orange-700 text-xs font-bold px-2 py-0.5 shadow-md rounded-pill">
+                            Novo
                         </Badge>
                     </div>
                 )}
@@ -196,7 +196,7 @@ const ServiceCard = ({ service, provider }) => {
                         )}
                     </div>
                     <div className="text-right">
-                        <p className="text-lg font-extrabold text-amber-700 dark:text-amber-400 leading-tight">
+                        <p className="text-lg font-extrabold text-orange-600 dark:text-orange-400 leading-tight">
                             R$ {formatPrice(service.price)}
                         </p>
                         <p className="text-xs text-slate-500 dark:text-slate-400">por {service.price_unit || 'serviço'}</p>
@@ -205,7 +205,7 @@ const ServiceCard = ({ service, provider }) => {
 
                 {/* Botão Ver Detalhes */}
                 <Link to={createPageUrl("ServicoDetalhes", `?id=${service.id}`)} data-testid={`service-card-link-${service.id}`} aria-label={`Ver detalhes do serviço ${service.title}`}>
-                    <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold">
+                    <Button className="w-full bg-brand-primary hover:bg-orange-600 text-white font-semibold rounded-pill">
                         Solicitar
                     </Button>
                 </Link>
@@ -405,14 +405,14 @@ export default function HomePage() {
   const popularServices = ["Faxina", "Eletricista", "Passeio Turístico", "Transporte", "Massagem"];
 
   return (
-    <div className="bg-slate-50 overflow-x-hidden">
+    <div className="bg-background overflow-x-hidden">
       {/* Pull-to-refresh indicator */}
       {pullDistance > 10 && (
         <div
-          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-amber-50 border-b border-amber-200 transition-all"
+          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-orange-50 border-b border-orange-200 transition-all"
           style={{ height: `${Math.min(pullDistance, threshold)}px` }}
         >
-          <div className={`flex items-center gap-2 text-amber-700 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
+          <div className={`flex items-center gap-2 text-orange-600 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
@@ -436,7 +436,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2"><BrainCircuit className="w-6 h-6 text-purple-600" /> Para Você</h2>
                     <Link to={createPageUrl("ServicosCategoria")}>
-                        <Button variant="ghost" className="text-amber-700 hover:text-amber-800">Ver todos</Button>
+                        <Button variant="ghost" className="text-orange-600 hover:text-orange-700">Ver todos</Button>
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -457,7 +457,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-lg md:text-2xl font-bold text-slate-900 drop-shadow-sm leading-tight">Profissionais verificados em Trancoso, na hora que você precisa.</h2>
             <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
-              <Button variant="ghost" className="text-amber-700 hover:text-amber-800" aria-label="Ver todos os serviços">
+              <Button variant="ghost" className="text-orange-600 hover:text-orange-700" aria-label="Ver todos os serviços">
                 Ver todos
               </Button>
             </Link>
@@ -477,14 +477,14 @@ export default function HomePage() {
                     return <ServiceCard key={service.id} service={service} provider={provider} />;
                   })
                 ) : (
-                  <div className="col-span-full text-center py-12 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-100">
+                  <div className="col-span-full text-center py-12 bg-gradient-to-br from-orange-50 to-sand rounded-xl border border-orange-100">
                     <Sparkles className="w-12 h-12 mx-auto text-amber-400 mb-3" />
                     <h3 className="text-lg font-semibold text-slate-700 mb-2">Serviços em Destaque em Breve!</h3>
                     <p className="text-slate-500 mb-4 max-w-md mx-auto">
                       Estamos selecionando os melhores serviços para você. Enquanto isso, explore nossos profissionais.
                     </p>
                     <Link to={createPageUrl("ServicosCategoria")}>
-                      <Button className="bg-amber-600 hover:bg-amber-700">
+                      <Button className="bg-orange-500 hover:bg-orange-600">
                         Explorar Profissionais
                       </Button>
                     </Link>
@@ -511,7 +511,7 @@ export default function HomePage() {
             ) : topProviders.length > 0 ? (
                 topProviders.map((provider) => (
                   <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
-                    <Card className="border border-slate-200 shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-amber-500 focus-within:ring-offset-2 bg-white">
+                    <Card className="border border-slate-200 shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 bg-white">
                       <CardContent className="p-4">
                         <LazyImage
                           src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
@@ -519,8 +519,8 @@ export default function HomePage() {
                           className="w-20 h-20 rounded-full mx-auto border-4 border-white shadow-md mb-3"
                         />
                         {provider.verified && (
-                          <div className="inline-flex items-center gap-1 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full mb-2">
-                            ✅ Verificado
+                          <div className="inline-flex items-center gap-1 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-pill mb-2">
+                            <CheckCircle className="w-3 h-3" /> Verificado
                           </div>
                         )}
                         <p className="font-bold text-sm text-slate-900 mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
@@ -544,14 +544,14 @@ export default function HomePage() {
                   </Link>
                 ))
             ) : (
-              <div className="col-span-full text-center py-12 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-100">
+              <div className="col-span-full text-center py-12 bg-gradient-to-br from-orange-50 to-sand rounded-xl border border-orange-100">
                 <Star className="w-12 h-12 mx-auto text-amber-400 mb-3" />
                 <h3 className="text-lg font-semibold text-slate-700 mb-2">Seja o Primeiro Avaliado!</h3>
                 <p className="text-slate-500 mb-4 max-w-md mx-auto">
                   Os profissionais mais bem avaliados aparecerão aqui. Cadastre-se e conquiste suas primeiras avaliações.
                 </p>
                 <Link to={createPageUrl("SejaPrestador")}>
-                  <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                  <Button className="bg-gradient-to-r bg-brand-primary hover:bg-orange-600">
                     Cadastrar como Prestador
                   </Button>
                 </Link>
@@ -568,24 +568,29 @@ export default function HomePage() {
            </div>
            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
              {[
-               { slug: 'limpeza-trancoso', label: 'Diarista', emoji: '🧹' },
-               { slug: 'eletricista-trancoso', label: 'Eletricista', emoji: '⚡' },
-               { slug: 'encanador-trancoso', label: 'Encanador', emoji: '🔧' },
-               { slug: 'jardinagem-trancoso', label: 'Jardineiro', emoji: '🌿' },
-               { slug: 'cozinheiro-trancoso', label: 'Cozinheiro', emoji: '👨‍🍳' },
-               { slug: 'pedreiro-trancoso', label: 'Pedreiro', emoji: '🏗️' },
-               { slug: 'pintor-trancoso', label: 'Pintor', emoji: '🖌️' },
-               { slug: 'baba-trancoso', label: 'Babá', emoji: '👶' },
-               { slug: 'garcom-trancoso', label: 'Garçom', emoji: '🍽️' },
-             ].map(item => (
+               { slug: 'limpeza-trancoso', label: 'Diarista', icon: Home },
+               { slug: 'eletricista-trancoso', label: 'Eletricista', icon: Zap },
+               { slug: 'encanador-trancoso', label: 'Encanador', icon: Wrench },
+               { slug: 'jardinagem-trancoso', label: 'Jardineiro', icon: Leaf },
+               { slug: 'cozinheiro-trancoso', label: 'Cozinheiro', icon: UtensilsCrossed },
+               { slug: 'pedreiro-trancoso', label: 'Pedreiro', icon: Hammer },
+               { slug: 'pintor-trancoso', label: 'Pintor', icon: Paintbrush },
+               { slug: 'baba-trancoso', label: 'Babá', icon: Baby },
+               { slug: 'garcom-trancoso', label: 'Garçom', icon: UtensilsCrossed },
+             ].map(item => {
+               const Icon = item.icon;
+               return (
                <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
-                 <div className="bg-white rounded-2xl p-4 text-center shadow-md hover:shadow-lg transition-all duration-300 border-2 border-slate-200 hover:border-amber-400 cursor-pointer group h-full flex flex-col items-center justify-center">
-                   <span className="text-3xl block mb-2" aria-hidden="true">{item.emoji}</span>
-                   <span className="text-sm md:text-base font-bold text-slate-800 group-hover:text-amber-700 transition-colors">{item.label}</span>
-                   <span className="block text-xs font-medium text-slate-600 mt-1">em Trancoso</span>
+                 <div className="bg-card rounded-brand-lg p-4 text-center shadow-warm-sm hover:shadow-warm-md transition-all duration-300 border border-border hover:border-orange-400 cursor-pointer group h-full flex flex-col items-center justify-center">
+                   <div className="w-10 h-10 rounded-brand-md bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center mb-2">
+                     <Icon className="w-5 h-5 text-orange-500" aria-hidden="true" />
+                   </div>
+                   <span className="text-sm md:text-base font-bold text-foreground group-hover:text-orange-500 transition-colors">{item.label}</span>
+                   <span className="block text-xs font-medium text-muted-foreground mt-1">em Trancoso</span>
                  </div>
                </Link>
-             ))}
+               );
+             })}
            </div>
          </section>
 
@@ -603,8 +608,8 @@ export default function HomePage() {
               { step: '2', title: 'Nós conectamos aos prestadores certos', desc: 'Nosso sistema distribui seu pedido para prestadores qualificados na região.' },
               { step: '3', title: 'Você recebe contatos e escolhe', desc: 'Compare respostas, avalie e decida com quem quer fechar.' },
             ].map(item => (
-              <div key={item.step} className="bg-white rounded-2xl p-5 md:p-6 shadow-md border border-slate-100 flex items-start gap-4 md:block md:text-center">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-amber-600 text-white font-bold text-lg md:text-xl flex items-center justify-center shrink-0 md:mx-auto md:mb-4">{item.step}</div>
+              <div key={item.step} className="bg-card rounded-brand-lg p-5 md:p-6 shadow-warm-sm border border-border flex items-start gap-4 md:block md:text-center">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-primary text-white font-bold text-lg md:text-xl flex items-center justify-center shrink-0 md:mx-auto md:mb-4 shadow-brand">{item.step}</div>
                 <div>
                   <h3 className="font-bold text-base md:text-lg text-slate-900 mb-1 md:mb-2">{item.title}</h3>
                   <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
@@ -615,8 +620,8 @@ export default function HomePage() {
         </section>
 
         {/* Por que usar */}
-        <section className="mb-10 md:mb-20 bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-8 md:p-12 border border-amber-100">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 drop-shadow-sm">Por que usar a Trancoso Resolve em Trancoso</h2>
+        <section className="mb-10 md:mb-20 bg-gradient-to-br from-orange-50 to-sand dark:from-secondary dark:to-background rounded-3xl p-8 md:p-12 border border-orange-100 dark:border-border">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">Por que usar a Trancoso Resolve em Trancoso</h2>
           <ul className="space-y-4">
             {[
               'Prestadores locais e confiáveis, focados em atender Trancoso e região.',
@@ -624,15 +629,15 @@ export default function HomePage() {
               'Mais segurança: perfis dos prestadores, histórico e verificação quando disponível.',
               'Sem custo para quem pede serviço: você pede, recebe retorno e escolhe.',
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-slate-700">
-                <span className="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
+              <li key={i} className="flex items-start gap-3 text-foreground">
+                <span className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
                 <span className="text-base">{item}</span>
               </li>
             ))}
           </ul>
           <div className="mt-8">
             <Link to={createPageUrl("ServicosCategoria")} className="block sm:inline-block">
-              <Button className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95">
+              <Button className="w-full sm:w-auto bg-brand-primary hover:bg-orange-600 text-white font-bold text-base px-8 min-h-[44px] transition-all duration-200 hover:scale-105 active:scale-95 rounded-pill shadow-brand">
                 Encontrar profissional agora
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
@@ -641,14 +646,13 @@ export default function HomePage() {
         </section>
 
         {/* Costa do Descobrimento */}
-        <section className="mb-10 md:mb-20 bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-8 md:p-12 border border-amber-100">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3 text-center">Atendemos toda a Costa do Descobrimento</h2>
-          <p className="text-slate-500 text-center mb-8 text-base max-w-xl mx-auto">Profissionais verificados para Trancoso, Porto Seguro e Caraíva — a mesma qualidade e segurança em toda a região.</p>
+        <section className="mb-10 md:mb-20 bg-gradient-to-br from-orange-50 to-sand dark:from-secondary dark:to-background rounded-3xl p-8 md:p-12 border border-orange-100 dark:border-border">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3 text-center">Atendemos toda a Costa do Descobrimento</h2>
+          <p className="text-muted-foreground text-center mb-8 text-base max-w-xl mx-auto">Profissionais verificados para Trancoso, Porto Seguro e Caraíva — a mesma qualidade e segurança em toda a região.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               {
                 cidade: 'Trancoso',
-                emoji: '🏄',
                 desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.',
                 destinoHref: '/destinos/trancoso',
                 links: [
@@ -659,7 +663,6 @@ export default function HomePage() {
               },
               {
                 cidade: 'Porto Seguro',
-                emoji: '⚓',
                 desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.',
                 destinoHref: '/destinos/porto-seguro',
                 links: [
@@ -670,7 +673,6 @@ export default function HomePage() {
               },
               {
                 cidade: 'Caraíva',
-                emoji: '🌊',
                 desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.',
                 destinoHref: '/destinos/caraiva',
                 links: [
@@ -680,21 +682,23 @@ export default function HomePage() {
                 ],
               },
             ].map((dest) => (
-              <div key={dest.cidade} className="bg-white rounded-2xl p-6 shadow-sm border border-amber-100 flex flex-col">
-                <div className="text-3xl mb-3">{dest.emoji}</div>
-                <h3 className="font-bold text-lg text-slate-900 mb-2">{dest.cidade}</h3>
-                <p className="text-slate-500 text-sm mb-4 leading-relaxed flex-grow">{dest.desc}</p>
+              <div key={dest.cidade} className="bg-card rounded-brand-lg p-6 shadow-warm-sm border border-orange-100 dark:border-border flex flex-col">
+                <div className="w-10 h-10 rounded-brand-md bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center mb-3">
+                  <MapPin className="w-5 h-5 text-orange-500" />
+                </div>
+                <h3 className="font-bold text-lg text-foreground mb-2">{dest.cidade}</h3>
+                <p className="text-muted-foreground text-sm mb-4 leading-relaxed flex-grow">{dest.desc}</p>
                 <ul className="space-y-2 mb-4">
                   {dest.links.map((link) => (
                     <li key={link.href}>
-                      <Link to={link.href} className="text-amber-700 hover:text-amber-900 text-sm font-medium flex items-center gap-1 group">
+                      <Link to={link.href} className="text-orange-600 hover:text-orange-800 text-sm font-medium flex items-center gap-1 group">
                         <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                         {link.label}
                       </Link>
                     </li>
                   ))}
                 </ul>
-                <Link to={dest.destinoHref} className="text-xs font-semibold text-amber-600 hover:text-amber-800 flex items-center gap-1 border-t border-amber-100 pt-3 transition-colors group">
+                <Link to={dest.destinoHref} className="text-xs font-semibold text-orange-500 hover:text-orange-700 flex items-center gap-1 border-t border-orange-100 dark:border-border pt-3 transition-colors group">
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                   Ver página de {dest.cidade}
                 </Link>
