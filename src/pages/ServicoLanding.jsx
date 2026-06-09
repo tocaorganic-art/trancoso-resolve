@@ -148,33 +148,33 @@ const ProviderMiniCard = ({ provider }) => (
             className="w-14 h-14 rounded-full object-cover border-2 border-white shadow"
           />
           {provider.verified && (
-            <div className="absolute -bottom-1 -right-1 bg-cyan-500 rounded-full p-0.5">
+            <div className="absolute -bottom-1 -right-1 bg-orange-500 rounded-full p-0.5">
               <CheckCircle className="w-3 h-3 text-white" />
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-slate-900 truncate group-hover:text-cyan-700">{provider.full_name}</p>
+          <p className="font-semibold text-foreground truncate group-hover:text-orange-700">{provider.full_name}</p>
           <div className="flex items-center gap-2 mt-0.5">
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 text-yellow-500 fill-current" />
               <span className="text-xs font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
             </div>
             {provider.total_reviews > 0 && (
-              <span className="text-xs text-slate-500">({provider.total_reviews})</span>
+              <span className="text-xs text-muted-foreground">({provider.total_reviews})</span>
             )}
             {provider.availability === 'Disponível' && (
-              <Badge className="bg-green-100 text-green-700 text-xs py-0 px-1.5">Disponível</Badge>
+              <Badge className="bg-[#3E8E5A]/10 text-[#3E8E5A] text-xs py-0 px-1.5">Disponível</Badge>
             )}
           </div>
           {provider.location?.city && (
-            <div className="flex items-center gap-1 mt-0.5 text-xs text-slate-500">
+            <div className="flex items-center gap-1 mt-0.5 text-xs text-muted-foreground">
               <MapPin className="w-3 h-3" />
               <span>{provider.location.city}</span>
             </div>
           )}
         </div>
-        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-600 shrink-0" />
+        <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-orange-600 shrink-0" />
       </CardContent>
     </Card>
   </Link>
@@ -293,7 +293,7 @@ export default function ServicoLandingPage() {
   const verifiedCount = providers?.filter(p => p.verified).length || 0;
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       {/* Hero */}
       <section className={`bg-gradient-to-r ${config.color} text-white py-12 md:py-20`}>
         <div className="container mx-auto max-w-6xl px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -324,7 +324,7 @@ export default function ServicoLandingPage() {
               )}
             </div>
             <Link to={createPageUrl("ServicosCategoria", `?cat=${config.occupation}`)}>
-              <Button size="lg" className="bg-white text-slate-800 hover:bg-slate-100 font-bold shadow-lg">
+              <Button size="lg" className="bg-white text-foreground hover:bg-muted font-bold shadow-lg">
                 Ver Todos os Profissionais
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
@@ -342,18 +342,18 @@ export default function ServicoLandingPage() {
       </section>
 
       {/* Trust Badges */}
-      <section className="bg-white border-b">
+      <section className="bg-card border-b border-border">
         <div className="container mx-auto max-w-6xl px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           {[
-            { icon: <Shield className="w-6 h-6 text-green-600 mx-auto mb-1" />, label: "Verificados", sub: "Antecedentes consultados" },
+            { icon: <Shield className="w-6 h-6 text-[#3E8E5A] mx-auto mb-1" />, label: "Verificados", sub: "Antecedentes consultados" },
             { icon: <Star className="w-6 h-6 text-yellow-500 mx-auto mb-1" />, label: "Avaliados", sub: "Feedbacks reais de clientes" },
-            { icon: <Clock className="w-6 h-6 text-blue-600 mx-auto mb-1" />, label: "Ágeis", sub: "Resposta rápida via WhatsApp" },
+            { icon: <Clock className="w-6 h-6 text-orange-600 mx-auto mb-1" />, label: "Ágeis", sub: "Resposta rápida via WhatsApp" },
             { icon: <MapPin className="w-6 h-6 text-red-500 mx-auto mb-1" />, label: "Locais", sub: "Profissionais de Trancoso" },
           ].map((item, i) => (
             <div key={i} className="py-3">
               {item.icon}
-              <p className="font-semibold text-slate-800 text-sm">{item.label}</p>
-              <p className="text-xs text-slate-500">{item.sub}</p>
+              <p className="font-semibold text-foreground text-sm">{item.label}</p>
+              <p className="text-xs text-muted-foreground">{item.sub}</p>
             </div>
           ))}
         </div>
@@ -363,27 +363,27 @@ export default function ServicoLandingPage() {
         {/* Profissionais */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">
               {config.occupation === 'Limpeza' ? 'Diaristas' : `${config.occupation}s`} em Trancoso
             </h2>
             <Link to={createPageUrl("ServicosCategoria", `?cat=${config.occupation}`)}>
-              <Button variant="ghost" className="text-cyan-600">Ver todos</Button>
+              <Button variant="ghost" className="text-orange-600">Ver todos</Button>
             </Link>
           </div>
 
           {isLoading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-cyan-600" />
+              <Loader2 className="w-8 h-8 animate-spin text-orange-600" />
             </div>
           ) : providers && providers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {providers.map(p => <ProviderMiniCard key={p.id} provider={p} />)}
             </div>
           ) : (
-            <div className="text-center py-12 bg-white rounded-xl border">
-              <p className="text-slate-500 mb-4">Ainda não há profissionais cadastrados nesta categoria.</p>
+            <div className="text-center py-12 bg-card rounded-xl border border-border">
+              <p className="text-muted-foreground mb-4">Ainda não há profissionais cadastrados nesta categoria.</p>
               <Link to={createPageUrl("SejaPrestador")}>
-                <Button className="bg-gradient-to-r from-cyan-500 to-blue-600">Seja o Primeiro!</Button>
+                <Button className="bg-brand-primary hover:bg-orange-600 text-white">Seja o Primeiro!</Button>
               </Link>
             </div>
           )}
@@ -391,31 +391,31 @@ export default function ServicoLandingPage() {
 
         {/* FAQ Schema */}
         <section className="mb-12">
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6">
             Perguntas Frequentes sobre {config.occupation} em Trancoso
           </h2>
           <div className="space-y-4">
             {config.faq.map((item, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-                <h3 className="font-semibold text-slate-900 mb-2 flex items-start gap-2">
-                  <span className="text-cyan-600 shrink-0 mt-0.5">Q.</span>
+              <div key={i} className="bg-card rounded-xl p-5 shadow-sm border border-border">
+                <h3 className="font-semibold text-foreground mb-2 flex items-start gap-2">
+                  <span className="text-orange-600 shrink-0 mt-0.5">Q.</span>
                   {item.q}
                 </h3>
-                <p className="text-slate-600 text-sm leading-relaxed pl-5">{item.a}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed pl-5">{item.a}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Links para outras categorias */}
-        <section className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">Outros Serviços em Trancoso</h2>
+        <section className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+          <h2 className="text-lg font-bold text-foreground mb-4">Outros Serviços em Trancoso</h2>
           <div className="flex flex-wrap gap-2">
             {Object.entries(servicoConfig)
               .filter(([s]) => s !== slug)
               .map(([s, c]) => (
                 <Link key={s} to={`/ServicoLanding?slug=${s}`}>
-                  <Badge variant="outline" className="cursor-pointer hover:bg-cyan-50 hover:border-cyan-300 py-1.5 px-3">
+                  <Badge variant="outline" className="cursor-pointer hover:bg-orange-50 hover:border-orange-300 py-1.5 px-3">
                     {c.occupation}
                   </Badge>
                 </Link>
@@ -431,7 +431,7 @@ export default function ServicoLandingPage() {
           <p className="text-white/90 mb-6">Profissionais verificados prontos para atender você.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to={createPageUrl("ServicosCategoria", `?cat=${config.occupation}`)}>
-              <Button size="lg" className="bg-white text-slate-800 hover:bg-slate-100 font-bold w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-foreground hover:bg-orange-50 font-bold w-full sm:w-auto">
                 Encontrar Profissional
               </Button>
             </Link>

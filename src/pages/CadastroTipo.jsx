@@ -167,7 +167,7 @@ export default function CadastroTipoPage() {
                 onClick={handleClienteClick}
               >
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-500">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-gradient-to-br from-orange-400 to-orange-500">
                     <User className="w-8 h-8 text-white" />
                   </div>
                   <h2 className="text-xl font-semibold mb-2 text-foreground">Sou Cliente</h2>
@@ -214,10 +214,10 @@ export default function CadastroTipoPage() {
 
           <div className="space-y-4">
             <div>
-              <Label className="text-white">Tipo de pessoa <span className="text-red-400">*</span></Label>
+              <Label className="text-foreground">Tipo de pessoa <span className="text-red-400">*</span></Label>
               <Select value={tipoPessoa} onValueChange={setTipoPessoa}>
-                <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-slate-900 border-white/10">
+                <SelectTrigger className="bg-background border-border text-foreground"><SelectValue /></SelectTrigger>
+                <SelectContent className="bg-card border-border">
                   <SelectItem value="pf">Pessoa Física (CPF)</SelectItem>
                   <SelectItem value="mei">MEI – Microempreendedor Individual</SelectItem>
                   <SelectItem value="pj">Empresa / PJ (CNPJ)</SelectItem>
@@ -226,30 +226,30 @@ export default function CadastroTipoPage() {
             </div>
 
             <div>
-              <Label htmlFor="cpf_cad" className="text-white">CPF do responsável <span className="text-red-400">*</span></Label>
-              <Input id="cpf_cad" placeholder="000.000.000-00" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
+              <Label htmlFor="cpf_cad" className="text-foreground">CPF do responsável <span className="text-red-400">*</span></Label>
+              <Input id="cpf_cad" placeholder="000.000.000-00" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))} className="bg-background border-border text-foreground placeholder:text-muted-foreground" />
             </div>
 
             {(tipoPessoa === 'mei' || tipoPessoa === 'pj') && (
               <>
                 <div>
-                  <Label htmlFor="cnpj_cad" className="text-white">CNPJ <span className="text-red-400">*</span></Label>
-                  <Input id="cnpj_cad" placeholder="00.000.000/0000-00" value={cnpj} onChange={(e) => setCnpj(formatCnpj(e.target.value))} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
+                  <Label htmlFor="cnpj_cad" className="text-foreground">CNPJ <span className="text-red-400">*</span></Label>
+                  <Input id="cnpj_cad" placeholder="00.000.000/0000-00" value={cnpj} onChange={(e) => setCnpj(formatCnpj(e.target.value))} className="bg-background border-border text-foreground placeholder:text-muted-foreground" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <Label className="text-white">Razão Social</Label>
-                    <Input placeholder="Opcional" value={razaoSocial} onChange={(e) => setRazaoSocial(e.target.value)} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
+                    <Label className="text-foreground">Razão Social</Label>
+                    <Input placeholder="Opcional" value={razaoSocial} onChange={(e) => setRazaoSocial(e.target.value)} className="bg-background border-border text-foreground placeholder:text-muted-foreground" />
                   </div>
                   <div>
-                    <Label className="text-white">Nome Fantasia</Label>
-                    <Input placeholder="Opcional" value={nomFantasia} onChange={(e) => setNomeFantasia(e.target.value)} className="bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
+                    <Label className="text-foreground">Nome Fantasia</Label>
+                    <Input placeholder="Opcional" value={nomFantasia} onChange={(e) => setNomeFantasia(e.target.value)} className="bg-background border-border text-foreground placeholder:text-muted-foreground" />
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
-                  <input type="checkbox" id="ponto_fisico_cad" checked={temPontoFisico} onChange={(e) => setTemPontoFisico(e.target.checked)} className="mt-0.5 accent-amber-400 w-4 h-4 shrink-0" />
-                  <label htmlFor="ponto_fisico_cad" className="text-sm text-slate-300 cursor-pointer">
-                    <span className="font-semibold block mb-0.5 text-white">Possuo ponto físico em Trancoso</span>
+                <div className="flex items-start gap-3 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                  <input type="checkbox" id="ponto_fisico_cad" checked={temPontoFisico} onChange={(e) => setTemPontoFisico(e.target.checked)} className="mt-0.5 accent-orange-400 w-4 h-4 shrink-0" />
+                  <label htmlFor="ponto_fisico_cad" className="text-sm text-muted-foreground cursor-pointer">
+                    <span className="font-semibold block mb-0.5 text-foreground">Possuo ponto físico em Trancoso</span>
                     Loja, restaurante, pousada, bar, beach club, clínica ou estabelecimento físico.
                   </label>
                 </div>
@@ -258,29 +258,29 @@ export default function CadastroTipoPage() {
 
             {/* Aviso de redirecionamento para empresa */}
             {isEmpresaComPonto && (
-              <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
-                <Building2 className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-xl flex items-start gap-3">
+                <Building2 className="w-5 h-5 text-orange-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-semibold text-white mb-1">Detectamos que você é uma empresa com ponto físico em Trancoso.</p>
-                  <p className="text-xs text-slate-300">Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong className="text-amber-400">Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.</p>
+                  <p className="text-sm font-semibold text-foreground mb-1">Detectamos que você é uma empresa com ponto físico em Trancoso.</p>
+                  <p className="text-xs text-muted-foreground">Para negócios locais — lojas, restaurantes, pousadas, bares, beach clubs, clínicas e similares — o plano correto é o <strong className="text-orange-400">Plano Empresas</strong>, que garante mais visibilidade e recursos específicos para o seu negócio.</p>
                 </div>
               </div>
             )}
 
             {/* LGPD */}
-            <div className="p-4 bg-white/5 border border-white/10 rounded-xl text-left">
+            <div className="p-4 bg-muted border border-border rounded-xl text-left">
               <label className="flex items-start gap-3 cursor-pointer">
-                <input type="checkbox" checked={autorizouVerificacao} onChange={(e) => setAutorizouVerificacao(e.target.checked)} className="mt-1 accent-amber-400 w-4 h-4 shrink-0" />
-                <span className="text-xs text-slate-300 leading-relaxed">
-                  <span className="font-semibold text-white flex items-center gap-1 mb-1">
-                    <Shield className="w-3 h-3 text-amber-400" /> Autorização de Verificação (obrigatória)
+                <input type="checkbox" checked={autorizouVerificacao} onChange={(e) => setAutorizouVerificacao(e.target.checked)} className="mt-1 accent-orange-400 w-4 h-4 shrink-0" />
+                <span className="text-xs text-muted-foreground leading-relaxed">
+                  <span className="font-semibold text-foreground flex items-center gap-1 mb-1">
+                    <Shield className="w-3 h-3 text-orange-400" /> Autorização de Verificação (obrigatória)
                   </span>
                   Autorizo a Trancoso Resolve a realizar consultas de antecedentes criminais e, quando aplicável, verificação de CNPJ na Receita Federal, usando meus dados exclusivamente para fins de validação cadastral, em conformidade com a LGPD.
                 </span>
               </label>
             </div>
 
-            <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={handlePrestadorSubmit} disabled={updateUserMutation.isPending}>
+            <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white" onClick={handlePrestadorSubmit} disabled={updateUserMutation.isPending}>
               {updateUserMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
               {isEmpresaComPonto ? 'Continuar com Plano Empresas' : 'Cadastrar como Prestador'}
             </Button>

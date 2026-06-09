@@ -15,8 +15,8 @@ import StatusPagamentoBadge from '@/components/pagamento/StatusPagamentoBadge';
 
 const statusConfig = {
   Pendente: { color: "bg-amber-100 text-amber-800 border-amber-200", text: "Pendente" },
-  Confirmado: { color: "bg-green-100 text-green-800 border-green-200", text: "Confirmado" },
-  "Em Andamento": { color: "bg-blue-100 text-blue-800 border-blue-200", text: "Em Andamento" },
+  Confirmado: { color: "bg-[#3E8E5A]/10 text-[#3E8E5A] border-[#3E8E5A]/30", text: "Confirmado" },
+  "Em Andamento": { color: "bg-orange-100 text-orange-800 border-orange-200", text: "Em Andamento" },
   Concluído: { color: "bg-muted text-foreground border-border", text: "Concluído" },
   Rejeitado: { color: "bg-red-100 text-red-800 border-red-200", text: "Rejeitado" },
   Cancelado: { color: "bg-muted text-foreground border-border", text: "Cancelado" },

@@ -15,7 +15,7 @@ import { toast } from "sonner";
 const statusConfig = {
   pendente: { label: "Pendente", color: "bg-orange-100 text-orange-700 border-orange-200", icon: Clock },
   em_analise_manual: { label: "Em Análise Manual", color: "bg-orange-100 text-orange-700 border-orange-200", icon: AlertTriangle },
-  aprovado: { label: "Aprovado", color: "bg-green-100 text-green-700 border-green-200", icon: CheckCircle },
+  aprovado: { label: "Aprovado", color: "bg-[#3E8E5A]/10 text-[#3E8E5A] border-[#3E8E5A]/30", icon: CheckCircle },
   reprovado: { label: "Reprovado", color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
 };
 
@@ -121,7 +121,7 @@ export default function AdminAntecedentesPage() {
         {[
           { key: "pendente", label: "Pendentes", color: "border-orange-200 bg-orange-50", text: "text-orange-700" },
           { key: "em_analise_manual", label: "Em Análise", color: "border-orange-200 bg-orange-50", text: "text-orange-700" },
-          { key: "aprovado", label: "Aprovados", color: "border-green-200 bg-green-50", text: "text-green-700" },
+          { key: "aprovado", label: "Aprovados", color: "border-[#3E8E5A]/30 bg-[#3E8E5A]/10", text: "text-[#3E8E5A]" },
           { key: "reprovado", label: "Reprovados", color: "border-red-200 bg-red-50", text: "text-red-700" },
         ].map(({ key, label, color, text }) => (
           <Card key={key} className={`border ${color}`}>
@@ -177,7 +177,7 @@ export default function AdminAntecedentesPage() {
             <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-orange-500" /></div>
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <CheckCircle className="w-12 h-12 text-green-300 mb-3" />
+              <CheckCircle className="w-12 h-12 text-[#3E8E5A]/60 mb-3" />
               <p className="text-muted-foreground font-medium">Nenhum prestador pendente de verificação</p>
             </div>
           ) : (

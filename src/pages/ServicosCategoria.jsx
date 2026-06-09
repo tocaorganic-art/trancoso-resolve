@@ -270,10 +270,10 @@ export default function ServicosCategoriaPage() {
   }, [searchQuery, providers]);
 
   return (
-    <div className="min-h-screen bg-[#0a1628]">
+    <div className="min-h-screen bg-background">
       {pullDistance > 10 && (
-        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-amber-50 border-b border-amber-200 transition-all" style={{ height: `${Math.min(pullDistance, threshold)}px` }}>
-          <div className={`flex items-center gap-2 text-amber-700 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
+        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center bg-orange-50 border-b border-orange-200 transition-all" style={{ height: `${Math.min(pullDistance, threshold)}px` }}>
+          <div className={`flex items-center gap-2 text-orange-700 text-sm font-medium ${isPulling ? 'animate-spin' : ''}`}>
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
@@ -283,22 +283,22 @@ export default function ServicosCategoriaPage() {
       )}
       
       {/* HERO HEADER - Corrigido: padding adequado, cor navy, contagem correta */}
-      <div className="bg-gradient-to-br from-[#0a1628] to-[#1e293b] text-white px-5 pt-6 pb-4">
+      <div className="bg-card px-5 pt-6 pb-4 border-b border-border">
         <div className="max-w-7xl mx-auto">
           <Link to={createPageUrl("Home")}>
-            <Button variant="ghost" className="text-white hover:bg-white/10 mb-4 -ml-2">
-              <ArrowLeft className="w-4 h-4 mr-2 text-amber-400" /> Voltar
+            <Button variant="ghost" className="text-foreground hover:bg-muted mb-4 -ml-2">
+              <ArrowLeft className="w-4 h-4 mr-2 text-orange-400" /> Voltar
             </Button>
           </Link>
-          <h1 className="text-2xl md:text-3xl font-extrabold mb-2" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
+          <h1 className="text-2xl md:text-3xl font-extrabold mb-2 text-foreground">
             {selectedCategory === 'Todos' ? 'Serviços em Trancoso, BA' : `${selectedCategory} em Trancoso, BA`}
           </h1>
-          <p className="text-slate-300 text-sm md:text-base">
+          <p className="text-muted-foreground text-sm md:text-base">
             {isLoadingProviders ? "Carregando..." : (isSearching ? "Buscando com IA..." : `${filteredProviders.length} profissional${filteredProviders.length !== 1 ? 'is' : 'l'} encontrado${filteredProviders.length !== 1 ? 's' : ''}`)}
           </p>
           {selectedCategory !== 'Todos' && slugMap[selectedCategory] && (
             <Link to={`/ServicoLanding?slug=${slugMap[selectedCategory]}`} className="inline-block mt-3">
-              <span className="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-full px-3 py-1 transition-colors border border-amber-500/30">
+              <span className="text-xs bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 rounded-full px-3 py-1 transition-colors border border-orange-500/30">
                 📄 Guia completo de {selectedCategory} em Trancoso →
               </span>
             </Link>

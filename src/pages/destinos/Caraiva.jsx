@@ -37,14 +37,14 @@ export default function DestinoCaraiva() {
   return (
     <div className="bg-background overflow-x-hidden">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-background via-green-900 to-card text-white py-20 md:py-32 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#1A1208] via-[#2d3a18] to-[#1A1208] text-white py-20 md:py-32 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20 bg-cover bg-center"
           style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
           aria-hidden="true"
         />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
-          <div className="inline-flex items-center gap-2 bg-green-700/40 border border-green-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-green-200 mb-6">
+          <div className="inline-flex items-center gap-2 bg-olive-700/40 border border-olive-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-200 mb-6">
             <MapPin className="w-4 h-4" /> Caraíva, Bahia
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
@@ -129,7 +129,7 @@ export default function DestinoCaraiva() {
         </section>
 
         {/* Particularidades */}
-        <section className="mb-16 bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-8 border border-green-100">
+        <section className="mb-16 bg-gradient-to-br from-sand to-orange-50 rounded-3xl p-8 border border-orange-100">
           <h2 className="text-2xl font-bold text-foreground mb-6">Entendemos Caraíva</h2>
           <p className="text-muted-foreground mb-6 leading-relaxed">
             Caraíva tem particularidades únicas que exigem profissionais que conhecem o local: o acesso pela balsa, a ausência de asfalto, as limitações de materiais e ferramentas, e o cuidado especial com o meio ambiente.
@@ -143,7 +143,7 @@ export default function DestinoCaraiva() {
               'Suporte para urgências, mesmo com a logística diferenciada de Caraíva.',
             ].map((item, i) => (
               <li key={i} className="flex items-start gap-3 text-foreground">
-                <span className="w-6 h-6 rounded-full bg-green-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
+                <span className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
                 <span className="text-sm">{item}</span>
               </li>
             ))}

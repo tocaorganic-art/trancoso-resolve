@@ -138,9 +138,9 @@ const ServiceCard = ({ service, provider }) => {
     const isNew = !provider?.rating || provider?.rating === 0;
 
     return (
-        <Card className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col rounded-2xl">
+        <Card className="border border-border bg-card shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col rounded-2xl">
             {/* Imagem */}
-            <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-700 shrink-0">
+            <div className="relative h-48 w-full overflow-hidden bg-muted shrink-0">
                 {imageSrc ? (
                     <LazyImage
                         src={imageSrc}
@@ -149,7 +149,7 @@ const ServiceCard = ({ service, provider }) => {
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full" aria-hidden="true">
-                        <Icon className="w-10 h-10 text-slate-400" />
+                        <Icon className="w-10 h-10 text-muted-foreground" />
                     </div>
                 )}
                 {/* Badge de categoria sobre a imagem */}
@@ -170,17 +170,17 @@ const ServiceCard = ({ service, provider }) => {
 
             <CardContent className="p-5 flex flex-col flex-grow">
                 {/* Título */}
-                <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug mb-1 line-clamp-2">
+                <h3 className="font-bold text-base text-foreground leading-snug mb-1 line-clamp-2">
                     {service.title}
                 </h3>
 
                 {/* Nome do prestador */}
                 {provider && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 font-medium">{provider.full_name}</p>
+                    <p className="text-xs text-muted-foreground mb-2 font-medium">{provider.full_name}</p>
                 )}
 
                 {/* Descrição */}
-                <p className="text-sm text-slate-600 dark:text-slate-300 mb-4 line-clamp-2 flex-grow leading-relaxed">
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-grow leading-relaxed">
                     {description}
                 </p>
 
@@ -188,18 +188,18 @@ const ServiceCard = ({ service, provider }) => {
                 <div className="flex items-end justify-between mt-auto mb-4">
                     <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                        <span className="text-sm font-bold text-foreground">
                             {provider?.rating ? provider.rating.toFixed(1) : 'Novo'}
                         </span>
                         {provider?.total_reviews > 0 && (
-                            <span className="text-xs text-slate-500 dark:text-slate-400 ml-0.5">({provider.total_reviews})</span>
+                            <span className="text-xs text-muted-foreground ml-0.5">({provider.total_reviews})</span>
                         )}
                     </div>
                     <div className="text-right">
-                        <p className="text-lg font-extrabold text-orange-600 dark:text-orange-400 leading-tight">
+                        <p className="text-lg font-extrabold text-brand-primary leading-tight">
                             R$ {formatPrice(service.price)}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">por {service.price_unit || 'serviço'}</p>
+                        <p className="text-xs text-muted-foreground">por {service.price_unit || 'serviço'}</p>
                     </div>
                 </div>
 
@@ -434,7 +434,7 @@ export default function HomePage() {
         {user && (isLoadingRecommendations || (recommendedServices?.data && recommendedServices.data.length > 0)) && (
             <section className="mb-20">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2"><BrainCircuit className="w-6 h-6 text-purple-600" /> Para Você</h2>
+                    <h2 className="text-2xl font-bold text-foreground flex items-center gap-2"><BrainCircuit className="w-6 h-6 text-brand-primary" /> Para Você</h2>
                     <Link to={createPageUrl("ServicosCategoria")}>
                         <Button variant="ghost" className="text-orange-600 hover:text-orange-700">Ver todos</Button>
                     </Link>
@@ -455,7 +455,7 @@ export default function HomePage() {
         {/* Featured Services */}
         <section className="mb-10 md:mb-20">
           <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h2 className="text-lg md:text-2xl font-bold text-slate-900 drop-shadow-sm leading-tight">Profissionais verificados em Trancoso, na hora que você precisa.</h2>
+            <h2 className="text-lg md:text-2xl font-bold text-foreground leading-tight">Profissionais verificados em Trancoso, na hora que você precisa.</h2>
             <Link to={createPageUrl("ServicosCategoria")} data-testid="home-ver-todos-servicos-link">
               <Button variant="ghost" className="text-orange-600 hover:text-orange-700" aria-label="Ver todos os serviços">
                 Ver todos
@@ -479,8 +479,8 @@ export default function HomePage() {
                 ) : (
                   <div className="col-span-full text-center py-12 bg-gradient-to-br from-orange-50 to-sand rounded-xl border border-orange-100">
                     <Sparkles className="w-12 h-12 mx-auto text-amber-400 mb-3" />
-                    <h3 className="text-lg font-semibold text-slate-700 mb-2">Serviços em Destaque em Breve!</h3>
-                    <p className="text-slate-500 mb-4 max-w-md mx-auto">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Serviços em Destaque em Breve!</h3>
+                    <p className="text-muted-foreground mb-4 max-w-md mx-auto">
                       Estamos selecionando os melhores serviços para você. Enquanto isso, explore nossos profissionais.
                     </p>
                     <Link to={createPageUrl("ServicosCategoria")}>
@@ -496,8 +496,8 @@ export default function HomePage() {
         {/* Top Rated Providers */}
         <section className="mb-10 md:mb-20">
           <div className="text-center mb-4 md:mb-8">
-            <h2 className="text-xl md:text-3xl font-bold text-slate-900 drop-shadow-sm">Conheça os Profissionais Mais Bem Avaliados de Trancoso</h2>
-            <p className="text-base md:text-lg text-slate-700 font-medium mt-2 leading-relaxed">Os favoritos da comunidade, com qualidade comprovada.</p>
+            <h2 className="text-xl md:text-3xl font-bold text-foreground">Conheça os Profissionais Mais Bem Avaliados de Trancoso</h2>
+            <p className="text-base md:text-lg text-muted-foreground font-medium mt-2 leading-relaxed">Os favoritos da comunidade, com qualidade comprovada.</p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-6">
@@ -511,31 +511,31 @@ export default function HomePage() {
             ) : topProviders.length > 0 ? (
                 topProviders.map((provider) => (
                   <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
-                    <Card className="border border-slate-200 shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 bg-white">
+                    <Card className="border border-border shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 bg-card">
                       <CardContent className="p-4">
                         <LazyImage
                           src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
                           alt={`Foto de perfil de ${provider.full_name}`}
-                          className="w-20 h-20 rounded-full mx-auto border-4 border-white shadow-md mb-3"
+                          className="w-20 h-20 rounded-full mx-auto border-4 border-background shadow-md mb-3"
                         />
                         {provider.verified && (
-                          <div className="inline-flex items-center gap-1 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-pill mb-2">
+                          <div className="inline-flex items-center gap-1 bg-[#3E8E5A] text-white text-xs font-bold px-2 py-0.5 rounded-pill mb-2">
                             <CheckCircle className="w-3 h-3" /> Verificado
                           </div>
                         )}
-                        <p className="font-bold text-sm text-slate-900 mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
-                        <p className="text-xs text-slate-500 font-medium mb-2 line-clamp-1">{provider.occupation}</p>
+                        <p className="font-bold text-sm text-foreground mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
+                        <p className="text-xs text-muted-foreground font-medium mb-2 line-clamp-1">{provider.occupation}</p>
                         <div className="flex items-center justify-center gap-1 mb-2">
                           <Star className="w-3.5 h-3.5 text-yellow-500 fill-current" aria-hidden="true" />
-                          <span className="text-sm font-bold text-slate-900">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
+                          <span className="text-sm font-bold text-foreground">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
                           {provider.total_reviews > 0 && (
-                            <span className="text-xs text-slate-400">({provider.total_reviews})</span>
+                            <span className="text-xs text-muted-foreground">({provider.total_reviews})</span>
                           )}
                         </div>
                         <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-                          provider.availability === 'Disponível' ? 'bg-green-100 text-green-700' :
+                          provider.availability === 'Disponível' ? 'bg-[#3E8E5A]/10 text-[#3E8E5A]' :
                           provider.availability === 'Ocupado' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-slate-100 text-slate-500'
+                          'bg-muted text-muted-foreground'
                         }`}>
                           {provider.availability === 'Disponível' ? 'Disponível · Responde em 2h' : provider.availability || 'Indisponível'}
                         </div>
@@ -546,8 +546,8 @@ export default function HomePage() {
             ) : (
               <div className="col-span-full text-center py-12 bg-gradient-to-br from-orange-50 to-sand rounded-xl border border-orange-100">
                 <Star className="w-12 h-12 mx-auto text-amber-400 mb-3" />
-                <h3 className="text-lg font-semibold text-slate-700 mb-2">Seja o Primeiro Avaliado!</h3>
-                <p className="text-slate-500 mb-4 max-w-md mx-auto">
+                <h3 className="text-lg font-semibold text-foreground mb-2">Seja o Primeiro Avaliado!</h3>
+                <p className="text-muted-foreground mb-4 max-w-md mx-auto">
                   Os profissionais mais bem avaliados aparecerão aqui. Cadastre-se e conquiste suas primeiras avaliações.
                 </p>
                 <Link to={createPageUrl("SejaPrestador")}>
@@ -563,8 +563,8 @@ export default function HomePage() {
         {/* Landing Pages por Serviço - SEO Local */}
          <section className="mb-10 md:mb-20 pt-8 md:pt-16">
            <div className="text-center mb-8">
-             <h2 className="text-2xl md:text-4xl font-bold text-slate-900 drop-shadow-sm mb-2">Serviços Mais Buscados em Trancoso</h2>
-             <p className="text-base md:text-lg text-slate-700 font-medium max-w-2xl mx-auto">Acesse guias completos com profissionais verificados em cada categoria</p>
+             <h2 className="text-2xl md:text-4xl font-bold text-foreground mb-2">Serviços Mais Buscados em Trancoso</h2>
+             <p className="text-base md:text-lg text-muted-foreground font-medium max-w-2xl mx-auto">Acesse guias completos com profissionais verificados em cada categoria</p>
            </div>
            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
              {[

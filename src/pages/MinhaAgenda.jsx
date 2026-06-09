@@ -166,7 +166,7 @@ function MinhaAgendaContent() {
   const isLoading = isUserLoading || isProviderLoading || (!!providerId && (isLoadingRequests || isLoadingServices));
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-amber-600" /></div>;
+    return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-orange-600" /></div>;
   }
 
   const renderRequestList = (requests, status) => {
@@ -174,8 +174,8 @@ function MinhaAgendaContent() {
       return (
         <div className="text-center py-12">
           <div className="text-4xl mb-3">📅</div>
-          <p className="font-bold text-white">Nenhum agendamento {status === 'Pendente' ? 'pendente' : 'nesta categoria'}</p>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="font-bold text-foreground">Nenhum agendamento {status === 'Pendente' ? 'pendente' : 'nesta categoria'}</p>
+          <p className="text-sm text-muted-foreground mt-1">
             {status === 'Pendente' 
               ? 'Quando clientes solicitarem, aparecerão aqui.'
               : 'Esta categoria está vazia.'}
@@ -205,45 +205,45 @@ function MinhaAgendaContent() {
   };
 
   return (
-    <div className="bg-[#0a1628] min-h-screen pb-24">
+    <div className="bg-background min-h-screen pb-24">
       {/* HEADER PADRÃO */}
       <header className="px-5 pt-6 pb-2">
-        <h1 className="text-2xl font-extrabold text-white tracking-tight">Minha Agenda</h1>
-        <p className="text-sm text-slate-400 mt-1">Gerencie solicitações e disponibilidade</p>
+        <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Minha Agenda</h1>
+        <p className="text-sm text-muted-foreground mt-1">Gerencie solicitações e disponibilidade</p>
       </header>
 
       <div className="px-5 mt-6">
         {/* ABAS SIMPLIFICADAS */}
-        <div className="flex gap-2 bg-white/5 p-1 rounded-xl mb-6">
+        <div className="flex gap-2 bg-muted p-1 rounded-xl mb-6">
           <button 
             onClick={() => setActiveTab('Pendente')}
             className={cn(
               "flex-1 py-2 rounded-lg text-sm font-semibold transition",
               activeTab === 'Pendente' 
-                ? "gradient-amber text-white" 
-                : "text-slate-400 hover:text-slate-200"
+                ? "gradient-amber text-white"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
-            Pendentes <span className="ml-1 px-1.5 rounded-full bg-white/20 text-xs">{requestsByStatus.Pendente.length}</span>
+            Pendentes <span className="ml-1 px-1.5 rounded-full bg-muted-foreground/20 text-xs">{requestsByStatus.Pendente.length}</span>
           </button>
-          <button 
+          <button
             onClick={() => setActiveTab('Confirmado')}
             className={cn(
               "flex-1 py-2 rounded-lg text-sm font-semibold transition",
-              activeTab === 'Confirmado' 
-                ? "gradient-amber text-white" 
-                : "text-slate-400 hover:text-slate-200"
+              activeTab === 'Confirmado'
+                ? "gradient-amber text-white"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             Confirmados
           </button>
-          <button 
+          <button
             onClick={() => setActiveTab('Disponibilidade')}
             className={cn(
               "flex-1 py-2 rounded-lg text-sm font-semibold transition",
-              activeTab === 'Disponibilidade' 
-                ? "gradient-amber text-white" 
-                : "text-slate-400 hover:text-slate-200"
+              activeTab === 'Disponibilidade'
+                ? "gradient-amber text-white"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             Horários
@@ -274,7 +274,7 @@ function MinhaAgendaContent() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4"
+            className="rounded-2xl bg-card border border-border p-4"
           >
             <DisponibilidadeEditor providerId={providerId} />
           </motion.div>

@@ -123,8 +123,8 @@ export default function AdminAssinaturasPage() {
   };
 
   const statusColors = {
-    trial: "bg-blue-100 text-blue-800 border-blue-200",
-    active: "bg-green-100 text-green-800 border-green-200",
+    trial: "bg-amber-100 text-amber-800 border-amber-200",
+    active: "bg-[#3E8E5A]/10 text-[#3E8E5A] border-[#3E8E5A]/30",
     expired: "bg-red-100 text-red-800 border-red-200",
     cancelled: "bg-muted text-foreground border-border"
   };
@@ -162,27 +162,27 @@ export default function AdminAssinaturasPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-lg">
+          <Card className="border-none shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Trial</span>
-                <Clock className="w-5 h-5 text-blue-400" />
+                <Clock className="w-5 h-5 text-amber-500" />
               </div>
-              <p className="text-3xl font-bold text-blue-600">{stats.trial}</p>
+              <p className="text-3xl font-bold text-amber-600">{stats.trial}</p>
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-lg">
+          <Card className="border-none shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Ativos</span>
-                <Check className="w-5 h-5 text-green-400" />
+                <Check className="w-5 h-5 text-[#3E8E5A]" />
               </div>
-              <p className="text-3xl font-bold text-green-600">{stats.active}</p>
+              <p className="text-3xl font-bold text-[#3E8E5A]">{stats.active}</p>
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-lg">
+          <Card className="border-none shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Expirados</span>
@@ -192,13 +192,13 @@ export default function AdminAssinaturasPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-lg bg-gradient-to-br from-green-50 to-emerald-50">
+          <Card className="border-none shadow-sm bg-orange-50">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-green-700 font-medium">MRR</span>
-                <TrendingUp className="w-5 h-5 text-green-600" />
+                <span className="text-sm text-orange-700 font-medium">MRR</span>
+                <TrendingUp className="w-5 h-5 text-brand-primary" />
               </div>
-              <p className="text-3xl font-bold text-green-600">
+              <p className="text-3xl font-bold text-brand-primary">
                 R$ {stats.revenue.toLocaleString('pt-BR')}
               </p>
             </CardContent>
