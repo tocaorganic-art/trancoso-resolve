@@ -1,3 +1,8 @@
+/* Trancoso Resolve brand design system — warm burnt-orange identity.
+   Tokens (colors/type/spacing/radius/shadows) + self-hosted Nunito.
+   Additive: exposes --orange-500, --brand-primary, --sand, etc. */
+@import "./styles/brand/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
