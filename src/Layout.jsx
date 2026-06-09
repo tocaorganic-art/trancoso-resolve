@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { cn } from "@/lib/utils";
+import { useApp } from "@/contexts/AppContext";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Menu, X, FileText, User, MessageCircle, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered, Image, ChevronDown, MapPin } from
+  TrendingUp, CreditCard, Menu, X, FileText, User, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered, ChevronDown, MapPin, Sun, Moon } from
 "lucide-react";
 
 import RoutePreloader from "./components/optimization/RoutePreloader";
@@ -40,6 +42,7 @@ export default function Layout({ children, currentPageName }) {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isRoot = location.pathname === "/" || location.pathname === "/Home";
+  const { theme, toggleTheme, lang, setLang, t, LANGUAGES } = useApp();
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -48,8 +51,6 @@ export default function Layout({ children, currentPageName }) {
   });
 
   useEffect(() => {
-    document.documentElement.lang = 'pt-BR';
-
     const pageTitles = {
       '/': 'Trancoso Resolve - Serviços Confiáveis em Trancoso, Porto Seguro e Caraíva',
       '/Home': 'Trancoso Resolve - Serviços Confiáveis em Trancoso, Porto Seguro e Caraíva',
@@ -187,111 +188,118 @@ export default function Layout({ children, currentPageName }) {
         <WebVitalsCollector />
         <AccessLogger />
 
-        <div className="min-h-screen bg-slate-900 overflow-x-hidden">
-          <style>{`
-            :root {
-              --primary: #8B6914;
-              --secondary: #C4713A;
-              --accent: #4A6741;
-              --text-dark: #f1f5f9;
-              --text-light: #FFFFFF;
-              --background: #0f172a;
-              color-scheme: dark;
-            }
-            :focus-visible {
-              outline: 3px solid #38bdf8 !important;
-              outline-offset: 2px !important;
-              box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.4) !important;
-              border-radius: 4px;
-              transition: outline 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-            }
-          `}</style>
-
-          <nav className="bg-slate-800 shadow-slate-900 sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
+        <div className="min-h-screen bg-background overflow-x-hidden">
+          <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-warm-sm" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchpriority="high" />
-                <span className="font-bold text-sm md:text-lg text-white truncate hidden xs:inline sm:inline drop-shadow-md">Trancoso Resolve</span>
+                <img src="/brand/logo-mark.svg" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchPriority="high" />
+                <span className="font-bold text-sm md:text-lg text-foreground truncate hidden xs:inline sm:inline">Trancoso Resolve</span>
               </Link>
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-6">
-                {/* Destinos dropdown — always visible */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors focus:outline-none">
-                      <MapPin className="w-4 h-4" /> Destinos <ChevronDown className="w-3.5 h-3.5" />
+                    <button className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-orange-500 transition-colors focus:outline-none">
+                      <MapPin className="w-4 h-4" /> {t('nav.destinos')} <ChevronDown className="w-3.5 h-3.5" />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-52">
-                    <DropdownMenuLabel>Nossas Cidades</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t('nav.cities')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link to="/destinos/trancoso">🏄 Trancoso</Link>
+                      <Link to="/destinos/trancoso"><MapPin className="w-3.5 h-3.5 mr-2 text-orange-500" />Trancoso</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/destinos/porto-seguro">⚓ Porto Seguro</Link>
+                      <Link to="/destinos/porto-seguro"><MapPin className="w-3.5 h-3.5 mr-2 text-orange-500" />Porto Seguro</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/destinos/caraiva">🌊 Caraíva</Link>
+                      <Link to="/destinos/caraiva"><MapPin className="w-3.5 h-3.5 mr-2 text-orange-500" />Caraíva</Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
 
                 {user ? (
                   <>
-                    <Link to={createPageUrl("ServicosCategoria")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Serviços</Link>
-                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors">
-                      <ListOrdered className="w-4 h-4" /> Meus Pedidos
+                    <Link to={createPageUrl("ServicosCategoria")} className="text-sm font-semibold text-foreground hover:text-orange-500 transition-colors">{t('nav.services')}</Link>
+                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-orange-500 transition-colors">
+                      <ListOrdered className="w-4 h-4" /> {t('nav.myOrders')}
                     </Link>
-                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-semibold text-white hover:text-amber-300 transition-colors">
-                      <Bot className="w-4 h-4" /> Assistente IA
+                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-orange-500 transition-colors">
+                      <Bot className="w-4 h-4" /> {t('nav.aiAssistant')}
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Como Funciona</Link>
-                    <Link to={createPageUrl("ServicosCategoria")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Serviços</Link>
-                    <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-white hover:text-amber-300 transition-colors">Seja Prestador</Link>
+                    <Link to={createPageUrl("ComoFunciona")} className="text-sm font-semibold text-foreground hover:text-orange-500 transition-colors">{t('nav.howItWorks')}</Link>
+                    <Link to={createPageUrl("ServicosCategoria")} className="text-sm font-semibold text-foreground hover:text-orange-500 transition-colors">{t('nav.services')}</Link>
+                    <Link to={createPageUrl("SejaPrestador")} className="text-sm font-semibold text-foreground hover:text-orange-500 transition-colors">{t('nav.beProvider')}</Link>
                   </>
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                {/* Language selector */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="text-foreground gap-1 px-2 h-8 text-xs font-bold">
+                      <Globe className="w-3.5 h-3.5" />
+                      {lang.toUpperCase()}
+                      <ChevronDown className="w-3 h-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-36">
+                    {LANGUAGES.map(l => (
+                      <DropdownMenuItem
+                        key={l.code}
+                        onClick={() => setLang(l.code)}
+                        className={cn("cursor-pointer text-sm", lang === l.code && "font-bold text-orange-500")}
+                      >
+                        {l.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Theme toggle */}
+                <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-8 w-8 text-foreground" aria-label="Alternar tema">
+                  {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </Button>
+
                 {user ?
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="flex items-center gap-2 text-slate-100" data-testid="user-menu-trigger">
+                      <Button variant="ghost" className="flex items-center gap-2 text-foreground" data-testid="user-menu-trigger">
                         <User className="w-5 h-5" />
                         <span>{user.full_name || user.email}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t('nav.myAccount')}</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       {user.user_type === 'prestador' &&
                     <Link to={createPageUrl("Dashboard")}>
-                          <DropdownMenuItem data-testid="user-menu-dashboard" className="cursor-pointer">Dashboard</DropdownMenuItem>
+                          <DropdownMenuItem data-testid="user-menu-dashboard" className="cursor-pointer">{t('nav.dashboard')}</DropdownMenuItem>
                         </Link>
                     }
                       <Link to={createPageUrl("MeusPedidos")}>
                         <DropdownMenuItem className="cursor-pointer" data-testid="user-menu-meus-pedidos">
                           <FileText className="w-4 h-4 mr-2" />
-                          Meus Pedidos
+                          {t('nav.myOrders')}
                         </DropdownMenuItem>
                       </Link>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => base44.auth.logout()} className="cursor-pointer" data-testid="user-menu-logout">
-                        Sair
+                        {t('nav.logout')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu> :
 
-                <Button onClick={() => {sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200" size="sm" data-testid="login-button">
-                    Entrar
+                <Button onClick={() => {sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="bg-brand-primary text-white hover:bg-orange-600 transition-colors duration-200" size="sm" data-testid="login-button">
+                    {t('nav.login')}
                   </Button>
                 }
-                <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Abrir menu de navegação">
+                <Button variant="ghost" size="icon" className="md:hidden h-8 w-8" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label={t('nav.openMenu')}>
                   {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
               </div>
@@ -299,29 +307,46 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Mobile Navigation */}
             {mobileMenuOpen &&
-            <div className="md:hidden animate-fade-in pb-4 space-y-1 px-4 bg-slate-800 border-t border-slate-700" data-testid="mobile-menu-content-public">
-                {/* Destinos — always visible in mobile */}
-                <div className="py-2 border-b border-slate-700">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Destinos</p>
-                  <Link to="/destinos/trancoso" className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>🏄 Trancoso</Link>
-                  <Link to="/destinos/porto-seguro" className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>⚓ Porto Seguro</Link>
-                  <Link to="/destinos/caraiva" className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>🌊 Caraíva</Link>
+            <div className="md:hidden animate-fade-in pb-4 space-y-1 px-4 bg-card border-t border-border" data-testid="mobile-menu-content-public">
+                <div className="py-2 border-b border-border">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">{t('nav.destinos')}</p>
+                  <Link to="/destinos/trancoso" className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><MapPin className="w-4 h-4 text-orange-500" />Trancoso</Link>
+                  <Link to="/destinos/porto-seguro" className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><MapPin className="w-4 h-4 text-orange-500" />Porto Seguro</Link>
+                  <Link to="/destinos/caraiva" className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><MapPin className="w-4 h-4 text-orange-500" />Caraíva</Link>
                 </div>
                 {user ? (
                   <>
-                    <Link to={createPageUrl("ServicosCategoria")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
-                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><ListOrdered className="w-4 h-4" /> Meus Pedidos</Link>
-                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><Bot className="w-4 h-4" /> Assistente IA</Link>
-                    {user.user_type === 'prestador' && <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2 text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Dashboard</Link>}
+                    <Link to={createPageUrl("ServicosCategoria")} className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>{t('nav.services')}</Link>
+                    <Link to={createPageUrl("MeusPedidos")} className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><ListOrdered className="w-4 h-4" /> {t('nav.myOrders')}</Link>
+                    <Link to={createPageUrl("Assistentevirtual")} className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><Bot className="w-4 h-4" /> {t('nav.aiAssistant')}</Link>
+                    {user.user_type === 'prestador' && <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>{t('nav.dashboard')}</Link>}
                   </>
                 ) : (
                   <>
-                    <Link to={createPageUrl("ServicosCategoria")} className="block text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
-                    <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Como funciona?</Link>
-                    <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-white hover:text-amber-300 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>Seja prestador</Link>
-                    <div className="pt-2 border-t border-slate-700">
-                      <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="w-full bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-200 min-h-[44px]" size="sm">
-                        Entrar
+                    <Link to={createPageUrl("ServicosCategoria")} className="block text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>{t('nav.services')}</Link>
+                    <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>{t('nav.howItWorks')}</Link>
+                    <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>{t('nav.beProvider')}</Link>
+                    <div className="pt-2 border-t border-border flex items-center gap-2">
+                      <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="flex-1 bg-brand-primary text-white hover:bg-orange-600 transition-colors duration-200 min-h-[44px]" size="sm">
+                        {t('nav.login')}
+                      </Button>
+                      {/* Language + theme in mobile menu */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm" className="gap-1 px-2 text-xs font-bold h-11">
+                            <Globe className="w-3.5 h-3.5" />{lang.toUpperCase()}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-36">
+                          {LANGUAGES.map(l => (
+                            <DropdownMenuItem key={l.code} onClick={() => setLang(l.code)} className={cn("cursor-pointer text-sm", lang === l.code && "font-bold text-orange-500")}>
+                              {l.name}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      <Button variant="outline" size="icon" onClick={toggleTheme} className="h-11 w-11" aria-label="Alternar tema">
+                        {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                       </Button>
                     </div>
                   </>
@@ -332,22 +357,21 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Mobile-only top bar: logo on root, back button on sub-pages */}
           {isRoot &&
-          <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-800 border-b border-slate-700 flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
+          <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-card border-b border-border flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
             <Link to="/" className="flex items-center gap-2">
-              <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve" className="h-8 w-8" />
-              <span className="font-bold text-sm text-slate-100">Trancoso Resolve</span>
+              <img src="/brand/logo-mark.svg" alt="Trancoso Resolve" className="h-8 w-8" />
+              <span className="font-bold text-sm text-foreground">Trancoso Resolve</span>
             </Link>
           </div>
           }
           {!isRoot &&
-          <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-800 border-b border-slate-700 flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
+          <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-card border-b border-border flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-slate-100 min-w-[44px] min-h-[44px] -ml-1"
-              aria-label="Voltar">
-              
+              className="flex items-center gap-2 text-foreground min-w-[44px] min-h-[44px] -ml-1"
+              aria-label={t('nav.back')}>
               <ArrowLeft className="w-5 h-5" />
-              <span className="text-sm font-medium">Voltar</span>
+              <span className="text-sm font-medium">{t('nav.back')}</span>
             </button>
           </div>
           }
@@ -357,14 +381,14 @@ export default function Layout({ children, currentPageName }) {
           <footer className="text-white py-8 mt-16 pb-safe bg-[hsl(var(--card))]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
               <div className="flex justify-center gap-2 mb-4 flex-wrap">
-                <Link to={createPageUrl("About")} className="text-base font-medium text-slate-200 hover:text-white transition-colors min-h-[44px] flex items-center px-2">
-                  Sobre
+                <Link to={createPageUrl("About")} className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors min-h-[44px] flex items-center px-2">
+                  {t('footer.about')}
                 </Link>
-                <Link to={createPageUrl("Contact")} className="text-base font-medium text-slate-200 hover:text-white transition-colors min-h-[44px] flex items-center px-2">
-                  Contato
+                <Link to={createPageUrl("Contact")} className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors min-h-[44px] flex items-center px-2">
+                  {t('footer.contact')}
                 </Link>
-                <Link to={createPageUrl("PoliticaPrivacidade")} className="text-base font-medium text-slate-200 hover:text-white transition-colors min-h-[44px] flex items-center px-2" data-testid="footer-privacy-link">
-                  Política de Privacidade
+                <Link to={createPageUrl("PoliticaPrivacidade")} className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors min-h-[44px] flex items-center px-2" data-testid="footer-privacy-link">
+                  {t('footer.privacy')}
                 </Link>
               </div>
 
@@ -407,9 +431,9 @@ export default function Layout({ children, currentPageName }) {
 
               {/* Links de Destinos */}
               <div className="flex justify-center gap-x-5 gap-y-1 mb-3 flex-wrap text-sm">
-                <Link to="/destinos/trancoso" className="text-amber-400 hover:text-amber-300 font-semibold transition-colors">🏄 Trancoso</Link>
-                <Link to="/destinos/porto-seguro" className="text-amber-400 hover:text-amber-300 font-semibold transition-colors">⚓ Porto Seguro</Link>
-                <Link to="/destinos/caraiva" className="text-amber-400 hover:text-amber-300 font-semibold transition-colors">🌊 Caraíva</Link>
+                <Link to="/destinos/trancoso" className="text-orange-500 hover:text-orange-400 font-semibold transition-colors flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />Trancoso</Link>
+                <Link to="/destinos/porto-seguro" className="text-orange-500 hover:text-orange-400 font-semibold transition-colors flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />Porto Seguro</Link>
+                <Link to="/destinos/caraiva" className="text-orange-500 hover:text-orange-400 font-semibold transition-colors flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />Caraíva</Link>
               </div>
 
               {/* Links SEO Porto Seguro */}
@@ -423,8 +447,8 @@ export default function Layout({ children, currentPageName }) {
                 <Link to="/servicos/pedreiro-porto-seguro" className="hover:text-slate-200 transition-colors">Pedreiro</Link>
               </div>
 
-              <p className="text-slate-300 text-base font-medium">
-                © 2026 Trancoso Resolve • Plataforma de Serviços em Trancoso • Todos os direitos reservados
+              <p className="text-muted-foreground text-base font-medium">
+                {t('footer.copyright')}
               </p>
             </div>
           </footer>
@@ -452,28 +476,13 @@ export default function Layout({ children, currentPageName }) {
       <PageViewTracker />
       <AccessLogger />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 transition-colors">
-        <style>{`
-          :focus-visible {
-            outline: 3px solid #38bdf8 !important;
-            outline-offset: 2px !important;
-            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3) !important;
-            border-radius: 4px;
-            transition: outline 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-          }
-          *:focus:not(:focus-visible) { outline: none; }
-          a:not([class]) { text-decoration: underline; text-underline-offset: 2px; }
-          .skip-link { position: absolute; top: -40px; left: 0; background: #0A81D1; color: white; padding: 8px 16px; z-index: 100; transition: top 0.3s; }
-          .skip-link:focus { top: 0; }
-          @media (max-width: 768px) { button, a, [role="button"] { min-height: 44px; min-width: 44px; } }
-        `}</style>
-
-        <nav className="bg-slate-800 shadow-sm sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
+      <div className="min-h-screen bg-background transition-colors">
+        <nav className="bg-card border-b border-border shadow-warm-sm sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/607538b94_generated_image.png" alt="Trancoso Resolve Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-100">Trancoso Resolve</span>
+                <img src="/brand/logo-mark.svg" alt="Trancoso Resolve Logo" className="h-10 w-10" />
+                <span className="font-bold text-xl text-foreground">Trancoso Resolve</span>
               </Link>
 
               <div className="hidden lg:flex items-center gap-2">

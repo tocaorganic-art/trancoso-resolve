@@ -53,7 +53,6 @@ export function useDestinationSeo({ title, description, canonical, schemaId, sch
       const s = document.getElementById(schemaId);
       if (s) s.remove();
     };
-  // Deps intentionally empty: runs once on mount, restores on unmount.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // Deps intentionally empty: runs once on mount, restores on unmount.
 }

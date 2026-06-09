@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import { ptBR } from "date-fns/locale";
 import LazyImage from "@/components/ui/LazyImage";
 import {
   ArrowLeft, Star, MapPin, Award, Clock,
-  DollarSign, CheckCircle, Calendar as CalendarIcon, Images, ChevronRight, Check, AlertCircle
+  DollarSign, Calendar as CalendarIcon, Images, ChevronRight, Check, AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import StarRating from "@/components/reviews/StarRating";
@@ -248,11 +248,11 @@ export default function PrestadorPerfilPage() {
       <div className="container mx-auto px-4 py-16 max-w-lg">
         <Card className="border-none shadow-lg">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="w-14 h-14 text-slate-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Prestador não encontrado 😕</h2>
-            <p className="text-slate-600 mb-6">O perfil que você procura pode ter sido removido ou o link está incorreto.</p>
+            <AlertCircle className="w-14 h-14 text-muted-foreground mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-foreground mb-2">Prestador não encontrado</h2>
+            <p className="text-muted-foreground mb-6">O perfil que você procura pode ter sido removido ou o link está incorreto.</p>
             <Link to={createPageUrl("ServicosCategoria")}>
-              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600">
+              <Button className="bg-brand-primary hover:bg-orange-600">
                 Ver todos os prestadores
               </Button>
             </Link>
@@ -274,9 +274,9 @@ export default function PrestadorPerfilPage() {
 
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {/* Header — usa foto de capa do prestador se disponível */}
-      <div className="relative h-56 bg-gradient-to-r from-cyan-500 to-blue-600">
+      <div className="relative h-56 bg-gradient-to-r from-orange-500 to-orange-700">
         <LazyImage
           src={provider.cover_photo_url || "https://images.unsplash.com/photo-1541599360-14863869b657?q=80&w=1964&auto=format&fit=crop"}
           alt={provider.cover_photo_url ? `Foto de capa de ${provider.full_name}` : "Imagem de fundo abstrata"}
@@ -308,8 +308,8 @@ export default function PrestadorPerfilPage() {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1 break-words">{provider.full_name}</h1>
-                      <p className="text-lg text-cyan-600 font-medium">{provider.occupation}</p>
+                      <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-1 break-words">{provider.full_name}</h1>
+                      <p className="text-lg text-orange-600 font-medium">{provider.occupation}</p>
                     </div>
                     {provider.verified && (
                       <VerificacaoBadge verified showLabel size="md" />
@@ -320,22 +320,22 @@ export default function PrestadorPerfilPage() {
                     <div className="flex items-center gap-2">
                       <StarRating rating={averageRating} />
                       <span className="text-xl font-bold">{averageRating > 0 ? averageRating.toFixed(1) : 'Novo'}</span>
-                      <span className="text-sm text-slate-500">({reviews.length} avaliações)</span>
+                      <span className="text-sm text-muted-foreground">({reviews.length} avaliações)</span>
                     </div>
                     {provider.price_range && (
-                      <Badge variant="outline" className="text-base border-slate-300">{provider.price_range}</Badge>
+                      <Badge variant="outline" className="text-base border-border">{provider.price_range}</Badge>
                     )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 text-sm">
                     {provider.location?.city && (
-                      <div className="flex items-center gap-2 text-slate-600">
+                      <div className="flex items-center gap-2 text-muted-foreground">
                         <MapPin className="w-4 h-4" />
                         <span>{provider.location.city}</span>
                       </div>
                     )}
                     {provider.experience_years && (
-                      <div className="flex items-center gap-2 text-slate-600">
+                      <div className="flex items-center gap-2 text-muted-foreground">
                         <Award className="w-4 h-4" />
                         <span>{provider.experience_years} anos de experiência</span>
                       </div>
@@ -356,9 +356,9 @@ export default function PrestadorPerfilPage() {
             </div>
 
             {provider.bio && (
-              <div className="bg-slate-50 p-8 border-y">
-                <h3 className="font-semibold text-slate-900 mb-2 text-lg">Sobre {provider.full_name.split(' ')[0]}</h3>
-                <p className="text-slate-700 leading-relaxed">{provider.bio}</p>
+              <div className="bg-muted p-8 border-y">
+                <h3 className="font-semibold text-foreground mb-2 text-lg">Sobre {provider.full_name.split(' ')[0]}</h3>
+                <p className="text-foreground leading-relaxed">{provider.bio}</p>
               </div>
             )}
 
@@ -366,7 +366,7 @@ export default function PrestadorPerfilPage() {
               <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
               <Button
               size="lg"
-              className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
+              className="flex-1 bg-brand-primary hover:bg-orange-600"
               onClick={() => {
                 if (!user) {
                   base44.auth.redirectToLogin(window.location.href);
@@ -392,14 +392,14 @@ export default function PrestadorPerfilPage() {
         {/* Request Form with Calendar */}
         {showRequestForm && (
           <Card className="border-none shadow-xl mb-8">
-            <CardHeader className="bg-gradient-to-r from-cyan-50 to-blue-50">
+            <CardHeader className="bg-gradient-to-r from-orange-50 to-orange-50">
               <CardTitle>Agendar com {provider.full_name.split(' ')[0]}</CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleSubmitRequest} className="space-y-4">
                 {step === 1 && (
                   <>
-                    <p className="text-sm text-slate-600 mb-4 font-semibold">Etapa 1 de 2: Detalhes do Serviço</p>
+                    <p className="text-sm text-muted-foreground mb-4 font-semibold">Etapa 1 de 2: Detalhes do Serviço</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="client_name">Seu Nome *</Label>
@@ -485,7 +485,7 @@ export default function PrestadorPerfilPage() {
                       <Button type="button" variant="outline" onClick={() => setShowRequestForm(false)} className="flex-1" aria-label="Cancelar agendamento">
                         Cancelar
                       </Button>
-                      <Button type="button" onClick={handleNextStep} disabled={services.length === 0} className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600" aria-label="Continuar para a próxima etapa do agendamento">
+                      <Button type="button" onClick={handleNextStep} disabled={services.length === 0} className="flex-1 bg-brand-primary hover:bg-orange-600" aria-label="Continuar para a próxima etapa do agendamento">
                         Continuar <ChevronRight className="w-4 h-4 ml-1" />
                       </Button>
                     </div>
@@ -494,7 +494,7 @@ export default function PrestadorPerfilPage() {
 
                 {step === 2 && (
                   <>
-                    <p className="text-sm text-slate-600 mb-4 font-semibold">Etapa 2 de 2: Localização do Serviço</p>
+                    <p className="text-sm text-muted-foreground mb-4 font-semibold">Etapa 2 de 2: Localização do Serviço</p>
                     <div className="mb-4">
                       <Label>Onde o serviço será realizado?</Label>
                       <ServiceLocationMap 
@@ -502,11 +502,11 @@ export default function PrestadorPerfilPage() {
                         onLocationSelect={(pos) => setRequestData(prev => ({...prev, location: {...prev.location, lat: pos[0], lng: pos[1]}}))} 
                       />
                        {requestData.location.lat && requestData.location.lng && (
-                         <p className="text-xs text-slate-500 mt-2">Localização selecionada: {requestData.location.lat.toFixed(4)}, {requestData.location.lng.toFixed(4)}</p>
+                         <p className="text-xs text-muted-foreground mt-2">Localização selecionada: {requestData.location.lat.toFixed(4)}, {requestData.location.lng.toFixed(4)}</p>
                        )}
                     </div>
                     <div className="space-y-4 pt-4 border-t">
-                      <h3 className="font-semibold text-lg text-slate-700">Detalhes do endereço</h3>
+                      <h3 className="font-semibold text-lg text-foreground">Detalhes do endereço</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="md:col-span-2">
                            <Label htmlFor="address">Rua/Avenida *</Label>
@@ -546,7 +546,7 @@ export default function PrestadorPerfilPage() {
           <Card className="border-none shadow-lg mb-8">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Images className="w-5 h-5 text-cyan-600" aria-hidden="true" />
+                <Images className="w-5 h-5 text-orange-600" aria-hidden="true" />
                 Portfólio de Trabalhos
               </CardTitle>
             </CardHeader>
@@ -572,22 +572,22 @@ export default function PrestadorPerfilPage() {
             <CardContent>
               <div className="space-y-4">
                 {services.map((service) => (
-                  <div key={service.id} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <div key={service.id} className="p-4 bg-muted rounded-xl border border-border">
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex-1">
-                        <h4 className="font-bold text-slate-900 dark:text-white mb-1 leading-snug">{service.title}</h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-300 mb-2 leading-relaxed line-clamp-2">{service.description}</p>
+                        <h4 className="font-bold text-foreground mb-1 leading-snug">{service.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-2 leading-relaxed line-clamp-2">{service.description}</p>
                         {service.duration_estimate && (
-                          <Badge className="bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200 text-xs font-medium">
+                          <Badge className="bg-muted text-muted-foreground text-xs font-medium">
                             ⏱ {service.duration_estimate}
                           </Badge>
                         )}
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="text-lg font-extrabold text-cyan-600 dark:text-cyan-400 leading-tight">
+                        <p className="text-lg font-extrabold text-orange-600 leading-tight">
                           R$ {service.price?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">por {service.price_unit}</p>
+                        <p className="text-xs text-muted-foreground font-medium">por {service.price_unit}</p>
                       </div>
                     </div>
                   </div>
@@ -609,9 +609,9 @@ export default function PrestadorPerfilPage() {
             {totalReviews > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b">
                   <div className="sm:col-span-1 flex flex-col items-center justify-center text-center">
-                    <p className="text-4xl sm:text-5xl font-bold text-slate-800 mb-2">{averageRating > 0 ? averageRating.toFixed(1) : 'Novo'}</p>
+                    <p className="text-4xl sm:text-5xl font-bold text-foreground mb-2">{averageRating > 0 ? averageRating.toFixed(1) : 'Novo'}</p>
                     <StarRating rating={averageRating} size={20} /> {/* Ensure rating is a number */}
-                    <p className="text-xs sm:text-sm text-slate-500 mt-1">Baseado em {totalReviews} avaliações</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">Baseado em {totalReviews} avaliações</p>
                   </div>
                   <div className="sm:col-span-2">
                   {[5, 4, 3, 2, 1].map(star => {
@@ -619,11 +619,11 @@ export default function PrestadorPerfilPage() {
                     const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
                     return (
                       <div key={star} className="flex items-center gap-2 text-sm">
-                        <span className="w-10 text-slate-600">{star} {star > 1 ? 'estrelas' : 'estrela'}</span>
-                        <div className="flex-1 bg-slate-200 rounded-full h-2">
+                        <span className="w-10 text-muted-foreground">{star} {star > 1 ? 'estrelas' : 'estrela'}</span>
+                        <div className="flex-1 bg-muted rounded-full h-2">
                            <div className="bg-yellow-400 h-2 rounded-full" style={{ width: `${percentage}%` }}></div>
                         </div>
-                        <span className="w-8 text-right text-slate-500">{count}</span>
+                        <span className="w-8 text-right text-muted-foreground">{count}</span>
                       </div>
                     );
                   })}
@@ -632,21 +632,21 @@ export default function PrestadorPerfilPage() {
             )}
 
             {reviews.length === 0 ? (
-              <p className="text-slate-500 text-center py-8">Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+              <p className="text-muted-foreground text-center py-8">Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
             ) : (
               <div className="space-y-6">
                 {reviews.map((review) => (
-                  <div key={review.id} className="p-4 bg-slate-50 rounded-lg border">
+                  <div key={review.id} className="p-4 bg-muted rounded-lg border border-border">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-3">
-                         <LazyImage 
-                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewer_name || 'A')}&background=random`} 
+                         <LazyImage
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewer_name || 'A')}&background=random`}
                             alt={review.reviewer_name ? `Avatar de ${review.reviewer_name}` : "Avatar de cliente anônimo"}
                             className="w-10 h-10 rounded-full"
                          />
                          <div>
-                            <p className="font-semibold text-slate-900">{review.reviewer_name || "Cliente Anônimo"}</p>
-                            <p className="text-xs text-slate-500">
+                            <p className="font-semibold text-foreground">{review.reviewer_name || "Cliente Anônimo"}</p>
+                            <p className="text-xs text-muted-foreground">
                               {format(new Date(review.created_date), "dd 'de' MMMM, yyyy", { locale: ptBR })}
                             </p>
                          </div>
@@ -654,7 +654,7 @@ export default function PrestadorPerfilPage() {
                       <StarRating rating={review.rating} aria-label={`Avaliação de ${review.rating} estrelas`} />
                     </div>
                     {review.comment && (
-                      <p className="text-sm text-slate-700 italic mb-3">"{review.comment}"</p>
+                      <p className="text-sm text-foreground italic mb-3">"{review.comment}"</p>
                     )}
                     {review.tags && review.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-3">
@@ -671,10 +671,10 @@ export default function PrestadorPerfilPage() {
                       </div>
                     )}
                     {review.response && (
-                        <div className="mt-4 pt-3 border-t border-slate-200 bg-slate-100 p-3 rounded-md">
-                            <p className="text-sm font-semibold text-slate-800">Resposta de {provider.full_name.split(' ')[0]}:</p>
-                            <p className="text-sm text-slate-600 mt-1">"{review.response}"</p>
-                            {review.response_date && <p className="text-xs text-slate-500 text-right mt-2">{format(new Date(review.response_date), "dd/MM/yyyy")}</p>}
+                        <div className="mt-4 pt-3 border-t border-border bg-card p-3 rounded-md">
+                            <p className="text-sm font-semibold text-foreground">Resposta de {provider.full_name.split(' ')[0]}:</p>
+                            <p className="text-sm text-muted-foreground mt-1">"{review.response}"</p>
+                            {review.response_date && <p className="text-xs text-muted-foreground text-right mt-2">{format(new Date(review.response_date), "dd/MM/yyyy")}</p>}
                         </div>
                     )}
                   </div>

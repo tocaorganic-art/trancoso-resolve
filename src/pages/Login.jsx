@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
@@ -128,15 +128,15 @@ export default function Login() {
 
         <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-300" />
+            <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-slate-500">ou</span>
+            <span className="bg-card px-2 text-muted-foreground">ou</span>
           </div>
         </div>
 
         <Button
-          className="w-full h-12 text-sm font-medium bg-amber-600 hover:bg-amber-700"
+          className="w-full h-12 text-sm font-medium bg-orange-600 hover:bg-orange-700"
           onClick={() => base44.auth.redirectToLogin()}
         >
           <LogIn className="w-5 h-5 mr-2" />

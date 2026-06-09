@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Calendar, Smile, UserCheck, Briefcase, BarChart, Shield, Star, Zap } from 'lucide-react';
+import { Search, Calendar, Smile, UserCheck, Briefcase, BarChart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
@@ -11,8 +11,8 @@ const ProcessStep = ({ icon, title, description }) => (
     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center mb-4 shadow-lg">
       {icon}
     </div>
-    <h3 className="font-bold text-lg mb-2 text-[#0a1628]">{title}</h3>
-    <p className="text-slate-600">{description}</p>
+    <h3 className="font-bold text-lg mb-2 text-foreground">{title}</h3>
+    <p className="text-muted-foreground">{description}</p>
   </div>
 );
 
@@ -21,8 +21,8 @@ const ProcessStepPrestador = ({ icon, title, description }) => (
     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center mb-4 shadow-lg">
       {icon}
     </div>
-    <h3 className="font-bold text-lg mb-2 text-white">{title}</h3>
-    <p className="text-slate-300">{description}</p>
+    <h3 className="font-bold text-lg mb-2 text-foreground">{title}</h3>
+    <p className="text-muted-foreground">{description}</p>
   </div>
 );
 
@@ -123,11 +123,11 @@ export default function ComoFuncionaPage() {
   ];
 
   return (
-    <div className="bg-slate-50">
+    <div className="bg-background">
       <div className="container mx-auto py-16 px-4">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#0a1628] mb-4">Simples, Rápido e Confiável</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">Simples, Rápido e Confiável</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Conectamos você aos melhores profissionais de Trancoso. Entenda como transformamos suas necessidades em soluções.
           </p>
         </div>
@@ -139,7 +139,7 @@ export default function ComoFuncionaPage() {
 
         {/* Para Clientes */}
         <section className="mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-[#0a1628]">Para Clientes: Sua Solução em 3 Passos</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-foreground">Para Clientes: Sua Solução em 3 Passos</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <ProcessStep 
               icon={<Search className="w-8 h-8" />} 
@@ -160,8 +160,8 @@ export default function ComoFuncionaPage() {
         </section>
 
         {/* Para Prestadores */}
-        <section className="mb-20 bg-gradient-to-br from-[#0a1628] to-[#1e293b] p-8 md:p-12 rounded-2xl shadow-xl border border-white/10">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-white">Para Prestadores: Transforme seu Talento em Negócio</h2>
+        <section className="mb-20 bg-card p-8 md:p-12 rounded-2xl shadow-xl border border-border">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-foreground">Para Prestadores: Transforme seu Talento em Negócio</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <ProcessStepPrestador 
               icon={<UserCheck className="w-8 h-8" />} 
@@ -181,7 +181,7 @@ export default function ComoFuncionaPage() {
           </div>
           <div className="text-center mt-12">
              <Link to={createPageUrl("SejaPrestador")}>
-                <Button size="lg" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold shadow-lg">Quero ser um Prestador</Button>
+                <Button size="lg" className="bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white font-bold shadow-lg">Quero ser um Prestador</Button>
             </Link>
           </div>
         </section>
@@ -195,19 +195,19 @@ export default function ComoFuncionaPage() {
               { emoji: '📍', label: 'Locais', sub: 'Profissionais de Trancoso' },
               { emoji: '💬', label: 'Ágeis', sub: 'Contato direto via WhatsApp' },
             ].map((item, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
+              <div key={i} className="bg-card rounded-xl p-5 shadow-sm border border-border">
                 <span className="text-3xl block mb-2">{item.emoji}</span>
-                <p className="font-bold text-slate-800">{item.label}</p>
-                <p className="text-xs text-slate-500 mt-1">{item.sub}</p>
+                <p className="font-bold text-foreground">{item.label}</p>
+                <p className="text-xs text-muted-foreground mt-1">{item.sub}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Link Building Interno — Categorias populares */}
-        <section className="mb-16 bg-white rounded-2xl p-8 shadow-sm border">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Serviços Mais Procurados em Trancoso</h2>
-          <p className="text-slate-600 mb-6">Navegue pelas categorias e encontre o profissional ideal para cada necessidade:</p>
+        <section className="mb-16 bg-card rounded-2xl p-8 shadow-sm border">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Serviços Mais Procurados em Trancoso</h2>
+          <p className="text-muted-foreground mb-6">Navegue pelas categorias e encontre o profissional ideal para cada necessidade:</p>
           <div className="flex flex-wrap gap-3">
             {[
               { slug: 'limpeza-trancoso', label: '🧹 Limpeza em Trancoso' },
@@ -221,14 +221,14 @@ export default function ComoFuncionaPage() {
               { slug: 'garcom-trancoso', label: '🍽️ Garçom em Trancoso' },
             ].map(item => (
               <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
-                <span className="inline-block bg-slate-100 hover:bg-cyan-50 hover:text-cyan-700 border border-slate-200 hover:border-cyan-200 rounded-full px-4 py-2 text-sm font-medium text-slate-700 transition-colors cursor-pointer">
+                <span className="inline-block bg-muted hover:bg-orange-50 hover:text-orange-700 border border-border hover:border-orange-200 rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors cursor-pointer">
                   {item.label}
                 </span>
               </Link>
             ))}
           </div>
-          <div className="mt-4 pt-4 border-t border-slate-100">
-            <Link to={createPageUrl("ServicosCategoria")} className="text-sm text-cyan-600 hover:underline font-medium">
+          <div className="mt-4 pt-4 border-t border-border">
+            <Link to={createPageUrl("ServicosCategoria")} className="text-sm text-orange-600 hover:underline font-medium">
               Ver todos os profissionais verificados em Trancoso →
             </Link>
           </div>
@@ -236,15 +236,15 @@ export default function ComoFuncionaPage() {
 
         {/* FAQ */}
         <section className="mb-16">
-           <h2 className="text-3xl font-bold text-center mb-10 text-slate-800">Dúvidas Frequentes sobre Contratar em Trancoso</h2>
+           <h2 className="text-3xl font-bold text-center mb-10 text-foreground">Dúvidas Frequentes sobre Contratar em Trancoso</h2>
            <div className="max-w-3xl mx-auto space-y-4">
             {faqs.map((faq, index) => (
-              <Card key={index} className="border-slate-200">
+              <Card key={index} className="border-border">
                 <CardHeader>
                   <CardTitle className="text-base">{faq.q}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-slate-600">{faq.a}</p>
+                  <p className="text-muted-foreground">{faq.a}</p>
                 </CardContent>
               </Card>
             ))}
@@ -252,12 +252,12 @@ export default function ComoFuncionaPage() {
         </section>
 
         {/* CTA Final */}
-        <section className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-2xl p-10 text-center text-white">
+        <section className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-10 text-center text-white">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">Pronto para Resolver?</h2>
-          <p className="text-blue-100 mb-6 max-w-md mx-auto">Encontre profissionais verificados em Trancoso agora mesmo.</p>
+          <p className="text-orange-100 mb-6 max-w-md mx-auto">Encontre profissionais verificados em Trancoso agora mesmo.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to={createPageUrl("ServicosCategoria")}>
-              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-bold w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50 font-bold w-full sm:w-auto">
                 <Search className="w-5 h-5 mr-2" />
                 Buscar Profissional
               </Button>

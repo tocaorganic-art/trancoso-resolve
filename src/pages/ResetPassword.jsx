@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,7 @@ export default function ResetPassword() {
         title="Invalid reset link"
         subtitle="This password reset link is missing or invalid"
         footer={
-          <Link to="/forgot-password" className="text-amber-700 font-medium hover:underline">
+          <Link to="/forgot-password" className="text-orange-700 font-medium hover:underline">
             Request a new link
           </Link>
         }
@@ -98,7 +98,7 @@ export default function ResetPassword() {
             />
           </div>
         </div>
-        <Button type="submit" className="w-full h-12 font-medium bg-amber-600 hover:bg-amber-700" disabled={loading}>
+        <Button type="submit" className="w-full h-12 font-medium bg-orange-600 hover:bg-orange-700" disabled={loading}>
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />

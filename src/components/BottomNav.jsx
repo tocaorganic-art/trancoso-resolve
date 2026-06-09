@@ -1,17 +1,19 @@
-import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { label: "Início", path: "/", emoji: "🏠" },
-  { label: "Categorias", path: "/ServicosCategoria", emoji: "▦" },
-  { label: "IA", path: "/GeradorDeImagem", emoji: "✦" },
-  { label: "Assistente", path: "/Assistentevirtual", emoji: "🤖" }
-];
+import { useApp } from "@/contexts/AppContext";
+import { Home, LayoutGrid, Sparkles, Bot } from "lucide-react";
 
 export default function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useApp();
+
+  const navItems = [
+    { key: 'home', path: "/", icon: Home },
+    { key: 'categories', path: "/ServicosCategoria", icon: LayoutGrid },
+    { key: 'ai', path: "/GeradorDeImagem", icon: Sparkles },
+    { key: 'assistant', path: "/Assistentevirtual", icon: Bot },
+  ];
 
   const handleNavClick = (e, path) => {
     const isActive = path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
@@ -24,12 +26,11 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a1628]/95 backdrop-blur-lg border-t border-white/10 flex justify-around py-2"
-      style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 4px)" }}>
-      
-      {navItems.map(({ label, path, emoji }) => {
-        const isActive =
-        path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border flex justify-around py-2"
+      style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 4px)" }}
+    >
+      {navItems.map(({ key, path, icon: Icon }) => {
+        const isActive = path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
         return (
           <Link
             key={path}
@@ -37,14 +38,14 @@ export default function BottomNav() {
             onClick={(e) => handleNavClick(e, path)}
             className={cn(
               "select-none flex flex-col items-center gap-0.5 flex-1 py-2 px-1 transition-colors",
-              isActive ? "text-amber-400" : "text-slate-500 hover:text-slate-300"
-            )}>
-            
-            <span className="text-base leading-none">{emoji}</span>
-            <span className="text-[10px] font-medium leading-tight">{label}</span>
-          </Link>);
-
+              isActive ? "text-orange-500" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Icon className="w-5 h-5" strokeWidth={isActive ? 2.5 : 2} />
+            <span className="text-[10px] font-medium leading-tight">{t(`bottomNav.${key}`)}</span>
+          </Link>
+        );
       })}
-    </nav>);
-
+    </nav>
+  );
 }

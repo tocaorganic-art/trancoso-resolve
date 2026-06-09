@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -64,16 +64,16 @@ const FAQ_ITEMS = [
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-slate-200 rounded-lg overflow-hidden">
+    <div className="border border-border rounded-lg overflow-hidden">
       <button
-        className="w-full text-left px-5 py-4 flex justify-between items-center bg-white hover:bg-slate-50 transition-colors"
+        className="w-full text-left px-5 py-4 flex justify-between items-center bg-card hover:bg-muted transition-colors"
         onClick={() => setOpen(!open)}
       >
-        <span className="font-semibold text-slate-800 text-sm pr-4">{q}</span>
-        {open ? <ChevronUp className="w-4 h-4 text-slate-500 shrink-0" /> : <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />}
+        <span className="font-semibold text-foreground text-sm pr-4">{q}</span>
+        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
       </button>
       {open && (
-        <div className="px-5 py-4 bg-slate-50 text-sm text-slate-600 border-t border-slate-200 leading-relaxed">
+        <div className="px-5 py-4 bg-muted text-sm text-muted-foreground border-t border-border leading-relaxed">
           {a}
         </div>
       )}
@@ -91,10 +91,10 @@ function PlanCard({
   loading, loadingAvulso, disabled, popular, isAvulso
 }) {
   return (
-    <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-amber-400' : 'border border-slate-700'} ${disabled ? 'opacity-60' : ''}`}>
+    <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-orange-400' : 'border border-border'} ${disabled ? 'opacity-60' : ''}`}>
       {popular && (
         <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, whiteSpace: 'nowrap' }}>
-          <Badge className="bg-amber-500 text-white font-bold text-xs px-3 py-1 shadow">
+          <Badge className="bg-orange-500 text-white font-bold text-xs px-3 py-1 shadow">
             <Star className="w-3 h-3 mr-1" /> Mais popular
           </Badge>
         </div>
@@ -141,7 +141,7 @@ function PlanCard({
             <>
               {/* Botão primário */}
               <Button
-                className={`w-full text-sm ${popular ? 'bg-amber-500 hover:bg-amber-600 text-white' : ''}`}
+                className={`w-full text-sm ${popular ? 'bg-orange-500 hover:bg-orange-600 text-white' : ''}`}
                 onClick={onCta}
                 disabled={loading}
               >
@@ -315,7 +315,7 @@ export default function PlanosPage() {
   };
 
   return (
-    <div className="bg-slate-900 min-h-screen py-12">
+    <div className="bg-background min-h-screen py-12">
       <style>{`
         @media (max-width: 768px) {
           .grid { grid-template-columns: 1fr !important; }
@@ -326,11 +326,11 @@ export default function PlanosPage() {
 
         {/* ─── PROVA SOCIAL ──────────────────────────────────────────────── */}
         <div className="text-center mb-6">
-          <p className="text-slate-400 text-base flex items-center justify-center gap-2">
-            <Users className="w-5 h-5 text-amber-500" />
+          <p className="text-muted-foreground text-base flex items-center justify-center gap-2">
+            <Users className="w-5 h-5 text-orange-500" />
             {totalVerificados > 0
-              ? <span>Junte-se a <strong className="text-slate-200">{totalVerificados}</strong> prestadores já verificados em Trancoso</span>
-              : <span className="text-slate-300">Junte-se aos primeiros prestadores verificados de Trancoso</span>
+              ? <span>Junte-se a <strong className="text-foreground">{totalVerificados}</strong> prestadores já verificados em Trancoso</span>
+              : <span className="text-foreground">Junte-se aos primeiros prestadores verificados de Trancoso</span>
             }
           </p>
         </div>
@@ -338,25 +338,25 @@ export default function PlanosPage() {
         {/* ─── MENU DE ÂNCORAS ──────────────────────────────────────────────── */}
         <div style={{
           display: 'flex', justifyContent: 'center', gap: 24,
-          padding: '12px 0', borderBottom: '1px solid #334155',
+          padding: '12px 0', borderBottom: '1px solid var(--border)',
           fontSize: 14, fontWeight: 500, marginBottom: 24
         }}>
           <a href="#prestadores" style={{color: '#f97316', textDecoration: 'none'}}>Prestadores</a>
           <a href="#empresas" style={{color: '#f97316', textDecoration: 'none'}}>Empresas</a>
-          <a href="#avulso" style={{color: '#0d9488', textDecoration: 'none'}}>Uso Avulso</a>
-          <a href="#recursos" style={{color: '#6366f1', textDecoration: 'none'}}>Recursos</a>
+          <a href="#avulso" style={{color: '#f97316', textDecoration: 'none'}}>Uso Avulso</a>
+          <a href="#recursos" style={{color: '#f97316', textDecoration: 'none'}}>Recursos</a>
         </div>
 
         {/* ─── BANNER SAZONALIDADE ──────────────────────────────────────── */}
-        <div className="mb-10 border-2 border-amber-500 bg-amber-900/20 rounded-2xl p-6 flex flex-col md:flex-row items-start gap-4">
-          <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center shrink-0">
-            <Calendar className="w-7 h-7 text-amber-400" />
+        <div className="mb-10 border-2 border-orange-500 bg-orange-900/20 rounded-2xl p-6 flex flex-col md:flex-row items-start gap-4">
+          <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center shrink-0">
+            <Calendar className="w-7 h-7 text-orange-400" />
           </div>
           <div>
-            <h2 className="text-lg font-extrabold text-amber-200 mb-1">
+            <h2 className="text-lg font-extrabold text-orange-200 mb-1">
               Trancoso tem temporada. Seu plano também pode ter.
             </h2>
-            <p className="text-amber-100/80 text-sm leading-relaxed">
+            <p className="text-orange-100/80 text-sm leading-relaxed">
               <strong>Alta temporada: dezembro a março e julho</strong> — quando a demanda por serviços dispara na região.<br />
               Se você trabalha por temporada, o <strong>Uso Avulso</strong> é a escolha certa: pague só quando precisar, sem mensalidade.
             </p>
@@ -365,11 +365,11 @@ export default function PlanosPage() {
 
         {/* ─── BLOCO 1: PRESTADORES ─────────────────────────────────────── */}
         <section id="prestadores">
-        <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Para Prestadores Individuais</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Para Prestadores Individuais</p>
 
         {isPromoAtivaPrestador && (
           <div className="mb-4 text-center">
-            <span className="inline-block bg-amber-900/30 border border-amber-600 text-amber-200 text-sm font-semibold rounded-full px-4 py-1.5">
+            <span className="inline-block bg-orange-900/30 border border-orange-600 text-orange-200 text-sm font-semibold rounded-full px-4 py-1.5">
               🎉 Restam <strong>{vagasPrestador}</strong> {vagasPrestador === 1 ? 'vaga' : 'vagas'} com preço de lançamento!
             </span>
           </div>
@@ -380,8 +380,8 @@ export default function PlanosPage() {
           {isPromoAtivaPrestador && (
             <PlanCard
               badge="🚀 Lançamento"
-              badgeColor="bg-amber-400 text-amber-900"
-              headerColor="bg-gradient-to-br from-amber-500 to-orange-500"
+              badgeColor="bg-orange-400 text-orange-900"
+              headerColor="bg-gradient-to-br from-orange-500 to-orange-600"
               icon={<Zap className="w-9 h-9 mx-auto opacity-90" />}
               name="Plano Prestador"
               price="29,90"
@@ -404,8 +404,8 @@ export default function PlanosPage() {
           {/* Prestador Mensal */}
           <PlanCard
             badge={!isPromoAtivaPrestador ? "✅ Disponível" : null}
-            badgeColor="bg-blue-400 text-white"
-            headerColor="bg-gradient-to-br from-blue-600 to-cyan-500"
+            badgeColor="bg-orange-400 text-white"
+            headerColor="bg-gradient-to-br from-orange-600 to-orange-500"
             icon={<Check className="w-9 h-9 mx-auto opacity-90" />}
             name="Plano Prestador Mensal"
             price="49,90"
@@ -424,11 +424,11 @@ export default function PlanosPage() {
 
         {/* ─── BLOCO 2: EMPRESAS ────────────────────────────────────────── */}
         <section id="empresas">
-        <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Para Empresas</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Para Empresas</p>
 
         {isPromoAtivaEmpresa && (
           <div className="mb-4 text-center">
-            <span className="inline-block bg-amber-900/30 border border-amber-600 text-amber-200 text-sm font-semibold rounded-full px-4 py-1.5">
+            <span className="inline-block bg-orange-900/30 border border-orange-600 text-orange-200 text-sm font-semibold rounded-full px-4 py-1.5">
               🎉 Restam <strong>{vagasEmpresa}</strong> {vagasEmpresa === 1 ? 'vaga' : 'vagas'} no preço de lançamento para empresas!
             </span>
           </div>
@@ -439,8 +439,8 @@ export default function PlanosPage() {
           {isPromoAtivaEmpresa && (
             <PlanCard
               badge="🚀 Lançamento"
-              badgeColor="bg-amber-400 text-amber-900"
-              headerColor="bg-gradient-to-br from-amber-500 to-orange-500"
+              badgeColor="bg-orange-400 text-orange-900"
+              headerColor="bg-gradient-to-br from-orange-500 to-orange-600"
               icon={<Building2 className="w-9 h-9 mx-auto opacity-90" />}
               name="Plano Empresas"
               price="59,90"
@@ -462,8 +462,8 @@ export default function PlanosPage() {
           {/* Empresa Mensal */}
           <PlanCard
             badge={!isPromoAtivaEmpresa ? "✅ Disponível" : null}
-            badgeColor="bg-blue-400 text-white"
-            headerColor="bg-gradient-to-br from-blue-600 to-cyan-500"
+            badgeColor="bg-orange-400 text-white"
+            headerColor="bg-gradient-to-br from-orange-600 to-orange-500"
             icon={<Building2 className="w-9 h-9 mx-auto opacity-90" />}
             name="Plano Empresas Mensal"
             price="89,90"
@@ -484,8 +484,8 @@ export default function PlanosPage() {
         <section id="avulso">
         <div className="mb-10">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-extrabold text-slate-100 mb-2">Trabalha só na temporada?</h2>
-            <p className="text-slate-300 text-sm max-w-2xl mx-auto">
+            <h2 className="text-2xl font-extrabold text-foreground mb-2">Trabalha só na temporada?</h2>
+            <p className="text-muted-foreground text-sm max-w-2xl mx-auto">
               A alta temporada em Trancoso concentra boa parte do movimento do ano — especialmente de dezembro a março e em julho. Se você ativa seu perfil só nesse período, o uso avulso permite pagar apenas os meses que importam, sem mensalidade.
             </p>
           </div>
@@ -507,14 +507,14 @@ export default function PlanosPage() {
             />
           </div>
 
-          <p className="text-center text-slate-500 text-xs mt-4">
+          <p className="text-center text-muted-foreground text-xs mt-4">
             💡 Você pode reativar manualmente em qualquer mês. Nenhuma cobrança automática.
           </p>
         </div>
         </section>
 
         {/* Transparência */}
-        <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-4 text-sm text-blue-200 text-center mb-6">
+        <div className="bg-orange-900/20 border border-orange-700/50 rounded-lg p-4 text-sm text-orange-200 text-center mb-6">
           <strong>Transparência total:</strong> Sem comissão sobre seus serviços. Você negocia diretamente com o cliente e fica com 100% do valor.
         </div>
 
@@ -523,14 +523,14 @@ export default function PlanosPage() {
           <PositionamentoEstrategico />
         </section>
 
-        <p className="text-center text-slate-400 text-sm mb-8">
-          Dúvidas? Entre em contato: <a href="mailto:suporte@trancosoresolve.com.br" className="underline text-slate-300"><strong>suporte@trancosoresolve.com.br</strong></a>
+        <p className="text-center text-muted-foreground text-sm mb-8">
+          Dúvidas? Entre em contato: <a href="mailto:suporte@trancosoresolve.com.br" className="underline text-foreground"><strong>suporte@trancosoresolve.com.br</strong></a>
         </p>
 
         {/* Assinatura ativa */}
         {mySubscription && mySubscription.status === 'active' && (
-          <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-center mb-8">
-            <p className="text-sm text-slate-300 mb-1">
+          <div className="bg-card border border-border rounded-lg p-4 text-center mb-8">
+            <p className="text-sm text-muted-foreground mb-1">
               Sua assinatura está ativa
               {mySubscription.next_billing_date && ` — próxima cobrança em ${new Date(mySubscription.next_billing_date + 'T00:00:00').toLocaleDateString('pt-BR')}`}.
             </p>
@@ -542,7 +542,7 @@ export default function PlanosPage() {
 
         {/* ─── FAQ ──────────────────────────────────────────────────────── */}
         <section style={{maxWidth: 680, margin: '48px auto', padding: '0 24px'}}>
-          <h2 style={{textAlign:'center', fontWeight:700, marginBottom:24, color: '#f1f5f9'}}>
+          <h2 style={{textAlign:'center', fontWeight:700, marginBottom:24, color: 'var(--foreground)'}}>
             Perguntas Frequentes
           </h2>
           {[
@@ -556,12 +556,12 @@ export default function PlanosPage() {
              r: 'Ideal para quem trabalha só na alta temporada. Você paga apenas o mês que precisar, sem mensalidade fixa e sem renovação automática.'},
           ].map(({q, r}) => (
             <details key={q} style={{
-              borderBottom: '1px solid #334155', padding: '16px 0', cursor: 'pointer'
+              borderBottom: '1px solid var(--border)', padding: '16px 0', cursor: 'pointer'
             }}>
-              <summary style={{fontWeight:600, fontSize:15, listStyle:'none', color: '#f1f5f9'}}>
+              <summary style={{fontWeight:600, fontSize:15, listStyle:'none', color: 'var(--foreground)'}}>
                 ▸ {q}
               </summary>
-              <p style={{marginTop:8, color:'#94a3b8', fontSize:14, lineHeight:1.6}}>{r}</p>
+              <p style={{marginTop:8, color:'var(--muted-foreground)', fontSize:14, lineHeight:1.6}}>{r}</p>
             </details>
           ))}
         </section>
