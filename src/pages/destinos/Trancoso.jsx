@@ -45,16 +45,16 @@ export default function DestinoTrancoso() {
   });
 
   return (
-    <div className="bg-slate-50 overflow-x-hidden">
+    <div className="bg-background overflow-x-hidden">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-amber-900 to-slate-800 text-white py-20 md:py-32 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-background via-orange-900 to-card text-white py-20 md:py-32 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20 bg-cover bg-center"
           style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
           aria-hidden="true"
         />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
-          <div className="inline-flex items-center gap-2 bg-amber-700/40 border border-amber-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-amber-200 mb-6">
+          <div className="inline-flex items-center gap-2 bg-orange-700/40 border border-orange-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-200 mb-6">
             <MapPin className="w-4 h-4" /> Trancoso, Bahia
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">

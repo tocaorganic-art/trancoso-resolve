@@ -17,9 +17,9 @@ const statusConfig = {
   Pendente: { color: "bg-amber-100 text-amber-800 border-amber-200", text: "Pendente" },
   Confirmado: { color: "bg-green-100 text-green-800 border-green-200", text: "Confirmado" },
   "Em Andamento": { color: "bg-blue-100 text-blue-800 border-blue-200", text: "Em Andamento" },
-  Concluído: { color: "bg-slate-100 text-slate-800 border-slate-200", text: "Concluído" },
+  Concluído: { color: "bg-muted text-foreground border-border", text: "Concluído" },
   Rejeitado: { color: "bg-red-100 text-red-800 border-red-200", text: "Rejeitado" },
-  Cancelado: { color: "bg-slate-100 text-slate-800 border-slate-200", text: "Cancelado" },
+  Cancelado: { color: "bg-muted text-foreground border-border", text: "Cancelado" },
 };
 
 function RequestCard({ request, provider, onReviewClick, hasReview, payment, onPaymentConfirmed }) {
@@ -28,7 +28,7 @@ function RequestCard({ request, provider, onReviewClick, hasReview, payment, onP
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm text-slate-500">Prestador:</p>
+            <p className="text-sm text-muted-foreground">Prestador:</p>
             <CardTitle className="text-lg">{provider?.full_name || "Carregando..."}</CardTitle>
           </div>
           <Badge className={`${statusConfig[request.status]?.color} font-medium`}>
@@ -38,10 +38,10 @@ function RequestCard({ request, provider, onReviewClick, hasReview, payment, onP
       </CardHeader>
       <CardContent className="flex-grow space-y-3">
         <div className="flex items-center gap-2 text-sm">
-          <Calendar className="w-4 h-4 text-slate-500" />
+          <Calendar className="w-4 h-4 text-muted-foreground" />
           <span>{format(new Date(request.date), "PPP", { locale: ptBR })}</span>
         </div>
-        <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-md border">{request.message || "Nenhuma observação enviada."}</p>
+        <p className="text-sm text-muted-foreground bg-muted p-3 rounded-md border border-border">{request.message || "Nenhuma observação enviada."}</p>
 
         {/* Informações de pagamento */}
         {payment && (
