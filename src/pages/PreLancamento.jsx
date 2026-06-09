@@ -349,7 +349,7 @@ export default function PreLancamento() {
         <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <img
-              src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
+              src="/brand/logo-mark.svg"
               alt="Trancoso Resolve"
               style={{ height: 28, width: 28, flexShrink: 0 }}
             />
@@ -715,7 +715,7 @@ export default function PreLancamento() {
           textAlign: "center",
         }}>
           <img
-            src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
+            src="/brand/logo-mark.svg"
             alt="Trancoso Resolve"
             style={{ height: 28, marginBottom: 14 }}
           />

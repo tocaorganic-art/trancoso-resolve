@@ -192,8 +192,8 @@ export default function Layout({ children, currentPageName }) {
           <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-warm-sm" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchPriority="high" />
-                <span className="font-bold text-sm md:text-lg text-white truncate hidden xs:inline sm:inline drop-shadow-md">Trancoso Resolve</span>
+                <img src="/brand/logo-mark.svg" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchPriority="high" />
+                <span className="font-bold text-sm md:text-lg text-foreground truncate hidden xs:inline sm:inline">Trancoso Resolve</span>
               </Link>
 
               {/* Desktop Navigation */}
@@ -359,7 +359,7 @@ export default function Layout({ children, currentPageName }) {
           {isRoot &&
           <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-card border-b border-border flex items-center px-3 h-12" style={{ paddingTop: "env(safe-area-inset-top, 0px)", top: "env(safe-area-inset-top, 0px)" }}>
             <Link to="/" className="flex items-center gap-2">
-              <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png" alt="Trancoso Resolve" className="h-8 w-8" />
+              <img src="/brand/logo-mark.svg" alt="Trancoso Resolve" className="h-8 w-8" />
               <span className="font-bold text-sm text-foreground">Trancoso Resolve</span>
             </Link>
           </div>
@@ -481,8 +481,8 @@ export default function Layout({ children, currentPageName }) {
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
               <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
-                <img src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/607538b94_generated_image.png" alt="Trancoso Resolve Logo" className="h-10" />
-                <span className="font-bold text-xl text-slate-100">Trancoso Resolve</span>
+                <img src="/brand/logo-mark.svg" alt="Trancoso Resolve Logo" className="h-10 w-10" />
+                <span className="font-bold text-xl text-foreground">Trancoso Resolve</span>
               </Link>
 
               <div className="hidden lg:flex items-center gap-2">

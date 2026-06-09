@@ -84,7 +84,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
           </button>
           <div className="flex items-center gap-3 mb-3">
             <img
-              src="https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png"
+              src="/brand/logo-mark.svg"
               alt="Logo"
               className="h-8 w-8 rounded"
             />
