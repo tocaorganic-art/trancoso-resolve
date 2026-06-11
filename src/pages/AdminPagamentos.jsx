@@ -2,21 +2,22 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, DollarSign, TrendingUp, Clock, AlertTriangle } from 'lucide-react';
+import { Loader2, DollarSign, TrendingUp, Clock, AlertTriangle, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 const statusColors = {
-  'captured': { bg: '#dcfce7', color: '#15803d', label: '✅ Pago' },
+  'captured': { bg: '#dcfce7', color: '#15803d', label: 'Pago', Icon: CheckCircle2 },
   'requires_payment_method': { bg: '#fef9c3', color: '#854d0e', label: 'Aguardando Pagamento' },
-  'requires_capture': { bg: '#dbeafe', color: '#1d4ed8', label: '💰 Em Custódia' },
+  'requires_capture': { bg: '#dbeafe', color: '#1d4ed8', label: 'Em Custódia', Icon: DollarSign },
   'canceled': { bg: '#f3f4f6', color: '#6b7280', label: 'Cancelado' },
-  'disputed': { bg: '#fee2e2', color: '#dc2626', label: '⚠️ Em Disputa' },
+  'disputed': { bg: '#fee2e2', color: '#dc2626', label: 'Em Disputa', Icon: ShieldAlert },
   'refunded': { bg: '#f3e8ff', color: '#6b21a8', label: 'Reembolsado' },
 };
 
 function StatusBadge({ status }) {
   const cfg = statusColors[status] || { bg: '#f3f4f6', color: '#6b7280', label: status };
+  const Icon = cfg.Icon;
   return (
     <span style={{
       padding: '4px 12px',
@@ -25,8 +26,11 @@ function StatusBadge({ status }) {
       fontWeight: 600,
       background: cfg.bg,
       color: cfg.color,
-      display: 'inline-block'
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 4
     }}>
+      {Icon && <Icon className="w-3.5 h-3.5" />}
       {cfg.label}
     </span>
   );

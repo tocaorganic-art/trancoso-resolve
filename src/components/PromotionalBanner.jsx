@@ -14,10 +14,10 @@ const banners = [
     subtitle: "Faxina, eletricista, jardinagem, cozinheiro e muito mais — tudo num só lugar, com avaliações reais e confiança garantida.",
     cta: "Começar Agora",
     ctaLink: "/ServicosCategoria",
-    bgColor: "linear-gradient(135deg, #0A81D1 0%, #0061FF 50%, #0D8A6F 100%)",
+    bgColor: "linear-gradient(135deg, #E8571A 0%, #C1440E 50%, #6B7C3A 100%)",
     image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: Shield,
-    accent: "from-blue-400 to-cyan-300",
+    accent: "from-orange-400 to-sand",
   },
   {
     id: 2,
@@ -41,10 +41,10 @@ const banners = [
     subtitle: "+ categorias de serviços profissionais. Se existe serviço em Trancoso, está aqui. Todos verificados, todos avaliados.",
     cta: "Explorar Categorias",
     ctaLink: "/ServicosCategoria",
-    bgColor: "linear-gradient(135deg, #0D8A6F 0%, #1DB584 50%, #2D3047 100%)",
+    bgColor: "linear-gradient(135deg, #6B7C3A 0%, #8C9B52 50%, #382F26 100%)",
     image: "https://images.unsplash.com/photo-1460925895917-adf4e565016c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: TrendingUp,
-    accent: "from-emerald-300 to-green-300",
+    accent: "from-olive-300 to-sand",
   },
   {
     id: 4,
@@ -54,10 +54,10 @@ const banners = [
     subtitle: "8 categorias e crescendo. Prestadores verificados. Clientes satisfeitos. Avaliações reais. Tudo que você precisa para gerenciar sua carreira profissional.",
     cta: "Explorar Categorias",
     ctaLink: "/ServicosCategoria",
-    bgColor: "linear-gradient(135deg, #1A2B3C 0%, #0A81D1 50%, #0061FF 100%)",
+    bgColor: "linear-gradient(135deg, #382F26 0%, #C1440E 50%, #E8571A 100%)",
     image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: Users,
-    accent: "from-blue-300 to-indigo-300",
+    accent: "from-orange-300 to-sand",
   }
 ];
 
