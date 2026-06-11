@@ -80,7 +80,7 @@ self.addEventListener('push', (event) => {
     const data = event.data.json();
     self.registration.showNotification(data.title || 'Trancoso Resolve', {
       body: data.body || '',
-      icon: 'https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png'
+      icon: 'https://trancosoresolve.com.br/brand/logo-mark-512.png'
     });
   }
 });

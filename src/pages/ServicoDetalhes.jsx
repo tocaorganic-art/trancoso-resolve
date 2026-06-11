@@ -78,7 +78,7 @@ export default function ServicoDetalhesPage() {
 
     let ogImage = document.querySelector('meta[property="og:image"]');
     if (!ogImage) { ogImage = document.createElement('meta'); ogImage.setAttribute('property', 'og:image'); document.head.appendChild(ogImage); }
-    ogImage.content = service.images?.[0] || 'https://media.base44.com/images/public/68eb21726a9614db4a82ba99/866729f3e_trancoso_resolve_logo_principal.png';
+    ogImage.content = service.images?.[0] || 'https://trancosoresolve.com.br/brand/logo-mark-512.png';
 
     // Schema markup
     const schemaId = `schema-servico-${serviceId}`;
