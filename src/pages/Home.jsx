@@ -22,18 +22,19 @@ import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
+// Categorias do enum possuem 2 imagens validadas para dar variedade entre cards da mesma categoria
 const categoryImageMap = {
   // Categorias do enum: Limpeza, Garçom, Pedreiro, Jardinagem, Babá, Eletricista, Encanador, Pintor, Cozinheiro, Outro
-  'Limpeza': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/inigQzgVMUPeKrkL.png',
-  'Garçom': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Pedreiro': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Jardinagem': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/MmnYpPgxNHhyniba.png',
-  'Babá': 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Eletricista': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/loNdoqfPbYrpiZUY.png',
-  'Encanador': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/SzIYzgzmeNbfcRvv.png',
-  'Pintor': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Cozinheiro': 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/XKIqXQfxYpLpcnsh.png',
-  'Outro': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'Limpeza': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/inigQzgVMUPeKrkL.png', 'https://images.unsplash.com/photo-1563207153-f403bf289096?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Garçom': ['https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1555939594-58d7cb561549?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Pedreiro': ['https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Jardinagem': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/MmnYpPgxNHhyniba.png', 'https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Babá': ['https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Eletricista': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/loNdoqfPbYrpiZUY.png', 'https://images.unsplash.com/photo-1576050485252-c4c65b4744d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Encanador': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/SzIYzgzmeNbfcRvv.png', 'https://images.unsplash.com/photo-1576050485252-c4c65b4744d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Pintor': ['https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1589939705066-3d1c3dd9671e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Cozinheiro': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/XKIqXQfxYpLpcnsh.png', 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+  'Outro': ['https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
   // Categorias extras para compatibilidade
   'Construção': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Beleza': 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -43,7 +44,17 @@ const categoryImageMap = {
   'Aulas': 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Transporte': 'https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   'Automóveis': 'https://images.unsplash.com/photo-1553440569-b506745199de?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'default': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'default': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+};
+
+// Seleciona um índice estável (baseado no id do serviço) para variar imagens de fallback dentro da mesma categoria
+const hashStringToIndex = (str, length) => {
+  if (!str || length <= 1) return 0;
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+  }
+  return hash % length;
 };
 
 // Descrições melhoradas por categoria para serviços sem descrição cadastrada
@@ -125,7 +136,10 @@ const isValidImageUrl = (url) => {
 const ServiceCard = ({ service, provider }) => {
     const serviceImage = service.images?.[0];
     const hasValidImage = isValidImageUrl(serviceImage);
-    const fallbackImage = categoryImageMap[service.category] || categoryImageMap.default;
+    const categoryFallbacks = categoryImageMap[service.category] || categoryImageMap.default;
+    const fallbackImage = Array.isArray(categoryFallbacks)
+        ? categoryFallbacks[hashStringToIndex(service.id, categoryFallbacks.length)]
+        : categoryFallbacks;
     const imageSrc = hasValidImage ? serviceImage : fallbackImage;
     const Icon = categoryIconMap[service.category] || categoryIconMap.default;
     const description = service.description || categoryDescriptionMap[service.category] || 'Serviço profissional de qualidade em Trancoso.';
@@ -566,7 +580,7 @@ export default function HomePage() {
              <h2 className="text-2xl md:text-4xl font-bold text-foreground mb-2">Serviços Mais Buscados em Trancoso</h2>
              <p className="text-base md:text-lg text-muted-foreground font-medium max-w-2xl mx-auto">Acesse guias completos com profissionais verificados em cada categoria</p>
            </div>
-           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+           <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-4 lg:grid-cols-5 md:gap-4 md:overflow-visible">
              {[
                { slug: 'limpeza-trancoso', label: 'Diarista', icon: Home },
                { slug: 'eletricista-trancoso', label: 'Eletricista', icon: Zap },
@@ -580,7 +594,7 @@ export default function HomePage() {
              ].map(item => {
                const Icon = item.icon;
                return (
-               <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`}>
+               <Link key={item.slug} to={`/ServicoLanding?slug=${item.slug}`} className="min-w-[110px] snap-start shrink-0 md:min-w-0 md:w-auto">
                  <div className="bg-card rounded-brand-lg p-4 text-center shadow-warm-sm hover:shadow-warm-md transition-all duration-300 border border-border hover:border-orange-400 cursor-pointer group h-full flex flex-col items-center justify-center">
                    <div className="w-10 h-10 rounded-brand-md bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center mb-2">
                      <Icon className="w-5 h-5 text-orange-500" aria-hidden="true" />
@@ -600,19 +614,19 @@ export default function HomePage() {
         {/* Como Funciona */}
         <section className="mb-10 md:mb-20 mt-10 md:mt-20">
           <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 drop-shadow-sm">Como funciona a Trancoso Resolve</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">Como funciona a Trancoso Resolve</h2>
           </div>
-          <div className="flex flex-col md:grid md:grid-cols-3 gap-4 md:gap-6">
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible">
             {[
               { step: '1', title: 'Você conta o que precisa', desc: 'Explique o tipo de serviço, bairro em Trancoso e melhor horário para contato.' },
               { step: '2', title: 'Nós conectamos aos prestadores certos', desc: 'Nosso sistema distribui seu pedido para prestadores qualificados na região.' },
               { step: '3', title: 'Você recebe contatos e escolhe', desc: 'Compare respostas, avalie e decida com quem quer fechar.' },
             ].map(item => (
-              <div key={item.step} className="bg-card rounded-brand-lg p-5 md:p-6 shadow-warm-sm border border-border flex items-start gap-4 md:block md:text-center">
+              <div key={item.step} className="bg-card rounded-brand-lg p-5 md:p-6 shadow-warm-sm border border-border flex items-start gap-4 md:block md:text-center min-w-[85%] sm:min-w-[340px] snap-start shrink-0 md:min-w-0 md:w-auto">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-primary text-white font-bold text-lg md:text-xl flex items-center justify-center shrink-0 md:mx-auto md:mb-4 shadow-brand">{item.step}</div>
                 <div>
-                  <h3 className="font-bold text-base md:text-lg text-slate-900 mb-1 md:mb-2">{item.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+                  <h3 className="font-bold text-base md:text-lg text-foreground mb-1 md:mb-2">{item.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
