@@ -203,11 +203,11 @@ function PlanCard({
 
 function AvulsoCard({ icon, title, price, onCta, loading }) {
   return (
-    <Card className="border-2 border-teal-500 overflow-hidden">
-      <div className="p-6 text-center bg-gradient-to-br from-teal-600 to-cyan-600 text-white">
+    <Card className="border-2 border-olive-500 overflow-hidden">
+      <div className="p-6 text-center bg-gradient-to-br from-olive-600 to-olive-700 text-white">
         {icon}
         <h3 className="text-lg font-bold mt-2">{title}</h3>
-        <Badge className="mt-1 bg-teal-400/30 text-teal-100 text-xs">Avulso</Badge>
+        <Badge className="mt-1 bg-olive-400/30 text-olive-100 text-xs">Avulso</Badge>
         <p className="text-3xl font-extrabold mt-2">R$ {price}<span className="text-sm font-normal"> / mês</span></p>
       </div>
       <CardContent className="p-5 space-y-3">
