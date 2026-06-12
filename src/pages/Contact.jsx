@@ -13,10 +13,42 @@ export default function ContactPage() {
     document.title = 'Contato | Trancoso Resolve';
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Bahia.';
+    meta.content = 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Arraial d\'Ajuda, Porto Seguro e Caraíva, Bahia.';
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
     canonical.href = `${window.location.origin}/Contact`;
+
+    // Schema Markup
+    const schemaId = 'schema-contact';
+    const existing = document.getElementById(schemaId);
+    if (existing) existing.remove();
+    const schema = document.createElement('script');
+    schema.id = schemaId;
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contato | Trancoso Resolve",
+      "url": `${window.location.origin}/Contact`,
+      "about": {
+        "@type": "LocalBusiness",
+        "name": "Trancoso Resolve",
+        "url": "https://www.trancosoresolve.com.br",
+        "email": "suporte@trancosoresolve.com.br",
+        "areaServed": [
+          { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+          { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" },
+          { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
+          { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
+        ]
+      }
+    });
+    document.head.appendChild(schema);
+
+    return () => {
+      const s = document.getElementById(schemaId);
+      if (s) s.remove();
+    };
   }, []);
 
   const handleSubmit = async (e) => {
@@ -64,16 +96,17 @@ export default function ContactPage() {
             <a href="https://wa.me/5573998283579" target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 p-4 bg-card rounded-xl border border-border shadow-sm hover:border-[#3E8E5A]/50 transition-colors group">
               <MessageSquare className="w-5 h-5 text-[#3E8E5A] mt-0.5 shrink-0" />
               <div>
-                <p className="font-semibold text-foreground group-hover:text-green-700 transition-colors">WhatsApp</p>
+                <p className="font-semibold text-foreground group-hover:text-[#3E8E5A] transition-colors">WhatsApp</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Atendimento em horário comercial</p>
               </div>
             </a>
 
             <div className="flex items-start gap-4 p-4 bg-card rounded-xl border border-border shadow-sm">
-              <MapPin className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
+              <MapPin className="w-5 h-5 text-terracotta mt-0.5 shrink-0" />
               <div>
                 <p className="font-semibold text-foreground">Trancoso, Bahia, Brasil</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Segunda a sexta, 8h às 18h</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Atendemos também Arraial d'Ajuda, Porto Seguro e Caraíva</p>
               </div>
             </div>
 
@@ -91,7 +124,7 @@ export default function ContactPage() {
 
             {status === 'success' ? (
               <div className="text-center py-8">
-                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                <CheckCircle className="w-12 h-12 text-[#3E8E5A] mx-auto mb-3" />
                 <h3 className="text-lg font-bold text-foreground mb-1">Mensagem enviada!</h3>
                 <p className="text-muted-foreground text-sm">Obrigado por entrar em contato. Retornaremos em breve.</p>
               </div>
