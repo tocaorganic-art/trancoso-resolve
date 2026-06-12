@@ -166,15 +166,41 @@ export default function PreLancamento() {
        tag.content = content;
      };
 
-     updateMeta("description", "name", "Pré-lançamento Trancoso Resolve: Oferta exclusiva para os 50 primeiros prestadores. R$ 29,90/mês + 60 dias grátis. Vagas limitadas!");
+     updateMeta("description", "name", "Pré-lançamento Trancoso Resolve: Oferta exclusiva para os 50 primeiros prestadores de Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. R$ 29,90/mês + 60 dias grátis. Vagas limitadas!");
      updateMeta("og:title", "property", "Oferta de Lançamento | Trancoso Resolve");
-     updateMeta("og:description", "property", "Seja um dos 50 primeiros prestadores de Trancoso Resolve. R$ 29,90/mês + 60 dias grátis. Vagas limitadas — garantir a sua agora!");
+     updateMeta("og:description", "property", "Seja um dos 50 primeiros prestadores de Trancoso Resolve em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. R$ 29,90/mês + 60 dias grátis. Vagas limitadas — garantir a sua agora!");
      updateMeta("og:image", "property", "https://media.base44.com/images/public/68eb21726a9614db4a82ba99/dfe6ee67e_generated_image.png");
      updateMeta("og:type", "property", "website");
      updateMeta("og:url", "property", window.location.href);
      updateMeta("twitter:card", "name", "summary_large_image");
      updateMeta("twitter:title", "name", "Oferta de Lançamento | Trancoso Resolve");
      updateMeta("twitter:description", "name", "Pré-lançamento: R$ 29,90/mês + 60 dias grátis. Vagas limitadas!");
+
+     // Schema Markup - SEO Local
+     const schemaId = "schema-prelancamento";
+     const existing = document.getElementById(schemaId);
+     if (existing) existing.remove();
+     const schema = document.createElement("script");
+     schema.id = schemaId;
+     schema.type = "application/ld+json";
+     schema.text = JSON.stringify({
+       "@context": "https://schema.org",
+       "@type": "LocalBusiness",
+       "name": "Trancoso Resolve",
+       "url": "https://www.trancosoresolve.com.br",
+       "areaServed": [
+         { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+         { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" },
+         { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
+         { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
+       ]
+     });
+     document.head.appendChild(schema);
+
+     return () => {
+       const s = document.getElementById(schemaId);
+       if (s) s.remove();
+     };
    }, []);
 
   const atualizarVagas = () => {
