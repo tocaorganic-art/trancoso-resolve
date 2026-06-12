@@ -11,27 +11,27 @@ const pillars = [
     desc: "Análise de antecedentes criminais, verificação de identidade e validação de dados — cada prestador aprovado passa por rigoroso processo antes de aparecer na plataforma."
   },
   {
-    icon: <Star className="w-7 h-7 text-yellow-400" />,
+    icon: <Star className="w-7 h-7 text-sand-deep" />,
     title: "Avaliações Transparentes",
     desc: "Clientes reais, avaliações reais. Nada de notas infladas: todo feedback é auditado para que você confie em quem contrata."
   },
   {
-    icon: <Bot className="w-7 h-7 text-purple-400" />,
+    icon: <Bot className="w-7 h-7 text-terracotta" />,
     title: "Toca TrIA — IA 24 horas",
     desc: "Nosso agente de inteligência artificial está disponível a qualquer momento para sugerir o profissional certo, responder dúvidas e agilizar seu pedido — tudo em português (e espanhol)."
   },
   {
-    icon: <Camera className="w-7 h-7 text-emerald-400" />,
+    icon: <Camera className="w-7 h-7 text-olive-400" />,
     title: "Toca Vision — Criação Visual com IA",
     desc: "Prestadores têm acesso a um gerador de imagens exclusivo: crie posts, cardápios e materiais visuais de alto padrão em segundos, sem custo adicional."
   },
   {
-    icon: <BarChart2 className="w-7 h-7 text-blue-400" />,
+    icon: <BarChart2 className="w-7 h-7 text-terracotta-deep" />,
     title: "Dashboard Financeiro Integrado",
     desc: "Controle de receitas, despesas, previsão de ganhos e relatórios — tudo dentro da plataforma. Sem planilhas, sem complicação."
   },
   {
-    icon: <Users className="w-7 h-7 text-rose-400" />,
+    icon: <Users className="w-7 h-7 text-olive-600" />,
     title: "Comunidade VIP Trancoso",
     desc: "Uma rede exclusiva de moradores, empresários e prestadores que compartilham o compromisso com a excelência que Trancoso exige."
   },
@@ -39,7 +39,7 @@ const pillars = [
 
 export default function AboutPage() {
   useEffect(() => {
-    document.title = 'Sobre Nós | Trancoso Resolve';
+    document.title = "Sobre Nós | Trancoso Resolve — Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva";
 
     const setMeta = (selector, attr, key, value) => {
       let el = document.querySelector(selector);
@@ -47,9 +47,9 @@ export default function AboutPage() {
       el.content = value;
     };
 
-    const desc = 'Conheça a Trancoso Resolve, a plataforma que conecta quem precisa de serviço a profissionais verificados em Trancoso, Bahia.';
+    const desc = "Conheça a Trancoso Resolve, a plataforma que conecta quem precisa de serviço a profissionais verificados em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva — toda a Costa do Descobrimento, Bahia.";
     setMeta('meta[name="description"]', null, 'description', desc);
-    setMeta('meta[property="og:title"]', 'property', 'og:title', 'Sobre Nós | Trancoso Resolve');
+    setMeta('meta[property="og:title"]', 'property', 'og:title', "Sobre Nós | Trancoso Resolve — Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva");
     setMeta('meta[property="og:description"]', 'property', 'og:description', desc);
 
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -69,7 +69,12 @@ export default function AboutPage() {
       "name": "Trancoso Resolve",
       "url": window.location.origin,
       "description": desc,
-      "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+      "areaServed": [
+        { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+        { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" },
+        { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
+        { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
+      ],
       "foundingDate": "2017",
       "sameAs": [
         "https://www.instagram.com/trancosoresolve/",
@@ -88,14 +93,14 @@ export default function AboutPage() {
         <div className="container mx-auto max-w-4xl relative">
           <div className="flex items-center gap-2 text-orange-500 text-sm font-semibold uppercase tracking-widest mb-4">
             <MapPin className="w-4 h-4" />
-            <span>Trancoso, Bahia — Brasil</span>
+            <span>Costa do Descobrimento, Bahia — Brasil</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
             Sua Expertise no<br />
             <span className="text-orange-500">Coração de Trancoso.</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mb-8">
-            O Trancoso Resolve nasceu da Toca Concierge — 8 anos conectando moradores, turistas e empresários ao melhor que Trancoso tem a oferecer. Hoje somos a plataforma digital que transforma essa curadoria em tecnologia acessível para todos.
+            O Trancoso Resolve nasceu da Toca Concierge — 8 anos conectando moradores, turistas e empresários ao melhor que Trancoso tem a oferecer. Hoje somos a plataforma digital que transforma essa curadoria em tecnologia acessível para todos, em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva — toda a Costa do Descobrimento.
           </p>
           <Link to={createPageUrl('ServicosCategoria')}>
             <Button className="bg-brand-primary hover:bg-orange-600 text-white font-bold px-8 py-3 text-base">
@@ -116,7 +121,7 @@ export default function AboutPage() {
                 Trancoso atrai um público exigente — e esse público merece serviços à altura. Por isso desenvolvemos um processo rigoroso de verificação que vai além do básico: análise de antecedentes criminais, validação de identidade e acompanhamento contínuo de desempenho.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Mais que uma plataforma de contratação, somos o elo entre quem vive e trabalha em Trancoso e os visitantes que desejam viver a experiência com tranquilidade absoluta.
+                Mais que uma plataforma de contratação, somos o elo entre quem vive e trabalha em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva e os visitantes que desejam viver a experiência com tranquilidade absoluta.
               </p>
             </div>
             <div className="space-y-4">
