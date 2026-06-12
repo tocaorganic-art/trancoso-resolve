@@ -5,6 +5,17 @@ export default function PitingaTrancoso() {
     <ServicoLocalPage
       title="Serviços em Pitinga, Trancoso BA | Profissionais para Praia e Propriedades | Trancoso Resolve"
       metaDescription="Contrate profissionais verificados para serviços em Pitinga, Trancoso: manutenção de casas de praia, diaristas, eletricistas, encanadores e muito mais. Especialistas em propriedades à beira-mar."
+      keywords="serviços Pitinga Trancoso, profissionais Pitinga, diarista Pitinga Trancoso, manutenção casa de praia Pitinga Bahia"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/pitinga-trancoso"
+      schemaData={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Trancoso Resolve - Serviços em Pitinga, Trancoso",
+        "description": "Profissionais verificados para casas de praia e propriedades à beira-mar em Pitinga, Trancoso, BA.",
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "areaServed": { "@type": "Place", "name": "Pitinga, Trancoso, BA" },
+        "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
+      }}
       h1="Serviços em Pitinga, Trancoso: Especialistas em Casas de Praia e Propriedades à Beira-Mar"
       intro="Pitinga é uma das praias mais exclusivas de Trancoso — com propriedades de frente para o mar, pousadas boutique e casas de temporada que sofrem com os efeitos da maresia, umidade e da proximidade com o oceano. Na Trancoso Resolve você encontra profissionais verificados com experiência nas particularidades da manutenção de imóveis costeiros na região."
       servicesTitle="Serviços disponíveis em Pitinga, Trancoso"

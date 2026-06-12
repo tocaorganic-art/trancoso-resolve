@@ -5,6 +5,17 @@ export default function PedreiroTrancoso() {
     <ServicoLocalPage
       title="Pedreiro em Trancoso, BA | Obras e Reformas com Profissionais Verificados | Trancoso Resolve"
       metaDescription="Encontre pedreiro de confiança em Trancoso, Bahia. Obras, reformas, ampliações e manutenção para villas e residências de alto padrão. Profissionais verificados, orçamento grátis."
+      keywords="pedreiro Trancoso, pedreiro Trancoso Bahia, profissional Trancoso BA, obra Trancoso, reforma Trancoso"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/pedreiro-trancoso"
+      schemaData={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Trancoso Resolve - Pedreiro Trancoso",
+        "description": "Pedreiros verificados em Trancoso, BA. Obras e reformas para villas e residências de alto padrão.",
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "areaServed": { "@type": "City", "name": "Trancoso, BA" },
+        "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
+      }}
       h1="Pedreiro em Trancoso: Obras e Reformas para Residências de Alto Padrão"
       intro="Trancoso concentra um dos mercados imobiliários mais valorizados da Bahia. Obras, reformas e ampliações acontecem o ano inteiro — e encontrar um pedreiro que conheça as particularidades da região, os materiais locais e os padrões exigidos por villas e residências de luxo faz toda a diferença no resultado e no prazo. Na Trancoso Resolve, todos os pedreiros são verificados e avaliados por clientes reais."
       servicesTitle="Serviços de pedreiro em Trancoso"

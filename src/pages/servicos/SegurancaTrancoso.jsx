@@ -5,6 +5,17 @@ export default function SegurancaTrancoso() {
     <ServicoLocalPage
       title="Segurança Particular em Trancoso, BA | Vigilância para Villas e Eventos | Trancoso Resolve"
       metaDescription="Contrate segurança particular verificado em Trancoso, Bahia. Vigilância para villas, pousadas, eventos privados e propriedades de luxo. Profissionais com antecedentes verificados, orçamento grátis."
+      keywords="segurança particular Trancoso, segurança Trancoso Bahia, vigilância Trancoso BA, segurança para eventos Trancoso"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/seguranca-trancoso"
+      schemaData={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Trancoso Resolve - Segurança Trancoso",
+        "description": "Profissionais de segurança verificados em Trancoso, BA. Vigilância para villas, pousadas e eventos privados.",
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "areaServed": { "@type": "City", "name": "Trancoso, BA" },
+        "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
+      }}
       h1="Segurança Particular em Trancoso: Vigilância para Villas e Eventos Privados"
       intro="A segurança de uma villa ou propriedade em Trancoso — especialmente durante eventos privados ou períodos de temporada com alto fluxo de pessoas — exige profissionais que conheçam a região e tenham experiência comprovada. Na Trancoso Resolve você contrata profissionais de segurança verificados, com análise de antecedentes criminais completa, para proteger sua propriedade e seus convidados."
       servicesTitle="Serviços de segurança em Trancoso"

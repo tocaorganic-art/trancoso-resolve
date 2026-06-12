@@ -5,6 +5,17 @@ export default function RioVerdeTrancoso() {
     <ServicoLocalPage
       title="Serviços em Rio Verde, Trancoso BA | Profissionais para Villas e Condomínios | Trancoso Resolve"
       metaDescription="Contrate profissionais verificados para serviços em Rio Verde, Trancoso: manutenção de villas, piscineiros, jardineiros, eletricistas e muito mais. Especialistas em condomínios de alto padrão."
+      keywords="serviços Rio Verde Trancoso, profissionais Rio Verde, piscineiro Rio Verde Trancoso, manutenção de villas Rio Verde Bahia"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/rio-verde-trancoso"
+      schemaData={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Trancoso Resolve - Serviços em Rio Verde, Trancoso",
+        "description": "Profissionais verificados para villas e condomínios fechados em Rio Verde, Trancoso, BA.",
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "areaServed": { "@type": "Place", "name": "Rio Verde, Trancoso, BA" },
+        "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
+      }}
       h1="Serviços em Rio Verde, Trancoso: Especialistas em Villas e Condomínios Fechados"
       intro="Rio Verde é um dos bairros mais valorizados de Trancoso — com condomínios fechados, villas de luxo e propriedades de alto padrão que exigem manutenção especializada. Na Trancoso Resolve você encontra profissionais verificados com experiência em trabalhos em condomínios, acostumados com as exigências e protocolos de propriedades premium da região."
       servicesTitle="Serviços disponíveis em Rio Verde, Trancoso"

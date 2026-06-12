@@ -5,6 +5,17 @@ export default function EletricistaTrancoso() {
     <ServicoLocalPage
       title="Eletricista em Trancoso – Emergências, Instalações e Manutenção em Villas e Propriedades de Luxo"
       metaDescription="Eletricista verificado em Trancoso para emergências elétricas, instalações em villas e pousadas de alto padrão. Atendimento rápido e profissional. Contrate pela Trancoso Resolve."
+      keywords="eletricista Trancoso, eletricista Trancoso Bahia, eletricista emergência Trancoso, instalação elétrica Trancoso BA"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/eletricista-trancoso"
+      schemaData={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Trancoso Resolve - Eletricista Trancoso",
+        "description": "Eletricistas verificados em Trancoso, BA. Emergências, instalações e manutenção em villas e propriedades de luxo.",
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "areaServed": { "@type": "City", "name": "Trancoso, BA" },
+        "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
+      }}
       h1="Eletricista em Trancoso: Pronto para Emergências e Instalações em Propriedades de Alto Padrão"
       intro="Uma falha elétrica em uma villa de luxo ou pousada não pode esperar. Na Trancoso Resolve você acessa eletricistas locais verificados — com experiência em instalações sofisticadas e prontos para atender emergências na sua propriedade em Trancoso com rapidez e segurança."
       servicesTitle="Serviços de eletricista especializado em Trancoso"

@@ -5,6 +5,17 @@ export default function QuadradoTrancoso() {
     <ServicoLocalPage
       title="Serviços no Quadrado de Trancoso, BA | Profissionais Verificados | Trancoso Resolve"
       metaDescription="Encontre profissionais verificados para serviços no Quadrado de Trancoso: diaristas, eletricistas, encanadores, jardineiros e muito mais. Atendimento para pousadas, boutiques e residências de alto padrão."
+      keywords="serviços Quadrado Trancoso, profissionais Quadrado de Trancoso, diarista Quadrado Trancoso, manutenção pousadas Quadrado Bahia"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/quadrado-trancoso"
+      schemaData={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Trancoso Resolve - Serviços no Quadrado de Trancoso",
+        "description": "Profissionais verificados para pousadas, lojas e residências no Quadrado de Trancoso, BA.",
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "areaServed": { "@type": "Place", "name": "Quadrado de Trancoso, BA" },
+        "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
+      }}
       h1="Serviços no Quadrado de Trancoso: Profissionais Verificados para a Área Central"
       intro="O Quadrado de Trancoso é o coração histórico e comercial da vila — e manter pousadas boutique, lojas, restaurantes e residências funcionando nessa área exige profissionais que conhecem o ritmo e as exigências do local. Na Trancoso Resolve você encontra prestadores verificados com experiência comprovada em trabalhos no Quadrado e nas ruas adjacentes."
       servicesTitle="Serviços disponíveis no Quadrado de Trancoso"
