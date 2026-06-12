@@ -18,17 +18,17 @@ const beneficios = [
     description: "Tenha seu perfil divulgado para turistas e moradores de Trancoso que buscam profissionais qualificados e de confiança. Amplie sua base de forma eficiente e direcionada."
   },
   {
-    icon: <BarChart2 className="w-8 h-8 text-green-600" />,
+    icon: <BarChart2 className="w-8 h-8 text-olive-600" />,
     title: "Gestão Simplificada",
     description: "Painel completo para gerenciar agenda, confirmar serviços e acompanhar seu desempenho financeiro de forma intuitiva. Otimize seu tempo e foque no seu trabalho."
   },
   {
-    icon: <Star className="w-8 h-8 text-yellow-500" />,
+    icon: <Star className="w-8 h-8 text-terracotta" />,
     title: "Construa sua Reputação",
     description: "Receba avaliações transparentes dos clientes e construa uma reputação online sólida. A credibilidade conquistada atrai continuamente novas oportunidades de negócio."
   },
   {
-    icon: <Bot className="w-8 h-8 text-purple-600" />,
+    icon: <Bot className="w-8 h-8 text-olive-700" />,
     title: "Toca TrIA: Agente de IA 24h",
     description: "Mais do que um assistente, o Toca TrIA automatiza agendamentos, responde a perguntas frequentes e qualifica leads — trabalhando por você enquanto você foca no serviço."
   },
@@ -38,7 +38,7 @@ const beneficios = [
     description: "Crie posts, cardápios, logos e materiais visuais impactantes em minutos. Gere imagens exclusivas em alta qualidade, fortalecendo sua identidade visual sem custos adicionais."
   },
   {
-    icon: <CheckCircle className="w-8 h-8 text-emerald-600" />,
+    icon: <CheckCircle className="w-8 h-8 text-olive-500" />,
     title: "Custo Zero de Marketing",
     description: "Esqueça o gasto com anúncios e divulgação. Na Trancoso Resolve, seu perfil é exibido gratuitamente para quem já está procurando exatamente o que você oferece."
   }
@@ -68,7 +68,7 @@ export default function SejaPrestadorPage() {
 
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Cadastre-se como prestador de serviços em Trancoso Resolve. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.";
+    meta.content = "Cadastre-se como prestador de serviços em Trancoso Resolve. Atendemos Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.";
 
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
@@ -84,7 +84,7 @@ export default function SejaPrestadorPage() {
 
     let ogDesc = document.querySelector('meta[property="og:description"]');
     if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
-    ogDesc.content = 'Cadastre-se como prestador de serviços em Trancoso Resolve. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.';
+    ogDesc.content = "Cadastre-se como prestador de serviços em Trancoso Resolve. Atendemos Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.";
 
     const schemaId = 'schema-seja-prestador';
     const existing = document.getElementById(schemaId);
@@ -99,7 +99,13 @@ export default function SejaPrestadorPage() {
           "@type": "WebPage",
           "name": "Seja um Parceiro Trancoso Resolve",
           "url": `${window.location.origin}/SejaPrestador`,
-          "description": "Cadastre-se como prestador de serviços verificado em Trancoso e comece a receber novos clientes pela plataforma."
+          "description": "Cadastre-se como prestador de serviços verificado em Trancoso e comece a receber novos clientes pela plataforma.",
+          "areaServed": [
+            { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+            { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" },
+            { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
+            { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
+          ]
         },
         {
           "@type": "BreadcrumbList",
