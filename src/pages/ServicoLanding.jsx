@@ -17,7 +17,7 @@ const servicoConfig = {
     h1: "Diaristas e Limpeza Doméstica em Trancoso",
     description: "Contrate diaristas e faxineiras verificadas em Trancoso, Bahia. Serviço de limpeza residencial e de pousadas com profissionais avaliados pela comunidade.",
     occupation: "Limpeza",
-    keywords: "diarista Trancoso, faxineira Trancoso, limpeza doméstica Trancoso, serviço limpeza Trancoso BA",
+    keywords: "diarista Trancoso, faxineira Trancoso, limpeza doméstica Trancoso, serviço limpeza Trancoso BA, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/inigQzgVMUPeKrkL.png",
     faq: [
       { q: "Quanto custa uma diarista em Trancoso?", a: "O valor de uma diarista em Trancoso varia entre R$ 120 e R$ 300 por diária, dependendo do tamanho do imóvel e dos serviços inclusos. Consulte os perfis para ver os preços de cada profissional." },
@@ -25,115 +25,115 @@ const servicoConfig = {
       { q: "Posso contratar para limpeza de pousada ou villa?", a: "Sim. Muitos profissionais têm experiência em pousadas, villas e imóveis de temporada em Trancoso." },
     ],
     heroImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/inigQzgVMUPeKrkL.png",
-    color: "from-teal-500 to-cyan-600",
+    color: "from-olive-400 to-olive-600",
   },
   "eletricista-trancoso": {
     title: "Eletricista em Trancoso, BA — Profissionais Verificados",
     h1: "Eletricista em Trancoso, Bahia",
     description: "Eletricistas qualificados em Trancoso para instalações, manutenção e emergências. Profissionais verificados com avaliações de clientes reais.",
     occupation: "Eletricista",
-    keywords: "eletricista Trancoso, serviço elétrico Trancoso, instalação elétrica Trancoso BA",
+    keywords: "eletricista Trancoso, serviço elétrico Trancoso, instalação elétrica Trancoso BA, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/loNdoqfPbYrpiZUY.png",
     faq: [
       { q: "Tem eletricista disponível para emergências em Trancoso?", a: "Sim, vários eletricistas em nosso cadastro atendem com urgência. Verifique a disponibilidade no perfil de cada profissional." },
       { q: "Qual o custo médio de um serviço elétrico em Trancoso?", a: "O valor varia conforme a complexidade. Instalações simples costumam partir de R$ 150, enquanto serviços mais complexos podem custar mais. Solicite orçamento diretamente com o profissional." },
     ],
     heroImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/loNdoqfPbYrpiZUY.png",
-    color: "from-yellow-500 to-amber-600",
+    color: "from-orange-400 to-orange-600",
   },
   "encanador-trancoso": {
     title: "Encanador em Trancoso, BA — Serviços Hidráulicos",
     h1: "Encanador em Trancoso, Bahia",
     description: "Encanadores especializados em Trancoso para reparos, entupimentos e instalações hidráulicas. Atendimento rápido com profissionais verificados.",
     occupation: "Encanador",
-    keywords: "encanador Trancoso, hidráulico Trancoso, conserto vazamento Trancoso BA",
+    keywords: "encanador Trancoso, hidráulico Trancoso, conserto vazamento Trancoso BA, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/SzIYzgzmeNbfcRvv.png",
     faq: [
       { q: "Como contratar um encanador urgente em Trancoso?", a: "Acesse a lista de encanadores disponíveis, verifique o status 'Disponível' no perfil e entre em contato diretamente pelo WhatsApp." },
       { q: "Encanadores atendem em vilarejos próximos a Trancoso?", a: "Muitos profissionais informam o raio de atendimento no perfil. Consulte a localização e cobertura de cada um." },
     ],
     heroImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/SzIYzgzmeNbfcRvv.png",
-    color: "from-blue-500 to-indigo-600",
+    color: "from-terracotta to-terracotta-deep",
   },
   "jardinagem-trancoso": {
     title: "Jardineiro em Trancoso, BA — Paisagismo e Manutenção",
     h1: "Jardinagem e Paisagismo em Trancoso, Bahia",
     description: "Jardineiros especializados em plantas tropicais em Trancoso. Manutenção de jardins, poda, paisagismo para residências, pousadas e villas na Bahia.",
     occupation: "Jardinagem",
-    keywords: "jardineiro Trancoso, jardinagem Trancoso, paisagismo Trancoso BA, manutenção jardim Trancoso",
+    keywords: "jardineiro Trancoso, jardinagem Trancoso, paisagismo Trancoso BA, manutenção jardim Trancoso, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/MmnYpPgxNHhyniba.png",
     faq: [
       { q: "Tem jardineiro especializado em plantas nativas da Bahia em Trancoso?", a: "Sim, nossos profissionais têm experiência com plantas tropicais e nativas do litoral sul da Bahia, ideais para o clima de Trancoso." },
       { q: "Com que frequência devo contratar um jardineiro em Trancoso?", a: "No clima tropical de Trancoso, recomenda-se manutenção quinzenal ou mensal. Verifique os planos disponíveis com cada profissional." },
     ],
     heroImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/MmnYpPgxNHhyniba.png",
-    color: "from-green-500 to-emerald-600",
+    color: "from-olive-500 to-olive-700",
   },
   "cozinheiro-trancoso": {
     title: "Chef e Cozinheiro Particular em Trancoso, BA",
     h1: "Cozinheiro e Chef Particular em Trancoso, Bahia",
     description: "Chefs e cozinheiros particulares em Trancoso para jantares, eventos e diárias. Gastronomia baiana autêntica com frutos do mar para sua villa ou pousada.",
     occupation: "Cozinheiro",
-    keywords: "cozinheiro Trancoso, chef particular Trancoso, jantar villa Trancoso, gastronomia Trancoso BA",
+    keywords: "cozinheiro Trancoso, chef particular Trancoso, jantar villa Trancoso, gastronomia Trancoso BA, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/XKIqXQfxYpLpcnsh.png",
     faq: [
       { q: "Posso contratar um chef para um jantar privativo na minha villa em Trancoso?", a: "Sim! Temos chefs especializados em jantares privativos, com menus personalizados de frutos do mar e culinária baiana." },
       { q: "Os cozinheiros atendem a eventos e festas em Trancoso?", a: "Sim, muitos profissionais atendem eventos, casamentos e celebrações. Consulte disponibilidade com antecedência." },
     ],
     heroImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/XKIqXQfxYpLpcnsh.png",
-    color: "from-orange-500 to-red-500",
+    color: "from-orange-500 to-terracotta-deep",
   },
   "pedreiro-trancoso": {
     title: "Pedreiro e Construção em Trancoso, BA",
     h1: "Pedreiro e Serviços de Construção em Trancoso, Bahia",
     description: "Pedreiros experientes em Trancoso para reformas, construção e manutenção. Profissionais verificados para obras residenciais e comerciais na Bahia.",
     occupation: "Pedreiro",
-    keywords: "pedreiro Trancoso, reforma Trancoso, construção Trancoso BA, manutenção Trancoso",
+    keywords: "pedreiro Trancoso, reforma Trancoso, construção Trancoso BA, manutenção Trancoso, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "Tem pedreiro para reformas pequenas em Trancoso?", a: "Sim, atendemos desde reparos pontuais até reformas completas. Os profissionais detalham os tipos de serviço nos perfis." },
     ],
     heroImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
-    color: "from-slate-500 to-slate-700",
+    color: "from-olive-700 to-olive-900",
   },
   "pintor-trancoso": {
     title: "Pintor em Trancoso, BA — Pintura Residencial e Comercial",
     h1: "Pintor em Trancoso, Bahia",
     description: "Pintores profissionais em Trancoso para pintura residencial, comercial e decorativa. Acabamento de qualidade para villas, pousadas e imóveis na Bahia.",
     occupation: "Pintor",
-    keywords: "pintor Trancoso, pintura residencial Trancoso, pintura comercial Trancoso BA",
+    keywords: "pintor Trancoso, pintura residencial Trancoso, pintura comercial Trancoso BA, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "Qual o custo de pintura por metro quadrado em Trancoso?", a: "O valor médio varia conforme o tipo de tinta e superfície. Consulte diretamente com o profissional para orçamento personalizado." },
     ],
     heroImage: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80",
-    color: "from-purple-500 to-violet-600",
+    color: "from-terracotta to-orange-800",
   },
   "baba-trancoso": {
     title: "Babá e Cuidadora em Trancoso, BA",
     h1: "Babá e Cuidadora de Crianças em Trancoso, Bahia",
     description: "Babás verificadas em Trancoso para cuidados de crianças durante viagens, hospedagem ou eventos. Profissionais com referências e experiência comprovada.",
     occupation: "Babá",
-    keywords: "babá Trancoso, cuidadora criança Trancoso, babysitter Trancoso BA",
+    keywords: "babá Trancoso, cuidadora criança Trancoso, babysitter Trancoso BA, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "As babás em Trancoso têm verificação de antecedentes?", a: "Sim, todos os prestadores passam por consulta de antecedentes criminais e verificação de identidade antes de ser listados na plataforma." },
     ],
     heroImage: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=800&q=80",
-    color: "from-pink-500 to-rose-500",
+    color: "from-orange-300 to-terracotta",
   },
   "garcom-trancoso": {
     title: "Garçom para Eventos em Trancoso, BA",
     h1: "Garçom e Serviço de Eventos em Trancoso, Bahia",
     description: "Garçons profissionais em Trancoso para eventos, jantares e celebrações. Equipe treinada e uniformizada para elevar o padrão do seu evento na Bahia.",
     occupation: "Garçom",
-    keywords: "garçom Trancoso, garçom eventos Trancoso, serviço evento Trancoso BA",
+    keywords: "garçom Trancoso, garçom eventos Trancoso, serviço evento Trancoso BA, Arraial d'Ajuda, Porto Seguro, Caraíva",
     ogImage: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
     faq: [
       { q: "Posso contratar vários garçons para um evento grande em Trancoso?", a: "Sim. Informe o tamanho do evento ao profissional para adequar a equipe necessária." },
     ],
     heroImage: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80",
-    color: "from-cyan-600 to-blue-700",
+    color: "from-olive-600 to-olive-800",
   },
 };
 
@@ -157,7 +157,7 @@ const ProviderMiniCard = ({ provider }) => (
           <p className="font-semibold text-foreground truncate group-hover:text-orange-700">{provider.full_name}</p>
           <div className="flex items-center gap-2 mt-0.5">
             <div className="flex items-center gap-1">
-              <Star className="w-3 h-3 text-yellow-500 fill-current" />
+              <Star className="w-3 h-3 text-terracotta fill-current" />
               <span className="text-xs font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
             </div>
             {provider.total_reviews > 0 && (
@@ -249,10 +249,12 @@ export default function ServicoLandingPage() {
               "addressCountry": "BR"
             }
           },
-          "areaServed": {
-            "@type": "Place",
-            "name": "Trancoso, Bahia, Brasil"
-          }
+          "areaServed": [
+            { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+            { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" },
+            { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
+            { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
+          ]
         },
         {
           "@type": "FAQPage",
@@ -346,9 +348,9 @@ export default function ServicoLandingPage() {
         <div className="container mx-auto max-w-6xl px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           {[
             { icon: <Shield className="w-6 h-6 text-[#3E8E5A] mx-auto mb-1" />, label: "Verificados", sub: "Antecedentes consultados" },
-            { icon: <Star className="w-6 h-6 text-yellow-500 mx-auto mb-1" />, label: "Avaliados", sub: "Feedbacks reais de clientes" },
+            { icon: <Star className="w-6 h-6 text-terracotta mx-auto mb-1" />, label: "Avaliados", sub: "Feedbacks reais de clientes" },
             { icon: <Clock className="w-6 h-6 text-orange-600 mx-auto mb-1" />, label: "Ágeis", sub: "Resposta rápida via WhatsApp" },
-            { icon: <MapPin className="w-6 h-6 text-red-500 mx-auto mb-1" />, label: "Locais", sub: "Profissionais de Trancoso" },
+            { icon: <MapPin className="w-6 h-6 text-terracotta-deep mx-auto mb-1" />, label: "Locais", sub: "Profissionais de Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva" },
           ].map((item, i) => (
             <div key={i} className="py-3">
               {item.icon}
