@@ -128,10 +128,26 @@ export default function PrestadorPerfilPage() {
       return;
     }
 
+    if (!user?.id || !user?.email) {
+      toast.error("Erro: usuário não autenticado. Faça login novamente.");
+      return;
+    }
+
+    // provider_email é obrigatório para o prestador ver a solicitação na MinhaAgenda.
+    // A RLS read e a query filtram por provider_email == user.email.
+    // provider já está carregado no escopo — não precisa de lookup extra.
+    const providerEmail = provider?.email || provider?.created_by;
+    if (!providerEmail) {
+      toast.error("Erro: não foi possível identificar o prestador. Tente novamente.");
+      return;
+    }
+
     createRequestMutation.mutate({
       ...requestData,
-      client_id: user?.id,
+      client_id: user.id,
+      client_email: user.email,
       provider_id: providerId,
+      provider_email: providerEmail,
       date: requestData.date ? format(requestData.date, "yyyy-MM-dd") : null,
       time: requestData.time || null,
     });
