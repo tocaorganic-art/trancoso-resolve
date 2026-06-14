@@ -1,5 +1,8 @@
 # Trancoso Resolve
 
+> **Idioma das respostas:** responda **sempre em português (pt-BR)**, de forma
+> calorosa e direta, tratando a pessoa por **você**.
+
 Marketplace de serviços locais em **Trancoso, Bahia**. Conecta moradores,
 empresários e donos de imóvel a prestadores de serviços locais — elétrica,
 limpeza, jardinagem, reformas e mais. Produtos digitais: **app web** e **app mobile**.
