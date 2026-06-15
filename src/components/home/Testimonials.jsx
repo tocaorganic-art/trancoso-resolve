@@ -1,5 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Star } from 'lucide-react';
+import LazyImage from '@/components/ui/LazyImage';
 
 const testimonials = [
   {
@@ -53,7 +54,7 @@ export default function Testimonials() {
                    <p className="text-slate-800 mt-4 italic leading-relaxed text-base">"{testimonial.comment}"</p>
                  </div>
                  <div className="flex items-center mt-auto">
-                   <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover mr-4" />
+                   <LazyImage src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" priority={true} />
                    <div>
                      <p className="font-bold text-slate-900 text-base">{testimonial.name}</p>
                      <p className="text-sm font-medium text-slate-700">{testimonial.role}</p>

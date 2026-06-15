@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,9 +20,11 @@ import {
   DollarSign, Calendar as CalendarIcon, Images, ChevronRight, Check, AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 import StarRating from "@/components/reviews/StarRating";
-import ServiceLocationMap from "@/components/map/ServiceLocationMap";
 import StartChatButton from "@/components/chat/StartChatButton";
+
+const ServiceLocationMap = lazy(() => import("@/components/map/ServiceLocationMap"));
 import WhatsAppCallButton from "@/components/whatsapp/WhatsAppCallButton";
 import SlotPicker from "@/components/agenda/SlotPicker";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
@@ -497,10 +499,12 @@ export default function PrestadorPerfilPage() {
                     <p className="text-sm text-muted-foreground mb-4 font-semibold">Etapa 2 de 2: Localização do Serviço</p>
                     <div className="mb-4">
                       <Label>Onde o serviço será realizado?</Label>
-                      <ServiceLocationMap 
-                        initialPosition={[-16.5925, -39.0931]} // Default Trancoso
-                        onLocationSelect={(pos) => setRequestData(prev => ({...prev, location: {...prev.location, lat: pos[0], lng: pos[1]}}))} 
-                      />
+                      <Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}>
+                        <ServiceLocationMap
+                          initialPosition={[-16.5925, -39.0931]}
+                          onLocationSelect={(pos) => setRequestData(prev => ({...prev, location: {...prev.location, lat: pos[0], lng: pos[1]}}))}
+                        />
+                      </Suspense>
                        {requestData.location.lat && requestData.location.lng && (
                          <p className="text-xs text-muted-foreground mt-2">Localização selecionada: {requestData.location.lat.toFixed(4)}, {requestData.location.lng.toFixed(4)}</p>
                        )}

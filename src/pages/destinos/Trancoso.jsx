@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Star, Utensils, Waves, Sun, Heart } from "lucide-react";
-import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 
 const HERO_IMAGE = "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=80";
 
@@ -179,7 +182,9 @@ export default function DestinoTrancoso() {
           </div>
         </section>
 
-        <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Trancoso" source="destino-trancoso" />
+        <Suspense fallback={<div className="py-12"><Skeleton className="h-96 w-full rounded-lg" /></div>}>
+          <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Trancoso" source="destino-trancoso" />
+        </Suspense>
       </div>
 
       <WhatsAppStickyBar serviceLabel="um profissional em Trancoso" />

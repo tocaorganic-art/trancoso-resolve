@@ -13,7 +13,7 @@ const SLIDES = [
     subtitle: "Cadastre-se agora com 2 meses grátis antes que as vagas acabem. Verificação de antecedentes inclusa. A partir de R$29,90/mês.",
     cta: { label: "Garantir minha vaga", to: "/Planos", icon: true },
     cta2: { label: "Ver como funciona", to: "/ComoFunciona" },
-    bg: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    bg: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format%3Dwebp&fit=crop&w=1600&q=80",
     overlay: "bg-gradient-to-r from-slate-900/90 via-slate-800/75 to-slate-900/60",
   },
   {
@@ -23,7 +23,7 @@ const SLIDES = [
     highlightIndex: 1,
     subtitle: "Diarista, eletricista, piscineiro, jardineiro e muito mais. Avaliações reais, agendamento fácil, confiança garantida.",
     cta: { label: "Encontrar profissional", to: "/ServicosCategoria", icon: true },
-    bg: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    bg: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format%3Dwebp&fit=crop&w=1600&q=80",
     overlay: "bg-gradient-to-r from-teal-900/85 via-slate-800/70 to-slate-900/60",
   },
   {
@@ -33,7 +33,7 @@ const SLIDES = [
     highlightIndex: 2,
     subtitle: "Plano empresarial com múltiplos prestadores vinculados, agenda centralizada e suporte prioritário. 7 dias grátis para começar.",
     cta: { label: "Conheça o plano empresa", to: "/Planos", icon: true },
-    bg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    bg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format%3Dwebp&fit=crop&w=1600&q=80",
     overlay: "bg-gradient-to-r from-blue-900/85 via-slate-800/70 to-slate-900/60",
   },
 ];

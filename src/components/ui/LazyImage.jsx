@@ -1,17 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from "@/lib/utils";
-import { ImageOff } from "lucide-react"; // Import an icon for fallback
+import { ImageOff } from "lucide-react";
+import { getImageFormats } from "@/utils/images";
 
 export default function LazyImage({ src, srcSet, sizes, alt, className, placeholderClassName, priority = false }) {
   const [imgSrc, setImgSrc] = useState(src);
+  const [imageFormats, setImageFormats] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef(null);
 
   useEffect(() => {
-    // Reseta o estado se a imagem (src) for alterada
     setImgSrc(src);
+    setImageFormats(getImageFormats(src));
     setIsLoaded(false);
     setHasError(false);
   }, [src]);
@@ -70,23 +72,28 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
         </div>
       )}
 
-      {/* Imagem real, carregada de forma preguiçosa */}
-      {isInView && !hasError && (
-        <img
-          src={imgSrc}
-          srcSet={srcSet}
-          sizes={sizes}
-          alt={alt}
-          className={cn(
-            "w-full h-full object-cover transition-opacity duration-500",
-            isLoaded ? "opacity-100" : "opacity-0"
+      {/* Imagem real, carregada de forma preguiçosa com suporte a WebP */}
+      {isInView && !hasError && imageFormats && (
+        <picture>
+          {imageFormats.hasWebp && (
+            <source srcSet={imageFormats.webp} type="image/webp" />
           )}
-          onLoad={() => setIsLoaded(true)}
-          onError={handleError}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          fetchPriority={priority ? "high" : "auto"}
-        />
+          <img
+            src={imgSrc}
+            srcSet={srcSet}
+            sizes={sizes}
+            alt={alt}
+            className={cn(
+              "w-full h-full object-cover transition-opacity duration-500",
+              isLoaded ? "opacity-100" : "opacity-0"
+            )}
+            onLoad={() => setIsLoaded(true)}
+            onError={handleError}
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            fetchPriority={priority ? "high" : "auto"}
+          />
+        </picture>
       )}
     </div>
   );
