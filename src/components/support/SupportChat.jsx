@@ -319,7 +319,14 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isMinimized ? 'w-80' : 'w-96'} max-w-[calc(100vw-2rem)]`}>
+    <>
+      {/* Backdrop opcional - apenas visual, não bloqueador */}
+      <div
+        className="fixed inset-0 z-40 bg-black/0 transition-opacity duration-300"
+        onClick={() => setIsOpen(false)}
+        aria-label="Fechar chat"
+      />
+      <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isMinimized ? 'w-80' : 'w-96'} max-w-[calc(100vw-2rem)]`}>
       <Card className="shadow-2xl border border-slate-200 overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between">
@@ -430,6 +437,7 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
           </>
         )}
       </Card>
-    </div>
+      </div>
+    </>
   );
 }
