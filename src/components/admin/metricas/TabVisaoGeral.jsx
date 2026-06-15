@@ -60,13 +60,14 @@ export default function TabVisaoGeral({ leads, requests, providers }) {
       .map(([name, value]) => ({ name, value }));
   }, [requests]);
 
-  // Top 10 serviços
+  // Top 10 serviços — com nome da categoria como fallback
   const topServices = useMemo(() => {
     const map = {};
     (requests || []).forEach(r => {
-      const key = r.service_id || "desconhecido";
-      if (!map[key]) map[key] = { id: key, count: 0 };
-      map[key].count++;
+      // Usar categoria como nome do serviço, se disponível; caso contrário, usar 'Serviço Geral'
+      const serviceName = r.category || r.service_name || "Serviço Geral";
+      if (!map[serviceName]) map[serviceName] = { name: serviceName, count: 0 };
+      map[serviceName].count++;
     });
     return Object.values(map).sort((a, b) => b.count - a.count).slice(0, 10);
   }, [requests]);
@@ -145,15 +146,15 @@ export default function TabVisaoGeral({ leads, requests, providers }) {
                 <thead>
                   <tr className="border-b border-slate-700 text-slate-400 text-left">
                     <th className="py-2 pr-4">#</th>
-                    <th className="py-2 pr-4">ID do Serviço</th>
+                    <th className="py-2 pr-4">Serviço</th>
                     <th className="py-2">Solicitações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {topServices.map((s, i) => (
-                    <tr key={s.id} className="border-b border-slate-700/50 text-slate-300">
+                    <tr key={s.name} className="border-b border-slate-700/50 text-slate-300">
                       <td className="py-2 pr-4 font-bold text-slate-500">{i + 1}</td>
-                      <td className="py-2 pr-4 font-mono text-xs">{s.id}</td>
+                      <td className="py-2 pr-4">{s.name}</td>
                       <td className="py-2 font-bold text-amber-400">{s.count}</td>
                     </tr>
                   ))}
