@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, DollarSign } from "lucide-react";
+import LazyImage from "@/components/ui/LazyImage";
 
 export default function ServiceCard({ service }) {
   const categoryColors = {
@@ -18,10 +19,10 @@ export default function ServiceCard({ service }) {
     <Card className="glass-card border-none shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]">
       {service.images && service.images[0] && (
         <div className="h-48 overflow-hidden rounded-t-xl">
-          <img 
-            src={service.images[0]} 
+          <LazyImage
+            src={service.images[0]}
             alt={service.name}
-            className="w-full h-full object-cover"
+            className="h-48"
           />
         </div>
       )}
