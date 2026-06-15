@@ -2,6 +2,7 @@
    Tokens (colors/type/spacing/radius/shadows) + self-hosted Nunito.
    Additive: exposes --orange-500, --brand-primary, --sand, etc. */
 @import "./styles/brand/index.css";
+@import "./styles/accessibility.css";
 
 @tailwind base;
 @tailwind components;
