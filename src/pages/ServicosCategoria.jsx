@@ -55,13 +55,26 @@ export default function ServicosCategoriaPage() {
 
   const { isPulling, pullDistance, threshold } = usePullToRefresh(handleRefresh);
 
+  // Helper: Detectar prestador de teste
+  const isTestProvider = useCallback((provider) => {
+    if (!provider) return false;
+    // Excluir por nome (contém "teste")
+    if (provider.full_name?.toLowerCase().includes('teste')) return true;
+    // Excluir por email (domains de teste)
+    if (provider.email?.match(/@(teste|email|test|demo|example|sample)\.com/i)) return true;
+    // Excluir por bio com caracteres aleatórios (padrão: sequências repetidas ou muito caóticas)
+    if (provider.bio && /[ytdgfutyfyuftyuftuyfytufytukfjtyufjyt]{20,}/.test(provider.bio.replace(/\s/g, ''))) return true;
+    return false;
+  }, []);
+
   // ⭐ STEP 2: Compute filtered providers AFTER providers is available
   const filteredProviders = useMemo(() => {
     if (!providers || providers.length === 0) return [];
-    
+
     return providers.filter(provider => {
-      // Ocultar reprovados sempre
+      // Ocultar reprovados e dados de teste
       if (provider.status_verificacao === 'reprovado') return false;
+      if (isTestProvider(provider)) return false;
 
       const matchesCategory = selectedCategory === 'Todos' || provider.occupation === selectedCategory;
       
@@ -82,8 +95,12 @@ export default function ServicosCategoriaPage() {
   // ⭐ STEP 3: Compute filter counts AFTER providers is available
   const filterCounts = useMemo(() => {
     if (!providers || providers.length === 0) return { price: {}, rating: {}, availability: {}, neighborhoods: [] };
-    
+
     const baseFiltered = providers.filter(p => {
+      // Ocultar reprovados e dados de teste
+      if (p.status_verificacao === 'reprovado') return false;
+      if (isTestProvider(p)) return false;
+
       const matchesCategory = selectedCategory === 'Todos' || p.occupation === selectedCategory;
       let matchesSearch = true;
       if (searchQuery.trim() !== '' && aiFilteredProviderIds) {
