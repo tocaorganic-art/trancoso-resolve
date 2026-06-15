@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import TrIASidebar from './TrIASidebar.jsx';
 import TrIAChatArea from './TrIAChatArea.jsx';
 import LanguageSelector from './LanguageSelector.jsx';
+import { setupTrIAAgent, createTrIAResponseInterceptor } from '@/services/triaIntegration.js';
 
 export default function TocaTrIAPremium() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -15,10 +16,13 @@ export default function TocaTrIAPremium() {
   const [language, setLanguage] = useState('pt');
   const [translationLoading, setTranslationLoading] = useState(false);
 
-  // Inicializar ou carregar conversa
+  // Inicializar TrIA e carregar conversas
   useEffect(() => {
     const initializeConversations = async () => {
       try {
+        // Configurar agente TrIA com system prompt
+        await setupTrIAAgent();
+
         const convos = await base44.agents.listConversations({ agent_name: 'toca' });
         if (convos && convos.length > 0) {
           setConversations(convos);
@@ -40,16 +44,34 @@ export default function TocaTrIAPremium() {
         setError('Erro ao carregar histórico');
       }
     };
-    
+
     initializeConversations();
   }, []);
 
-  // Subscriber para atualizações em tempo real
+  // Subscriber para atualizações em tempo real com interceptor de ações
   useEffect(() => {
     if (!activeConversationId) return;
 
-    const unsubscribe = base44.agents.subscribeToConversation(activeConversationId, (data) => {
-      setMessages(data.messages || []);
+    const responseInterceptor = createTrIAResponseInterceptor();
+
+    const unsubscribe = base44.agents.subscribeToConversation(activeConversationId, async (data) => {
+      try {
+        // Processar mensagens para detectar ações
+        const processedMessages = await Promise.all(
+          (data.messages || []).map(async (msg) => {
+            if (msg.role === 'assistant') {
+              const processedContent = await responseInterceptor(msg.content);
+              return { ...msg, content: processedContent };
+            }
+            return msg;
+          })
+        );
+
+        setMessages(processedMessages);
+      } catch (err) {
+        console.error('Erro ao processar respostas:', err);
+        setMessages(data.messages || []);
+      }
       setIsLoading(false);
     });
 
