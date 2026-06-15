@@ -122,10 +122,12 @@ export default function ProviderCard({ provider }) {
                 </button>
             </Link>
 
-            {/* 8) Aviso de perfil ilustrativo */}
-            <p className="text-center text-[10px] text-[#6b7280] mt-1">
-                {DEMO_PROFILE_WARNING}
-            </p>
+            {/* 8) Aviso de perfil ilustrativo — apenas se sem foto real */}
+            {!provider.photo_url && (
+                <p className="text-center text-[10px] text-[#6b7280] mt-1">
+                    {DEMO_PROFILE_WARNING}
+                </p>
+            )}
         </div>
     </div>
     );

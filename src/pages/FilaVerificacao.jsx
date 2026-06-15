@@ -17,6 +17,22 @@ import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
+// Status normalizados (apenas português)
+const STATUS_MAP = {
+  'in_progress': 'Em Análise',
+  'pending': 'Pendente',
+  'awaiting_admin': 'Aguardando Admin',
+  'approved': 'Verificado',
+  'rejected': 'Rejeitado',
+  'Em Análise': 'Em Análise',
+  'Pendente': 'Pendente',
+  'Aguardando Admin': 'Aguardando Admin',
+  'Verificado': 'Verificado',
+  'Rejeitado': 'Rejeitado',
+};
+
+const normalizeStatus = (status) => STATUS_MAP[status] || 'Pendente';
+
 const statusConfig = {
 "Em Análise": { color: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
 "Aguardando Admin": { color: "bg-amber-100 text-amber-700 border-amber-200", icon: ShieldCheck },
@@ -49,6 +65,17 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
     },
     enabled: !!verificacao?.user_email && isOpen,
   });
+
+  const normalizeStatus = (status) => {
+    const STATUS_MAP = {
+      'in_progress': 'Em Análise',
+      'pending': 'Pendente',
+      'awaiting_admin': 'Aguardando Admin',
+      'approved': 'Verificado',
+      'rejected': 'Rejeitado',
+    };
+    return STATUS_MAP[status] || status;
+  };
 
   const tipoPessoaLabel = { pf: 'Pessoa Física', mei: 'MEI', pj: 'Pessoa Jurídica' };
 
@@ -134,7 +161,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
               <div>
                 <Label className="text-xs text-muted-foreground uppercase tracking-wide">Status</Label>
                 <div className="mt-0.5">
-                  <StatusBadge status={verificacao.status} />
+                  <StatusBadge status={normalizeStatus(verificacao.status)} />
                 </div>
               </div>
             </div>
@@ -273,7 +300,7 @@ export default function FilaVerificacaoPage() {
       const verificacao = verificacoes.find(v => v.id === id);
       if (!verificacao) throw new Error('Verificação não encontrada');
 
-      // Atualizar status da verificação
+      // Atualizar status da verificação (sempre salvar em português para consistência)
       const newStatus = action === "aprovar" ? "Verificado" : "Rejeitado";
       await base44.entities.Verificacao.update(id, {
         status: newStatus,
@@ -324,15 +351,17 @@ export default function FilaVerificacaoPage() {
   }
 
   const filtered = (verificacoes || []).filter((v) => {
-    const matchStatus = statusFilter === "Todos" || v.status === statusFilter;
+    const normalizedStatus = normalizeStatus(v.status);
+    const matchStatus = statusFilter === "Todos" || normalizedStatus === statusFilter;
     const matchSearch = !search.trim() ||
-      v.user_name?.toLowerCase().includes(search.toLowerCase()) ||
+      (v.user_name || v.user_email)?.toLowerCase().includes(search.toLowerCase()) ||
       v.user_email?.toLowerCase().includes(search.toLowerCase());
     return matchStatus && matchSearch;
   });
 
   const counts = (verificacoes || []).reduce((acc, v) => {
-    acc[v.status] = (acc[v.status] || 0) + 1;
+    const normalized = normalizeStatus(v.status);
+    acc[normalized] = (acc[normalized] || 0) + 1;
     return acc;
   }, {});
 
@@ -441,21 +470,23 @@ export default function FilaVerificacaoPage() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {filtered.map((v) => {
-                    const isPending = ["Em Análise", "Aguardando Admin", "Pendente"].includes(v.status);
+                    const normalizedStatus = normalizeStatus(v.status);
+                    const isPending = ["Em Análise", "Aguardando Admin", "Pendente"].includes(normalizedStatus);
                     const isProcessing = quickActionId === v.id;
+                    const displayName = v.user_name || v.user_email || 'Usuário removido';
                     return (
                     <tr key={v.id} className="hover:bg-muted transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                                           <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
                             <span className="text-amber-700 font-semibold text-xs">
-                              {v.user_name?.charAt(0)?.toUpperCase() || "?"}
+                              {displayName?.charAt(0)?.toUpperCase() || "?"}
                             </span>
                           </div>
                           <div>
                             <p className="text-sm font-medium text-foreground flex items-center gap-1.5">
-                              {v.user_name}
-                              {v.status === "Verificado" && <VerificacaoBadge verified size="xs" />}
+                              {displayName}
+                              {normalizedStatus === "Verificado" && <VerificacaoBadge verified size="xs" />}
                             </p>
                             <p className="text-xs text-muted-foreground">{v.user_email}</p>
                           </div>
@@ -475,7 +506,7 @@ export default function FilaVerificacaoPage() {
                         </div>
                       </td>
                       <td className="px-4 py-4">
-                        <StatusBadge status={v.status} />
+                        <StatusBadge status={normalizeStatus(v.status)} />
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
