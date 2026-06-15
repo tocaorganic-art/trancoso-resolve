@@ -211,6 +211,9 @@ export default function Layout({ children, currentPageName }) {
                       <Link to="/destinos/trancoso"><MapPin className="w-3.5 h-3.5 mr-2 text-orange-500" />Trancoso</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
+                      <Link to="/destinos/arraial-dajuda"><MapPin className="w-3.5 h-3.5 mr-2 text-orange-500" />Arraial d'Ajuda</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link to="/destinos/porto-seguro"><MapPin className="w-3.5 h-3.5 mr-2 text-orange-500" />Porto Seguro</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -311,6 +314,7 @@ export default function Layout({ children, currentPageName }) {
                 <div className="py-2 border-b border-border">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">{t('nav.destinos')}</p>
                   <Link to="/destinos/trancoso" className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><MapPin className="w-4 h-4 text-orange-500" />Trancoso</Link>
+                  <Link to="/destinos/arraial-dajuda" className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><MapPin className="w-4 h-4 text-orange-500" />Arraial d'Ajuda</Link>
                   <Link to="/destinos/porto-seguro" className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><MapPin className="w-4 h-4 text-orange-500" />Porto Seguro</Link>
                   <Link to="/destinos/caraiva" className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-orange-500 py-2 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}><MapPin className="w-4 h-4 text-orange-500" />Caraíva</Link>
                 </div>
@@ -432,6 +436,7 @@ export default function Layout({ children, currentPageName }) {
               {/* Links de Destinos */}
               <div className="flex justify-center gap-x-5 gap-y-1 mb-3 flex-wrap text-sm">
                 <Link to="/destinos/trancoso" className="text-orange-500 hover:text-orange-400 font-semibold transition-colors flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />Trancoso</Link>
+                <Link to="/destinos/arraial-dajuda" className="text-orange-500 hover:text-orange-400 font-semibold transition-colors flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />Arraial d'Ajuda</Link>
                 <Link to="/destinos/porto-seguro" className="text-orange-500 hover:text-orange-400 font-semibold transition-colors flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />Porto Seguro</Link>
                 <Link to="/destinos/caraiva" className="text-orange-500 hover:text-orange-400 font-semibold transition-colors flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />Caraíva</Link>
               </div>
