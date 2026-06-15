@@ -90,9 +90,25 @@ export default function TocaTrIAPremium() {
           content: messageToSend,
           metadata: { language, originalContent: content }
         });
+
+        // Invocar o agente para processar a mensagem
+        // O agente 'toca' processa e adiciona resposta automaticamente via subscriber
+        try {
+          const msgRes = await base44.functions.invoke('tocaTriaProcessor', {
+            conversationId: activeConversationId,
+            userMessage: messageToSend,
+            language
+          });
+          console.log('[CHAT] Processamento iniciado:', msgRes);
+        } catch (procErr) {
+          console.warn('[CHAT] Processador não disponível, aguardando subscriber:', procErr);
+          // O subscriber ainda pode receber a resposta do agente
+        }
       } catch (addErr) {
         console.error('[CHAT] Erro ao adicionar mensagem:', addErr);
-        // Continuar mesmo se falhar (mensagem pode ter sido adicionada)
+        setError('Erro ao enviar mensagem. Tente novamente.');
+        setIsLoading(false);
+        setTranslationLoading(false);
       }
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err);
