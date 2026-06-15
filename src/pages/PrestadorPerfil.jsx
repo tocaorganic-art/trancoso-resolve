@@ -264,12 +264,17 @@ export default function PrestadorPerfilPage() {
     );
   }
 
-  const totalReviews = reviews.length;
+  // Filtrar avaliações seed (dados de teste)
+  const isTestEmail = (email) => !email || email.includes('test') || email.includes('seed') || email.includes('demo');
+  const isTestName = (name) => !name || ['teste', 'test', 'seed', 'demo', 'cliente'].some(t => name?.toLowerCase().includes(t));
+  const realReviews = reviews.filter(r => !isTestEmail(r.reviewer_email) && !isTestName(r.reviewer_name));
+
+  const totalReviews = realReviews.length;
   const averageRating = totalReviews > 0
-    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews)
+    ? (realReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews)
     : (provider.rating || 0);
-  
-  const ratingDistribution = reviews.reduce((acc, review) => {
+
+  const ratingDistribution = realReviews.reduce((acc, review) => {
       acc[review.rating] = (acc[review.rating] || 0) + 1;
       return acc;
   }, {1:0, 2:0, 3:0, 4:0, 5:0});
@@ -305,6 +310,11 @@ export default function PrestadorPerfilPage() {
                   src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=400`}
                   alt={`Foto de perfil de ${provider.full_name}`}
                   className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg mx-auto md:mx-0"
+                  fallback={
+                    <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 text-white font-bold text-2xl">
+                      {provider.full_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+                    </div>
+                  }
                 />
 
                 <div className="flex-1">
@@ -322,7 +332,11 @@ export default function PrestadorPerfilPage() {
                     <div className="flex items-center gap-2">
                       <StarRating rating={averageRating} />
                       <span className="text-xl font-bold">{averageRating > 0 ? averageRating.toFixed(1) : 'Novo'}</span>
-                      <span className="text-sm text-muted-foreground">({reviews.length} avaliações)</span>
+                      {totalReviews > 0 ? (
+                        <span className="text-sm text-muted-foreground">({totalReviews} avaliações)</span>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">Novo profissional</span>
+                      )}
                     </div>
                     {provider.price_range && (
                       <Badge variant="outline" className="text-base border-border">{provider.price_range}</Badge>
@@ -635,11 +649,11 @@ export default function PrestadorPerfilPage() {
               </div>
             )}
 
-            {reviews.length === 0 ? (
+            {realReviews.length === 0 ? (
               <p className="text-muted-foreground text-center py-8">Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
             ) : (
               <div className="space-y-6">
-                {reviews.map((review) => (
+                {realReviews.map((review) => (
                   <div key={review.id} className="p-4 bg-muted rounded-lg border border-border">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-3">

@@ -130,7 +130,7 @@ export default function AdminAssinaturasPage() {
   };
 
   const statusLabels = {
-    trial: "Trial",
+    trial: "Período de Teste",
     active: "Ativo",
     expired: "Expirado",
     cancelled: "Cancelado"
