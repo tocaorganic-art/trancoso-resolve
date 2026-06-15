@@ -64,6 +64,7 @@ const PedreiroCaraiva = lazy(() => import('@/pages/servicos/PedreiroCaraiva'));
 const RelatorioDiarioPage = lazy(() => import('@/pages/RelatorioDiarioPage'));
 const ServicosCategoria = lazy(() => import('@/pages/ServicosCategoria'));
 const DestinoTrancoso = lazy(() => import('@/pages/destinos/Trancoso'));
+const DestinoArraialDajuda = lazy(() => import('@/pages/destinos/ArraialDajuda'));
 const DestinoPortoSeguro = lazy(() => import('@/pages/destinos/PortoSeguro'));
 const DestinoCaraiva = lazy(() => import('@/pages/destinos/Caraiva'));
 const DestinoHub = lazy(() => import('@/pages/DestinoHub'));
@@ -382,6 +383,11 @@ const AuthenticatedApp = () => {
         <Route path="/destinos/trancoso" element={
           <LayoutWrapper currentPageName="DestinoTrancoso">
             <AnimatedPage><DestinoTrancoso /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/destinos/arraial-dajuda" element={
+          <LayoutWrapper currentPageName="DestinoArraialDajuda">
+            <AnimatedPage><DestinoArraialDajuda /></AnimatedPage>
           </LayoutWrapper>
         } />
         <Route path="/destinos/porto-seguro" element={

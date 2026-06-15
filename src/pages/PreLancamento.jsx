@@ -252,7 +252,6 @@ export default function PreLancamento() {
     <div style={{
       fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
       color: "#fff",
-      minHeight: "100vh",
       background: `linear-gradient(170deg, rgba(7,28,55,0.85) 0%, rgba(4,18,40,0.90) 60%, rgba(10,30,50,0.95) 100%), url('https://media.base44.com/images/public/68eb21726a9614db4a82ba99/dfe6ee67e_generated_image.png') center/cover no-repeat fixed`,
       overflowX: "hidden",
     }}>
@@ -361,7 +360,7 @@ export default function PreLancamento() {
         </div>
       </header>
 
-      <div style={{ paddingTop: 56 }}>
+      <div style={{ paddingTop: 56, paddingBottom: "calc(6rem + env(safe-area-inset-bottom, 0px))" }}>
 
         {/* ══════════════ HERO ══════════════ */}
         <section className="sec-pad" style={{ padding: "64px 24px 56px", textAlign: "center", maxWidth: 640, margin: "0 auto" }}>

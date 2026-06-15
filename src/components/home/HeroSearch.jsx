@@ -19,6 +19,7 @@ const QUICK_CATEGORIES = [
 
 const DESTINOS = [
   { label: "Trancoso", path: "/destinos/trancoso" },
+  { label: "Arraial d'Ajuda", path: "/destinos/arraial-dajuda" },
   { label: "Porto Seguro", path: "/destinos/porto-seguro" },
   { label: "Caraíva", path: "/destinos/caraiva" },
 ];

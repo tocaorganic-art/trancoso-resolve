@@ -10,7 +10,7 @@ export default function ProviderCard({ provider }) {
     <div className="rounded-2xl overflow-hidden bg-[#1a1a2e] shadow-lg flex flex-col h-full border border-white/5">
         {/* 1) IMAGEM DE CAPA no topo - altura fixa, sem sobreposição */}
         <div className="h-28 w-full bg-gradient-to-br from-[#c2410c] to-[#9a3412] relative flex-shrink-0">
-            {provider.cover_photo_url ? (
+            {provider.cover_photo_url && provider.cover_photo_url.trim() ? (
                 <LazyImage
                     src={provider.cover_photo_url}
                     alt={`Foto de capa de ${provider.full_name}`}
@@ -27,7 +27,7 @@ export default function ProviderCard({ provider }) {
                 {/* Avatar circular sobreposto na borda da capa (-mt-8) */}
                 <div className="w-16 h-16 rounded-full border-3 border-white overflow-hidden flex-shrink-0 bg-[#374151] -mt-8 relative z-10 shadow-md">
                     <LazyImage
-                        src={provider.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.full_name)}&size=200`}
+                        src={provider.photo_url && provider.photo_url.trim() ? provider.photo_url : `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.full_name)}&size=200&background=random`}
                         alt={`Foto de perfil de ${provider.full_name}`}
                         className="w-full h-full object-cover"
                     />

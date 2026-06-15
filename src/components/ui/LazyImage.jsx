@@ -49,7 +49,7 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
 
   const handleError = () => {
     setHasError(true);
-    setIsLoaded(true); // Trata o erro como "carregado" para parar de mostrar o placeholder de loading
+    setIsLoaded(true);
   };
 
   return (
