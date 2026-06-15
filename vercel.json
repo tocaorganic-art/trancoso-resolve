@@ -1,6 +1,12 @@
 {
-        "rewrites": [
-                    { "source": "/api/(.*)", "destination": "https://base44.app/api/$1" },
-                    { "source": "/(.*)", "destination": "/index.html" }
-        ]
+  "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }]
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://base44.app/api/$1" },
+    { "source": "/((?!sitemap\\.xml$).*)", "destination": "/index.html" }
+  ]
 }
