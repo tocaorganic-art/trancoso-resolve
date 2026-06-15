@@ -66,6 +66,8 @@ const ServicosCategoria = lazy(() => import('@/pages/ServicosCategoria'));
 const DestinoTrancoso = lazy(() => import('@/pages/destinos/Trancoso'));
 const DestinoPortoSeguro = lazy(() => import('@/pages/destinos/PortoSeguro'));
 const DestinoCaraiva = lazy(() => import('@/pages/destinos/Caraiva'));
+const DestinoHub = lazy(() => import('@/pages/DestinoHub'));
+const ServicoDestino = lazy(() => import('@/pages/ServicoDestino'));
 import { AnimatePresence, motion } from 'framer-motion';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -399,6 +401,18 @@ const AuthenticatedApp = () => {
         <Route path="/ServicosCategoria" element={
           <LayoutWrapper currentPageName="ServicosCategoria">
             <AnimatedPage><ServicosCategoria /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+
+        {/* Hubs de destino e páginas categoria × destino — devem vir antes do catch-all */}
+        <Route path="/:destino/:categoria" element={
+          <LayoutWrapper currentPageName="ServicoDestino">
+            <AnimatedPage><ServicoDestino /></AnimatedPage>
+          </LayoutWrapper>
+        } />
+        <Route path="/:destino" element={
+          <LayoutWrapper currentPageName="DestinoHub">
+            <AnimatedPage><DestinoHub /></AnimatedPage>
           </LayoutWrapper>
         } />
 
