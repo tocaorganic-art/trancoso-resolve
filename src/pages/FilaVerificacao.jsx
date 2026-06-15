@@ -270,7 +270,32 @@ export default function FilaVerificacaoPage() {
   const handleAction = async (id, action, motivo) => {
     setQuickActionId(id);
     try {
-      await base44.functions.invoke('adminVerificacao', { verificacao_id: id, action, motivo });
+      const verificacao = verificacoes.find(v => v.id === id);
+      if (!verificacao) throw new Error('Verificação não encontrada');
+
+      // Atualizar status da verificação
+      const newStatus = action === "aprovar" ? "Verificado" : "Rejeitado";
+      await base44.entities.Verificacao.update(id, {
+        status: newStatus,
+        ...(action === "rejeitar" && { rejection_reason: motivo }),
+        admin_action_date: new Date().toISOString(),
+      });
+
+      // Se aprovado, atualizar ServiceProvider para aprovado
+      if (action === "aprovar" && verificacao.provider_id) {
+        await base44.entities.ServiceProvider.update(verificacao.provider_id, {
+          status_verificacao: "aprovado",
+          verified: true,
+          verification_approved_date: new Date().toISOString(),
+        });
+      } else if (action === "rejeitar" && verificacao.provider_id) {
+        await base44.entities.ServiceProvider.update(verificacao.provider_id, {
+          status_verificacao: "reprovado",
+          verified: false,
+          rejection_reason: motivo,
+        });
+      }
+
       toast.success(action === "aprovar" ? "✅ Identidade aprovada!" : "❌ Verificação rejeitada.");
       queryClient.invalidateQueries({ queryKey: ["todasVerificacoes"] });
     } catch (error) {
