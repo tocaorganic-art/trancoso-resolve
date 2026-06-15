@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useApp } from "@/contexts/AppContext";
 import {
   Home, Calendar, Briefcase, UserCog,
-  TrendingUp, CreditCard, Menu, X, FileText, User, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered, ChevronDown, MapPin, Sun, Moon } from
+  TrendingUp, CreditCard, Menu, X, FileText, User, Bot, Rocket, Globe, ShieldCheck, Banknote, ArrowLeft, ListOrdered, ChevronDown, MapPin, Sun, Moon, CheckCircle2 } from
 "lucide-react";
 
 import RoutePreloader from "./components/optimization/RoutePreloader";
@@ -149,6 +149,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Pagamentos", path: "/AdminPagamentos", icon: Banknote },
     { name: "📊 Métricas", path: "/admin/metricas", icon: TrendingUp },
     { name: "Deploy", path: createPageUrl("DeployDashboard"), icon: Rocket },
+    { name: "📋 Progresso", path: "/AdminProgressoProjeto", icon: CheckCircle2 },
     { name: "Ver Site", path: "/", icon: Globe, clearLogin: true },
   ] : isPrestador ? [
     { name: "Início", path: createPageUrl("Dashboard"), icon: Home },
