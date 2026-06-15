@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import usePullToRefresh from "@/hooks/usePullToRefresh";
 import { base44 } from "@/api/base44Client";
@@ -18,8 +18,9 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
-import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+
+const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 
 // Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
 // Categorias do enum possuem 2 imagens validadas para dar variedade entre cards da mesma categoria
@@ -722,11 +723,13 @@ export default function HomePage() {
         </section>
 
         {/* Lead Capture Form */}
-        <LeadCaptureForm
-          serviceInterest="Geral"
-          serviceLabel="um profissional"
-          source="home"
-        />
+        <Suspense fallback={<div className="py-12"><Skeleton className="h-96 w-full rounded-lg" /></div>}>
+          <LeadCaptureForm
+            serviceInterest="Geral"
+            serviceLabel="um profissional"
+            source="home"
+          />
+        </Suspense>
 
         {/* CTA Prestadores */}
         <CTAPrestador vagasRestantes={vagasRestantes} />

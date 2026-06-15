@@ -1,10 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Star, Waves, TreePine, Heart, Leaf } from "lucide-react";
-import LeadCaptureForm from "@/components/servicos/LeadCaptureForm";
+
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 
+const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 const HERO_IMAGE = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80";
 
 const servicos = [
@@ -174,7 +177,9 @@ export default function DestinoCaraiva() {
           </div>
         </section>
 
-        <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Caraíva" source="destino-caraiva" />
+        <Suspense fallback={<div className="py-12"><Skeleton className="h-96 w-full rounded-lg" /></div>}>
+                    <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Caraíva" source="destino-caraiva" />
+        </Suspense>
       </div>
 
       <WhatsAppStickyBar serviceLabel="um profissional em Caraíva" />

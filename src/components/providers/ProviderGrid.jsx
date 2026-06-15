@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Search, Star, AlertCircle, Loader2, Filter } from "lucide-react";
-import ProvidersMap from "@/components/map/ProvidersMap";
+import { Skeleton } from "@/components/ui/skeleton";
 import ProviderCard from "./ProviderCard";
+
+const ProvidersMap = lazy(() => import("@/components/map/ProvidersMap"));
 
 export default function ProviderGrid({
     filteredProviders,
@@ -90,7 +93,7 @@ export default function ProviderGrid({
         }
 
         if (viewMode === 'map') {
-            return <div className="col-span-full"><ProvidersMap providers={filteredProviders} /></div>;
+            return <div className="col-span-full"><Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}><ProvidersMap providers={filteredProviders} /></Suspense></div>;
         }
         
         return filteredProviders.map((provider) => <ProviderCard key={provider.id} provider={provider} />);
