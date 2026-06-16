@@ -22,7 +22,6 @@ import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 
 const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 
-// Mapeamento completo de imagens por categoria com arrays de 3 imagens
 const categoryImageMap = {
   limpeza: [
     'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
@@ -33,6 +32,11 @@ const categoryImageMap = {
     'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
     'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80',
     'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80',
+  ],
+  faxina: [
+    'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80',
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
+    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80',
   ],
   eletricista: [
     'https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=800&q=80',
@@ -64,6 +68,11 @@ const categoryImageMap = {
     'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80',
     'https://images.unsplash.com/photo-1599598425947-5202edd56fde?w=800&q=80',
   ],
+  cozinheiro: [
+    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+    'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80',
+    'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80',
+  ],
   chef: [
     'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
     'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80',
@@ -73,6 +82,11 @@ const categoryImageMap = {
     'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
     'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80',
     'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80',
+  ],
+  garcom: [
+    'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
+    'https://images.unsplash.com/photo-1555939594-58d7cb561549?w=800&q=80',
+    'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800&q=80',
   ],
   piscineiro: [
     'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80',
@@ -114,15 +128,15 @@ const categoryImageMap = {
     'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=800&q=80',
     'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80',
   ],
+  baba: [
+    'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800&q=80',
+    'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&q=80',
+    'https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=800&q=80',
+  ],
   seguranca: [
     'https://images.unsplash.com/photo-1557597774-9d475d0c0e43?w=800&q=80',
     'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
     'https://images.unsplash.com/photo-1609188076864-c35269136b09?w=800&q=80',
-  ],
-  faxina: [
-    'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80',
-    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
-    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80',
   ],
   default: [
     'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80',
@@ -130,19 +144,6 @@ const categoryImageMap = {
     'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',
   ],
 };
-
-function getServiceImage(service) {
-  if (service.images && service.images.length > 0) return service.images[0];
-  const raw = (service.category || service.serviceType || service.name || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '');
-  const categoryKey = Object.keys(categoryImageMap).find(key => raw.includes(key)) || 'default';
-  const imgs = categoryImageMap[categoryKey];
-  const id = service.id || service._id || '';
-  const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  return imgs[hash % imgs.length];
-}
 
 // Descrições melhoradas por categoria para serviços sem descrição cadastrada
 const categoryDescriptionMap = {
@@ -210,7 +211,6 @@ const ProviderSkeletonCard = () => (
 // Função para validar se uma URL de imagem parece válida e relevante
 const isValidImageUrl = (url) => {
   if (!url || typeof url !== 'string') return false;
-  // Verifica se é uma URL válida de imagem
   const validDomains = ['unsplash.com', 'images.unsplash.com', 'storage.googleapis.com', 'base44.com', 'ui-avatars.com', 'manuscdn.com'];
   try {
     const urlObj = new URL(url);
@@ -219,6 +219,22 @@ const isValidImageUrl = (url) => {
     return false;
   }
 };
+
+function getServiceImage(service) {
+  if (isValidImageUrl(service.images?.[0])) return service.images[0];
+
+  const raw = (service.category || service.serviceType || service.name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '');
+
+  const categoryKey = Object.keys(categoryImageMap).find(key => raw.includes(key)) || 'default';
+  const imgs = categoryImageMap[categoryKey];
+
+  const id = service.id || service._id || '';
+  const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return imgs[hash % imgs.length];
+}
 
 const ServiceCard = ({ service, provider }) => {
     const imageSrc = getServiceImage(service);
@@ -315,12 +331,12 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, Porto Seguro e Caraíva";
+    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva";
 
     // Meta description otimizada
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.";
+    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.";
 
     // Canonical + OG URL da Home
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -356,6 +372,7 @@ export default function HomePage() {
           "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
           "areaServed": [
             { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+            { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" },
             { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
             { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
           ],
@@ -757,13 +774,13 @@ export default function HomePage() {
                 ],
               },
               {
-                cidade: 'Arraial d\'Ajuda',
-                desc: 'Vila turística charmosa — pousadas, casas de temporada e praias paradisíacas.',
+                cidade: "Arraial d'Ajuda",
+                desc: "Vila turística charmosa — pousadas, casas de temporada e praias paradisíacas.",
                 destinoHref: '/destinos/arraial-dajuda',
                 links: [
-                  { label: 'Diarista Arraial d\'Ajuda', href: '/servicos/diarista-arraial-dajuda' },
-                  { label: 'Eletricista Arraial d\'Ajuda', href: '/servicos/eletricista-arraial-dajuda' },
-                  { label: 'Piscineiro Arraial d\'Ajuda', href: '/servicos/piscineiro-arraial-dajuda' },
+                  { label: "Diarista Arraial d'Ajuda", href: '/servicos/diarista-arraial-dajuda' },
+                  { label: "Eletricista Arraial d'Ajuda", href: '/servicos/eletricista-arraial-dajuda' },
+                  { label: "Piscineiro Arraial d'Ajuda", href: '/servicos/piscineiro-arraial-dajuda' },
                 ],
               },
               {
