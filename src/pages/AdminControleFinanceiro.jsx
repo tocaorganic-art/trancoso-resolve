@@ -37,7 +37,7 @@ function AdminControleFinanceiroContent() {
       if (filters.type !== 'all') query.type = filters.type;
       if (filters.status !== 'all') query.status = filters.status;
       
-      const results = await base44.asServiceRole.entities.Transaction.filter(query, '-date');
+      const results = await base44.entities.Transaction.filter(query, '-date');
       
       return results.filter(t => {
         const matchesSearch = !filters.search || 
@@ -62,7 +62,7 @@ function AdminControleFinanceiroContent() {
     try {
       await Promise.all(
         selectedTransactions.map(id =>
-          base44.asServiceRole.entities.Transaction.update(id, { status: newStatus })
+          base44.entities.Transaction.update(id, { status: newStatus })
         )
       );
       
