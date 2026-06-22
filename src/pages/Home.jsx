@@ -261,6 +261,18 @@ function getServiceImage(service) {
   return imgs[hash % imgs.length];
 }
 
+function getCategoryFallback(service) {
+  const raw = (service.category || service.serviceType || service.name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  const categoryKey = Object.keys(categoryImageMap).find(key => raw.includes(key)) || 'default';
+  const imgs = categoryImageMap[categoryKey];
+  const id = service.id || service._id || '';
+  const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return imgs[hash % imgs.length];
+}
+
 const ServiceCard = ({ service, provider }) => {
     const imageSrc = getServiceImage(service);
     const Icon = categoryIconMap[service.category] || categoryIconMap.default;
@@ -280,6 +292,7 @@ const ServiceCard = ({ service, provider }) => {
                 {imageSrc ? (
                     <LazyImage
                         src={imageSrc}
+                        fallbackSrc={getCategoryFallback(service)}
                         alt={`${service.title} — serviço de ${service.category} em Trancoso`}
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
