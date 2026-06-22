@@ -18,17 +18,17 @@ const beneficios = [
     description: "Tenha seu perfil divulgado para turistas e moradores de Trancoso que buscam profissionais qualificados e de confiança. Amplie sua base de forma eficiente e direcionada."
   },
   {
-    icon: <BarChart2 className="w-8 h-8 text-green-600" />,
+    icon: <BarChart2 className="w-8 h-8 text-olive-500" />,
     title: "Gestão Simplificada",
     description: "Painel completo para gerenciar agenda, confirmar serviços e acompanhar seu desempenho financeiro de forma intuitiva. Otimize seu tempo e foque no seu trabalho."
   },
   {
-    icon: <Star className="w-8 h-8 text-yellow-500" />,
+    icon: <Star className="w-8 h-8 text-sand-deep" />,
     title: "Construa sua Reputação",
     description: "Receba avaliações transparentes dos clientes e construa uma reputação online sólida. A credibilidade conquistada atrai continuamente novas oportunidades de negócio."
   },
   {
-    icon: <Bot className="w-8 h-8 text-purple-600" />,
+    icon: <Bot className="w-8 h-8 text-terracotta" />,
     title: "Toca TrIA: Agente de IA 24h",
     description: "Mais do que um assistente, o Toca TrIA automatiza agendamentos, responde a perguntas frequentes e qualifica leads — trabalhando por você enquanto você foca no serviço."
   },
@@ -38,7 +38,7 @@ const beneficios = [
     description: "Crie posts, cardápios, logos e materiais visuais impactantes em minutos. Gere imagens exclusivas em alta qualidade, fortalecendo sua identidade visual sem custos adicionais."
   },
   {
-    icon: <CheckCircle className="w-8 h-8 text-emerald-600" />,
+    icon: <CheckCircle className="w-8 h-8 text-olive-600" />,
     title: "Custo Zero de Marketing",
     description: "Esqueça o gasto com anúncios e divulgação. Na Trancoso Resolve, seu perfil é exibido gratuitamente para quem já está procurando exatamente o que você oferece."
   }
