@@ -191,13 +191,13 @@ export default function Layout({ children, currentPageName }) {
         <div className="min-h-screen bg-background overflow-x-hidden">
           <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-warm-sm" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
-              <Link to={createPageUrl("Home")} className="flex items-center gap-2 min-w-0 shrink" data-testid="nav-logo-link">
+              <Link to={createPageUrl("Home")} className="flex items-center gap-2 shrink-0" data-testid="nav-logo-link">
                 <img src="/brand/logo-mark.svg" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchPriority="high" />
-                <span className="font-bold text-sm md:text-lg text-foreground truncate hidden xs:inline sm:inline">Trancoso Resolve</span>
+                <span className="font-bold text-sm md:text-lg text-foreground whitespace-nowrap hidden xs:inline sm:inline">Trancoso Resolve</span>
               </Link>
 
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-6">
+              <div className="hidden md:flex items-center gap-3 lg:gap-6 min-w-0 overflow-hidden">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-orange-500 transition-colors focus:outline-none">
@@ -241,7 +241,7 @@ export default function Layout({ children, currentPageName }) {
                 )}
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 min-w-0 shrink">
                 {/* Language selector */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -272,9 +272,9 @@ export default function Layout({ children, currentPageName }) {
                 {user ?
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="flex items-center gap-2 text-foreground" data-testid="user-menu-trigger">
-                        <User className="w-5 h-5" />
-                        <span>{user.full_name || user.email}</span>
+                      <Button variant="ghost" className="flex items-center gap-2 text-foreground min-w-0 max-w-[160px]" data-testid="user-menu-trigger">
+                        <User className="w-5 h-5 shrink-0" />
+                        <span className="truncate">{user.full_name || user.email}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
