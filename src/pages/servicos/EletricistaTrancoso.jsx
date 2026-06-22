@@ -5,6 +5,17 @@ export default function EletricistaTrancoso() {
     <ServicoLocalPage
       title="Eletricista em Trancoso – Emergências, Instalações e Manutenção em Villas e Propriedades de Luxo"
       metaDescription="Eletricista verificado em Trancoso para emergências elétricas, instalações em villas e pousadas de alto padrão. Atendimento rápido e profissional. Contrate pela Trancoso Resolve."
+      keywords="eletricista Trancoso, eletricista Trancoso Bahia, profissional Trancoso BA, serviços Trancoso, elétrica Trancoso"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/eletricista-trancoso"
+      schemaData={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Trancoso Resolve - Eletricista Trancoso",
+        "description": "Eletricistas verificados em Trancoso, BA. Instalações e emergências em villas e pousadas de alto padrão.",
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "areaServed": { "@type": "City", "name": "Trancoso, BA" },
+        "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
+      }}
       h1="Eletricista em Trancoso: Pronto para Emergências e Instalações em Propriedades de Alto Padrão"
       intro="Uma falha elétrica em uma villa de luxo ou pousada não pode esperar. Na Trancoso Resolve você acessa eletricistas locais verificados — com experiência em instalações sofisticadas e prontos para atender emergências na sua propriedade em Trancoso com rapidez e segurança."
       servicesTitle="Serviços de eletricista especializado em Trancoso"
@@ -24,6 +35,12 @@ export default function EletricistaTrancoso() {
       category="Eletricista"
       serviceLabel="eletricistas"
       heroEmoji="⚡"
+      locationLabel="Trancoso, Bahia"
+      seoText={[
+        "A rede elétrica em Trancoso enfrenta oscilações de tensão recorrentes, sobretudo na alta temporada, quando o consumo dispara em villas, pousadas e estabelecimentos comerciais do Quadrado. Eletricistas com experiência local sabem identificar rapidamente a causa de quedas de energia e propor soluções definitivas, como instalação de estabilizadores e geradores de backup.",
+        "Muitas propriedades em Trancoso foram construídas com madeira de demolição e técnicas vernaculares, o que exige cuidado redobrado na passagem de fiação e na adequação às normas de segurança atuais. Os eletricistas cadastrados na plataforma têm experiência específica nesse tipo de instalação, sem comprometer a estética arquitetônica do imóvel.",
+        "Com o crescimento da energia solar em villas de alto padrão, a demanda por eletricistas especializados em sistemas fotovoltaicos também aumentou em Trancoso. A Trancoso Resolve conecta proprietários a profissionais verificados, com histórico de instalações e manutenções bem avaliadas por clientes da região.",
+      ]}
     />
   );
 }
