@@ -138,6 +138,31 @@ const categoryImageMap = {
     'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
     'https://images.unsplash.com/photo-1609188076864-c35269136b09?w=800&q=80',
   ],
+  som: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  dj: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  iluminacao: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  musica: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  outro: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
   default: [
     'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80',
     'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
