@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ImageOff } from "lucide-react";
 import { getImageFormats } from "@/utils/images";
 
-export default function LazyImage({ src, srcSet, sizes, alt, className, placeholderClassName, priority = false }) {
+export default function LazyImage({ src, srcSet, sizes, alt, className, placeholderClassName, priority = false, fallbackSrc }) {
   const [imgSrc, setImgSrc] = useState(src);
   const [imageFormats, setImageFormats] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -19,12 +19,10 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
   }, [src]);
 
   useEffect(() => {
-    // Se a imagem tem prioridade, carrega imediatamente
     if (priority) {
       setIsInView(true);
       return;
     }
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -34,29 +32,27 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
           }
         });
       },
-      { rootMargin: "300px" } // Carrega a imagem 300px antes de entrar na tela (aumentado para melhor UX)
+      { rootMargin: "300px" }
     );
-
     const currentRef = imgRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
+    if (currentRef) observer.observe(currentRef);
+    return () => { if (currentRef) observer.unobserve(currentRef); };
   }, [priority]);
 
   const handleError = () => {
-    setHasError(true);
-    setIsLoaded(true);
+    if (fallbackSrc && imgSrc !== fallbackSrc) {
+      setImgSrc(fallbackSrc);
+      setImageFormats(getImageFormats(fallbackSrc));
+      setHasError(false);
+      setIsLoaded(false);
+    } else {
+      setHasError(true);
+      setIsLoaded(true);
+    }
   };
 
   return (
     <div ref={imgRef} className={cn("relative overflow-hidden bg-slate-200", className)}>
-      {/* Placeholder de carregamento */}
       {!isLoaded && !hasError && (
         <div className={cn(
           "absolute inset-0 bg-slate-200 transition-opacity duration-300 dark:bg-slate-700 flex items-center justify-center",
@@ -64,15 +60,11 @@ export default function LazyImage({ src, srcSet, sizes, alt, className, placehol
           placeholderClassName
         )} />
       )}
-      
-      {/* Fallback em caso de erro no carregamento da imagem */}
       {hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-100 text-slate-400">
-            <ImageOff className="w-1/4 h-1/4" />
+          <ImageOff className="w-1/4 h-1/4" />
         </div>
       )}
-
-      {/* Imagem real, carregada de forma preguiçosa com suporte a WebP */}
       {isInView && !hasError && imageFormats && (
         <picture>
           {imageFormats.hasWebp && (
