@@ -53,8 +53,8 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     const pageTitles = {
-      '/': 'Trancoso Resolve - Serviços Confiáveis em Trancoso, Porto Seguro e Caraíva',
-      '/Home': 'Trancoso Resolve - Serviços Confiáveis em Trancoso, Porto Seguro e Caraíva',
+      '/': 'Trancoso Resolve — Profissionais Verificados em Trancoso',
+      '/Home': 'Trancoso Resolve — Profissionais Verificados em Trancoso',
       '/ServicosCategoria': 'Buscar Serviços - Trancoso Resolve',
       '/PrestadorPerfil': 'Perfil do Prestador - Trancoso Resolve',
       '/ServicoDetalhes': 'Detalhes do Serviço - Trancoso Resolve',
@@ -190,6 +190,7 @@ export default function Layout({ children, currentPageName }) {
         <AccessLogger />
 
         <div className="min-h-screen bg-background overflow-x-hidden">
+          <header role="banner">
           <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-warm-sm" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 shrink-0" data-testid="nav-logo-link">
@@ -359,6 +360,7 @@ export default function Layout({ children, currentPageName }) {
               </div>
             }
           </nav>
+          </header>
 
           {/* Mobile-only top bar: logo on root, back button on sub-pages */}
           {isRoot &&

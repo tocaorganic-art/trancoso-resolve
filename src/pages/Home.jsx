@@ -369,7 +369,7 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva";
+    document.title = "Trancoso Resolve — Profissionais Verificados em Trancoso";
 
     // Meta description otimizada
     let meta = document.querySelector('meta[name="description"]');
@@ -556,6 +556,8 @@ export default function HomePage() {
 
   return (
     <div className="bg-background overflow-x-hidden">
+      {/* H1 semântico oculto para crawlers — SPA não renderiza H1 no HTML estático */}
+      <h1 className="sr-only">Trancoso Resolve — Profissionais Verificados em Trancoso</h1>
       {/* Pull-to-refresh indicator */}
       {pullDistance > 10 && (
         <div
