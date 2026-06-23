@@ -1,9 +1,27 @@
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import LazyImage from "@/components/ui/LazyImage";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import BadgeEmVerificacao from "@/components/verificacao/BadgeEmVerificacao";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { DEMO_PROFILE_WARNING } from "@/lib/mockProviderImages";
+
+// Cores quentes da marca para o fundo das iniciais quando não há foto
+const AVATAR_COLORS = ["#E8571A", "#C1440E", "#6B7C3A", "#2D7D8A", "#9a3412"];
+
+function getInitials(name) {
+    if (!name) return "?";
+    const parts = name.trim().split(/\s+/);
+    const first = parts[0]?.[0] || "";
+    const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+    return (first + last).toUpperCase();
+}
+
+function getAvatarColor(name) {
+    if (!name) return AVATAR_COLORS[0];
+    const sum = name.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return AVATAR_COLORS[sum % AVATAR_COLORS.length];
+}
 
 export default function ProviderCard({ provider }) {
     return (
@@ -25,13 +43,21 @@ export default function ProviderCard({ provider }) {
             {/* Header com avatar + nome + ocupação + favorito */}
             <div className="flex items-start gap-3">
                 {/* Avatar circular sobreposto na borda da capa (-mt-8) */}
-                <div className="w-16 h-16 rounded-full border-3 border-white overflow-hidden flex-shrink-0 bg-[#374151] -mt-8 relative z-10 shadow-md">
-                    <LazyImage
-                        src={provider.photo_url && provider.photo_url.trim() ? provider.photo_url : `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.full_name)}&size=200&background=random`}
-                        alt={`Foto de perfil de ${provider.full_name}`}
-                        className="w-full h-full object-cover"
-                    />
-                </div>
+                <Avatar className="w-16 h-16 border-3 border-white flex-shrink-0 -mt-8 relative z-10 shadow-md">
+                    {provider.photo_url && provider.photo_url.trim() && (
+                        <AvatarImage
+                            src={provider.photo_url}
+                            alt={`Foto de perfil de ${provider.full_name}`}
+                            className="object-cover"
+                        />
+                    )}
+                    <AvatarFallback
+                        style={{ backgroundColor: getAvatarColor(provider.full_name) }}
+                        className="text-white font-bold text-base"
+                    >
+                        {getInitials(provider.full_name)}
+                    </AvatarFallback>
+                </Avatar>
 
                 {/* Nome e ocupação - à direita do avatar, NUNCA coberto */}
                 <div className="flex-1 min-w-0 pt-1">

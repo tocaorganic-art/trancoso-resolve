@@ -3,6 +3,19 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, DollarSign } from "lucide-react";
 import LazyImage from "@/components/ui/LazyImage";
 
+const isValidImageUrl = (url) => {
+  if (!url || typeof url !== 'string') return false;
+  const validDomains = ['unsplash.com', 'images.unsplash.com', 'storage.googleapis.com', 'base44.com', 'ui-avatars.com', 'manuscdn.com'];
+  try {
+    const urlObj = new URL(url);
+    return validDomains.some(domain => urlObj.hostname.includes(domain));
+  } catch {
+    return false;
+  }
+};
+
+const FALLBACK_SERVICE_IMAGE = 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80';
+
 export default function ServiceCard({ service }) {
   const categoryColors = {
     "Eventos": "bg-purple-100 text-purple-800",
@@ -15,18 +28,19 @@ export default function ServiceCard({ service }) {
     "Compras": "bg-indigo-100 text-indigo-800",
   };
 
+  const rawImage = service.images?.[0];
+  const imageSrc = isValidImageUrl(rawImage) ? rawImage : FALLBACK_SERVICE_IMAGE;
+
   return (
     <Card className="glass-card border-none shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]">
-      {service.images && service.images[0] && (
-        <div className="h-48 overflow-hidden rounded-t-xl">
-          <LazyImage
-            src={service.images[0]}
-            alt={service.name}
-            className="h-48"
-          />
-        </div>
-      )}
-      <CardHeader className={`${service.images && service.images[0] ? '' : 'bg-gradient-to-r from-blue-50 to-cyan-50'} border-b`}>
+      <div className="h-48 overflow-hidden rounded-t-xl">
+        <LazyImage
+          src={imageSrc}
+          alt={service.name}
+          className="h-48"
+        />
+      </div>
+      <CardHeader className="border-b">
         <div className="flex items-start justify-between gap-3">
           <CardTitle className="text-lg">{service.name}</CardTitle>
           <Badge className={categoryColors[service.category]}>

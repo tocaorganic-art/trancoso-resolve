@@ -22,40 +22,152 @@ import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 
 const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 
-// Mapeamento completo de imagens por categoria (alinhado com enum da entidade ServiceListing)
-// Categorias do enum possuem 2 imagens validadas para dar variedade entre cards da mesma categoria
 const categoryImageMap = {
-  // Categorias do enum: Limpeza, Garçom, Pedreiro, Jardinagem, Babá, Eletricista, Encanador, Pintor, Cozinheiro, Outro
-  'Limpeza': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/inigQzgVMUPeKrkL.png', 'https://images.unsplash.com/photo-1563207153-f403bf289096?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Garçom': ['https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1555939594-58d7cb561549?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Pedreiro': ['https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Jardinagem': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/MmnYpPgxNHhyniba.png', 'https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Babá': ['https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Eletricista': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/loNdoqfPbYrpiZUY.png', 'https://images.unsplash.com/photo-1576050485252-c4c65b4744d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Encanador': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/SzIYzgzmeNbfcRvv.png', 'https://images.unsplash.com/photo-1576050485252-c4c65b4744d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Pintor': ['https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1589939705066-3d1c3dd9671e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Cozinheiro': ['https://files.manuscdn.com/user_upload_by_module/session_file/310519663209925483/XKIqXQfxYpLpcnsh.png', 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  'Outro': ['https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-  // Categorias extras para compatibilidade
-  'Construção': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Beleza': 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Turismo': 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Gastronomia': 'https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Festas': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Aulas': 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Transporte': 'https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'Automóveis': 'https://images.unsplash.com/photo-1553440569-b506745199de?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'default': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-};
-
-// Seleciona um índice estável (baseado no id do serviço) para variar imagens de fallback dentro da mesma categoria
-const hashStringToIndex = (str, length) => {
-  if (!str || length <= 1) return 0;
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
-  }
-  return hash % length;
+  limpeza: [
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
+    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+  ],
+  diarista: [
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
+    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80',
+    'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80',
+  ],
+  faxina: [
+    'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80',
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
+    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80',
+  ],
+  eletricista: [
+    'https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
+    'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80',
+  ],
+  eletrica: [
+    'https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
+    'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80',
+  ],
+  encanador: [
+    'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+    'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80',
+  ],
+  hidraulica: [
+    'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+    'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80',
+  ],
+  jardineiro: [
+    'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
+    'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
+  ],
+  jardinagem: [
+    'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
+    'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80',
+    'https://images.unsplash.com/photo-1599598425947-5202edd56fde?w=800&q=80',
+  ],
+  cozinheiro: [
+    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+    'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80',
+    'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80',
+  ],
+  chef: [
+    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+    'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80',
+    'https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?w=800&q=80',
+  ],
+  gastronomia: [
+    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+    'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80',
+    'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80',
+  ],
+  garcom: [
+    'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
+    'https://images.unsplash.com/photo-1555939594-58d7cb561549?w=800&q=80',
+    'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800&q=80',
+  ],
+  piscineiro: [
+    'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80',
+    'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80',
+    'https://images.unsplash.com/photo-1572331165267-854da2b021dc?w=800&q=80',
+  ],
+  piscina: [
+    'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80',
+    'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80',
+    'https://images.unsplash.com/photo-1572331165267-854da2b021dc?w=800&q=80',
+  ],
+  pintor: [
+    'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=800&q=80',
+    'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
+  ],
+  pintura: [
+    'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=800&q=80',
+    'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80',
+    'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=800&q=80',
+  ],
+  marceneiro: [
+    'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80',
+    'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=80',
+    'https://images.unsplash.com/photo-1611170540292-bc1e6f6a8462?w=800&q=80',
+  ],
+  marcenaria: [
+    'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80',
+    'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=80',
+    'https://images.unsplash.com/photo-1611170540292-bc1e6f6a8462?w=800&q=80',
+  ],
+  pedreiro: [
+    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80',
+    'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=800&q=80',
+    'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80',
+  ],
+  construcao: [
+    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80',
+    'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=800&q=80',
+    'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80',
+  ],
+  baba: [
+    'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800&q=80',
+    'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&q=80',
+    'https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=800&q=80',
+  ],
+  seguranca: [
+    'https://images.unsplash.com/photo-1557597774-9d475d0c0e43?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
+    'https://images.unsplash.com/photo-1609188076864-c35269136b09?w=800&q=80',
+  ],
+  som: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  dj: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  iluminacao: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  musica: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  outro: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  default: [
+    'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80',
+    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
+    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',
+  ],
 };
 
 // Descrições melhoradas por categoria para serviços sem descrição cadastrada
@@ -124,7 +236,6 @@ const ProviderSkeletonCard = () => (
 // Função para validar se uma URL de imagem parece válida e relevante
 const isValidImageUrl = (url) => {
   if (!url || typeof url !== 'string') return false;
-  // Verifica se é uma URL válida de imagem
   const validDomains = ['unsplash.com', 'images.unsplash.com', 'storage.googleapis.com', 'base44.com', 'ui-avatars.com', 'manuscdn.com'];
   try {
     const urlObj = new URL(url);
@@ -134,14 +245,36 @@ const isValidImageUrl = (url) => {
   }
 };
 
+function getServiceImage(service) {
+  if (isValidImageUrl(service.images?.[0])) return service.images[0];
+
+  const raw = (service.category || service.serviceType || service.name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '');
+
+  const categoryKey = Object.keys(categoryImageMap).find(key => raw.includes(key)) || 'default';
+  const imgs = categoryImageMap[categoryKey];
+
+  const id = service.id || service._id || '';
+  const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return imgs[hash % imgs.length];
+}
+
+function getCategoryFallback(service) {
+  const raw = (service.category || service.serviceType || service.name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  const categoryKey = Object.keys(categoryImageMap).find(key => raw.includes(key)) || 'default';
+  const imgs = categoryImageMap[categoryKey];
+  const id = service.id || service._id || '';
+  const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return imgs[hash % imgs.length];
+}
+
 const ServiceCard = ({ service, provider }) => {
-    const serviceImage = service.images?.[0];
-    const hasValidImage = isValidImageUrl(serviceImage);
-    const categoryFallbacks = categoryImageMap[service.category] || categoryImageMap.default;
-    const fallbackImage = Array.isArray(categoryFallbacks)
-        ? categoryFallbacks[hashStringToIndex(service.id, categoryFallbacks.length)]
-        : categoryFallbacks;
-    const imageSrc = hasValidImage ? serviceImage : fallbackImage;
+    const imageSrc = getServiceImage(service);
     const Icon = categoryIconMap[service.category] || categoryIconMap.default;
     const description = service.description || categoryDescriptionMap[service.category] || 'Serviço profissional de qualidade em Trancoso.';
 
@@ -159,6 +292,7 @@ const ServiceCard = ({ service, provider }) => {
                 {imageSrc ? (
                     <LazyImage
                         src={imageSrc}
+                        fallbackSrc={getCategoryFallback(service)}
                         alt={`${service.title} — serviço de ${service.category} em Trancoso`}
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -235,12 +369,12 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, Porto Seguro e Caraíva";
+    document.title = "Trancoso Resolve | Profissionais Verificados em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva";
 
     // Meta description otimizada
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.";
+    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.";
 
     // Canonical + OG URL da Home
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -276,6 +410,7 @@ export default function HomePage() {
           "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
           "areaServed": [
             { "@type": "Place", "name": "Trancoso, Bahia, Brasil" },
+            { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" },
             { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" },
             { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
           ],
@@ -663,8 +798,8 @@ export default function HomePage() {
         {/* Costa do Descobrimento */}
         <section className="mb-10 md:mb-20 bg-gradient-to-br from-orange-50 to-sand dark:from-secondary dark:to-background rounded-3xl p-8 md:p-12 border border-orange-100 dark:border-border">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3 text-center">Atendemos toda a Costa do Descobrimento</h2>
-          <p className="text-muted-foreground text-center mb-8 text-base max-w-xl mx-auto">Profissionais verificados para Trancoso, Porto Seguro e Caraíva — a mesma qualidade e segurança em toda a região.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <p className="text-muted-foreground text-center mb-8 text-base max-w-xl mx-auto">Profissionais verificados para Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva — a mesma qualidade e segurança em toda a Costa do Descobrimento.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
               {
                 cidade: 'Trancoso',
@@ -674,6 +809,16 @@ export default function HomePage() {
                   { label: 'Diarista Trancoso', href: '/servicos/diarista-trancoso' },
                   { label: 'Eletricista Trancoso', href: '/servicos/eletricista-trancoso' },
                   { label: 'Piscineiro Trancoso', href: '/servicos/piscineiro-trancoso' },
+                ],
+              },
+              {
+                cidade: "Arraial d'Ajuda",
+                desc: "Vila turística charmosa — pousadas, casas de temporada e praias paradisíacas.",
+                destinoHref: '/destinos/arraial-dajuda',
+                links: [
+                  { label: "Diarista Arraial d'Ajuda", href: '/servicos/diarista-arraial-dajuda' },
+                  { label: "Eletricista Arraial d'Ajuda", href: '/servicos/eletricista-arraial-dajuda' },
+                  { label: "Piscineiro Arraial d'Ajuda", href: '/servicos/piscineiro-arraial-dajuda' },
                 ],
               },
               {

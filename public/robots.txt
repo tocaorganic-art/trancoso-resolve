@@ -27,4 +27,4 @@ Disallow: /VerificacaoAntecedentes
 
 Allow: /
 
-Sitemap: https://trancosoresolve.com.br/sitemap.xml
+Sitemap: https://www.trancosoresolve.com.br/sitemap.xml
