@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Loader2 } from 'lucide-react';
+import { Send, Sparkles, Loader2, X } from 'lucide-react';
 import TrIAMessageBubble from './TrIAMessageBubble.jsx';
 
 /**
@@ -27,28 +27,28 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
   const getLocalizedPrompts = () => {
     const prompts = {
       pt: [
-        '🗺️ Monte um roteiro turístico em Trancoso',
-        '📋 Resuma dados',
-        '💬 Responda cliente',
-        '🔍 Pesquise algo'
+        'Monte um roteiro turístico em Trancoso',
+        'Resuma dados',
+        'Responda cliente',
+        'Pesquise algo'
       ],
       en: [
-        '🗺️ Create a tourist itinerary in Trancoso',
-        '📋 Summarize data',
-        '💬 Reply to client',
-        '🔍 Search for something'
+        'Create a tourist itinerary in Trancoso',
+        'Summarize data',
+        'Reply to client',
+        'Search for something'
       ],
       es: [
-        '🗺️ Crear un itinerario turístico en Trancoso',
-        '📋 Resumir datos',
-        '💬 Responder al cliente',
-        '🔍 Buscar algo'
+        'Crear un itinerario turístico en Trancoso',
+        'Resumir datos',
+        'Responder al cliente',
+        'Buscar algo'
       ],
       fr: [
-        '🗺️ Créer un itinéraire touristique à Trancoso',
-        '📋 Résumer les données',
-        '💬 Répondre au client',
-        '🔍 Rechercher quelque chose'
+        'Créer un itinéraire touristique à Trancoso',
+        'Résumer les données',
+        'Répondre au client',
+        'Rechercher quelque chose'
       ]
     };
     return prompts[language] || prompts.pt;
@@ -74,13 +74,13 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Error Banner */}
       {error && (
-        <div className="mx-4 mt-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg flex items-center justify-between text-sm text-red-200">
+        <div className="mx-4 mt-4 p-3 bg-red-900/20 border border-red-700/50 rounded-brand-sm flex items-center justify-between text-sm text-red-300">
           <span>{error}</span>
-          <button 
+          <button
             onClick={onErrorDismiss}
-            className="text-red-300 hover:text-red-100 transition-colors"
+            className="text-red-400 hover:text-red-200 transition-colors ml-3"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -90,16 +90,16 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-center">
             <div>
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-4 flex items-center justify-center animate-pulse">
+              <div className="w-16 h-16 rounded-full bg-brand-primary mx-auto mb-4 flex items-center justify-center shadow-brand">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">
+              <h2 className="text-xl font-bold text-[#F2DEC4] mb-2">
                 {language === 'en' && 'Welcome to Toca TrIA'}
                 {language === 'es' && 'Bienvenido a Toca TrIA'}
                 {language === 'fr' && 'Bienvenue à Toca TrIA'}
                 {language === 'pt' && 'Bem-vindo à Toca TrIA'}
               </h2>
-              <p className="text-slate-400 text-sm max-w-xs mx-auto">
+              <p className="text-[#8A6A4A] text-sm max-w-xs mx-auto">
                 {language === 'en' && 'Your AI assistant that executes tasks autonomously in Trancoso'}
                 {language === 'es' && 'Tu asistente de IA que ejecuta tareas de forma autónoma en Trancoso'}
                 {language === 'fr' && 'Votre assistant IA qui exécute des tâches de manière autonome à Trancoso'}
@@ -135,7 +135,7 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
                 key={prompt}
                 onClick={() => handleQuickPrompt(prompt)}
                 disabled={isLoading}
-                className="text-xs p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                className="text-xs p-2.5 rounded-brand-sm bg-orange-900/20 hover:bg-orange-900/40 text-[#C8A882] hover:text-[#F2DEC4] transition-all border border-orange-800/30 hover:border-orange-700/50 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
               >
                 {prompt}
               </button>
@@ -145,7 +145,7 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
       )}
 
       {/* Input Area */}
-      <div className="p-4 md:p-6 bg-black/40 backdrop-blur-md border-t border-slate-800">
+      <div className="p-4 md:p-6 bg-[#1A1208]/80 backdrop-blur-md border-t border-orange-900/30">
         <div className="flex gap-3">
           <input
             value={input}
@@ -158,12 +158,12 @@ export default function TrIAChatArea({ messages, onSendMessage, isLoading, error
               'Converse com a Toca TrIA...'
             }
             disabled={isLoading}
-            className="flex-1 bg-slate-800 border border-slate-700 hover:border-slate-600 focus:border-purple-500 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none transition-colors focus:shadow-lg focus:shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-orange-900/20 border border-orange-800/30 hover:border-orange-700/50 focus:border-orange-500 rounded-brand-sm px-4 py-3 text-[#F2DEC4] placeholder-[#7A5E45] focus:outline-none transition-colors focus:shadow-lg focus:shadow-orange-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="p-3 bg-brand-primary hover:bg-orange-700 text-white rounded-pill transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-brand"
             aria-label="Enviar mensagem"
           >
             {isLoading ? (

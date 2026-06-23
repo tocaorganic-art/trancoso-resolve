@@ -135,10 +135,10 @@ export default function TocaTrIAPremium() {
   };
 
   return (
-    <div className="flex h-screen bg-black overflow-hidden">
+    <div className="flex h-screen bg-[#1A1208] overflow-hidden font-nunito">
       {/* Sidebar */}
-      <TrIASidebar 
-        isOpen={sidebarOpen} 
+      <TrIASidebar
+        isOpen={sidebarOpen}
         conversations={conversations}
         activeConversationId={activeConversationId}
         onSelectConversation={setActiveConversationId}
@@ -147,19 +147,19 @@ export default function TocaTrIAPremium() {
       />
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-gradient-to-br from-black via-slate-900 to-slate-800 relative overflow-hidden">
+      <div className="flex-1 flex flex-col bg-[#1A1208] relative overflow-hidden">
         {/* Header */}
-        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-4 bg-black/40 backdrop-blur-md">
-          <button 
+        <div className="h-16 border-b border-orange-900/30 flex items-center justify-between px-4 bg-[#1A1208]/80 backdrop-blur-md">
+          <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-slate-800 rounded-lg transition-colors md:hidden"
+            className="p-2 hover:bg-orange-900/20 rounded-brand-sm transition-colors md:hidden"
             aria-label="Toggle sidebar"
           >
-            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {sidebarOpen ? <X className="w-5 h-5 text-[#F2DEC4]" /> : <Menu className="w-5 h-5 text-[#F2DEC4]" />}
           </button>
           <div className="flex items-center gap-2">
-            <div className={`w-3 h-3 rounded-full ${isLoading || translationLoading ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`}></div>
-            <span className="text-sm font-semibold text-slate-200">
+            <div className={`w-3 h-3 rounded-full ${isLoading || translationLoading ? 'bg-orange-400' : 'bg-[#6B7C3A]'} animate-pulse`}></div>
+            <span className="text-sm font-semibold text-[#F2DEC4]">
               {translationLoading ? 'Traduzindo...' : isLoading ? 'Toca TrIA está pensando...' : 'Toca TrIA Online'}
             </span>
           </div>
@@ -167,8 +167,8 @@ export default function TocaTrIAPremium() {
         </div>
 
         {/* Chat Content */}
-        <TrIAChatArea 
-          messages={messages} 
+        <TrIAChatArea
+          messages={messages}
           onSendMessage={handleSendMessage}
           isLoading={isLoading || translationLoading}
           error={error}
