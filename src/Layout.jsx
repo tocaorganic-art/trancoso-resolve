@@ -189,7 +189,7 @@ export default function Layout({ children, currentPageName }) {
         <WebVitalsCollector />
         <AccessLogger />
 
-        <div className="min-h-screen bg-background overflow-x-hidden">
+        <div className="min-h-screen bg-background overflow-x-hidden flex flex-col">
           <header role="banner">
           <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-warm-sm" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
             <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
@@ -383,7 +383,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
           }
 
-          <main id="main-content" className="pb-24 md:pb-0 pt-12 md:pt-0 md:min-h-screen">{children}</main>
+          <main id="main-content" className="flex-1 pb-24 md:pb-0 pt-12 md:pt-0">{children}</main>
 
           <footer className="text-white py-8 mt-16 pb-safe bg-[hsl(var(--card))]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
             <div className="container mx-auto px-4 text-center">
