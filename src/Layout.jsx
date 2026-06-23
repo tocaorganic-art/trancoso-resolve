@@ -31,8 +31,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import PageViewTracker from "./components/analytics/PageViewTracker";
 import WebVitalsCollector from "./components/analytics/WebVitalsCollector";
 import AccessLogger from "./components/auth/AccessLogger";
-import SupportChat from "./components/support/SupportChat";
-import FeedbackCollector from "./components/feedback/FeedbackCollector";
+import { lazy, Suspense } from "react";
+const SupportChat = lazy(() => import("./components/support/SupportChat"));
+const FeedbackCollector = lazy(() => import("./components/feedback/FeedbackCollector"));
 import BottomNav from "./components/BottomNav";
 import CompletarPerfilModal from "./components/auth/CompletarPerfilModal";
 import PWAPrompt from "./components/optimization/PWAPrompt";
@@ -167,7 +168,7 @@ export default function Layout({ children, currentPageName }) {
   ];
 
 
-  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat', '/About', '/Contact', '/ServicoLanding', '/SolicitacaoConfirmada'];
+  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat', '/About', '/Contact', '/ServicoLanding', '/SolicitacaoConfirmada', '/Planos'];
   const isPublicPage = publicPages.some((page) => {
     const pagePath = page === '/Home' ? '/' : page;
     const currentLocationPath = location.pathname === '/Home' ? '/' : location.pathname;
@@ -463,8 +464,8 @@ export default function Layout({ children, currentPageName }) {
           <CookieConsent />
         </div>
         <BottomNav />
-        <SupportChat />
-        <FeedbackCollector />
+        <Suspense fallback={null}><SupportChat /></Suspense>
+        <Suspense fallback={null}><FeedbackCollector /></Suspense>
         <PWAPrompt />
         <CompletarPerfilModal user={user} open={precisaCompletarPerfil} onClose={() => setPerfilModalFechado(true)} />
       </ErrorBoundary>);
@@ -559,8 +560,8 @@ export default function Layout({ children, currentPageName }) {
         <OfflineIndicator />
         <CookieConsent />
       </div>
-      <SupportChat />
-      <FeedbackCollector />
+      <Suspense fallback={null}><SupportChat /></Suspense>
+      <Suspense fallback={null}><FeedbackCollector /></Suspense>
       <PWAPrompt />
     </ErrorBoundary>);
 
