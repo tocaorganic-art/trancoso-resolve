@@ -29,12 +29,12 @@ function AdminUserManagementContent() {
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['allUsers'],
-    queryFn: () => base44.asServiceRole.entities.User.list('-created_date'),
+    queryFn: () => base44.entities.User.list('-created_date'),
     initialData: [],
   });
 
   const updateUserMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.asServiceRole.entities.User.update(id, data),
+    mutationFn: ({ id, data }) => base44.entities.User.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries(['allUsers']);
       toast.success('Usuário atualizado!');
@@ -61,7 +61,7 @@ function AdminUserManagementContent() {
     try {
       await Promise.all(
         selectedUsers.map(id =>
-          base44.asServiceRole.entities.User.update(id, { role: newRole })
+          base44.entities.User.update(id, { role: newRole })
         )
       );
       
@@ -82,7 +82,7 @@ function AdminUserManagementContent() {
     try {
       await Promise.all(
         selectedUsers.map(id =>
-          base44.asServiceRole.entities.User.update(id, { user_type: newUserType })
+          base44.entities.User.update(id, { user_type: newUserType })
         )
       );
       
