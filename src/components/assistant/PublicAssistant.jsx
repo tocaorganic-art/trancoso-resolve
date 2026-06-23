@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+﻿import { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,7 @@ Sofisticado, acolhedor, "baiano-chic", exclusivo e proativo. Use **negrito** par
 ## BASE DE CONHECIMENTO — PLATAFORMA
 - **Como funciona:** clientes encontram prestadores verificados → agendam → pagam (escrow 48h) → confirmam conclusão
 - **Categorias:** Limpeza, Garçom, Pedreiro, Jardinagem, Babá, Eletricista, Encanador, Pintor, Cozinheiro
-- **Pagamentos:** cartão de crédito, custódia 48h, 80% para o prestador após confirmação
+- **Pagamentos:** Mercado Pago (cartão, boleto, Pix), custódia 48h, 100% para o prestador (sem comissão)
 - **Cadastro prestador:** menu → "Seja um Prestador" → verificação de documento
 - **Pedidos:** acompanhar em "Meus Pedidos"
 - **Segurança:** prestadores verificados, pagamentos em custódia, conformidade com LGPD
@@ -38,7 +38,7 @@ export default function PublicAssistant() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Olá! Sou a **Toca**, sua concierge virtual da **Trancoso Experience**. 🌴\n\nEstou aqui para ser seu guia exclusivo em Trancoso — desde as praias mais paradisíacas até os melhores restaurantes, serviços e experiências únicas da região.\n\nComo posso tornar sua experiência em Trancoso inesquecível hoje?'
+      content: 'Olá! Sou a **Toca**, sua concierge virtual da **Trancoso Resolve**. 🌴\n\nEstou aqui para ser seu guia exclusivo em Trancoso — desde as praias mais paradisíacas até os melhores restaurantes, serviços e experiências únicas da região.\n\nComo posso tornar sua experiência em Trancoso inesquecível hoje?'
     }
   ]);
   const [input, setInput] = useState('');
