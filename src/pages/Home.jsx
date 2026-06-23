@@ -364,7 +364,7 @@ const ServiceCard = ({ service, provider }) => {
 };
 
 export default function HomePage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [_searchQuery, _setSearchQuery] = useState("");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -484,7 +484,7 @@ export default function HomePage() {
 
   const { isPulling, pullDistance, threshold } = usePullToRefresh(handleRefresh);
 
-  const { data: user, isLoading: isLoadingUser, isFetched: isUserFetched } = useQuery({
+  const { data: user, isLoading: _isLoadingUser, isFetched: isUserFetched } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
     retry: false,
@@ -533,8 +533,8 @@ export default function HomePage() {
   ).length || 0;
   const vagasRestantes = Math.max(0, 50 - totalPrestadoresVagas);
   const totalVerificados = allProviders?.filter(p => p.verificado === true || p.status === 'ativo').length || 0;
-  const totalCategorias = 9;
-  const totalAvaliacoes = allReviews?.length || 0;
+  const _totalCategorias = 9;
+  const _totalAvaliacoes = allReviews?.length || 0;
   
   const { data: services, isLoading: isLoadingServices, isError: isErrorServices } = useQuery({
     queryKey: ['serviceListings'],
@@ -552,7 +552,7 @@ export default function HomePage() {
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 6) || [];
     
-  const popularServices = ["Faxina", "Eletricista", "Passeio Turístico", "Transporte", "Massagem"];
+  const _popularServices = ["Faxina", "Eletricista", "Passeio Turístico", "Transporte", "Massagem"];
 
   return (
     <div className="bg-background overflow-x-hidden">
