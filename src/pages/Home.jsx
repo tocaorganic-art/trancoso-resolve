@@ -138,6 +138,31 @@ const categoryImageMap = {
     'https://images.unsplash.com/photo-1558618047-3c8c76ca1e28?w=800&q=80',
     'https://images.unsplash.com/photo-1609188076864-c35269136b09?w=800&q=80',
   ],
+  som: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  dj: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  iluminacao: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  musica: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
+  outro: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  ],
   default: [
     'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80',
     'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
@@ -236,6 +261,18 @@ function getServiceImage(service) {
   return imgs[hash % imgs.length];
 }
 
+function getCategoryFallback(service) {
+  const raw = (service.category || service.serviceType || service.name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  const categoryKey = Object.keys(categoryImageMap).find(key => raw.includes(key)) || 'default';
+  const imgs = categoryImageMap[categoryKey];
+  const id = service.id || service._id || '';
+  const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return imgs[hash % imgs.length];
+}
+
 const ServiceCard = ({ service, provider }) => {
     const imageSrc = getServiceImage(service);
     const Icon = categoryIconMap[service.category] || categoryIconMap.default;
@@ -255,6 +292,7 @@ const ServiceCard = ({ service, provider }) => {
                 {imageSrc ? (
                     <LazyImage
                         src={imageSrc}
+                        fallbackSrc={getCategoryFallback(service)}
                         alt={`${service.title} — serviço de ${service.category} em Trancoso`}
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />

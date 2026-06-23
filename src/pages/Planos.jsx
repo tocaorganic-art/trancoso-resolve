@@ -91,14 +91,15 @@ function PlanCard({
   loading, loadingAvulso, disabled, popular, isAvulso
 }) {
   return (
-    <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-orange-400' : 'border border-border'} ${disabled ? 'opacity-60' : ''}`}>
+    <div className={popular ? 'relative pt-4' : 'relative'}>
       {popular && (
-        <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, whiteSpace: 'nowrap' }}>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 whitespace-nowrap">
           <Badge className="bg-orange-500 text-white font-bold text-xs px-3 py-1 shadow">
             <Star className="w-3 h-3 mr-1" /> Mais popular
           </Badge>
         </div>
       )}
+    <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-orange-400' : 'border border-border'} ${disabled ? 'opacity-60' : ''}`}>
       {badge && (
         <div className="absolute top-3 right-3 z-10">
           <Badge className={`font-bold text-xs ${badgeColor}`}>{badge}</Badge>
@@ -196,6 +197,7 @@ function PlanCard({
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 }
 
@@ -203,11 +205,11 @@ function PlanCard({
 
 function AvulsoCard({ icon, title, price, onCta, loading }) {
   return (
-    <Card className="border-2 border-teal-500 overflow-hidden">
-      <div className="p-6 text-center bg-gradient-to-br from-teal-600 to-cyan-600 text-white">
+    <Card className="border-2 border-amber-600 overflow-hidden">
+      <div className="p-6 text-center bg-gradient-to-br from-amber-700 to-amber-600 text-white">
         {icon}
         <h3 className="text-lg font-bold mt-2">{title}</h3>
-        <Badge className="mt-1 bg-teal-400/30 text-teal-100 text-xs">Avulso</Badge>
+        <Badge className="mt-1 bg-amber-400/30 text-amber-100 text-xs">Avulso</Badge>
         <p className="text-3xl font-extrabold mt-2">R$ {price}<span className="text-sm font-normal"> / mês</span></p>
       </div>
       <CardContent className="p-5 space-y-3">
@@ -218,7 +220,7 @@ function AvulsoCard({ icon, title, price, onCta, loading }) {
         </ul>
         <Button
           className="w-full hover:opacity-90 text-white font-bold"
-          style={{ background: '#0d9488' }}
+          style={{ background: '#b45309' }}
           onClick={onCta}
           disabled={loading}
         >

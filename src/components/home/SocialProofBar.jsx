@@ -7,7 +7,7 @@ export default function SocialProofBar({ totalVerificados = 0 }) {
   const metrics = [
     { icon: Users, value: `${prestadoresDisplay} profissionais`, label: "cadastrados na plataforma" },
     { icon: ShieldCheck, value: "Prestadores verificados", label: "com antecedentes checados" },
-    { icon: MapPin, value: "3 destinos", label: "Trancoso, Porto Seguro e Caraíva" },
+    { icon: MapPin, value: "4 destinos", label: "Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva" },
     { icon: CreditCard, value: "Pagamento seguro", label: "para todos os serviços" },
   ];
 
