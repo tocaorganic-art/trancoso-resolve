@@ -1,56 +1,56 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+﻿import { useState, useEffect, useRef, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { MessageCircle, Send, X, Minimize2, Maximize2, Bot, Paperclip, User, ShieldCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 
-// ── Base de conhecimento RAG inline (evita alucinações, reduz latência) ────────
+// â”€â”€ Base de conhecimento RAG inline (evita alucinaÃ§Ãµes, reduz latÃªncia) â”€â”€â”€â”€â”€â”€â”€â”€
 const KNOWLEDGE_BASE = `
-PLATAFORMA TRANCOSO RESOLVE — BASE DE CONHECIMENTO OFICIAL
+PLATAFORMA TRANCOSO RESOLVE â€” BASE DE CONHECIMENTO OFICIAL
 
 COMO FUNCIONA:
-Clientes encontram prestadores verificados → agendam serviços → pagam com segurança (escrow 48h) → confirmam conclusão → pagamento liberado ao prestador.
+Clientes encontram prestadores verificados â†’ agendam serviÃ§os â†’ pagam com seguranÃ§a (escrow 48h) â†’ confirmam conclusÃ£o â†’ pagamento liberado ao prestador.
 
-CATEGORIAS DE SERVIÇO: Limpeza, Garçom, Pedreiro, Jardinagem, Babá, Eletricista, Encanador, Pintor, Cozinheiro.
+CATEGORIAS DE SERVIÃ‡O: Limpeza, GarÃ§om, Pedreiro, Jardinagem, BabÃ¡, Eletricista, Encanador, Pintor, Cozinheiro.
 
 PAGAMENTOS:
-- Método: cartão de crédito via Stripe
-- Custódia: valor fica retido por 48h após o serviço
-- Divisão: 80% prestador / 20% plataforma (taxa de serviço)
-- Liberação: automática após 48h ou quando cliente confirmar conclusão
+- MÃ©todo: cartÃ£o de crÃ©dito via Stripe
+- CustÃ³dia: valor fica retido por 48h apÃ³s o serviÃ§o
+- DivisÃ£o: 80% prestador / 20% plataforma (taxa de serviÃ§o)
+- LiberaÃ§Ã£o: automÃ¡tica apÃ³s 48h ou quando cliente confirmar conclusÃ£o
 
-CANCELAMENTO: Gratuito antes do prestador confirmar a solicitação.
+CANCELAMENTO: Gratuito antes do prestador confirmar a solicitaÃ§Ã£o.
 
 PRESTADORES:
-- Cadastro: menu superior → "Seja um Prestador"
-- Verificação: envio de documento (CNH/RG) obrigatório
-- Recebimento: após configurar conta bancária no painel Financeiro
+- Cadastro: menu superior â†’ "Seja um Prestador"
+- VerificaÃ§Ã£o: envio de documento (CNH/RG) obrigatÃ³rio
+- Recebimento: apÃ³s configurar conta bancÃ¡ria no painel Financeiro
 
 CLIENTES:
-- Pedidos: seção "Meus Pedidos" no menu
-- Avaliações: disponíveis após conclusão de cada serviço
-- Comunicação: chat interno com o prestador
+- Pedidos: seÃ§Ã£o "Meus Pedidos" no menu
+- AvaliaÃ§Ãµes: disponÃ­veis apÃ³s conclusÃ£o de cada serviÃ§o
+- ComunicaÃ§Ã£o: chat interno com o prestador
 
-SEGURANÇA:
-- Todos os prestadores passam por verificação de identidade
-- Pagamentos em custódia protegem o cliente
+SEGURANÃ‡A:
+- Todos os prestadores passam por verificaÃ§Ã£o de identidade
+- Pagamentos em custÃ³dia protegem o cliente
 - Dados pessoais protegidos conforme LGPD
 
 SUPORTE HUMANO: suporte@trancosoresolve.com.br
 
 TRANCOSO LOCAL:
-- Praias: Coqueiros, Nativos, Rio da Barra, Taípe, Itapororoca, Patimirim, Itaquena, Espelho
-- Gastronomia: El Gordo, Capim Santo, Silvana & Cia, Maritaca, Jacaré do Brasil
-- Ponto cultural: Quadrado Histórico de Trancoso
+- Praias: Coqueiros, Nativos, Rio da Barra, TaÃ­pe, Itapororoca, Patimirim, Itaquena, Espelho
+- Gastronomia: El Gordo, Capim Santo, Silvana & Cia, Maritaca, JacarÃ© do Brasil
+- Ponto cultural: Quadrado HistÃ³rico de Trancoso
 `;
 
-// ── Cache de respostas para FAQs frequentes (reduz custos de API) ──────────────
+// â”€â”€ Cache de respostas para FAQs frequentes (reduz custos de API) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const FAQ_CACHE = {
-  'como funciona': `A **Trancoso Resolve** funciona em 4 passos simples:\n\n1. **Encontre** um prestador verificado na busca\n2. **Agende** o serviço na data e hora desejada\n3. **Pague** com cartão — o valor fica em custódia segura por 48h\n4. **Confirme** a conclusão para liberar o pagamento ao prestador\n\nPrecisa de mais alguma informação?`,
-  'como agendar': `Para agendar um serviço:\n\n1. Acesse o perfil do prestador desejado\n2. Clique em **Agendar Serviço**\n3. Preencha data, horário e localização\n4. O prestador receberá a solicitação e confirmará\n\nGostaria de buscar um prestador agora?`,
-  'como funciona o pagamento': `O pagamento é **100% seguro**:\n\n- Aceito por **cartão de crédito** via Stripe\n- Valor fica em **custódia por 48h** após o serviço\n- O prestador recebe **80%** após confirmação\n- Cancelamento **gratuito** antes da confirmação\n\nAlguma dúvida sobre pagamentos?`,
-  'quero ser um prestador': `Para se cadastrar como prestador:\n\n1. Clique em **"Seja um Prestador"** no menu superior\n2. Preencha seus dados e especialidade\n3. Envie um documento (CNH ou RG) para verificação\n4. Configure sua conta bancária no painel Financeiro\n\nQuer saber mais sobre como funciona para prestadores?`,
+  'como funciona': `A **Trancoso Resolve** funciona em 4 passos simples:\n\n1. **Encontre** um prestador verificado na busca\n2. **Agende** o serviÃ§o na data e hora desejada\n3. **Pague** com cartÃ£o â€” o valor fica em custÃ³dia segura por 48h\n4. **Confirme** a conclusÃ£o para liberar o pagamento ao prestador\n\nPrecisa de mais alguma informaÃ§Ã£o?`,
+  'como agendar': `Para agendar um serviÃ§o:\n\n1. Acesse o perfil do prestador desejado\n2. Clique em **Agendar ServiÃ§o**\n3. Preencha data, horÃ¡rio e localizaÃ§Ã£o\n4. O prestador receberÃ¡ a solicitaÃ§Ã£o e confirmarÃ¡\n\nGostaria de buscar um prestador agora?`,
+  'como funciona o pagamento': `O pagamento Ã© **100% seguro**:\n\n- Aceito por **cartÃ£o de crÃ©dito** via Stripe\n- Valor fica em **custÃ³dia por 48h** apÃ³s o serviÃ§o\n- O prestador recebe **80%** apÃ³s confirmaÃ§Ã£o\n- Cancelamento **gratuito** antes da confirmaÃ§Ã£o\n\nAlguma dÃºvida sobre pagamentos?`,
+  'quero ser um prestador': `Para se cadastrar como prestador:\n\n1. Clique em **"Seja um Prestador"** no menu superior\n2. Preencha seus dados e especialidade\n3. Envie um documento (CNH ou RG) para verificaÃ§Ã£o\n4. Configure sua conta bancÃ¡ria no painel Financeiro\n\nQuer saber mais sobre como funciona para prestadores?`,
 };
 
 const findCachedAnswer = (text) => {
@@ -61,23 +61,23 @@ const findCachedAnswer = (text) => {
   return null;
 };
 
-// ── Filtro de conteúdo (LGPD + segurança) ─────────────────────────────────────
+// â”€â”€ Filtro de conteÃºdo (LGPD + seguranÃ§a) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const BLOCKED_PATTERNS = [
-  /cpf|rg|cnpj|senha|password|credit.?card|cartão/i,
-  /número.?do.?cartão|cvv|validade.?cartão/i,
+  /cpf|rg|cnpj|senha|password|credit.?card|cartÃ£o/i,
+  /nÃºmero.?do.?cartÃ£o|cvv|validade.?cartÃ£o/i,
 ];
 
 const containsSensitiveData = (text) =>
   BLOCKED_PATTERNS.some(p => p.test(text));
 
-const SYSTEM_PROMPT = `Você é a **Toca**, Assistente IA da **Trancoso Resolve**. Responda APENAS com base na base de conhecimento fornecida. Se não souber, diga honestamente e indique suporte@trancosoresolve.com.br.
+const SYSTEM_PROMPT = `VocÃª Ã© a **Toca**, Assistente IA da **Trancoso Resolve**. Responda APENAS com base na base de conhecimento fornecida. Se nÃ£o souber, diga honestamente e indique suporte@trancosoresolve.com.br.
 
-TOM: Profissional, amigável, empático, baiano-chic. Respostas concisas (máx 3 parágrafos).
-LIMITES: Nunca forneça conselhos legais, médicos ou financeiros pessoais. Nunca solicite dados sensíveis (CPF, senha, dados de cartão).
-LGPD: Se o usuário compartilhar dados pessoais desnecessários, oriente gentilmente a não fazê-lo.
-ENCERRAMENTO: Sempre pergunte se há mais alguma dúvida.`;
+TOM: Profissional, amigÃ¡vel, empÃ¡tico, baiano-chic. Respostas concisas (mÃ¡x 3 parÃ¡grafos).
+LIMITES: Nunca forneÃ§a conselhos legais, mÃ©dicos ou financeiros pessoais. Nunca solicite dados sensÃ­veis (CPF, senha, dados de cartÃ£o).
+LGPD: Se o usuÃ¡rio compartilhar dados pessoais desnecessÃ¡rios, oriente gentilmente a nÃ£o fazÃª-lo.
+ENCERRAMENTO: Sempre pergunte se hÃ¡ mais alguma dÃºvida.`;
 
-// ── Componentes de UI ──────────────────────────────────────────────────────────
+// â”€â”€ Componentes de UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TypingIndicator() {
   return (
     <div className="flex justify-start items-end gap-2">
@@ -135,12 +135,12 @@ function MessageBubble({ msg }) {
 
 const quickActions = [
   'Como funciona a plataforma?',
-  'Como agendar um serviço?',
+  'Como agendar um serviÃ§o?',
   'Como funciona o pagamento?',
   'Quero ser um prestador',
 ];
 
-// ── Componente principal ───────────────────────────────────────────────────────
+// â”€â”€ Componente principal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function SupportChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -153,7 +153,7 @@ export default function SupportChat() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Olá! 👋 Sou a **Toca**, assistente inteligente da Trancoso Resolve. Como posso ajudar você hoje?\n\nPosso tirar dúvidas sobre a plataforma, agendamentos, pagamentos, prestadores e muito mais.',
+      content: 'OlÃ¡! ðŸ‘‹ Sou a **Toca**, assistente inteligente da Trancoso Resolve. Como posso ajudar vocÃª hoje?\n\nPosso tirar dÃºvidas sobre a plataforma, agendamentos, pagamentos, prestadores e muito mais.',
       timestamp: new Date().toISOString(),
     }
   ]);
@@ -167,7 +167,7 @@ export default function SupportChat() {
     queryFn: () => base44.auth.me(),
   });
 
-  // Busca pedidos do usuário para contexto transacional
+  // Busca pedidos do usuÃ¡rio para contexto transacional
   const { data: userRequests } = useQuery({
     queryKey: ['userRequests', user?.id],
     queryFn: () => base44.entities.ServiceRequest.filter({ client_email: user?.email }, '-created_date', 3),
@@ -187,38 +187,38 @@ export default function SupportChat() {
   }, [isOpen]);
 
   const buildContextualPrompt = useCallback((userText, historyText, imageUrl) => {
-    // Contexto transacional: últimos pedidos do usuário logado
+    // Contexto transacional: Ãºltimos pedidos do usuÃ¡rio logado
     const requestsContext = userRequests?.length > 0
-      ? `\nPEDIDOS RECENTES DO USUÁRIO:\n${userRequests.map(r =>
-          `- Serviço #${r.id?.slice(-6)}: Status "${r.status}", Data ${r.date || 'não definida'}`
+      ? `\nPEDIDOS RECENTES DO USUÃRIO:\n${userRequests.map(r =>
+          `- ServiÃ§o #${r.id?.slice(-6)}: Status "${r.status}", Data ${r.date || 'nÃ£o definida'}`
         ).join('\n')}`
       : '';
 
     const userContext = user
-      ? `\nUSUÁRIO LOGADO: ${user.full_name} (${user.email})`
-      : '\nUSUÁRIO: não autenticado';
+      ? `\nUSUÃRIO LOGADO: ${user.full_name} (${user.email})`
+      : '\nUSUÃRIO: nÃ£o autenticado';
 
     return `${SYSTEM_PROMPT}
 
 --- BASE DE CONHECIMENTO ---
 ${KNOWLEDGE_BASE}${userContext}${requestsContext}
 
---- HISTÓRICO DA CONVERSA ---
+--- HISTÃ“RICO DA CONVERSA ---
 ${historyText}
 
-${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}Responda à última mensagem de forma concisa e útil.`;
+${imageUrl ? `[O usuÃ¡rio enviou uma imagem para anÃ¡lise: ${imageUrl}]\n` : ''}Responda Ã  Ãºltima mensagem de forma concisa e Ãºtil.`;
   }, [user, userRequests]);
 
   const sendMessage = useCallback(async (text, imageUrl = null) => {
     const content = text || inputMessage;
     if (!content.trim() || isTyping) return;
 
-    // Filtro de conteúdo — LGPD
+    // Filtro de conteÃºdo â€” LGPD
     if (containsSensitiveData(content)) {
       const warnMsg = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: '⚠️ Por segurança, **não compartilhe dados sensíveis** como CPF, número de cartão ou senhas no chat. Para questões que envolvam dados pessoais, entre em contato por suporte@trancosoresolve.com.br.',
+        content: 'âš ï¸ Por seguranÃ§a, **nÃ£o compartilhe dados sensÃ­veis** como CPF, nÃºmero de cartÃ£o ou senhas no chat. Para questÃµes que envolvam dados pessoais, entre em contato por suporte@trancosoresolve.com.br.',
         timestamp: new Date().toISOString(),
       };
       setMessages(prev => [...prev, warnMsg]);
@@ -240,10 +240,10 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
     setIsTyping(true);
     setConversationHistory(newHistory);
 
-    // Cache de FAQ — evita chamada de API desnecessária
+    // Cache de FAQ â€” evita chamada de API desnecessÃ¡ria
     const cached = findCachedAnswer(content);
     if (cached && !imageUrl) {
-      await new Promise(r => setTimeout(r, 600)); // simula latência natural
+      await new Promise(r => setTimeout(r, 600)); // simula latÃªncia natural
       const assistantMsg = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -257,7 +257,7 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
     }
 
     const historyText = newHistory.slice(-10).map(m =>
-      `${m.role === 'user' ? 'Usuário' : 'Toca'}: ${m.content}`
+      `${m.role === 'user' ? 'UsuÃ¡rio' : 'Toca'}: ${m.content}`
     ).join('\n');
 
     const prompt = buildContextualPrompt(content, historyText, imageUrl);
@@ -267,7 +267,7 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
       ...(imageUrl ? { file_urls: [imageUrl] } : {}),
     });
 
-    const responseText = typeof result === 'string' ? result : (result?.response || 'Desculpe, não consegui processar sua mensagem. Tente novamente ou contate suporte@trancosoresolve.com.br.');
+    const responseText = typeof result === 'string' ? result : (result?.response || 'Desculpe, nÃ£o consegui processar sua mensagem. Tente novamente ou contate suporte@trancosoresolve.com.br.');
 
     const assistantMsg = {
       id: (Date.now() + 1).toString(),
@@ -283,7 +283,7 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
     if (!isOpen) setUnreadCount(prev => prev + 1);
   }, [inputMessage, isTyping, conversationHistory, isOpen, buildContextualPrompt]);
 
-  // Multimodalidade — upload de imagem
+  // Multimodalidade â€” upload de imagem
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -305,7 +305,7 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
     return (
       <button
         onClick={() => { setIsOpen(true); setUnreadCount(0); }}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 z-50 flex items-center justify-center transition-all hover:scale-105 relative"
+        className="fixed bottom-20 md:bottom-6 right-4 md:right-6 w-14 h-14 rounded-full shadow-2xl bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-800 hover:to-amber-700 z-50 flex items-center justify-center transition-all hover:scale-105 relative"
         aria-label="Abrir chat de suporte"
       >
         <MessageCircle className="w-6 h-6 text-white" />
@@ -320,13 +320,13 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
 
   return (
     <>
-      {/* Backdrop opcional - apenas visual, não bloqueador */}
+      {/* Backdrop opcional - apenas visual, nÃ£o bloqueador */}
       <div
         className="fixed inset-0 z-40 bg-black/0 transition-opacity duration-300"
         onClick={() => setIsOpen(false)}
         aria-label="Fechar chat"
       />
-      <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isMinimized ? 'w-80' : 'w-96'} max-w-[calc(100vw-2rem)]`}>
+      <div className={`fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 transition-all duration-300 ${isMinimized ? 'w-80' : 'w-96'} max-w-[calc(100vw-2rem)]`}>
       <Card className="shadow-2xl border border-slate-200 overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between">
@@ -335,10 +335,10 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
               <Bot className="w-5 h-5" />
             </div>
             <div>
-              <p className="font-semibold text-sm">Toca — Assistente IA</p>
+              <p className="font-semibold text-sm">Toca â€” Assistente IA</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs text-white/80">Online • IA avançada</span>
+                <span className="text-xs text-white/80">Online â€¢ IA avanÃ§ada</span>
               </div>
             </div>
           </div>
@@ -392,7 +392,7 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
             {/* Input */}
             <div className="p-3 bg-white border-t border-slate-100">
               <div className="flex gap-2 items-center">
-                {/* Upload de imagem — multimodalidade */}
+                {/* Upload de imagem â€” multimodalidade */}
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -431,7 +431,7 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
               </div>
               <div className="flex items-center justify-center gap-1 mt-2">
                 <ShieldCheck className="w-3 h-3 text-slate-400" />
-                <p className="text-xs text-slate-400">Protegido por LGPD · Trancoso Resolve</p>
+                <p className="text-xs text-slate-400">Protegido por LGPD Â· Trancoso Resolve</p>
               </div>
             </div>
           </>
@@ -441,3 +441,4 @@ ${imageUrl ? `[O usuário enviou uma imagem para análise: ${imageUrl}]\n` : ''}
     </>
   );
 }
+
