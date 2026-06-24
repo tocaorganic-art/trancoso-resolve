@@ -21,8 +21,6 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Login from '@/pages/Login';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import CategoryDestinationPage from '@/components/CategoryDestinationPage';
-
 // Páginas carregadas sob demanda (code-splitting) para reduzir o bundle inicial.
 const FilaVerificacaoPage = lazy(() => import('@/pages/FilaVerificacao'));
 const AdminPagamentosPage = lazy(() => import('@/pages/AdminPagamentos'));
@@ -370,17 +368,6 @@ const AuthenticatedApp = () => {
               <AnimatedPage><DestinoCaraiva /></AnimatedPage>
             </LayoutWrapper>
           } />
-
-          {/* URLs limpas /:destino/:servico — geradas dinamicamente */}
-          {['trancoso', 'arraial-dajuda', 'porto-seguro', 'caraiva'].flatMap(d =>
-            ['eletricista', 'diarista', 'encanador', 'jardineiro', 'chef'].map(c => (
-              <Route key={`${d}-${c}`} path={`/${d}/${c}`} element={
-                <LayoutWrapper currentPageName={`${d}-${c}`}>
-                  <AnimatedPage><CategoryDestinationPage destino={d} categoria={c} /></AnimatedPage>
-                </LayoutWrapper>
-              } />
-            ))
-          )}
 
           {/* Aliases com hífen → redirect para CamelCase */}
           <Route path="/como-funciona" element={<Navigate to="/ComoFunciona" replace />} />
