@@ -75,6 +75,13 @@ const ServicoDestino = lazy(() => import('@/pages/ServicoDestino'));
 const DJTrancoso = lazy(() => import('@/pages/servicos/DJTrancoso'));
 const CasamentoTrancoso = lazy(() => import('@/pages/destinos/CasamentoTrancoso'));
 const RevelionTrancoso = lazy(() => import('@/pages/destinos/RevelionTrancoso'));
+const DiaristaArraialDajuda = lazy(() => import('@/pages/servicos/DiaristaArraialDajuda'));
+const EletricistaArraialDajuda = lazy(() => import('@/pages/servicos/EletricistaArraialDajuda'));
+const PiscineiroArraialDajuda = lazy(() => import('@/pages/servicos/PiscineiroArraialDajuda'));
+const CozinheiroArraialDajuda = lazy(() => import('@/pages/servicos/CozinheiroArraialDajuda'));
+const JardineiroArraialDajuda = lazy(() => import('@/pages/servicos/JardineiroArraialDajuda'));
+const PedreiroArraialDajuda = lazy(() => import('@/pages/servicos/PedreiroArraialDajuda'));
+const MorarTrancoso = lazy(() => import('@/pages/guides/MorarTrancoso'));
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -349,6 +356,45 @@ const AuthenticatedApp = () => {
             </LayoutWrapper>
           } />
 
+
+          {/* Serviços Arraial d'Ajuda */}
+          <Route path="/servicos/diarista-arraial-dajuda" element={
+            <LayoutWrapper currentPageName="DiaristaArraialDajuda">
+              <AnimatedPage><DiaristaArraialDajuda /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/servicos/eletricista-arraial-dajuda" element={
+            <LayoutWrapper currentPageName="EletricistaArraialDajuda">
+              <AnimatedPage><EletricistaArraialDajuda /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/servicos/piscineiro-arraial-dajuda" element={
+            <LayoutWrapper currentPageName="PiscineiroArraialDajuda">
+              <AnimatedPage><PiscineiroArraialDajuda /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/servicos/cozinheiro-arraial-dajuda" element={
+            <LayoutWrapper currentPageName="CozinheiroArraialDajuda">
+              <AnimatedPage><CozinheiroArraialDajuda /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/servicos/jardineiro-arraial-dajuda" element={
+            <LayoutWrapper currentPageName="JardineiroArraialDajuda">
+              <AnimatedPage><JardineiroArraialDajuda /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/servicos/pedreiro-arraial-dajuda" element={
+            <LayoutWrapper currentPageName="PedreiroArraialDajuda">
+              <AnimatedPage><PedreiroArraialDajuda /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+
+          {/* Guide: Morar em Trancoso */}
+          <Route path="/guides/morar-em-trancoso" element={
+            <LayoutWrapper currentPageName="MorarTrancoso">
+              <AnimatedPage><MorarTrancoso /></AnimatedPage>
+            </LayoutWrapper>
+          } />
 
           {/* Novas páginas: DJ, Casamento, Réveillon */}
           <Route path="/servicos/dj-trancoso" element={
