@@ -348,14 +348,6 @@ const AuthenticatedApp = () => {
             </LayoutWrapper>
           } />
 
-          {/* Painel do prestador (rota pós-login) */}
-          <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-            <Route path="/painel-prestador" element={
-              <LayoutWrapper currentPageName="PainelPrestador">
-                <AnimatedPage><PainelPrestadorPage /></AnimatedPage>
-              </LayoutWrapper>
-            } />
-          </Route>
 
           {/* URLs limpas por destino */}
           <Route path="/trancoso" element={
