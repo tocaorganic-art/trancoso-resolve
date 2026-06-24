@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Star, Utensils, Waves, Sun, Heart } from "lucide-react";
-
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 
@@ -27,14 +26,14 @@ export default function DestinoArraialDajuda() {
   useDestinationSeo({
     title: "Arraial d'Ajuda Bahia | Serviços e Profissionais Verificados — Trancoso Resolve",
     description: "Encontre diaristas, eletricistas, piscineiros, chefs e mais em Arraial d'Ajuda, BA. Profissionais verificados para sua vila, pousada ou residência no litoral baiano.",
-    canonical: "https://www.trancosoresolve.com.br/destinos/arraial-dajuda",
+    canonical: "https://www.trancosoresolve.com.br/arraial-dajuda",
     schemaId: "schema-destino-arraial-dajuda",
     schema: {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Trancoso Resolve — Serviços em Arraial d'Ajuda",
       "description": "Marketplace de serviços locais em Arraial d'Ajuda, Bahia. Profissionais verificados para vilas, pousadas e residências.",
-      "url": "https://www.trancosoresolve.com.br/destinos/arraial-dajuda",
+      "url": "https://www.trancosoresolve.com.br/arraial-dajuda",
       "address": { "@type": "PostalAddress", "addressLocality": "Arraial d'Ajuda", "addressRegion": "BA", "addressCountry": "BR" },
       "geo": { "@type": "GeoCoordinates", "latitude": -16.4467, "longitude": -39.0744 },
       "areaServed": { "@type": "Place", "name": "Arraial d'Ajuda, Bahia, Brasil" }
@@ -43,13 +42,8 @@ export default function DestinoArraialDajuda() {
 
   return (
     <div className="bg-background overflow-x-hidden">
-      {/* Hero */}
       <section className="relative bg-gradient-to-br from-background via-orange-900 to-card text-white py-20 md:py-32 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 opacity-20 bg-cover bg-center" style={{ backgroundImage: `url('${HERO_IMAGE}')` }} aria-hidden="true" />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-orange-700/40 border border-orange-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-200 mb-6">
             <MapPin className="w-4 h-4" /> Arraial d'Ajuda, Bahia
@@ -76,8 +70,6 @@ export default function DestinoArraialDajuda() {
       </section>
 
       <div className="container mx-auto max-w-5xl px-4 py-12 md:py-20">
-
-        {/* Sobre Arraial d'Ajuda */}
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
@@ -105,7 +97,7 @@ export default function DestinoArraialDajuda() {
                 { icon: Waves, title: 'Praias Virgens', desc: 'Praia de Taípe, Lagoa Azul e muito mais' },
                 { icon: Utensils, title: 'Gastronomia Local', desc: 'Restaurantes simples e aconchegantes' },
                 { icon: Sun, title: 'Lifestyle Autêntico', desc: 'Vilas e pousadas com charme rústico' },
-                { icon: Heart, label: 'Natureza', desc: 'Trilhas, mergulho e ecoturismo' },
+                { icon: Heart, title: 'Natureza', desc: 'Trilhas, mergulho e ecoturismo' },
               ].map(({ icon: Icon, title, desc }) => (
                 <div key={title} className="bg-card rounded-2xl p-4 shadow-sm border border-border">
                   <Icon className="w-6 h-6 text-orange-600 mb-2" />
@@ -117,7 +109,6 @@ export default function DestinoArraialDajuda() {
           </div>
         </section>
 
-        {/* Serviços Disponíveis */}
         <section className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Serviços Disponíveis em Arraial d'Ajuda</h2>
@@ -135,7 +126,6 @@ export default function DestinoArraialDajuda() {
           </div>
         </section>
 
-        {/* Outros Destinos */}
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-3 gap-4">
@@ -161,7 +151,7 @@ export default function DestinoArraialDajuda() {
         </section>
 
         <Suspense fallback={<div className="py-12"><Skeleton className="h-96 w-full rounded-lg" /></div>}>
-                    <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Arraial d'Ajuda" source="destino-arraial-dajuda" />
+          <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Arraial d'Ajuda" source="destino-arraial-dajuda" />
         </Suspense>
       </div>
 

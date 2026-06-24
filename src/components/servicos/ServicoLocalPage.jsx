@@ -39,36 +39,44 @@ export default function ServicoLocalPage({
 
     document.title = seoTitle;
 
-    // description
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
     meta.content = seoDesc;
 
-    // keywords
     if (keywords) {
       let kw = document.querySelector('meta[name="keywords"]');
       if (!kw) { kw = document.createElement('meta'); kw.name = 'keywords'; document.head.appendChild(kw); }
       kw.content = keywords;
     }
 
-    // og:title
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
     ogTitle.content = seoTitle;
 
-    // og:description
     let ogDesc = document.querySelector('meta[property="og:description"]');
     if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
     ogDesc.content = seoDesc;
 
-    // canonical
+    if (canonicalUrl) {
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+      ogUrl.content = canonicalUrl;
+    }
+
+    let twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (!twTitle) { twTitle = document.createElement('meta'); twTitle.name = 'twitter:title'; document.head.appendChild(twTitle); }
+    twTitle.content = seoTitle;
+
+    let twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (!twDesc) { twDesc = document.createElement('meta'); twDesc.name = 'twitter:description'; document.head.appendChild(twDesc); }
+    twDesc.content = seoDesc;
+
     if (canonicalUrl) {
       let canonical = document.querySelector('link[rel="canonical"]');
       if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
       canonical.href = canonicalUrl;
     }
 
-    // Service JSON-LD schema
     if (schemaData) {
       const existingSchema = document.getElementById('page-schema-ld');
       if (existingSchema) existingSchema.remove();
@@ -79,7 +87,6 @@ export default function ServicoLocalPage({
       document.head.appendChild(script);
     }
 
-    // FAQ schema — usa faqData se fornecido, senão gera perguntas genéricas
     const faqs = faqData || [
       {
         question: `Quanto custa ${label} em ${locationLabel}?`,
@@ -111,7 +118,6 @@ export default function ServicoLocalPage({
     faqScript.text = JSON.stringify(faqSchema);
     document.head.appendChild(faqScript);
 
-    // Breadcrumb schema
     const breadcrumbItems = [
       { position: 1, name: 'Trancoso Resolve', item: 'https://www.trancosoresolve.com.br' },
       { position: 2, name: 'Serviços', item: 'https://www.trancosoresolve.com.br/ServicosCategoria' },
@@ -146,7 +152,6 @@ export default function ServicoLocalPage({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero */}
       <section className="bg-gradient-to-br from-orange-900 to-orange-700 text-white py-14 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="flex items-center gap-2 text-orange-200 text-sm font-medium mb-4">
@@ -165,15 +170,12 @@ export default function ServicoLocalPage({
       </section>
 
       <div className="container mx-auto max-w-4xl px-4 py-12 space-y-16">
-
-        {/* Lead Capture Form — antes da listagem */}
         <LeadCaptureForm
           serviceInterest={category}
           serviceLabel={serviceLabel || category}
           source={`pagina-servico-${(serviceLabel || category || '').toLowerCase().replace(/\s+/g, '-')}`}
         />
 
-        {/* Serviços */}
         <section>
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">{servicesTitle}</h2>
           <ul className="space-y-3">
@@ -186,13 +188,11 @@ export default function ServicoLocalPage({
           </ul>
         </section>
 
-        {/* Como funciona */}
         <section className="bg-card backdrop-blur-sm rounded-2xl p-8 border border-border">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">{howTitle}</h2>
           <p className="text-muted-foreground text-base leading-relaxed">{howText}</p>
         </section>
 
-        {/* CTA */}
         <section className="bg-gradient-to-r from-orange-600 to-orange-800 rounded-3xl p-8 md:p-12 text-center shadow-xl">
           <p className="text-white text-lg font-medium mb-6 max-w-xl mx-auto">{cta}</p>
           <Link to={searchUrl} className="block sm:inline-block w-full sm:w-auto">
@@ -202,7 +202,6 @@ export default function ServicoLocalPage({
           </Link>
         </section>
 
-        {/* SEO Text Block */}
         {seoText && (
           <section className="bg-card backdrop-blur-sm rounded-2xl p-8 border border-border">
             <div className="prose max-w-none text-muted-foreground text-sm leading-relaxed space-y-4">
