@@ -1,4 +1,6 @@
 User-agent: *
+Allow: /
+Disallow: /admin/
 Disallow: /Admin
 Disallow: /AdminAssinaturas
 Disallow: /AdminControleFinanceiro
@@ -20,11 +22,19 @@ Disallow: /MinhaAgenda
 Disallow: /MeusPedidos
 Disallow: /Chat
 Disallow: /GeradorDeImagem
-Disallow: /admin/
 Disallow: /DiagnosticosCompletos
 Disallow: /VerificacaoDocumento
 Disallow: /VerificacaoAntecedentes
+Disallow: /RelatorioDiario
+Disallow: /api/
+Disallow: /*.json$
 
+User-agent: Googlebot
 Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Crawl-delay: 1
 
 Sitemap: https://www.trancosoresolve.com.br/sitemap.xml
