@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Star, Waves, TreePine, Heart, Leaf } from "lucide-react";
-
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 
@@ -23,14 +22,14 @@ export default function DestinoCaraiva() {
   useDestinationSeo({
     title: "Caraíva Bahia | Serviços e Profissionais Verificados — Trancoso Resolve",
     description: "Encontre profissionais verificados em Caraíva, BA: diaristas, eletricistas, piscineiros, cozinheiros e jardineiros. Atendimento na vila sem carros mais charmosa da Bahia.",
-    canonical: "https://www.trancosoresolve.com.br/destinos/caraiva",
+    canonical: "https://www.trancosoresolve.com.br/caraiva",
     schemaId: "schema-destino-caraiva",
     schema: {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Trancoso Resolve — Serviços em Caraíva",
       "description": "Marketplace de serviços locais em Caraíva, Bahia. Profissionais verificados para a vila sem carros mais charmosa do Brasil.",
-      "url": "https://www.trancosoresolve.com.br/destinos/caraiva",
+      "url": "https://www.trancosoresolve.com.br/caraiva",
       "address": { "@type": "PostalAddress", "addressLocality": "Caraíva", "addressRegion": "BA", "addressCountry": "BR" },
       "geo": { "@type": "GeoCoordinates", "latitude": -16.7667, "longitude": -39.2167 },
       "areaServed": { "@type": "Place", "name": "Caraíva, Bahia, Brasil" }
@@ -39,13 +38,8 @@ export default function DestinoCaraiva() {
 
   return (
     <div className="bg-background overflow-x-hidden">
-      {/* Hero */}
       <section className="relative bg-gradient-to-br from-[#1A1208] via-[#2d3a18] to-[#1A1208] text-white py-20 md:py-32 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 opacity-20 bg-cover bg-center" style={{ backgroundImage: `url('${HERO_IMAGE}')` }} aria-hidden="true" />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-olive-700/40 border border-olive-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-200 mb-6">
             <MapPin className="w-4 h-4" /> Caraíva, Bahia
@@ -72,17 +66,15 @@ export default function DestinoCaraiva() {
       </section>
 
       <div className="container mx-auto max-w-5xl px-4 py-12 md:py-20">
-
-        {/* Sobre Caraíva */}
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-4">O paraíso preservado da Costa do Descobrimento</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Caraíva é única. Sem asfalto, sem carros e com um rio separando a vila do mar, o vilarejo encanta quem busca autenticidade, natureza intocada e o ritmo do tempo desacelerado. Um destino cada vez mais valorizado por viajantes VIP.
+                Caraíva é única. Sem asfalto, sem carros e com um rio separando a vila do mar, o vilarejo encanta quem busca autenticidade, natureza intocada e o ritmo do tempo desacelerado.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                A Trancoso Resolve entende as particularidades de Caraíva — o acesso por barco, a logística especial, as necessidades de pousadas e casas neste ambiente único. Profissionais verificados que conhecem e respeitam o local.
+                A Trancoso Resolve entende as particularidades de Caraíva — o acesso por barco, a logística especial, as necessidades de pousadas e casas neste ambiente único.
               </p>
               <div className="flex flex-wrap gap-3">
                 {[
@@ -113,7 +105,6 @@ export default function DestinoCaraiva() {
           </div>
         </section>
 
-        {/* Serviços Disponíveis */}
         <section className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Serviços Disponíveis em Caraíva</h2>
@@ -131,29 +122,6 @@ export default function DestinoCaraiva() {
           </div>
         </section>
 
-        {/* Particularidades */}
-        <section className="mb-16 bg-gradient-to-br from-sand to-orange-50 rounded-3xl p-8 border border-orange-100">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Entendemos Caraíva</h2>
-          <p className="text-muted-foreground mb-6 leading-relaxed">
-            Caraíva tem particularidades únicas que exigem profissionais que conhecem o local: o acesso pela balsa, a ausência de asfalto, as limitações de materiais e ferramentas, e o cuidado especial com o meio ambiente.
-          </p>
-          <ul className="space-y-3">
-            {[
-              'Profissionais acostumados com o acesso por barco e as condições locais.',
-              'Equipes que respeitam a área de proteção ambiental e suas regras.',
-              'Conhecimento das fornecedoras e materiais disponíveis na região.',
-              'Atendimento às pousadas boutique que exigem discrição e qualidade.',
-              'Suporte para urgências, mesmo com a logística diferenciada de Caraíva.',
-            ].map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-foreground">
-                <span className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
-                <span className="text-sm">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Outros Destinos */}
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -178,7 +146,7 @@ export default function DestinoCaraiva() {
         </section>
 
         <Suspense fallback={<div className="py-12"><Skeleton className="h-96 w-full rounded-lg" /></div>}>
-                    <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Caraíva" source="destino-caraiva" />
+          <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Caraíva" source="destino-caraiva" />
         </Suspense>
       </div>
 

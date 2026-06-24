@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Star, Utensils, Anchor, Sun, Heart } from "lucide-react";
-
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 
@@ -23,14 +22,14 @@ export default function DestinoPortoSeguro() {
   useDestinationSeo({
     title: "Porto Seguro Bahia | Serviços e Profissionais Verificados — Trancoso Resolve",
     description: "Encontre profissionais verificados em Porto Seguro, BA: diaristas, eletricistas, piscineiros, cozinheiros e jardineiros para hotéis, resorts e residências de alto padrão.",
-    canonical: "https://www.trancosoresolve.com.br/destinos/porto-seguro",
+    canonical: "https://www.trancosoresolve.com.br/porto-seguro",
     schemaId: "schema-destino-porto-seguro",
     schema: {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Trancoso Resolve — Serviços em Porto Seguro",
       "description": "Marketplace de serviços locais em Porto Seguro, Bahia. Profissionais verificados para hotéis, resorts e residências.",
-      "url": "https://www.trancosoresolve.com.br/destinos/porto-seguro",
+      "url": "https://www.trancosoresolve.com.br/porto-seguro",
       "address": { "@type": "PostalAddress", "addressLocality": "Porto Seguro", "addressRegion": "BA", "addressCountry": "BR" },
       "geo": { "@type": "GeoCoordinates", "latitude": -16.4497, "longitude": -39.0648 },
       "areaServed": { "@type": "Place", "name": "Porto Seguro, Bahia, Brasil" }
@@ -39,13 +38,8 @@ export default function DestinoPortoSeguro() {
 
   return (
     <div className="bg-background overflow-x-hidden">
-      {/* Hero */}
       <section className="relative bg-gradient-to-br from-background via-orange-900 to-card text-white py-20 md:py-32 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 opacity-20 bg-cover bg-center" style={{ backgroundImage: `url('${HERO_IMAGE}')` }} aria-hidden="true" />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-orange-700/40 border border-orange-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-200 mb-6">
             <MapPin className="w-4 h-4" /> Porto Seguro, Bahia
@@ -72,17 +66,15 @@ export default function DestinoPortoSeguro() {
       </section>
 
       <div className="container mx-auto max-w-5xl px-4 py-12 md:py-20">
-
-        {/* Sobre Porto Seguro */}
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-4">História, cultura e praias paradisíacas</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Porto Seguro é o berço do Brasil — um destino que combina história colonial, praias deslumbrantes e uma infraestrutura turística completa. Da Cidade Histórica às praias de Coroa Vermelha, Arraial d'Ajuda e Trancoso, a região é um polo de alto padrão.
+                Porto Seguro é o berço do Brasil — um destino que combina história colonial, praias deslumbrantes e uma infraestrutura turística completa.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                A Trancoso Resolve atua em Porto Seguro com os mesmos padrões de verificação e qualidade. Profissionais para hotéis, resorts, condomínios fechados e residências de luxo, com histórico verificado e avaliações reais.
+                A Trancoso Resolve atua em Porto Seguro com os mesmos padrões de verificação e qualidade. Profissionais para hotéis, resorts, condomínios fechados e residências de luxo.
               </p>
               <div className="flex flex-wrap gap-3">
                 {[
@@ -113,7 +105,6 @@ export default function DestinoPortoSeguro() {
           </div>
         </section>
 
-        {/* Serviços Disponíveis */}
         <section className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Serviços Disponíveis em Porto Seguro</h2>
@@ -131,26 +122,6 @@ export default function DestinoPortoSeguro() {
           </div>
         </section>
 
-        {/* Por que Porto Seguro */}
-        <section className="mb-16 bg-gradient-to-br from-orange-50 to-orange-50 rounded-3xl p-8 border border-orange-100">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Por que contratar pela Trancoso Resolve em Porto Seguro</h2>
-          <ul className="space-y-3">
-            {[
-              'Prestadores verificados com antecedentes criminais checados em bases oficiais.',
-              'Profissionais avaliados por outros clientes com histórico público.',
-              'Atendimento prioritário para hotéis e resorts com contratos recorrentes.',
-              'Rede local de prestadores que conhecem a região e seus desafios.',
-              'Suporte via WhatsApp para urgências e demandas de último minuto.',
-            ].map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-foreground">
-                <span className="w-6 h-6 rounded-full bg-orange-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">✓</span>
-                <span className="text-sm">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Outros Destinos */}
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -175,7 +146,7 @@ export default function DestinoPortoSeguro() {
         </section>
 
         <Suspense fallback={<div className="py-12"><Skeleton className="h-96 w-full rounded-lg" /></div>}>
-                    <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Porto Seguro" source="destino-porto-seguro" />
+          <LeadCaptureForm serviceInterest="Geral" serviceLabel="um profissional em Porto Seguro" source="destino-porto-seguro" />
         </Suspense>
       </div>
 

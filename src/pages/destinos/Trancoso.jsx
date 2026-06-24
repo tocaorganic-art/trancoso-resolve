@@ -33,14 +33,14 @@ export default function DestinoTrancoso() {
   useDestinationSeo({
     title: "Trancoso Bahia | Serviços e Profissionais Verificados — Trancoso Resolve",
     description: "Encontre diaristas, eletricistas, piscineiros, chefs e mais em Trancoso, BA. Profissionais verificados para sua villa, pousada ou residência no Quadrado.",
-    canonical: "https://www.trancosoresolve.com.br/destinos/trancoso",
+    canonical: "https://www.trancosoresolve.com.br/trancoso",
     schemaId: "schema-destino-trancoso",
     schema: {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Trancoso Resolve — Serviços em Trancoso",
       "description": "Marketplace de serviços locais em Trancoso, Bahia. Profissionais verificados para villas, pousadas e residências.",
-      "url": "https://www.trancosoresolve.com.br/destinos/trancoso",
+      "url": "https://www.trancosoresolve.com.br/trancoso",
       "address": { "@type": "PostalAddress", "addressLocality": "Trancoso", "addressRegion": "BA", "addressCountry": "BR" },
       "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 },
       "areaServed": { "@type": "Place", "name": "Trancoso, Bahia, Brasil" }
@@ -49,13 +49,8 @@ export default function DestinoTrancoso() {
 
   return (
     <div className="bg-background overflow-x-hidden">
-      {/* Hero */}
       <section className="relative bg-gradient-to-br from-background via-orange-900 to-card text-white py-20 md:py-32 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 opacity-20 bg-cover bg-center" style={{ backgroundImage: `url('${HERO_IMAGE}')` }} aria-hidden="true" />
         <div className="relative container mx-auto max-w-5xl px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-orange-700/40 border border-orange-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-200 mb-6">
             <MapPin className="w-4 h-4" /> Trancoso, Bahia
@@ -82,8 +77,6 @@ export default function DestinoTrancoso() {
       </section>
 
       <div className="container mx-auto max-w-5xl px-4 py-12 md:py-20">
-
-        {/* Sobre Trancoso */}
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
@@ -123,7 +116,6 @@ export default function DestinoTrancoso() {
           </div>
         </section>
 
-        {/* Serviços Disponíveis */}
         <section className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Serviços Disponíveis em Trancoso</h2>
@@ -141,7 +133,6 @@ export default function DestinoTrancoso() {
           </div>
         </section>
 
-        {/* Bairros e Regiões */}
         <section className="mb-16 bg-gradient-to-br from-orange-50 to-orange-50 rounded-3xl p-8 border border-orange-100">
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Atendemos em Todo Trancoso</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -158,7 +149,6 @@ export default function DestinoTrancoso() {
           </div>
         </section>
 
-        {/* Outros Destinos */}
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
