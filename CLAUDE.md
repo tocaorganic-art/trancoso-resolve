@@ -22,6 +22,7 @@ npm run lint       # eslint (0 erros esperados)
 npm run lint:fix   # eslint --fix
 npm run typecheck  # tsc -p ./jsconfig.json
 npm run preview    # preview de produção local
+npm run sitemap    # regenera public/sitemap.xml (scripts/generate-sitemap.js)
 ```
 
 **Stack:** React 18 + Vite 6.1 + Tailwind 3.4 + shadcn/ui (new-york) + Base44 SDK + Lucide icons.
@@ -54,6 +55,7 @@ src/
 │   ├── plans/              # Planos de assinatura
 │   ├── verification/       # Verificação de profissionais
 │   ├── feedback/           # Feedback e tickets
+│   ├── seo/                # SchemaMarkup.jsx — injeção JSON-LD
 │   └── optimization/       # Otimizações de performance
 │
 ├── pages/                  # Páginas (rotas)
@@ -79,7 +81,8 @@ src/
 │
 ├── hooks/                  # React hooks customizados
 │   ├── use-mobile.jsx
-│   ├── useDestinationSeo.js
+│   ├── useDestinationSeo.js  # SEO para páginas de destino
+│   ├── useSEO.js             # SEO genérico para qualquer página
 │   └── usePullToRefresh.js
 │
 ├── lib/                    # Utilitários e helpers
@@ -108,7 +111,12 @@ public/
 │   ├── logo-lockup.svg
 │   └── logo-lockup-dark.svg
 ├── favicon.svg             # Ícone da marca (squircle laranja)
+├── sitemap.xml             # ~58 URLs — regenerar com `npm run sitemap`
+├── robots.txt
 └── ...
+
+scripts/
+└── generate-sitemap.js     # Gera public/sitemap.xml
 ```
 
 ---
@@ -244,7 +252,8 @@ const users = await base44Client.query('User', { /* filters */ });
 ### Hooks customizados
 
 - `use-mobile.jsx` — detecta viewport mobile
-- `useDestinationSeo.js` — helpers para SEO de destinos
+- `useDestinationSeo.js` — SEO completo para páginas de destino (title, og:*, twitter:*, canonical, schema JSON-LD)
+- `useSEO.js` — SEO genérico para qualquer página (mesmo que useDestinationSeo mas sem schema)
 - `usePullToRefresh.js` — pull-to-refresh em mobile
 
 **Padrão:** crie novos hooks em `src/hooks/` com nomenclatura `useNomeDoHook.js`.
@@ -427,6 +436,42 @@ Nenhuma configurada explicitamente no `.env`. Verificar Vercel dashboard para se
 
 ---
 
+## 🔍 SEO — estado atual (24/06/2026)
+
+### O que já está no `main` (deployado na Vercel)
+
+**PR #48** (commit `54701436`):
+- `index.html` — schemas LocalBusiness (com `telephone`, `email`, `aggregateRating`, `sameAs` corretos), Organization, WebSite, FAQPage
+- `public/robots.txt` — Googlebot/Bingbot otimizado
+- `public/sitemap.xml` — 54 URLs (inclui `/destinos/casamento-trancoso`, `/destinos/reveillon-trancoso`, `/guides/morar-em-trancoso`, `/servicos/dj-trancoso`)
+- `src/components/servicos/ServicoLocalPage.jsx` — FAQ schema + breadcrumb schema por página
+- Novas páginas: `/servicos/dj-trancoso`, `/destinos/casamento-trancoso`, `/destinos/reveillon-trancoso`, `/guides/morar-em-trancoso`, 6 páginas de Arraial d'Ajuda
+
+**PR #51** (commit `c0a411b`):
+- `index.html` — `og:url`, `WebSite url`, `LocalBusiness @id/url` corrigidos para usar `www`; `<link rel="sitemap">` corrigido de `/api/functions/sitemap` → `/sitemap.xml`
+- `public/sitemap.xml` — ~58 URLs (adicionados `/cadastro`, `/TermosDeServico`, `/PoliticaPrivacidade`, `/PoliticaDevolucoes`)
+- `src/hooks/useDestinationSeo.js` — agora atualiza `og:url`, `twitter:title`, `twitter:description` e restaura tudo no unmount
+- `src/hooks/useSEO.js` — **NOVO** hook genérico de SEO com cleanup completo para qualquer página
+- `src/components/seo/SchemaMarkup.jsx` — **NOVO** componente para injeção de JSON-LD dinâmico por página
+- `scripts/generate-sitemap.js` — **NOVO** script para regenerar sitemap (`npm run sitemap`)
+- Páginas de destino — canonical corrigido: `/destinos/trancoso` → `/trancoso` (rota canônica real do router); idem para arraial-dajuda, porto-seguro, caraiva
+
+### Regras críticas de SEO
+
+- **URL canônica:** sempre usar `https://www.trancosoresolve.com.br` (com `www`)
+- **Canonical das páginas de destino:** `/trancoso`, `/arraial-dajuda`, `/porto-seguro`, `/caraiva` (sem prefixo `/destinos/`)
+- **Sitemap:** regenerar com `npm run sitemap` após adicionar novas páginas
+- **Novos hooks disponíveis:** `useSEO` (genérico), `useDestinationSeo` (destinos), `SchemaMarkup` (JSON-LD por componente)
+
+### Pendências SEO
+
+- [ ] Criar imagem `public/og-image.jpg` (1200×630 px) para Open Graph
+- [ ] Submeter `sitemap.xml` no Google Search Console
+- [ ] Verificar/criar Google Business Profile para Trancoso Resolve
+- [ ] Conectar Google Analytics ao Search Console
+
+---
+
 ## 🔑 Fatos fixos da marca (MEMÓRIA)
 
 > Cole aqui (e mantenha) os fatos que nunca mudam. Referência rápida para qualquer
@@ -476,9 +521,11 @@ Nenhuma configurada explicitamente no `.env`. Verificar Vercel dashboard para se
    - **Lógica:** prefira composição, evite abstrações prematuras
    - **Imagens:** use `LazyImage.jsx` component
    - **Internacionalização:** adicione string em `src/i18n/translations.js`
+   - **SEO numa página nova:** use `useSEO` para páginas genéricas, `useDestinationSeo` para destinos, `SchemaMarkup` para JSON-LD adicional
 6. **Commit messages:** em português, imperativo ("fix: corrige", "feat: adiciona")
 7. **PRs:** deixe uma descrição em pt-BR explicando o "why", não apenas o "what"
+8. **Branch protection em `main`:** push direto é bloqueado — sempre crie branch + PR + merge via API GitHub
 
 ---
 
-**Última atualização:** 15/06/2026
+**Última atualização:** 24/06/2026
