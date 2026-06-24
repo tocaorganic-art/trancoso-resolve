@@ -66,6 +66,22 @@ export default function ServicoLocalPage({
     if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
     ogDesc.content = seoDesc;
 
+    // og:url
+    if (canonicalUrl) {
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+      ogUrl.content = canonicalUrl;
+    }
+
+    // twitter:title + twitter:description
+    let twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (!twTitle) { twTitle = document.createElement('meta'); twTitle.name = 'twitter:title'; document.head.appendChild(twTitle); }
+    twTitle.content = seoTitle;
+
+    let twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (!twDesc) { twDesc = document.createElement('meta'); twDesc.name = 'twitter:description'; document.head.appendChild(twDesc); }
+    twDesc.content = seoDesc;
+
     // canonical
     if (canonicalUrl) {
       let canonical = document.querySelector('link[rel="canonical"]');
