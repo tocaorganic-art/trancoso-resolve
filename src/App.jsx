@@ -182,7 +182,7 @@ const AuthenticatedApp = () => {
           </LayoutWrapper>
         } />
         <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-          <Route path="/Assistentevirtual" element={
+          <Route path="/AssistenteVirtual" element={
             <AnimatedPage><AssistenteVirtualPage /></AnimatedPage>
           } />
         </Route>
