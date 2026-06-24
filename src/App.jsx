@@ -373,10 +373,19 @@ const AuthenticatedApp = () => {
           <Route path="/como-funciona" element={<Navigate to="/ComoFunciona" replace />} />
           <Route path="/seja-prestador" element={<Navigate to="/SejaPrestador" replace />} />
           <Route path="/servicos" element={<Navigate to="/ServicosCategoria" replace />} />
+          <Route path="/Servicos" element={<Navigate to="/ServicosCategoria" replace />} />
           <Route path="/sobre" element={<Navigate to="/About" replace />} />
           <Route path="/contato" element={<Navigate to="/Contact" replace />} />
           <Route path="/planos" element={<Navigate to="/Planos" replace />} />
           <Route path="/politica-privacidade" element={<Navigate to="/PoliticaPrivacidade" replace />} />
+
+          {/* Aliases CamelCase → slugs canônicos com hífen (BUG #2) */}
+          <Route path="/Trancoso" element={<Navigate to="/trancoso" replace />} />
+          <Route path="/PortoSeguro" element={<Navigate to="/porto-seguro" replace />} />
+          <Route path="/Caraiva" element={<Navigate to="/caraiva" replace />} />
+          <Route path="/ArraialdAjuda" element={<Navigate to="/arraial-dajuda" replace />} />
+          <Route path="/ArraialDAjuda" element={<Navigate to="/arraial-dajuda" replace />} />
+          <Route path="/ArraialDajuda" element={<Navigate to="/arraial-dajuda" replace />} />
 
           {/* Aliases sem barra para garantir acesso em hosting estático */}
           <Route path="/servicos-diarista-trancoso" element={<LayoutWrapper currentPageName="DiaristaTrancoso"><AnimatedPage><DiaristaTrancoso /></AnimatedPage></LayoutWrapper>} />
