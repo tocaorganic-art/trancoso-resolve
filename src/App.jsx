@@ -72,6 +72,9 @@ const DestinoCaraiva = lazy(() => import('@/pages/destinos/Caraiva'));
 const TocaTrIAPage = lazy(() => import('@/pages/Assistentevirtual'));
 const DestinoHub = lazy(() => import('@/pages/DestinoHub'));
 const ServicoDestino = lazy(() => import('@/pages/ServicoDestino'));
+const DJTrancoso = lazy(() => import('@/pages/servicos/DJTrancoso'));
+const CasamentoTrancoso = lazy(() => import('@/pages/destinos/CasamentoTrancoso'));
+const RevelionTrancoso = lazy(() => import('@/pages/destinos/RevelionTrancoso'));
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -346,6 +349,23 @@ const AuthenticatedApp = () => {
             </LayoutWrapper>
           } />
 
+
+          {/* Novas páginas: DJ, Casamento, Réveillon */}
+          <Route path="/servicos/dj-trancoso" element={
+            <LayoutWrapper currentPageName="DJTrancoso">
+              <AnimatedPage><DJTrancoso /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/destinos/casamento-trancoso" element={
+            <LayoutWrapper currentPageName="CasamentoTrancoso">
+              <AnimatedPage><CasamentoTrancoso /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/destinos/reveillon-trancoso" element={
+            <LayoutWrapper currentPageName="RevelionTrancoso">
+              <AnimatedPage><RevelionTrancoso /></AnimatedPage>
+            </LayoutWrapper>
+          } />
 
           {/* URLs limpas por destino */}
           <Route path="/trancoso" element={
