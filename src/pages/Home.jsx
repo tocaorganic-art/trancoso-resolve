@@ -14,7 +14,7 @@ import SocialProofBar from "@/components/home/SocialProofBar";
 import CTAPrestador from "@/components/home/CTAPrestador";
 import {
   Sparkles, UtensilsCrossed, Hammer, Leaf,
-  Baby, Zap, Star, AlertCircle, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight, MapPin, CheckCircle, Paintbrush
+  Baby, Zap, Star, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight, MapPin, CheckCircle, Paintbrush
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
@@ -507,7 +507,7 @@ export default function HomePage() {
     }
   }, [user, isUserFetched, navigate]);
 
-  const { data: providers, isLoading: isLoadingProviders, isError: isErrorProviders } = useQuery({
+  const { data: providers, isLoading: isLoadingProviders } = useQuery({
     queryKey: ['serviceProviders'],
     queryFn: () => base44.entities.ServiceProvider.list('-rating', 50),
   });
@@ -536,9 +536,9 @@ export default function HomePage() {
   const _totalCategorias = 9;
   const _totalAvaliacoes = allReviews?.length || 0;
   
-  const { data: services, isLoading: isLoadingServices, isError: isErrorServices } = useQuery({
+  const { data: services, isLoading: isLoadingServices } = useQuery({
     queryKey: ['serviceListings'],
-    queryFn: () => base44.entities.ServiceListing.filter({ active: true, featured: true }, '-created_date', 6),
+    queryFn: () => base44.entities.ServiceListing.filter({ active: true }, '-created_date', 6),
   });
 
   const { data: recommendedServices, isLoading: isLoadingRecommendations } = useQuery({
@@ -618,11 +618,6 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {isLoadingServices ? (
                   Array.from({ length: 3 }).map((_, i) => <ServiceSkeletonCard key={i} />)
-                ) : isErrorServices ? (
-                  <div className="col-span-full text-center py-10 bg-red-50 rounded-lg">
-                    <AlertCircle className="w-8 h-8 mx-auto text-red-500 mb-2" />
-                    <p className="text-red-700">Não foi possível carregar os serviços em destaque.</p>
-                  </div>
                 ) : services && services.length > 0 ? (
                   services.map((service) => {
                     const provider = providers?.find(p => p.id === service.provider_id);
@@ -655,11 +650,6 @@ export default function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-6">
             {isLoadingProviders ? (
                 Array.from({ length: 6 }).map((_, i) => <ProviderSkeletonCard key={i} />)
-            ) : isErrorProviders ? (
-              <div className="col-span-full text-center py-10 bg-red-50 rounded-lg">
-                <AlertCircle className="w-8 h-8 mx-auto text-red-500 mb-2" />
-                <p className="text-red-700">Não foi possível carregar os profissionais.</p>
-              </div>
             ) : topProviders.length > 0 ? (
                 topProviders.map((provider) => (
                   <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
