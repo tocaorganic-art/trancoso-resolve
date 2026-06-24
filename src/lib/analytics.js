@@ -1,4 +1,4 @@
-import { trackEvent } from '@vercel/analytics';
+import { track as trackEvent } from '@vercel/analytics';
 
 /**
  * Analytics events para Trancoso Resolve
