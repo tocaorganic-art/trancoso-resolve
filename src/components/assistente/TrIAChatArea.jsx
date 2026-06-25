@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Loader2, X, ArrowUp } from 'lucide-react';
+import { Sparkles, Loader2, X, ArrowUp } from 'lucide-react';
 import TrIAMessageBubble from './TrIAMessageBubble.jsx';
 
 const QUICK_PROMPTS = {
