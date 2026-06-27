@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import ProviderGrid from "@/components/providers/ProviderGrid";
 import FilterBar from "@/components/providers/FilterBar";
+import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import { useSEO } from "@/hooks/useSEO";
 
 const slugMap = {
   'Limpeza': 'limpeza-trancoso',
@@ -24,6 +26,12 @@ const slugMap = {
 export default function ServicosCategoriaPage() {
   const urlParams = useMemo(() => new URLSearchParams(window.location.search), []);
   const [selectedCategory, setSelectedCategory] = useState(urlParams.get('cat') || 'Todos');
+
+  useSEO({
+    title: "Buscar Serviços e Profissionais Verificados | Trancoso Resolve",
+    description: "Encontre diaristas, eletricistas, jardineiros, chefs e mais profissionais verificados em Trancoso e Costa do Descobrimento. Filtros por categoria, preço e avaliação.",
+    canonical: "/ServicosCategoria",
+  });
   const [searchQuery, setSearchQuery] = useState(urlParams.get('q') || '');
   
   const [priceFilter, setPriceFilter] = useState("all");
@@ -373,6 +381,8 @@ export default function ServicosCategoriaPage() {
           setSelectedCategory={setSelectedCategory}
         />
       </div>
+
+      <WhatsAppStickyBar serviceLabel="profissionais verificados" />
     </div>
   );
 };

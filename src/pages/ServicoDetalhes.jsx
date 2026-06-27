@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useSEO } from "@/hooks/useSEO";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -15,6 +16,12 @@ export default function ServicoDetalhesPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const serviceId = urlParams.get('id');
   const [showBooking, setShowBooking] = useState(false);
+
+  useSEO({
+    title: "Detalhes do Serviço | Trancoso Resolve",
+    description: "Confira detalhes, preço e profissional responsável. Solicite via WhatsApp e contrate com segurança em Trancoso.",
+    canonical: "/ServicoDetalhes",
+  });
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],

@@ -37,12 +37,13 @@ export default function BottomNav() {
             to={path}
             onClick={(e) => handleNavClick(e, path)}
             className={cn(
-              "select-none flex flex-col items-center gap-0.5 flex-1 py-2 px-1 transition-colors",
+              "select-none flex flex-col items-center gap-0.5 flex-1 py-3 px-1 min-h-[48px] transition-colors",
               isActive ? "text-orange-500" : "text-muted-foreground hover:text-foreground"
             )}
+            aria-current={isActive ? "page" : undefined}
           >
-            <Icon className="w-5 h-5" strokeWidth={isActive ? 2.5 : 2} />
-            <span className="text-[10px] font-medium leading-tight">{t(`bottomNav.${key}`)}</span>
+            <Icon className="w-6 h-6" strokeWidth={isActive ? 2.5 : 2} />
+            <span className="text-[11px] font-medium leading-tight">{t(`bottomNav.${key}`)}</span>
           </Link>
         );
       })}

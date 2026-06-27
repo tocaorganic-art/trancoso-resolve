@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import CancelSubscriptionButton from "@/components/dashboard/CancelSubscriptionButton";
 import PositionamentoEstrategico from "@/components/plans/PositionamentoEstrategico";
+import { useSEO } from "@/hooks/useSEO";
 
 // ─── Benefícios ────────────────────────────────────────────────────────────────
 
@@ -236,6 +237,12 @@ function AvulsoCard({ icon, title, price, onCta, loading }) {
 
 export default function PlanosPage() {
   const [loadingPlan, setLoadingPlan] = useState(null);
+
+  useSEO({
+    title: "Planos e Preços | Trancoso Resolve",
+    description: "Escolha o plano ideal para prestadores e empresas. 60 dias grátis no lançamento, visibilidade para profissionais verificados em Trancoso e região.",
+    canonical: "/Planos",
+  });
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],

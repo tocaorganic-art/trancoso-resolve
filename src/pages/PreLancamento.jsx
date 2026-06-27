@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 
 const TOTAL_VAGAS = 50;
 const CTA_URL = "https://trancosoresolve.com.br/SejaPrestador";
-const DEADLINE = new Date("2025-05-19T00:00:00-03:00").getTime();
+const DEADLINE = new Date("2026-12-31T23:59:59-03:00").getTime(); // Atualizado para janela de lançamento atual
 
 const BENEFICIOS = [
   { emoji: "🤖", title: "Novos clientes todo dia com Toca TrIA", desc: "Nossa inteligência artificial conecta você automaticamente com quem precisa do seu serviço em Trancoso." },

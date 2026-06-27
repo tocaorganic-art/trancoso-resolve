@@ -19,6 +19,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import { useSEO } from "@/hooks/useSEO";
 
 const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 
@@ -368,22 +369,13 @@ export default function HomePage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  useSEO({
+    title: "Trancoso Resolve — Profissionais Verificados em Trancoso",
+    description: "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.",
+    canonical: "/",
+  });
+
   useEffect(() => {
-    document.title = "Trancoso Resolve — Profissionais Verificados em Trancoso";
-
-    // Meta description otimizada
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Encontre diaristas, eletricistas, piscineiros, cozinheiros e mais em Trancoso, Arraial d'Ajuda, Porto Seguro e Caraíva. Profissionais verificados, avaliados e prontos para atender sua villa ou pousada na Costa do Descobrimento.";
-
-    // Canonical + OG URL da Home
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/`;
-
-    let ogUrl = document.querySelector('meta[property="og:url"]');
-    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = `${window.location.origin}/`;
 
     // Schema Markup - LocalBusiness + WebSite + FAQPage
     const existingSchema = document.getElementById('schema-home');

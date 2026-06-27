@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSEO } from "@/hooks/useSEO";
 import { base44 } from "@/api/base44Client";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -33,6 +34,12 @@ export default function PrestadorPerfilPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const providerId = urlParams.get('id');
   const navigate = useNavigate();
+
+  useSEO({
+    title: providerId ? "Perfil do Prestador | Trancoso Resolve" : "Prestadores Verificados | Trancoso Resolve",
+    description: "Veja perfil completo, avaliações, serviços e entre em contato via WhatsApp com profissionais verificados em Trancoso e região.",
+    canonical: "/PrestadorPerfil",
+  });
 
   const { data: user, isSuccess: isUserLoaded } = useQuery({
     queryKey: ['currentUser'],
