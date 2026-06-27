@@ -9,6 +9,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 ## [Unreleased]
 
 ### Adicionado
+- `README.md` — reescrito em PT-BR com quick start, deploy detalhado, modelo híbrido e links para docs
 - `base44/entities/LogWhatsApp.jsonc` — entidade de auditoria para mensagens WhatsApp (campos: prestador_id, tipo, telefone, mensagem, status, message_id, erro, timestamp, referencia_id, referencia_tipo; RLS admin-only)
 - `base44/functions/enviarMensagemWhatsApp/entry.ts` — function Deno para envio de WhatsApp via Z-API ou WABA; normalização E.164 para números BR; log persistido via service role
 - `src/api/whatsapp.js` — stub client frontend para chamar `enviarMensagemWhatsApp` via Base44 SDK
@@ -19,7 +20,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 
 ### Alterado
 - `base44/functions/stripeWebhook/entry.ts` — adicionado envio de WhatsApp de boas-vindas após `checkout.session.completed`; integração não-bloqueante (falha no WhatsApp não afeta resposta ao Stripe)
-- `package.json` — adicionados scripts `sitemap`, `deploy`, `deploy:windows`, `deploy:unix`
+- `package.json` — scripts: `sitemap`, `deploy`, `deploy:auto`, `deploy:windows`, `deploy:unix`, `deploy:vercel`, `deploy:base44`, `deploy:base44:fn`, `deploy:base44:entities`
 
 ---
 

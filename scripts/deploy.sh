@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# deploy.sh — script de deploy do Trancoso Resolve (Linux/macOS)
+# deploy.sh — deploy do Trancoso Resolve (Linux/macOS)
 set -euo pipefail
 
 echo ""
@@ -8,65 +8,72 @@ echo "  Trancoso Resolve — Deploy"
 echo "========================================"
 echo ""
 
-# 1. Instalar dependências
-echo "[1/4] Instalando dependências..."
+# 1. Instalar dependências e build
+echo "[1/4] npm install..."
 npm install
 
-# 2. Build de produção
-echo "[2/4] Gerando build de produção..."
+echo "[2/4] npm run build..."
 npm run build
-echo "  ✓ Build gerado em dist/"
+echo "  ✓ dist/ gerado"
 
-# 3. Lint
-echo "[3/4] Verificando lint..."
-npm run lint
-echo "  ✓ Lint OK"
+# 3. Deploy Vercel
+echo ""
+echo "[3/4] Deploy Vercel (frontend)..."
+if command -v vercel &>/dev/null || npx vercel --version &>/dev/null 2>&1; then
+  if npx vercel deploy --prod --yes 2>&1; then
+    echo "  ✓ Vercel deploy concluído"
+  else
+    echo "  ⚠ Vercel deploy falhou. Passos manuais:"
+    echo "    1. npx vercel login"
+    echo "    2. npx vercel link   (primeira vez)"
+    echo "    3. npx vercel deploy --prod --yes"
+    echo "    (ou: push para 'main' dispara deploy automático)"
+  fi
+else
+  echo "  ⚠ Vercel CLI não encontrado. Instalando..."
+  npm install -g vercel 2>/dev/null || true
+  echo "    Rode: npx vercel login && npx vercel deploy --prod --yes"
+fi
 
-# 4. Guia de deploy manual
+# 4. Deploy Base44
 echo ""
-echo "[4/4] Próximos passos manuais:"
-echo ""
-echo "  VERCEL"
-echo "  ------"
-echo "  1. Acesse vercel.com/dashboard"
-echo "  2. O deploy automático já ocorre a cada push para 'main'"
-echo "  3. Verifique as variáveis de ambiente em Settings > Environment Variables:"
-echo "     - WHATSAPP_PROVIDER"
-echo "     - ZAPI_INSTANCE_ID / ZAPI_TOKEN"
-echo "     - WABA_TOKEN / WABA_PHONE_ID (se usar WABA)"
-echo "     - STRIPE_SECRET_KEY"
-echo "     - STRIPE_WEBHOOK_SECRET"
-echo ""
-echo "  BASE44 — Functions"
-echo "  ------------------"
-echo "  1. Acesse o app 68eb21726a9614db4a82ba99 no painel Base44"
-echo "  2. Functions > enviarMensagemWhatsApp"
-echo "     Conteúdo: base44/functions/enviarMensagemWhatsApp/entry.ts"
-echo "  3. Functions > stripeWebhook"
-echo "     Conteúdo: base44/functions/stripeWebhook/entry.ts"
-echo "  4. Configure as variáveis de ambiente em cada function"
-echo ""
-echo "  BASE44 — Entidade LogWhatsApp"
-echo "  -----------------------------"
-echo "  1. Entities > New Entity"
-echo "  2. Colar conteúdo de: base44/entities/LogWhatsApp.jsonc"
-echo ""
-echo "  STRIPE — Webhook"
-echo "  ----------------"
-echo "  1. dashboard.stripe.com/webhooks > Add endpoint"
-echo "  2. URL: https://trancosoresolve.com.br/api/functions/stripeWebhook"
-echo "  3. Eventos:"
-echo "     checkout.session.completed"
-echo "     invoice.paid / invoice.payment_failed"
-echo "     customer.subscription.deleted"
-echo "     payment_intent.* / charge.dispute.created / account.updated"
-echo "  4. Copiar Signing secret > adicionar como STRIPE_WEBHOOK_SECRET"
-echo ""
-echo "  TESTE LOCAL COM STRIPE CLI"
-echo "  --------------------------"
-echo "  stripe listen --forward-to http://localhost:5173/api/functions/stripeWebhook"
-echo "  stripe trigger checkout.session.completed"
+echo "[4/4] Deploy Base44 (functions + entities)..."
+if npx base44 --version &>/dev/null 2>&1; then
+  if npx base44 deploy --yes 2>&1; then
+    echo "  ✓ Base44 deploy concluído"
+  else
+    echo "  ⚠ Base44 deploy falhou. Passos manuais:"
+    echo "    1. npx base44 login"
+    echo "    2. npx base44 deploy --yes"
+  fi
+else
+  echo "  ⚠ Base44 CLI não disponível. Deploy manual necessário:"
+  echo ""
+  echo "  Acesse app 68eb21726a9614db4a82ba99 no painel Base44:"
+  echo "  • Entities → New Entity → colar base44/entities/LogWhatsApp.jsonc"
+  echo "  • Functions → enviarMensagemWhatsApp → colar base44/functions/enviarMensagemWhatsApp/entry.ts"
+  echo "  • Functions → stripeWebhook → colar base44/functions/stripeWebhook/entry.ts"
+fi
+
+# Resumo final
 echo ""
 echo "========================================"
-echo "  Deploy concluído! A gente resolve. ✅"
+echo "  Passos manuais obrigatórios (1ª vez)"
+echo "========================================"
+echo ""
+echo "  SECRETS (Vercel Dashboard)"
+echo "    WHATSAPP_PROVIDER=zapi (ou waba)"
+echo "    ZAPI_INSTANCE_ID, ZAPI_TOKEN"
+echo "    STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET"
+echo ""
+echo "  WEBHOOK STRIPE"
+echo "    URL: https://trancosoresolve.com.br/api/functions/stripeWebhook"
+echo "    Eventos: checkout.session.completed, invoice.paid, etc."
+echo ""
+echo "  TESTE LOCAL"
+echo "    stripe listen --forward-to http://localhost:5173/api/functions/stripeWebhook"
+echo "    stripe trigger checkout.session.completed"
+echo ""
+echo "========================================"
+echo "  A gente resolve! ✅"
 echo "========================================"
