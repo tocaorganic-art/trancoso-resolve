@@ -1,6 +1,23 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import Stripe from 'npm:stripe@14.21.0';
 
+const BASE_URL = Deno.env.get('BASE44_FUNCTION_URL') || 'https://trancosoresolve.com.br/api/functions';
+
+async function notificarWhatsApp(base44: any, payload: {
+  prestador_id?: string;
+  tipo: string;
+  telefone: string;
+  mensagem: string;
+  referencia_id?: string;
+  referencia_tipo?: string;
+}) {
+  try {
+    await base44.asServiceRole.functions.enviarMensagemWhatsApp(payload);
+  } catch (err) {
+    console.error('[stripeWebhook] falha ao enviar WhatsApp:', err.message);
+  }
+}
+
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
 
 Deno.serve(async (req) => {
@@ -125,10 +142,14 @@ Deno.serve(async (req) => {
       // Verifica se já existe uma assinatura para esse usuário
       const existing = await base44.asServiceRole.entities.Subscription.filter({ user_email: customerEmail });
 
+      // Plano e provider_id passados como metadata pelo createSubscriptionCheckout
+      const planName = session.metadata?.plan || stripeSub?.metadata?.plan || 'monthly';
+      const providerIdMeta = session.metadata?.provider_id || stripeSub?.metadata?.provider_id;
+
       if (existing.length > 0) {
         await base44.asServiceRole.entities.Subscription.update(existing[0].id, {
           status: 'active',
-          plan: 'monthly',
+          plan: planName,
           stripe_customer_id: customerId,
           stripe_subscription_id: subscriptionId,
           subscription_start: today,
@@ -139,7 +160,7 @@ Deno.serve(async (req) => {
       } else {
         await base44.asServiceRole.entities.Subscription.create({
           user_email: customerEmail,
-          plan: 'monthly',
+          plan: planName,
           status: 'active',
           stripe_customer_id: customerId,
           stripe_subscription_id: subscriptionId,
@@ -149,6 +170,43 @@ Deno.serve(async (req) => {
           payment_method: 'stripe',
         });
         console.log('Subscription created for:', customerEmail);
+      }
+
+      // ─── Notificação WhatsApp de boas-vindas ao prestador ───────────────────
+      try {
+        const providers = await base44.asServiceRole.entities.ServiceProvider.filter(
+          providerIdMeta ? { id: providerIdMeta } : { created_by: customerEmail }
+        );
+        const provider = providers?.[0];
+
+        if (provider?.phone) {
+          const planoLabel: Record<string, string> = {
+            lancamento: 'Prestador Lançamento (R$29,90/mês)',
+            regular: 'Prestador Mensal (R$49,90/mês)',
+            empresa_lancamento: 'Empresa Lançamento (R$59,90/mês)',
+            empresa_regular: 'Empresa Mensal (R$89,90/mês)',
+            avulso_prestador: 'Avulso Prestador',
+            avulso_empresa: 'Avulso Empresa',
+          };
+          const label = planoLabel[planName] || planName;
+          const nome = provider.full_name?.split(' ')[0] || 'você';
+          const mensagem =
+            `Olá, ${nome}! 🎉 Seu plano *${label}* no Trancoso Resolve está ativo.\n\n` +
+            `A partir de agora seu perfil aparece nas buscas e você começa a receber leads de clientes na região.\n\n` +
+            `Acesse seu painel: https://trancosoresolve.com.br/dashboard\n\n` +
+            `Qualquer dúvida, é só chamar. A gente resolve! ✅`;
+
+          await notificarWhatsApp(base44, {
+            prestador_id: provider.id,
+            tipo: 'boas_vindas_plano',
+            telefone: provider.phone,
+            mensagem,
+            referencia_id: subscriptionId || session.id,
+            referencia_tipo: 'Subscription',
+          });
+        }
+      } catch (waErr) {
+        console.error('[stripeWebhook] erro ao buscar prestador para WhatsApp:', waErr.message);
       }
     }
 
