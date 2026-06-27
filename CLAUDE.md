@@ -528,4 +528,39 @@ Nenhuma configurada explicitamente no `.env`. Verificar Vercel dashboard para se
 
 ---
 
-**Última atualização:** 24/06/2026
+---
+
+## 🔄 Regra de merge e deploy (workflow automático)
+
+> **Regra salva em 27/06/2026 — aplicar sempre que o usuário pedir para mergear/fazer deploy.**
+
+### Quando um PR está pronto para mergear, execute esta sequência:
+
+1. **Verificar pré-condições** (via `mcp__github__pull_request_read`):
+   - CI verde: checks `Lint & Build` + `Vercel – Preview` com status `success`
+   - `mergeable_state: clean` (sem conflitos)
+   - Nenhum review pendente / changes requested bloqueando
+
+2. **Se ainda draft:** marcar como ready for review (`mcp__github__update_pull_request` com `draft: false`)
+
+3. **Mergear via squash** (`mcp__github__merge_pull_request` com `merge_method: squash`)
+   - Título do commit: mesmo título do PR
+   - Body: vazio ou resumo automático do GitHub
+
+4. **Confirmar deploy Vercel:** aguardar alguns segundos e verificar se o workflow
+   `Vercel – Production Deployment` foi disparado (ou confirmar na Vercel Dashboard)
+
+5. **Repetir para todos os PRs abertos**, na ordem: mais antigo → mais novo
+
+### Observações importantes
+
+- **NUNCA** usar `merge_method: merge` (gera commit extra) — sempre squash
+- **NUNCA** push direto em `main` — branch protection está ativa
+- **NUNCA** push do Base44 → GitHub (sobrescreve migração de marca)
+- Se um PR tiver CI falhando, investigar e corrigir antes de mergear
+- Commit messages em português, imperativo ("fix: corrige", "feat: adiciona")
+- Após mergear, o deploy Vercel dispara automaticamente via integração Git
+
+---
+
+**Última atualização:** 27/06/2026
