@@ -12,7 +12,7 @@ import RoutePreloader from "./components/optimization/RoutePreloader";
 import ImagePreloader from "./components/optimization/ImagePreloader";
 import PerformanceMonitor from "./components/optimization/PerformanceMonitor";
 import { Button } from "@/components/ui/button";
-import { useQuery } from '@tanstack/react-query';
+import { useCurrentUser } from '@/hooks/queries';
 import { base44 } from '@/api/base44Client';
 import {
   DropdownMenu,
@@ -45,11 +45,7 @@ export default function Layout({ children, currentPageName }) {
   const isRoot = location.pathname === "/" || location.pathname === "/Home";
   const { theme, toggleTheme, lang, setLang, t, LANGUAGES } = useApp();
 
-  const { data: user } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: () => base44.auth.me(),
-    staleTime: Infinity
-  });
+  const { data: user } = useCurrentUser({ staleTime: Infinity });
 
   useEffect(() => {
     const pageTitles = {
