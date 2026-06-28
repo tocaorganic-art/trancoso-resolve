@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import {
+  useCurrentUser,
+  useActiveSubscription,
+  useAllSubscriptions,
+  useProviderProfile,
+  useServiceRequestsByProvider,
+  useTransactions,
+} from "@/hooks/queries";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,57 +43,18 @@ function DashboardContent() {
     return false;
   });
 
-  const { data: user, isLoading: isUserLoading } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: () => base44.auth.me(),
-  });
+  const { data: user, isLoading: isUserLoading } = useCurrentUser();
 
   // Verifica assinatura ativa (trial ou active)
-  const { data: subscription, isLoading: isLoadingSubscription } = useQuery({
-    queryKey: ['mySubscription', user?.email],
-    queryFn: async () => {
-      if (!user?.email) return null;
-      const today = new Date().toISOString().split('T')[0];
-      const subs = await base44.entities.Subscription.filter({ user_email: user.email });
-      return subs?.find(sub => {
-        if (sub.status === 'active') {
-          if (sub.next_billing_date && today > sub.next_billing_date) return false;
-          return true;
-        }
-        if (sub.status === 'trial') {
-          return sub.trial_end && today <= sub.trial_end;
-        }
-        return false;
-      }) || null;
-    },
-    enabled: !!user,
-  });
+  const { data: subscription, isLoading: isLoadingSubscription } = useActiveSubscription(user?.email);
 
-  const { data: allSubs } = useQuery({
-    queryKey: ['allMySubscriptions', user?.email],
-    queryFn: () => base44.entities.Subscription.filter({ user_email: user.email }),
-    enabled: !!user,
-  });
+  const { data: allSubs } = useAllSubscriptions(user?.email);
 
-  const { data: providerProfile } = useQuery({
-    queryKey: ['myProviderProfile', user?.email],
-    queryFn: () => base44.entities.ServiceProvider.filter({ created_by: user.email }),
-    enabled: !!user,
-    select: (data) => data?.[0] || null,
-  });
+  const { data: providerProfile } = useProviderProfile(user?.email);
 
-  const { data: serviceRequests, isLoading: isLoadingRequests } = useQuery({
-    queryKey: ['serviceRequests', providerProfile?.id],
-    queryFn: () => base44.entities.ServiceRequest.filter({ provider_id: providerProfile?.id }, '-created_date'),
-    enabled: !!providerProfile?.id,
-  });
+  const { data: serviceRequests, isLoading: isLoadingRequests } = useServiceRequestsByProvider(providerProfile?.id);
 
-  const { data: transactions, isLoading: isLoadingTransactions } = useQuery({
-    queryKey: ['transactions', user?.email],
-    queryFn: () => base44.entities.Transaction.filter({}, '-created_date'),
-    enabled: !!user,
-    initialData: [],
-  });
+  const { data: transactions, isLoading: isLoadingTransactions } = useTransactions(user?.email);
 
   // Grava flag de checkout no localStorage por 5 min (para reload/refetch)
   useEffect(() => {

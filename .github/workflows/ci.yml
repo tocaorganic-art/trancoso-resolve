@@ -31,6 +31,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
       # Build é o gate obrigatório: precisa passar para o PR ser mergeável.
       - name: Build
         run: npm run build
