@@ -63,7 +63,7 @@ export default function ProviderGrid({
             return (
                 <div className="col-span-full text-center py-16 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700">
                     <div className="w-16 h-16 mx-auto mb-4 bg-slate-700 rounded-full flex items-center justify-center">
-                        <Search className="w-8 h-8 text-cyan-400" />
+                        <Search className="w-8 h-8 text-orange-400" />
                     </div>
                     <h3 className="text-xl font-semibold text-slate-100 mb-2">Nenhum Prestador Encontrado</h3>
                     <p className="text-slate-400 max-w-md mx-auto mb-6">

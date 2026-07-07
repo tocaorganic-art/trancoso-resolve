@@ -269,7 +269,7 @@ ${checklist.map(item => `- [${item.status === 'completed' ? 'x' : ' '}] ${item.t
             <Card className="border-none shadow-lg">
               <CardContent className="p-6 text-center">
                 <p className="text-sm text-muted-foreground mb-2">SEO Score</p>
-                <p className="text-4xl font-bold text-indigo-600">{metrics.seo_score}</p>
+                <p className="text-4xl font-bold text-orange-600">{metrics.seo_score}</p>
                 <p className="text-xs text-muted-foreground mt-1">/ 100</p>
               </CardContent>
             </Card>
@@ -382,8 +382,8 @@ npm run build
               <h4>6. Rollback (se necessário)</h4>
               <p>Em caso de problemas críticos, use o dashboard Base44 para reverter para a versão anterior.</p>
 
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4">
-                <p className="text-sm text-yellow-800">
+              <div className="bg-amber-50 border-l-4 border-amber-400 p-4 my-4">
+                <p className="text-sm text-amber-800">
                   <strong>⚠️ Importante:</strong> Sempre faça backup antes de deploy em produção e tenha um plano de rollback preparado.
                 </p>
               </div>

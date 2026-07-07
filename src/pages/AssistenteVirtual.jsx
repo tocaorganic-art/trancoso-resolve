@@ -288,7 +288,7 @@ export default function AssistenteVirtualPage() {
           </div>
 
           <div className="mt-8 p-4 bg-card border border-border rounded-lg flex gap-3">
-            <AlertCircle className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground">
               <strong>Você está sempre no controle:</strong> O assistente não fecha preço final, não promete o que não existe no seu cadastro e você pode desligar ou ajustar quando quiser.
             </p>
