@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LocateFixed, MapPin } from 'lucide-react';
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyAOc54TuiYbL5mWlIsdGx7kAsABOvRZ79g";
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "AIzaSyAOc54TuiYbL5mWlIsdGx7kAsABOvRZ79g";
 
 const trancosoDefault = { lat: -16.5925, lng: -39.0931 };
 

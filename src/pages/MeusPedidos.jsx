@@ -1,6 +1,11 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import {
+  useCurrentUser,
+  useMyServiceRequests,
+  useMyReviews,
+  useAllProviders,
+  useMyPayments,
+} from '@/hooks/queries';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -94,37 +99,15 @@ function RequestCard({ request, provider, onReviewClick, hasReview, payment, onP
 export default function MeusPedidosPage() {
   const [reviewingRequest, setReviewingRequest] = useState(null);
 
-  const { data: user } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: () => base44.auth.me(),
-  });
+  const { data: user } = useCurrentUser();
 
-  const { data: requests, isLoading: isLoadingRequests } = useQuery({
-    queryKey: ['myServiceRequests', user?.email],
-    queryFn: () => base44.entities.ServiceRequest.filter({}, '-date'),
-    enabled: !!user,
-    initialData: [],
-  });
+  const { data: requests, isLoading: isLoadingRequests } = useMyServiceRequests(user?.email);
 
-  const { data: reviews } = useQuery({
-    queryKey: ['myReviews', user?.id],
-    queryFn: () => base44.entities.ServiceReview.filter({ created_by: user.email }),
-    enabled: !!user,
-    initialData: [],
-  });
+  const { data: reviews } = useMyReviews(user);
 
-  const { data: providers } = useQuery({
-    queryKey: ['allProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list(),
-    initialData: [],
-  });
+  const { data: providers } = useAllProviders();
 
-  const { data: payments, refetch: refetchPayments } = useQuery({
-    queryKey: ['myPayments', user?.email],
-    queryFn: () => base44.entities.Payment.filter({ client_email: user.email }),
-    enabled: !!user,
-    initialData: [],
-  });
+  const { data: payments, refetch: refetchPayments } = useMyPayments(user?.email);
 
   if (isLoadingRequests) {
     return <div className="flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin" /></div>;
