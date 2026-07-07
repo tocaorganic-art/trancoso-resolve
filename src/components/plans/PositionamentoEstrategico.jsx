@@ -6,7 +6,7 @@ const Section = ({ icon, title, subtitle, text, benefits, color }) => (
       {icon}
       <h3 className="text-xl font-bold text-slate-900">{title}</h3>
     </div>
-    {subtitle && <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">{subtitle}</p>}
+    {subtitle && <p className="text-xs font-semibold uppercase tracking-widest text-orange-600 mb-2">{subtitle}</p>}
     <p className="text-slate-600 text-sm mb-4 leading-relaxed">{text}</p>
     <ul className="space-y-2">
       {benefits.map((b, i) => (
@@ -23,7 +23,7 @@ export default function PositionamentoEstrategico() {
   return (
     <div className="mt-16 max-w-4xl mx-auto">
       <div className="text-center mb-10">
-        <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 mb-2">Inovação & Vantagem Competitiva</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-orange-500 mb-2">Inovação & Vantagem Competitiva</p>
         <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
           Trancoso Resolve, Toca TrIA e Toca Vision:<br className="hidden md:block" /> inovação ao alcance de prestadores e lojistas.
         </h2>
@@ -34,7 +34,7 @@ export default function PositionamentoEstrategico() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <Section
-          icon={<Bot className="w-7 h-7 text-blue-600" />}
+          icon={<Bot className="w-7 h-7 text-orange-600" />}
           title="Toca TrIA"
           subtitle="Agente de IA autônomo"
           color="bg-blue-50 border-blue-200"
@@ -47,7 +47,7 @@ export default function PositionamentoEstrategico() {
           ]}
         />
         <Section
-          icon={<Eye className="w-7 h-7 text-purple-600" />}
+          icon={<Eye className="w-7 h-7 text-[#6B7C3A]" />}
           title="Toca Vision"
           subtitle="Imagens exclusivas com IA"
           color="bg-purple-50 border-purple-200"
@@ -86,7 +86,7 @@ export default function PositionamentoEstrategico() {
         />
       </div>
 
-      <div className="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-6 md:p-8 text-white text-center">
+      <div className="bg-gradient-to-r from-[#E8571A] to-[#C1440E] rounded-2xl p-6 md:p-8 text-white text-center">
         <Zap className="w-8 h-8 mx-auto mb-3 opacity-90" />
         <p className="text-base font-semibold max-w-2xl mx-auto leading-relaxed">
           O Trancoso Resolve, com o Toca TrIA, o Toca Vision e o Dashboard Financeiro Integrado, constitui um ecossistema completo que capacita seus usuários com inteligência artificial e gestão financeira avançada — a escolha estratégica para profissionais e lojistas que buscam eficiência, visibilidade e crescimento sustentável.

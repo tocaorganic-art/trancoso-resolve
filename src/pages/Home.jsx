@@ -336,7 +336,7 @@ const ServiceCard = ({ service, provider }) => {
                 {/* Avaliação + Preço */}
                 <div className="flex items-end justify-between mt-auto mb-4">
                     <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                        <Star className="w-4 h-4 text-amber-400 fill-current" />
                         <span className="text-sm font-bold text-foreground">
                             {provider?.rating ? provider.rating.toFixed(1) : 'Novo'}
                         </span>
@@ -668,7 +668,7 @@ export default function HomePage() {
                         <p className="font-bold text-sm text-foreground mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
                         <p className="text-xs text-muted-foreground font-medium mb-2 line-clamp-1">{provider.occupation}</p>
                         <div className="flex items-center justify-center gap-1 mb-2">
-                          <Star className="w-3.5 h-3.5 text-yellow-500 fill-current" aria-hidden="true" />
+                          <Star className="w-3.5 h-3.5 text-amber-400 fill-current" aria-hidden="true" />
                           <span className="text-sm font-bold text-foreground">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
                           {provider.total_reviews > 0 && (
                             <span className="text-xs text-muted-foreground">({provider.total_reviews})</span>
@@ -676,7 +676,7 @@ export default function HomePage() {
                         </div>
                         <div className={`text-xs font-medium px-2 py-1 rounded-full ${
                           provider.availability === 'Disponível' ? 'bg-[#3E8E5A]/10 text-[#3E8E5A]' :
-                          provider.availability === 'Ocupado' ? 'bg-yellow-100 text-yellow-700' :
+                          provider.availability === 'Ocupado' ? 'bg-amber-100 text-amber-700' :
                           'bg-muted text-muted-foreground'
                         }`}>
                           {provider.availability === 'Disponível' ? 'Disponível · Responde em 2h' : provider.availability || 'Indisponível'}

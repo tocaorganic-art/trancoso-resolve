@@ -4,13 +4,13 @@ import { createPageUrl } from "@/utils";
 
 export default function BannerCategorias() {
   const categorias = [
-    { icon: <Home size={24} />, name: "Limpeza", color: "from-blue-400 to-cyan-300", bgColor: "bg-blue-50 dark:bg-blue-900/30" },
+    { icon: <Home size={24} />, name: "Limpeza", color: "from-[#2D7D8A] to-[#6B7C3A]", bgColor: "bg-teal-50 dark:bg-teal-900/30" },
     { icon: <Hammer size={24} />, name: "Construção", color: "from-orange-400 to-amber-300", bgColor: "bg-orange-50 dark:bg-orange-900/30" },
-    { icon: <Sparkles size={24} />, name: "Beleza", color: "from-pink-400 to-rose-300", bgColor: "bg-pink-50 dark:bg-pink-900/30" },
-    { icon: <Car size={24} />, name: "Transporte", color: "from-purple-400 to-violet-300", bgColor: "bg-purple-50 dark:bg-purple-900/30" },
-    { icon: <Compass size={24} />, name: "Turismo", color: "from-green-400 to-emerald-300", bgColor: "bg-green-50 dark:bg-green-900/30" },
+    { icon: <Sparkles size={24} />, name: "Beleza", color: "from-[#E8571A] to-[#C1440E]", bgColor: "bg-orange-50 dark:bg-orange-900/30" },
+    { icon: <Car size={24} />, name: "Transporte", color: "from-[#6B7C3A] to-[#9aad5d]", bgColor: "bg-[#6B7C3A]/10 dark:bg-[#6B7C3A]/20" },
+    { icon: <Compass size={24} />, name: "Turismo", color: "from-[#3E8E5A] to-[#6B7C3A]", bgColor: "bg-green-50 dark:bg-green-900/30" },
     { icon: <UtensilsCrossed size={24} />, name: "Gastronomia", color: "from-red-400 to-orange-300", bgColor: "bg-red-50 dark:bg-red-900/30" },
-    { icon: <PartyPopper size={24} />, name: "Festas", color: "from-yellow-400 to-amber-300", bgColor: "bg-yellow-50 dark:bg-yellow-900/30" },
+    { icon: <PartyPopper size={24} />, name: "Festas", color: "from-amber-400 to-amber-300", bgColor: "bg-amber-50 dark:bg-amber-900/30" },
     { icon: <Wrench size={24} />, name: "Automóveis", color: "from-slate-400 to-zinc-300", bgColor: "bg-slate-50 dark:bg-slate-800" },
   ];
 
