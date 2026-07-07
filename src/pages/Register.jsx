@@ -31,7 +31,7 @@ export default function Register() {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("As senhas não correspondem");
       return;
     }
     setLoading(true);
@@ -67,8 +67,8 @@ export default function Register() {
     try {
       await base44.auth.resendOtp(email);
       toast({
-        title: "Code sent",
-        description: "Check your email for the new code.",
+        title: "Código enviado",
+        description: "Verifique seu e-mail pelo novo código.",
       });
     } catch (err) {
       setError(err.message || "Failed to resend code");
@@ -83,8 +83,8 @@ export default function Register() {
     return (
       <AuthLayout
         icon={Mail}
-        title="Verify your email"
-        subtitle={`We sent a code to ${email}`}
+        title="Verifique seu e-mail"
+        subtitle={`Enviamos um código para ${email}`}
       >
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -117,16 +117,16 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Verifying...
+              Verificando...
             </>
           ) : (
-            "Verify"
+            "Verificar"
           )}
         </Button>
         <p className="text-center text-sm text-muted-foreground mt-4">
-          Didn't receive the code?{" "}
+          Não recebeu o código?{" "}
           <button onClick={handleResend} className="text-orange-700 font-medium hover:underline">
-            Resend
+            Reenviar
           </button>
         </p>
       </AuthLayout>
