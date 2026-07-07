@@ -31,7 +31,7 @@ const banners = [
     image: "https://images.unsplash.com/photo-1516321318423-f06f70d504f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     Icon: Zap,
     spots: true,
-    accent: "from-orange-300 to-yellow-300",
+    accent: "from-orange-300 to-amber-300",
   },
   {
     id: 3,
@@ -158,7 +158,7 @@ export default function PromotionalBanner() {
                         {banner.cta}
                         <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                       </span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 opacity-0 group-hover:opacity-20 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-amber-400 opacity-0 group-hover:opacity-20 transition-opacity" />
                     </Button>
                   </Link>
                 </div>

@@ -18,14 +18,14 @@ const FALLBACK_SERVICE_IMAGE = 'https://images.unsplash.com/photo-1582268611958-
 
 export default function ServiceCard({ service }) {
   const categoryColors = {
-    "Eventos": "bg-purple-100 text-purple-800",
+    "Eventos": "bg-orange-100 text-orange-800",
     "Restaurantes": "bg-orange-100 text-orange-800",
-    "Passeios": "bg-blue-100 text-blue-800",
-    "Praias": "bg-cyan-100 text-cyan-800",
+    "Passeios": "bg-[#6B7C3A]/10 text-[#6B7C3A]",
+    "Praias": "bg-orange-50 text-orange-700",
     "Fornecedores": "bg-green-100 text-green-800",
-    "Transporte": "bg-yellow-100 text-yellow-800",
-    "Bem-estar": "bg-pink-100 text-pink-800",
-    "Compras": "bg-indigo-100 text-indigo-800",
+    "Transporte": "bg-amber-100 text-amber-800",
+    "Bem-estar": "bg-[#C1440E]/10 text-[#C1440E]",
+    "Compras": "bg-[#6B7C3A]/10 text-[#6B7C3A]",
   };
 
   const rawImage = service.images?.[0];
