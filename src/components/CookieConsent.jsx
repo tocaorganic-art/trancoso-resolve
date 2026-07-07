@@ -50,7 +50,7 @@ export default function CookieConsent() {
             <h3 className="font-bold text-white mb-2">Consentimento de Cookies</h3>
             <p className="text-sm text-slate-300">
               Usamos cookies para melhorar sua experiência, analisar tráfego e personalizar conteúdo. 
-              Ao continuar, você concorda com nossa <a href="/PoliticaPrivacidade" className="underline text-blue-400">Política de Privacidade</a>.
+              Ao continuar, você concorda com nossa <a href="/PoliticaPrivacidade" className="underline text-orange-300">Política de Privacidade</a>.
             </p>
           </div>
           <div className="flex gap-3 flex-shrink-0">
@@ -63,7 +63,7 @@ export default function CookieConsent() {
             </Button>
             <Button
               onClick={handleAccept}
-              className="bg-blue-600 hover:bg-blue-700 text-sm"
+              className="bg-orange-600 hover:bg-orange-700 text-sm"
             >
               Aceitar
             </Button>

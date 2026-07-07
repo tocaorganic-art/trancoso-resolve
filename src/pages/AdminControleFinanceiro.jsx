@@ -297,7 +297,7 @@ function AdminControleFinanceiroContent() {
                     <td className="p-4 text-center">
                       <Badge variant="outline" className={
                         transaction.status === 'Validado' ? 'border-green-500 text-green-700' :
-                        transaction.status === 'Pendente' ? 'border-yellow-500 text-yellow-700' :
+                        transaction.status === 'Pendente' ? 'border-amber-500 text-amber-700' :
                         transaction.status === 'Divergente' ? 'border-orange-500 text-orange-700' :
                         'border-red-500 text-red-700'
                       }>

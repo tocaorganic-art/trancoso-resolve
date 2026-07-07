@@ -57,7 +57,7 @@ export default function PWAPrompt() {
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-5 border border-slate-200 dark:border-slate-700">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Download className="w-5 h-5 text-blue-600" />
+            <Download className="w-5 h-5 text-orange-600" />
             <h3 className="font-bold text-slate-900 dark:text-white">Instalar App</h3>
           </div>
           <button
@@ -85,7 +85,7 @@ export default function PWAPrompt() {
           <Button
             size="sm"
             onClick={handleInstall}
-            className="flex-1 bg-blue-600 hover:bg-blue-700"
+            className="flex-1 bg-orange-600 hover:bg-orange-700"
           >
             Instalar
           </Button>
