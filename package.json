@@ -10,6 +10,7 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
     "preview": "vite preview",
+    "prerender": "node scripts/prerender-head.js",
     "sitemap": "node scripts/generate-sitemap.js",
     "deploy": "node -e \"const p=process.platform;require('child_process').execSync(p==='win32'?'pwsh -File scripts/deploy.ps1':'bash scripts/deploy.sh',{stdio:'inherit'})\"",
     "deploy:auto": "npm run deploy",
