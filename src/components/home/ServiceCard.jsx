@@ -57,7 +57,7 @@ export default function ServiceCard({ service, provider, categoryImageMap, categ
                 </div>
                 {isNew && (
                     <div className="absolute top-3 left-3">
-                        <Badge className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 shadow-md">
+                        <Badge className="bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 shadow-md">
                             ⭐ Novo
                         </Badge>
                     </div>
@@ -79,7 +79,7 @@ export default function ServiceCard({ service, provider, categoryImageMap, categ
 
                 <div className="flex items-end justify-between mt-auto mb-4">
                     <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                        <Star className="w-4 h-4 text-amber-400 fill-current" />
                         <span className="text-sm font-bold text-slate-800 dark:text-slate-100">
                             {provider?.rating ? provider.rating.toFixed(1) : 'Novo'}
                         </span>

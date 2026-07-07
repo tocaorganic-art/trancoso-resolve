@@ -31,7 +31,7 @@ const StarRating = ({ rating }) => (
     {Array.from({ length: 5 }).map((_, index) => (
       <Star
         key={index}
-        className={`w-4 h-4 ${index < rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'}`}
+        className={`w-4 h-4 ${index < rating ? 'text-amber-400 fill-amber-400' : 'text-slate-300'}`}
       />
     ))}
   </div>

@@ -164,7 +164,7 @@ export default function ServicoDestino() {
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => trackContatoWhatsApp(`${categoriaLabel} ${destinoLabel}`)}
-        className="fixed bottom-6 right-6 z-50 hidden md:flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-full shadow-lg transition-all hover:scale-105"
+        className="fixed bottom-24 right-6 z-50 hidden md:flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-3 rounded-full shadow-lg transition-all hover:scale-105"
         aria-label={`Falar pelo WhatsApp sobre ${categoriaLabel} em ${destinoLabel}`}
       >
         <MessageCircle className="w-5 h-5" />

@@ -81,14 +81,14 @@ ENCERRAMENTO: Sempre pergunte se hÃ¡ mais alguma dÃºvida.`;
 function TypingIndicator() {
   return (
     <div className="flex justify-start items-end gap-2">
-      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shrink-0">
+      <div className="w-7 h-7 rounded-full bg-[#E8571A] flex items-center justify-center shrink-0">
         <Bot className="w-4 h-4 text-white" />
       </div>
       <div className="bg-white border border-slate-100 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
         <div className="flex gap-1 items-center">
-          <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-          <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-          <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+          <div className="w-2 h-2 rounded-full bg-[#E8571A] animate-bounce" style={{ animationDelay: '0ms' }} />
+          <div className="w-2 h-2 rounded-full bg-[#E8571A] animate-bounce" style={{ animationDelay: '150ms' }} />
+          <div className="w-2 h-2 rounded-full bg-[#E8571A] animate-bounce" style={{ animationDelay: '300ms' }} />
         </div>
       </div>
     </div>
@@ -100,13 +100,13 @@ function MessageBubble({ msg }) {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} items-end gap-2`}>
       {!isUser && (
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shrink-0 mb-1">
+        <div className="w-7 h-7 rounded-full bg-[#E8571A] flex items-center justify-center shrink-0 mb-1">
           <Bot className="w-4 h-4 text-white" />
         </div>
       )}
       <div className={`max-w-[82%] rounded-2xl px-4 py-2.5 shadow-sm ${
         isUser
-          ? 'bg-blue-600 text-white rounded-br-sm'
+          ? 'bg-[#E8571A] text-white rounded-br-sm'
           : 'bg-white border border-slate-100 text-slate-900 rounded-bl-sm'
       }`}>
         {/* Imagem anexada */}
@@ -120,7 +120,7 @@ function MessageBubble({ msg }) {
             <ReactMarkdown>{msg.content}</ReactMarkdown>
           </div>
         )}
-        <p className={`text-xs mt-1 ${isUser ? 'text-blue-200' : 'text-slate-400'}`}>
+        <p className={`text-xs mt-1 ${isUser ? 'text-[#E8571A]/60' : 'text-slate-400'}`}>
           {new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
         </p>
       </div>
@@ -306,6 +306,7 @@ ${imageUrl ? `[O usuÃ¡rio enviou uma imagem para anÃ¡lise: ${imageUrl}]\n` :
       <button
         onClick={() => { setIsOpen(true); setUnreadCount(0); }}
         className="fixed bottom-20 md:bottom-6 right-4 md:right-6 w-14 h-14 rounded-full shadow-2xl bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-800 hover:to-amber-700 z-50 flex items-center justify-center transition-all hover:scale-105 relative"
+        style={{ touchAction: 'manipulation' }}
         aria-label="Abrir chat de suporte"
       >
         <MessageCircle className="w-6 h-6 text-white" />
@@ -329,7 +330,7 @@ ${imageUrl ? `[O usuÃ¡rio enviou uma imagem para anÃ¡lise: ${imageUrl}]\n` :
       <div className={`fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 transition-all duration-300 ${isMinimized ? 'w-80' : 'w-96'} max-w-[calc(100vw-2rem)]`}>
       <Card className="shadow-2xl border border-slate-200 overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#E8571A] to-[#C1440E] text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
               <Bot className="w-5 h-5" />
