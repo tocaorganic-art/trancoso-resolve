@@ -122,7 +122,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
               value={form.phone}
               onChange={handlePhone}
               required
-              className="border-slate-300 text-xs md:text-sm h-9 md:h-10 focus:border-blue-500"
+              className="border-slate-300 text-xs md:text-sm h-9 md:h-10 focus:border-orange-500"
             />
             <p className="text-xs text-slate-500 leading-tight">
               Usado apenas para conectar você com prestadores verificados. Seu número não será exibido publicamente.

@@ -347,7 +347,7 @@ export default function PrestadorPerfilPage() {
 
                   <Badge className={`text-sm ${
                     provider.availability === 'Disponível' ? 'bg-green-100 text-green-800' :
-                    provider.availability === 'Ocupado' ? 'bg-yellow-100 text-yellow-800' :
+                    provider.availability === 'Ocupado' ? 'bg-amber-100 text-amber-800' :
                     'bg-red-100 text-red-800'
                   }`}>
                     <Clock className="w-3 h-3 mr-1" />
@@ -569,7 +569,7 @@ export default function PrestadorPerfilPage() {
           <Card className="border-none shadow-lg mb-8">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-cyan-600" aria-hidden="true" />
+                <DollarSign className="w-5 h-5 text-orange-600" aria-hidden="true" />
                 Serviços Oferecidos
               </CardTitle>
             </CardHeader>

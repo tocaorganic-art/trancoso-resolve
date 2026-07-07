@@ -198,8 +198,8 @@ function FinanceiroContent() { // Renamed from FinanceiroPage
             <CardContent className="p-5">
               <p className="text-sm font-medium text-muted-foreground mb-2">Sua Avaliação Média</p>
               <div className="flex items-baseline gap-2">
-                <p className="text-3xl font-bold text-yellow-600">{mediaAvaliacao}</p>
-                <Star className="w-6 h-6 text-yellow-500 fill-current" />
+                <p className="text-3xl font-bold text-amber-600">{mediaAvaliacao}</p>
+                <Star className="w-6 h-6 text-amber-500 fill-current" />
               </div>
             </CardContent>
           </Card>

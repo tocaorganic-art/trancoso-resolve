@@ -268,7 +268,7 @@ function AdminUserManagementContent() {
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-[#C1440E] flex items-center justify-center text-white font-bold">
                           {user.full_name?.[0] || user.email[0].toUpperCase()}
                         </div>
                         <span className="text-sm font-medium text-foreground">{user.full_name || 'Sem nome'}</span>
@@ -281,7 +281,7 @@ function AdminUserManagementContent() {
                       </div>
                     </td>
                     <td className="p-4 text-center">
-                      <Badge className={user.role === 'admin' ? 'bg-purple-500' : 'bg-muted text-muted-foreground'}>
+                      <Badge className={user.role === 'admin' ? 'bg-orange-600' : 'bg-muted text-muted-foreground'}>
                         {user.role}
                       </Badge>
                     </td>
@@ -289,7 +289,7 @@ function AdminUserManagementContent() {
                       <Badge variant="outline" className={
                         user.user_type === 'prestador' ? 'border-[#3E8E5A] text-[#3E8E5A]' :
                         user.user_type === 'cliente' ? 'border-orange-400 text-orange-700' :
-                        'border-yellow-500 text-yellow-700'
+                        'border-amber-500 text-amber-700'
                       }>
                         {user.user_type || 'indefinido'}
                       </Badge>

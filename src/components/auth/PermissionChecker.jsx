@@ -143,10 +143,10 @@ export default function PermissionChecker({ children, requiredRole = null, requi
 
   if (permissionStatus === 'checking') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-sand/30">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
-            <RefreshCw className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+            <RefreshCw className="w-12 h-12 text-orange-600 animate-spin mx-auto mb-4" />
             <h2 className="text-xl font-bold text-slate-900 mb-2">Verificando acesso...</h2>
             <p className="text-slate-600">Aguarde enquanto validamos suas credenciais.</p>
           </CardContent>
@@ -200,10 +200,10 @@ export default function PermissionChecker({ children, requiredRole = null, requi
 
   if (permissionStatus === 'forbidden') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 to-orange-50">
-        <Card className="w-full max-w-md border-yellow-200">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-50">
+        <Card className="w-full max-w-md border-amber-200">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+            <AlertCircle className="w-16 h-16 text-amber-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-slate-900 mb-2">Acesso Restrito</h2>
             <p className="text-slate-600 mb-6">{errorDetails?.details}</p>
             <div className="flex gap-3">
