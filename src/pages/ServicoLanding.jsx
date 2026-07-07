@@ -157,7 +157,7 @@ const ProviderMiniCard = ({ provider }) => (
           <p className="font-semibold text-foreground truncate group-hover:text-orange-700">{provider.full_name}</p>
           <div className="flex items-center gap-2 mt-0.5">
             <div className="flex items-center gap-1">
-              <Star className="w-3 h-3 text-yellow-500 fill-current" />
+              <Star className="w-3 h-3 text-amber-400 fill-current" />
               <span className="text-xs font-medium">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
             </div>
             {provider.total_reviews > 0 && (
@@ -348,7 +348,7 @@ export default function ServicoLandingPage() {
         <div className="container mx-auto max-w-6xl px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           {[
             { icon: <Shield className="w-6 h-6 text-[#3E8E5A] mx-auto mb-1" />, label: "Verificados", sub: "Antecedentes consultados" },
-            { icon: <Star className="w-6 h-6 text-yellow-500 mx-auto mb-1" />, label: "Avaliados", sub: "Feedbacks reais de clientes" },
+            { icon: <Star className="w-6 h-6 text-amber-400 mx-auto mb-1" />, label: "Avaliados", sub: "Feedbacks reais de clientes" },
             { icon: <Clock className="w-6 h-6 text-orange-600 mx-auto mb-1" />, label: "Ágeis", sub: "Resposta rápida via WhatsApp" },
             { icon: <MapPin className="w-6 h-6 text-red-500 mx-auto mb-1" />, label: "Locais", sub: "Profissionais de Trancoso" },
           ].map((item, i) => (

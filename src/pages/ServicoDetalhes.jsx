@@ -245,7 +245,7 @@ export default function ServicoDetalhesPage() {
                     <p className="font-semibold text-base sm:text-lg truncate">{provider.full_name}</p>
                     <p className="text-sm text-muted-foreground">{provider.occupation}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                      <Star className="w-4 h-4 text-amber-400 fill-current" />
                       <span className="text-sm font-medium">{provider?.rating && provider.rating > 0 ? provider.rating.toFixed(1) : 'Novo'}</span>
                       {provider?.total_reviews && provider.total_reviews > 0 && <span className="text-xs text-muted-foreground">({provider.total_reviews} avaliações)</span>}
                     </div>

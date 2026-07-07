@@ -9,7 +9,16 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sitemap": "node scripts/generate-sitemap.js",
+    "deploy": "node -e \"const p=process.platform;require('child_process').execSync(p==='win32'?'pwsh -File scripts/deploy.ps1':'bash scripts/deploy.sh',{stdio:'inherit'})\"",
+    "deploy:auto": "npm run deploy",
+    "deploy:windows": "pwsh -File scripts/deploy.ps1",
+    "deploy:unix": "bash scripts/deploy.sh",
+    "deploy:vercel": "npx vercel deploy --prod --yes",
+    "deploy:base44": "npx base44 deploy --yes",
+    "deploy:base44:fn": "npx base44 functions deploy",
+    "deploy:base44:entities": "npx base44 entities push"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.31",
