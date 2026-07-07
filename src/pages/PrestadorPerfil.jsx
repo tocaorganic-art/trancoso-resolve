@@ -534,7 +534,7 @@ export default function PrestadorPerfilPage() {
                         <Button type="button" variant="outline" onClick={() => setStep(1)} className="flex-1" aria-label="Voltar para a etapa anterior">
                             <ArrowLeft className="w-4 h-4 mr-1" /> Voltar
                         </Button>
-                        <Button type="submit" disabled={createRequestMutation.isPending} className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600" aria-label="Confirmar agendamento do serviço">
+                        <Button type="submit" disabled={createRequestMutation.isPending} className="flex-1 bg-gradient-to-r from-green-600 to-[#3E8E5A]" aria-label="Confirmar agendamento do serviço">
                             {createRequestMutation.isPending ? "Enviando..." : <>Confirmar Agendamento <Check className="w-4 h-4 ml-1" /></>}
                         </Button>
                     </div>
@@ -605,7 +605,7 @@ export default function PrestadorPerfilPage() {
         <Card className="border-none shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-yellow-400" aria-hidden="true" />
+              <Star className="w-5 h-5 text-amber-400" aria-hidden="true" />
               Avaliações de Clientes ({totalReviews})
             </CardTitle>
           </CardHeader>
@@ -625,7 +625,7 @@ export default function PrestadorPerfilPage() {
                       <div key={star} className="flex items-center gap-2 text-sm">
                         <span className="w-10 text-muted-foreground">{star} {star > 1 ? 'estrelas' : 'estrela'}</span>
                         <div className="flex-1 bg-muted rounded-full h-2">
-                           <div className="bg-yellow-400 h-2 rounded-full" style={{ width: `${percentage}%` }}></div>
+                           <div className="bg-amber-400 h-2 rounded-full" style={{ width: `${percentage}%` }}></div>
                         </div>
                         <span className="w-8 text-right text-muted-foreground">{count}</span>
                       </div>

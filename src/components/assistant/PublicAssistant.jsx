@@ -83,13 +83,13 @@ export default function PublicAssistant() {
         {messages.map((msg, i) => (
           <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.role === 'assistant' && (
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-[#E8571A] flex items-center justify-center shrink-0 mt-1">
                 <Bot className="w-4 h-4 text-white" />
               </div>
             )}
             <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
               msg.role === 'user'
-                ? 'bg-blue-600 text-white rounded-br-sm'
+                ? 'bg-[#E8571A] text-white rounded-br-sm'
                 : 'bg-white border border-slate-200 text-slate-800 rounded-bl-sm shadow-sm'
             }`}>
               {msg.role === 'assistant' ? (
@@ -117,11 +117,11 @@ export default function PublicAssistant() {
 
         {loading && (
           <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#E8571A] flex items-center justify-center shrink-0">
               <Bot className="w-4 h-4 text-white" />
             </div>
             <div className="bg-white border border-slate-200 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
-              <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#E8571A]" />
             </div>
           </div>
         )}
@@ -133,7 +133,7 @@ export default function PublicAssistant() {
               <button
                 key={i}
                 onClick={() => { setInput(q); }}
-                className="text-xs bg-white border border-blue-200 text-blue-700 rounded-full px-3 py-1.5 hover:bg-blue-50 transition-colors"
+                className="text-xs bg-white border border-orange-200 text-[#C1440E] rounded-full px-3 py-1.5 hover:bg-orange-50 transition-colors"
               >
                 {q}
               </button>
@@ -157,7 +157,7 @@ export default function PublicAssistant() {
         <Button
           type="submit"
           disabled={!input.trim() || loading}
-          className="bg-blue-600 hover:bg-blue-700 shrink-0"
+          className="bg-[#E8571A] hover:bg-[#C1440E] shrink-0"
           aria-label="Enviar mensagem"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}

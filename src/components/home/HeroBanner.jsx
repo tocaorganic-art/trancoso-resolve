@@ -79,7 +79,7 @@ export default function HeroBanner({ vagasRestantes = 0, total = 0 }) {
         {/* Vagas counter — slide 1 only */}
         {isPrestadorSlide && vagasRestantes > 0 && (
           <div className={`mb-4 flex items-center gap-2 bg-red-600/80 backdrop-blur-sm text-white text-sm font-bold px-4 py-1.5 rounded-full ${vagasRestantes <= 10 ? 'animate-pulse' : ''}`}>
-            <Flame className="w-4 h-4 text-yellow-300" />
+            <Flame className="w-4 h-4 text-amber-300" />
             {vagasRestantes} de 50 vagas restantes
           </div>
         )}

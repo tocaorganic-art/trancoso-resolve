@@ -19,7 +19,7 @@ export default function PlanCard({ plan, isCurrentPlan }) {
         style={{ borderColor: isFeatured ? plan.color_theme : undefined }}
     >
         <CardHeader className="relative text-center p-6" style={{ backgroundColor: isFeatured ? plan.color_theme : (isCurrentPlan ? '#e2e8f0' : '#f8fafc')}}>
-            {isFeatured && <Badge className="absolute -top-3 right-5 bg-yellow-400 text-black">Mais Popular</Badge>}
+            {isFeatured && <Badge className="absolute -top-3 right-5 bg-amber-400 text-black">Mais Popular</Badge>}
             <h2 className={cn("text-2xl font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>{plan.name}</h2>
             
             {plan.monthly_price > 0 ? (
