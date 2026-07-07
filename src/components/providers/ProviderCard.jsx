@@ -67,7 +67,7 @@ export default function ProviderCard({ provider }) {
                             {provider.full_name}
                         </span>
                         {provider.verified && (
-                            <span className="text-blue-400 text-sm" title="Verificado" aria-label="Profissional verificado">✔</span>
+                            <span className="text-orange-500 text-sm" title="Verificado" aria-label="Profissional verificado">✔</span>
                         )}
                     </div>
                     {/* Ocupação em cinza abaixo do nome */}

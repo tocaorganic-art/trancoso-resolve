@@ -73,10 +73,10 @@ export default function TabVisaoGeral({ leads, requests, providers }) {
   }, [requests]);
 
   const kpis = [
-    { label: "Leads (7 dias)", value: leadsUltimos7, icon: Users, color: "text-cyan-400" },
+    { label: "Leads (7 dias)", value: leadsUltimos7, icon: Users, color: "text-orange-400" },
     { label: "Prestadores Ativos", value: prestadoresAtivos, icon: TrendingUp, color: "text-green-400" },
     { label: "Solicitações (7 dias)", value: requestsUltimos7, icon: FileText, color: "text-amber-400" },
-    { label: "Taxa Conversão", value: `${taxaConversao}%`, icon: Percent, color: "text-purple-400" },
+    { label: "Taxa Conversão", value: `${taxaConversao}%`, icon: Percent, color: "text-[#6B7C3A]" },
   ];
 
   return (

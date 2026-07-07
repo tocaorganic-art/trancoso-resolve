@@ -37,7 +37,7 @@ export default function PositionamentoEstrategico() {
           icon={<Bot className="w-7 h-7 text-orange-600" />}
           title="Toca TrIA"
           subtitle="Agente de IA autônomo"
-          color="bg-blue-50 border-blue-200"
+          color="bg-orange-50 border-orange-200"
           text="O Toca TrIA é o primeiro agente de inteligência artificial integrado a um site de serviços no Brasil. Mais do que um simples assistente, ele atua de forma autônoma, aprendendo com o seu negócio e otimizando processos para prestadores e lojistas."
           benefits={[
             "Automação inteligente: gerencia agendamentos, responde perguntas frequentes, qualifica leads e otimiza a comunicação com clientes",
@@ -50,7 +50,7 @@ export default function PositionamentoEstrategico() {
           icon={<Eye className="w-7 h-7 text-[#6B7C3A]" />}
           title="Toca Vision"
           subtitle="Imagens exclusivas com IA"
-          color="bg-purple-50 border-purple-200"
+          color="bg-[#6B7C3A]/10 border-[#6B7C3A]/30"
           text="O Toca Vision é a ferramenta definitiva para criação de conteúdo visual impactante. Utilizando inteligência artificial avançada, gera imagens exclusivas em alta qualidade, perfeitas para posts, marcas, logos e a representação de experiências únicas em Trancoso."
           benefits={[
             "Marketing profissional otimizado: crie materiais visuais de alta qualidade sem depender de agências",

@@ -98,7 +98,7 @@ export default function ManutencaoSistemaPage() {
               <p className="text-muted-foreground">Uptime Target</p>
             </div>
             <div className="bg-card p-3 rounded">
-              <p className="font-bold text-purple-600">17/17</p>
+              <p className="font-bold text-orange-600">17/17</p>
               <p className="text-muted-foreground">Rotas Ativas</p>
             </div>
             <div className="bg-card p-3 rounded">
