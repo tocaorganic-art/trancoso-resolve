@@ -381,7 +381,7 @@ ${imageUrl ? `[O usuÃ¡rio enviou uma imagem para anÃ¡lise: ${imageUrl}]\n` :
                     <button
                       key={action}
                       onClick={() => sendMessage(action)}
-                      className="text-xs text-left px-3 py-2 rounded-lg border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-colors text-slate-700"
+                      className="text-xs text-left px-3 py-2 rounded-lg border border-slate-200 hover:border-orange-300 hover:bg-orange-50 transition-colors text-slate-700"
                     >
                       {action}
                     </button>
@@ -419,12 +419,12 @@ ${imageUrl ? `[O usuÃ¡rio enviou uma imagem para anÃ¡lise: ${imageUrl}]\n` :
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={isTyping || uploadingImage}
-                  className="flex-1 text-sm px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200 disabled:opacity-50 bg-slate-50"
+                  className="flex-1 text-sm px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-200 disabled:opacity-50 bg-slate-50"
                 />
                 <button
                   onClick={() => sendMessage()}
                   disabled={!inputMessage.trim() || isTyping || uploadingImage}
-                  className="w-9 h-9 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-all shrink-0"
+                  className="w-9 h-9 rounded-xl bg-[#E8571A] hover:bg-[#C1440E] flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-all shrink-0"
                   aria-label="Enviar mensagem"
                 >
                   <Send className="w-4 h-4 text-white" />

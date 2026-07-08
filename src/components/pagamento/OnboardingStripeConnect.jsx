@@ -41,8 +41,8 @@ export default function OnboardingStripeConnect({ providerId }) {
     <Card className="border-2 border-dashed border-slate-200">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
-          <Banknote className="w-5 h-5 text-blue-600" />
-          Receber Pagamentos (Stripe)
+          <Banknote className="w-5 h-5 text-[#E8571A]" />
+          Receber Pagamentos
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -77,14 +77,14 @@ export default function OnboardingStripeConnect({ providerId }) {
               Conecte sua conta bancária para receber <strong>80%</strong> do valor dos serviços automaticamente após confirmação do cliente.
             </p>
             <ul className="text-xs text-slate-500 space-y-1">
-              <li>✅ Pagamentos seguros via Stripe</li>
+              <li>✅ Pagamentos seguros via Mercado Pago</li>
               <li>✅ Transferência automática após confirmação</li>
               <li>✅ Painel de ganhos e histórico</li>
             </ul>
             {error && (
               <p className="text-xs text-red-600 bg-red-50 p-2 rounded">{error}</p>
             )}
-            <Button onClick={handleStartOnboarding} disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+            <Button onClick={handleStartOnboarding} disabled={loading} className="w-full bg-[#E8571A] hover:bg-[#C1440E] text-white">
               {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <ExternalLink className="w-4 h-4 mr-2" />}
               Cadastrar para Receber Pagamentos
             </Button>
