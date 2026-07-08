@@ -8,7 +8,6 @@ import Testimonials from '@/components/home/Testimonials';
 import HeroSection from '@/components/sejaprestador/HeroSection';
 import SelosQualidade from '@/components/sejaprestador/SelosQualidade';
 import TabelaComparativa from '@/components/sejaprestador/TabelaComparativa';
-import ChatOnboarding from '@/components/sejaprestador/ChatOnboarding';
 import CalculadoraGanhos from '@/components/sejaprestador/CalculadoraGanhos';
 
 const beneficios = [
@@ -224,8 +223,6 @@ export default function SejaPrestadorPage() {
         </div>
       </div>
 
-      {/* Chat de Onboarding */}
-      <ChatOnboarding />
     </div>
   );
 }

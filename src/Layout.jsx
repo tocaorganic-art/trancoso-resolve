@@ -488,7 +488,7 @@ export default function Layout({ children, currentPageName }) {
         <nav className="bg-card border-b border-border shadow-warm-sm sticky top-0 z-50" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
-              <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2" data-testid="admin-nav-logo-link">
+              <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2 shrink-0 min-w-fit" data-testid="admin-nav-logo-link">
                 <img src="/brand/logo-mark.svg" alt="Trancoso Resolve Logo" className="h-10 w-10" />
                 <span className="font-bold text-xl text-foreground">Trancoso Resolve</span>
               </Link>
@@ -503,7 +503,7 @@ export default function Layout({ children, currentPageName }) {
                       onClick={() => item.clearLogin && sessionStorage.removeItem('loginTimestamp')}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                       isActive(item.path) ?
-                      'bg-blue-500 text-white' :
+                      'bg-orange-600 text-white' :
                       'text-slate-300 hover:bg-slate-700'}`
                       }
                       data-testid={`admin-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
@@ -539,7 +539,7 @@ export default function Layout({ children, currentPageName }) {
                     onClick={() => {setMobileMenuOpen(false);item.clearLogin && sessionStorage.removeItem('loginTimestamp');}}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
                     isActive(item.path) ?
-                    'bg-blue-500 text-white' :
+                    'bg-orange-600 text-white' :
                     'text-slate-300 hover:bg-slate-700'}`
                     }
                     data-testid={`admin-mobile-nav-${item.name.toLowerCase().replace(' ', '-')}`}>
