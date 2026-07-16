@@ -14,7 +14,7 @@ import SocialProofBar from "@/components/home/SocialProofBar";
 import CTAPrestador from "@/components/home/CTAPrestador";
 import {
   Sparkles, UtensilsCrossed, Hammer, Leaf,
-  Baby, Zap, Star, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight, MapPin, CheckCircle, Paintbrush
+  Baby, Zap, Star, Shirt, Car, Compass, PartyPopper, BookOpen, Home, Wrench, BrainCircuit, ArrowRight, MapPin, Paintbrush
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
@@ -220,17 +220,6 @@ const ServiceSkeletonCard = () => (
       <Skeleton className="h-10 w-full mt-2" />
     </CardContent>
   </Card>
-);
-
-const ProviderSkeletonCard = () => (
-    <Card className="border-none shadow-lg">
-        <CardContent className="p-4 text-center">
-            <Skeleton className="w-20 h-20 rounded-full mx-auto mb-3" />
-            <Skeleton className="h-4 w-3/4 mx-auto mb-2" />
-            <Skeleton className="h-3 w-1/2 mx-auto mb-2" />
-            <Skeleton className="h-4 w-1/4 mx-auto" />
-        </CardContent>
-    </Card>
 );
 
 // Função para validar se uma URL de imagem parece válida e relevante
@@ -507,7 +496,7 @@ export default function HomePage() {
     }
   }, [user, isUserFetched, navigate]);
 
-  const { data: providers, isLoading: isLoadingProviders } = useQuery({
+  const { data: providers } = useQuery({
     queryKey: ['serviceProviders'],
     queryFn: () => base44.entities.ServiceProvider.list('-rating', 50),
   });
@@ -547,11 +536,6 @@ export default function HomePage() {
     enabled: !!user,
   });
 
-  const topProviders = providers
-    ?.filter(p => p.rating > 0)
-    .sort((a, b) => b.rating - a.rating)
-    .slice(0, 6) || [];
-    
   const _popularServices = ["Faxina", "Eletricista", "Passeio Turístico", "Transporte", "Massagem"];
 
   return (
@@ -637,68 +621,6 @@ export default function HomePage() {
                     </Link>
                   </div>
                 )}
-          </div>
-        </section>
-
-        {/* Top Rated Providers */}
-        <section className="mb-10 md:mb-20">
-          <div className="text-center mb-4 md:mb-8">
-            <h2 className="text-xl md:text-3xl font-bold text-foreground">Conheça os Profissionais Mais Bem Avaliados de Trancoso</h2>
-            <p className="text-base md:text-lg text-muted-foreground font-medium mt-2 leading-relaxed">Os favoritos da comunidade, com qualidade comprovada.</p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-6">
-            {isLoadingProviders ? (
-                Array.from({ length: 6 }).map((_, i) => <ProviderSkeletonCard key={i} />)
-            ) : topProviders.length > 0 ? (
-                topProviders.map((provider) => (
-                  <Link key={provider.id} to={createPageUrl("PrestadorPerfil", `?id=${provider.id}`)} aria-label={`Ver perfil de ${provider.full_name}, ${provider.occupation}`}>
-                    <Card className="border border-border shadow-md hover:shadow-xl transition-all text-center cursor-pointer focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 bg-card">
-                      <CardContent className="p-4">
-                        <LazyImage
-                          src={provider.photo_url || `https://ui-avatars.com/api/?name=${provider.full_name}&size=200`}
-                          alt={`Foto de perfil de ${provider.full_name}`}
-                          className="w-20 h-20 rounded-full mx-auto border-4 border-background shadow-md mb-3"
-                        />
-                        {provider.verified && (
-                          <div className="inline-flex items-center gap-1 bg-[#3E8E5A] text-white text-xs font-bold px-2 py-0.5 rounded-pill mb-2">
-                            <CheckCircle className="w-3 h-3" /> Verificado
-                          </div>
-                        )}
-                        <p className="font-bold text-sm text-foreground mb-1 leading-tight line-clamp-2">{provider.full_name}</p>
-                        <p className="text-xs text-muted-foreground font-medium mb-2 line-clamp-1">{provider.occupation}</p>
-                        <div className="flex items-center justify-center gap-1 mb-2">
-                          <Star className="w-3.5 h-3.5 text-amber-400 fill-current" aria-hidden="true" />
-                          <span className="text-sm font-bold text-foreground">{provider.rating ? provider.rating.toFixed(1) : 'Novo'}</span>
-                          {provider.total_reviews > 0 && (
-                            <span className="text-xs text-muted-foreground">({provider.total_reviews})</span>
-                          )}
-                        </div>
-                        <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-                          provider.availability === 'Disponível' ? 'bg-[#3E8E5A]/10 text-[#3E8E5A]' :
-                          provider.availability === 'Ocupado' ? 'bg-amber-100 text-amber-700' :
-                          'bg-muted text-muted-foreground'
-                        }`}>
-                          {provider.availability === 'Disponível' ? 'Disponível · Responde em 2h' : provider.availability || 'Indisponível'}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))
-            ) : (
-              <div className="col-span-full text-center py-12 bg-gradient-to-br from-orange-50 to-sand rounded-xl border border-orange-100">
-                <Star className="w-12 h-12 mx-auto text-amber-400 mb-3" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">Seja o Primeiro Avaliado!</h3>
-                <p className="text-muted-foreground mb-4 max-w-md mx-auto">
-                  Os profissionais mais bem avaliados aparecerão aqui. Cadastre-se e conquiste suas primeiras avaliações.
-                </p>
-                <Link to={createPageUrl("SejaPrestador")}>
-                  <Button className="bg-gradient-to-r bg-brand-primary hover:bg-orange-600">
-                    Cadastrar como Prestador
-                  </Button>
-                </Link>
-              </div>
-            )}
           </div>
         </section>
 
