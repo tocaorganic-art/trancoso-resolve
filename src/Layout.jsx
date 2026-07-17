@@ -163,7 +163,7 @@ export default function Layout({ children, currentPageName }) {
   ] : isLojista ? [
     { name: "Início", path: "/", icon: Home },
     { name: "Meus Anúncios", path: createPageUrl("DashboardLojista"), icon: Megaphone },
-    { name: "Meu Perfil", path: createPageUrl("MeusPedidos"), icon: UserCog },
+    { name: "Meu Perfil", path: createPageUrl("DashboardLojista"), icon: UserCog },
     { name: "Ver Site", path: "/", icon: Globe, clearLogin: true },
   ] : [
     { name: "Início", path: "/", icon: Home },

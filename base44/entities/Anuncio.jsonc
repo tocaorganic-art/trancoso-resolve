@@ -75,7 +75,9 @@
   ],
   "rls": {
     "read": true,
-    "create": true,
+    "create": {
+      "data.lojista_id": "{{user.id}}"
+    },
     "update": {
       "created_by": "{{user.email}}"
     },

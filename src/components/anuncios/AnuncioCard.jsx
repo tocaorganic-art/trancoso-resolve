@@ -1,29 +1,34 @@
+import { useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import LazyImage from "@/components/ui/LazyImage";
 import { ExternalLink, Megaphone } from "lucide-react";
 
+const isSafeUrl = (url) => /^https?:\/\//i.test(url);
+const viewedAnuncioIds = new Set();
+
 export default function AnuncioCard({ anuncio }) {
+  const trackedRef = useRef(false);
+
+  useEffect(() => {
+    if (!anuncio || trackedRef.current || viewedAnuncioIds.has(anuncio.id)) return;
+    trackedRef.current = true;
+    viewedAnuncioIds.add(anuncio.id);
+    base44.entities.Anuncio.update(anuncio.id, { impressoes: (anuncio.impressoes || 0) + 1 });
+  }, [anuncio]);
+
   if (!anuncio) return null;
 
-  const handleCardClick = () => {
-    base44.entities.Anuncio.update(anuncio.id, { impressoes: (anuncio.impressoes || 0) + 1 });
-  };
-
-  const handleCtaClick = (e) => {
-    e.stopPropagation();
+  const handleCtaClick = () => {
     base44.entities.Anuncio.update(anuncio.id, { cliques: (anuncio.cliques || 0) + 1 });
-    if (anuncio.cta_url) {
+    if (anuncio.cta_url && isSafeUrl(anuncio.cta_url)) {
       window.open(anuncio.cta_url, "_blank", "noopener,noreferrer");
     }
   };
 
   return (
-    <div
-      onClick={handleCardClick}
-      className="rounded-xl border border-border bg-card shadow-warm-sm overflow-hidden cursor-pointer transition hover:shadow-warm-md"
-    >
+    <div className="rounded-xl border border-border bg-card shadow-warm-sm overflow-hidden transition hover:shadow-warm-md">
       {anuncio.imagem_url && (
         <LazyImage src={anuncio.imagem_url} alt={anuncio.titulo} className="w-full h-40 object-cover" />
       )}
