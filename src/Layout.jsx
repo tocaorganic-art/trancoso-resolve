@@ -35,6 +35,7 @@ import { lazy, Suspense } from "react";
 const SupportChat = lazy(() => import("./components/support/SupportChat"));
 const FeedbackCollector = lazy(() => import("./components/feedback/FeedbackCollector"));
 import BottomNav from "./components/BottomNav";
+import ProFloatingButton from "./components/banners/ProFloatingButton";
 import CompletarPerfilModal from "./components/auth/CompletarPerfilModal";
 import PWAPrompt from "./components/optimization/PWAPrompt";
 
@@ -472,6 +473,7 @@ export default function Layout({ children, currentPageName }) {
           <CookieConsent />
         </div>
         <BottomNav />
+        <ProFloatingButton />
         <Suspense fallback={null}><SupportChat /></Suspense>
         <Suspense fallback={null}><FeedbackCollector /></Suspense>
         <PWAPrompt />
