@@ -19,6 +19,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import OnboardingTour from "@/components/onboarding/OnboardingTour";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import FounderBanner from "@/components/banners/FounderBanner";
 
 const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 
@@ -565,6 +566,8 @@ export default function HomePage() {
       <SocialProofBar totalVerificados={totalVerificados} />
 
       <div className="container mx-auto max-w-6xl px-4 py-8 md:py-16">
+        {/* Banner Prestador Fundador — visível para não-assinantes */}
+        <FounderBanner />
 
         {/* Recomendações com IA */}
         {user && (isLoadingRecommendations || (recommendedServices?.data && recommendedServices.data.length > 0)) && (

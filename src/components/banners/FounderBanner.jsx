@@ -1,114 +1,132 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Rocket, X } from "lucide-react";
+import { Shield, X } from "lucide-react";
 
 const FOUNDER_LIMIT = 100;
 
-export default function FounderBanner({ user, subscription }) {
-  const [dismissed, setDismissed] = useState(() =>
-    localStorage.getItem('founder_banner_dismissed') === 'true'
+export default function FounderBanner() {
+  const [dismissed, setDismissed] = useState(
+    () => localStorage.getItem("founder_banner_dismissed") === "1"
   );
 
-  const { data: allProviders } = useQuery({
-    queryKey: ['allProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list('-created_date', 500),
-    initialData: [],
-    staleTime: 5 * 60 * 1000,
+  const { data: user } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => base44.auth.me(),
   });
 
-  const { data: recentProviders } = useQuery({
-    queryKey: ['recentProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list('-created_date', 3),
-    initialData: [],
-    staleTime: 2 * 60 * 1000,
+  const { data: mySubscription } = useQuery({
+    queryKey: ["mySubscription", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      const subs = await base44.entities.Subscription.filter({ user_email: user.email });
+      return subs?.find(s => s.status === "active" || s.status === "trial") || null;
+    },
+    enabled: !!user,
   });
 
-  const totalVerificados = allProviders?.filter(p =>
-    p.verificado === true || p.status === 'ativo'
-  ).length || 0;
+  const { data: founderStats } = useQuery({
+    queryKey: ["founderProgress"],
+    queryFn: async () => {
+      const subs = await base44.entities.Subscription.list("-created_date", 200);
+      const taken =
+        subs?.filter(
+          s =>
+            (s.status === "active" || s.status === "trial") &&
+            (s.plan === "profissional" ||
+              s.plan === "lancamento" ||
+              s.plan === "prestador_profissional")
+        ).length || 0;
+      return { taken, remaining: Math.max(0, FOUNDER_LIMIT - taken) };
+    },
+    staleTime: 60000,
+  });
 
-  const slotsRemaining = Math.max(0, FOUNDER_LIMIT - totalVerificados);
-  const progressPct = Math.min(100, (totalVerificados / FOUNDER_LIMIT) * 100);
+  if (dismissed || mySubscription) return null;
+  if (founderStats && founderStats.remaining === 0) return null;
 
-  const hasActivePlan = subscription && ['active', 'trial'].includes(subscription.status);
-  const isLojista = user?.user_type === 'lojista';
-
-  // Não exibir para lojistas, usuários com plano ativo, sem login, sem vagas ou se dispensado
-  if (dismissed || hasActivePlan || !user || slotsRemaining === 0 || isLojista) return null;
+  const taken = founderStats?.taken ?? 0;
+  const remaining = founderStats?.remaining ?? FOUNDER_LIMIT;
+  const progress = Math.min(100, Math.round((taken / FOUNDER_LIMIT) * 100));
+  const isUrgent = remaining <= 20;
 
   const handleDismiss = () => {
-    localStorage.setItem('founder_banner_dismissed', 'true');
+    localStorage.setItem("founder_banner_dismissed", "1");
     setDismissed(true);
   };
 
-  const recentName = recentProviders?.[0]?.full_name;
-
   return (
-    <div className="relative rounded-2xl overflow-hidden border-2 border-orange-500 mb-6"
-      style={{ background: 'linear-gradient(135deg, rgba(124,45,18,0.4) 0%, rgba(154,52,18,0.25) 100%)' }}>
+    <div
+      className={`relative rounded-2xl border-2 p-4 md:p-5 overflow-hidden ${
+        isUrgent
+          ? "border-red-500 bg-gradient-to-r from-red-950/40 to-orange-950/40"
+          : "border-orange-500 bg-gradient-to-r from-orange-950/40 to-amber-950/30"
+      }`}
+    >
       <button
         onClick={handleDismiss}
-        className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors z-10"
+        className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
         aria-label="Fechar banner"
       >
         <X className="w-4 h-4" />
       </button>
 
-      <div className="p-5 md:p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: 'rgba(234,88,12,0.2)' }}>
-            <Rocket className="w-5 h-5 text-orange-400" />
-          </div>
-          <div className="flex-1 min-w-0 pr-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-orange-400 mb-1">
-              Oferta de Fundador
-            </p>
-            <h3 className="text-lg font-extrabold text-foreground leading-tight mb-1">
-              🔥 Restam <span className="text-orange-400">{slotsRemaining}</span> vagas de Prestador Fundador em Trancoso
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-              Os primeiros <strong className="text-foreground">{FOUNDER_LIMIT}</strong> prestadores verificados ganham o{" "}
-              <strong className="text-orange-300">Selo Fundador</strong> para sempre — e o preço de lançamento de{" "}
-              <strong className="text-orange-400">R$29,90/mês</strong> com 30 dias grátis não vai voltar assim.
-            </p>
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-4 pr-6">
+        <div
+          className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+            isUrgent ? "bg-red-500/20" : "bg-orange-500/20"
+          }`}
+        >
+          <Shield
+            className={`w-6 h-6 ${isUrgent ? "text-red-400" : "text-orange-400"}`}
+          />
+        </div>
 
-            {/* Barra de progresso */}
-            <div className="mb-4">
-              <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
-                <span>{totalVerificados} de {FOUNDER_LIMIT} vagas preenchidas</span>
-                <span className="text-orange-400 font-semibold">{slotsRemaining} restantes</span>
-              </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-700"
-                  style={{
-                    width: `${progressPct}%`,
-                    background: 'linear-gradient(90deg, #f97316, #ea580c)',
-                  }}
-                />
-              </div>
+        <div className="flex-1 min-w-0">
+          <p
+            className={`text-xs font-bold uppercase tracking-widest mb-0.5 ${
+              isUrgent ? "text-red-400" : "text-orange-400"
+            }`}
+          >
+            {isUrgent ? `⚠️ Últimas ${remaining} vagas!` : "Prestador Fundador"}
+          </p>
+          <h3 className="font-extrabold text-foreground text-base leading-snug">
+            Restam{" "}
+            <span className={isUrgent ? "text-red-400" : "text-orange-400"}>
+              {remaining} vagas
+            </span>{" "}
+            de Prestador Fundador em Trancoso
+          </h3>
+          <p className="text-muted-foreground text-sm mt-1 leading-relaxed">
+            Os primeiros {FOUNDER_LIMIT} prestadores verificados ganham o{" "}
+            <strong className="text-foreground">Selo Fundador</strong> para sempre — e o preço
+            de lançamento{" "}
+            <strong className="text-orange-400">R$19,90/mês</strong> nunca mais vai baixar assim.
+          </p>
+
+          <div className="mt-3 max-w-sm">
+            <div className="flex justify-between text-xs text-muted-foreground mb-1">
+              <span>{taken} de {FOUNDER_LIMIT} vagas preenchidas</span>
+              <span>{remaining} restantes</span>
             </div>
-
-            {/* Prova social dinâmica */}
-            {recentName && (
-              <p className="text-xs text-muted-foreground mb-4">
-                <span className="text-emerald-400 font-semibold">{recentName.split(' ')[0]}</span>
-                {' '}acaba de se cadastrar na plataforma
-              </p>
-            )}
-
-            <Link to={`${createPageUrl('Planos')}#profissional`}>
-              <Button className="bg-brand-primary hover:bg-orange-700 text-white rounded-pill font-bold shadow-brand">
-                Garantir meu Selo Fundador →
-              </Button>
-            </Link>
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-700 ${
+                  isUrgent ? "bg-red-500" : "bg-orange-500"
+                }`}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
         </div>
+
+        <Link to="/Planos" className="shrink-0 mt-1 md:mt-0">
+          <Button className="bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full px-5 shadow-md whitespace-nowrap">
+            Garantir meu selo Fundador →
+          </Button>
+        </Link>
       </div>
     </div>
   );

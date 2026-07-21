@@ -35,6 +35,7 @@ import { lazy, Suspense } from "react";
 const SupportChat = lazy(() => import("./components/support/SupportChat"));
 const FeedbackCollector = lazy(() => import("./components/feedback/FeedbackCollector"));
 import BottomNav from "./components/BottomNav";
+import ProFloatingButton from "./components/banners/ProFloatingButton";
 import CompletarPerfilModal from "./components/auth/CompletarPerfilModal";
 import PWAPrompt from "./components/optimization/PWAPrompt";
 
@@ -66,7 +67,7 @@ export default function Layout({ children, currentPageName }) {
       '/MeusPedidos': 'Meus Pedidos - Trancoso Resolve',
       '/Dashboard': 'Dashboard - Trancoso Resolve',
       '/Financeiro': 'Portal Financeiro - Trancoso Resolve',
-      '/Assistentevirtual': 'Assistente Virtual Toca - Trancoso Resolve',
+      '/Assistentevirtual': 'TryA — Assistente de IA da Trancoso Resolve',
       '/GeradorDeImagem': 'Gerador de Imagens IA - Trancoso Resolve',
       '/PoliticaPrivacidade': 'Política de Privacidade - Trancoso Resolve',
       '/MinhaAgenda': 'Minha Agenda - Trancoso Resolve',
@@ -94,7 +95,7 @@ export default function Layout({ children, currentPageName }) {
       '/ComoFunciona': 'Veja como conectar sua necessidade ao profissional certo em Trancoso em 3 passos simples. Rápido, seguro e com profissionais verificados.',
       '/SejaPrestador': 'Cadastre-se como prestador de serviços em Trancoso e receba clientes verificados. Eletricista, diarista, piscineiro, cozinheiro — sua agenda cheia começa aqui.',
       '/Planos': 'Escolha o plano ideal para expandir seus serviços em Trancoso. Comece grátis e cresça com nossa plataforma de profissionais verificados.',
-      '/Assistentevirtual': 'Converse com o Toca TrIA, o assistente inteligente da Trancoso Resolve. Encontre o profissional certo para sua necessidade em segundos.',
+      '/Assistentevirtual': 'Converse com o TryA, o assistente inteligente da Trancoso Resolve. Encontre o profissional certo para sua necessidade em segundos.',
       '/login': 'Acesse sua conta na Trancoso Resolve para gerenciar pedidos, contratar serviços e conectar-se com profissionais verificados em Trancoso.',
       '/register': 'Crie sua conta gratuita na Trancoso Resolve e acesse os melhores profissionais verificados de Trancoso, Bahia.',
     };
@@ -198,7 +199,7 @@ export default function Layout({ children, currentPageName }) {
         <div className="min-h-screen bg-background overflow-x-hidden flex flex-col">
           <header role="banner">
           <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-warm-sm" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
-            <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2 overflow-hidden">
+            <div className="container mx-auto px-3 md:px-4 py-3 flex items-center justify-between gap-2">
               <Link to={createPageUrl("Home")} className="flex items-center gap-2 shrink-0 min-w-fit" data-testid="nav-logo-link">
                 <img src="/brand/logo-mark.svg" alt="Trancoso Resolve - Serviços em Trancoso, Bahia" className="h-12 md:h-14 shrink-0" width="48" height="48" loading="eager" fetchPriority="high" />
                 <span className="font-bold text-sm md:text-lg text-foreground whitespace-nowrap hidden sm:inline">Trancoso Resolve</span>
@@ -472,6 +473,7 @@ export default function Layout({ children, currentPageName }) {
           <CookieConsent />
         </div>
         <BottomNav />
+        <ProFloatingButton />
         <Suspense fallback={null}><SupportChat /></Suspense>
         <Suspense fallback={null}><FeedbackCollector /></Suspense>
         <PWAPrompt />

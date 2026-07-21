@@ -1,24 +1,200 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
 import {
-  Check, Zap, Loader2, Calendar, ChevronDown, ChevronUp,
-  Lock, Users, Star, Megaphone, Crown, Store, Sun
+  Check, Zap, Star, Calendar, Lock, Users, Crown,
+  Building2, ChevronDown, ChevronUp, Loader2, Shield, Flame
 } from "lucide-react";
+import { toast } from "sonner";
 import CancelSubscriptionButton from "@/components/dashboard/CancelSubscriptionButton";
 import PositionamentoEstrategico from "@/components/plans/PositionamentoEstrategico";
 
-const PROMO_LIMIT = 50;
+// ─── Dados dos planos ────────────────────────────────────────────────────────
 
-// ─── FAQ Item ─────────────────────────────────────────────────────────────────
-function FaqItem({ q, a }) {
+const PLANOS_PRESTADOR = [
+  {
+    id: "gratuito",
+    nome: "Gratuito",
+    preco: 0,
+    precoAnual: null,
+    trial: null,
+    trialLabel: "30 dias grátis · sem cartão",
+    destaque: false,
+    cor: "from-neutral-700 to-neutral-600",
+    borda: "border-border",
+    icone: Shield,
+    badge: null,
+    features: [
+      "Perfil na plataforma por 30 dias",
+      "Recebimento de pedidos de clientes",
+      "Chat direto com clientes",
+      "1 serviço ativo",
+    ],
+    ctaLabel: "Começar grátis",
+    ctaKey: null,
+  },
+  {
+    id: "profissional",
+    nome: "Profissional",
+    preco: 19.90,
+    precoAnual: 199,
+    trial: 30,
+    trialLabel: "30 dias grátis · LANÇAMENTO",
+    destaque: true,
+    cor: "from-orange-600 to-orange-500",
+    borda: "border-orange-400",
+    icone: Zap,
+    badge: "Mais Popular",
+    features: [
+      "Tudo do Gratuito, sem limite de tempo",
+      "Até 10 serviços ativos simultâneos",
+      "Destaque nas buscas da região",
+      "Agenda integrada de atendimentos",
+      "Selo de prestador verificado",
+      "Suporte por WhatsApp",
+    ],
+    ctaLabel: "Assinar — R$19,90/mês",
+    ctaKey: "profissional",
+  },
+  {
+    id: "elite",
+    nome: "Premium Elite",
+    preco: 197,
+    precoAnual: 1970,
+    trial: 7,
+    trialLabel: "7 dias grátis",
+    destaque: false,
+    cor: "from-amber-700 to-amber-600",
+    borda: "border-amber-600",
+    icone: Crown,
+    badge: "Elite",
+    features: [
+      "Tudo do Profissional, ilimitado",
+      "Serviços ilimitados ativos",
+      "Prioridade máxima nas buscas",
+      "Destaque na página inicial",
+      "Assistente IA premium (TryA)",
+      "Gerador de imagens IA",
+      "Painel financeiro avançado",
+      "Suporte prioritário dedicado",
+    ],
+    ctaLabel: "Assinar — R$197/mês",
+    ctaKey: "prestador_elite",
+  },
+];
+
+const PLANOS_LOJISTA = [
+  {
+    id: "lojista_essencial",
+    nome: "Lojista Essencial",
+    preco: 89,
+    precoAnual: 890,
+    trial: 7,
+    trialLabel: "7 dias grátis",
+    destaque: false,
+    cor: "from-olive-600 to-olive-500",
+    borda: "border-border",
+    icone: Building2,
+    badge: null,
+    features: [
+      "Perfil completo do estabelecimento",
+      "Catálogo / cardápio de até 30 itens",
+      "Aparece nas buscas da região",
+      "Botão WhatsApp integrado",
+      "Selo de negócio verificado",
+      "1 usuário gestor",
+    ],
+    ctaLabel: "Assinar — R$89/mês",
+    ctaKey: "lojista_essencial",
+  },
+  {
+    id: "lojista_pro",
+    nome: "Lojista Pro",
+    preco: 197,
+    precoAnual: 1970,
+    trial: 7,
+    trialLabel: "7 dias grátis",
+    destaque: true,
+    cor: "from-orange-600 to-orange-500",
+    borda: "border-orange-400",
+    icone: Zap,
+    badge: "Mais Popular",
+    features: [
+      "Tudo do Essencial",
+      "Catálogo / cardápio ilimitado",
+      "Destaque nas buscas locais",
+      "Sistema de reservas / agendamento integrado",
+      "Painel de analytics (acessos, cliques, contatos)",
+      "Suporte por WhatsApp",
+      "Até 3 usuários gestores",
+    ],
+    ctaLabel: "Assinar — R$197/mês",
+    ctaKey: "lojista_pro",
+  },
+  {
+    id: "lojista_elite",
+    nome: "Lojista Elite",
+    preco: 497,
+    precoAnual: 4970,
+    trial: 7,
+    trialLabel: "7 dias grátis",
+    destaque: false,
+    cor: "from-amber-700 to-amber-600",
+    borda: "border-amber-600",
+    icone: Crown,
+    badge: "Elite",
+    features: [
+      "Tudo do Pro",
+      "Posição fixa no topo das buscas",
+      "Destaque na página inicial da plataforma",
+      "Assistente IA TryA + gerador de imagens",
+      "Relatórios avançados com exportação",
+      "Integração com Instagram / WhatsApp Business",
+      "Suporte prioritário dedicado",
+      "Usuários ilimitados",
+    ],
+    ctaLabel: "Assinar — R$497/mês",
+    ctaKey: "lojista_elite",
+  },
+];
+
+const FAQ_ITEMS = [
+  {
+    q: "Posso cancelar a qualquer momento?",
+    r: "Sim. Em todos os planos você cancela quando quiser, sem multa. Seu acesso continua até o fim do período já pago.",
+  },
+  {
+    q: "Como funciona o período gratuito?",
+    r: "Seu cartão é salvo no cadastro, mas nenhuma cobrança é feita durante o período grátis. Você pode cancelar antes do fim sem pagar nada.",
+  },
+  {
+    q: "Por que o Profissional tem 30 dias grátis e os outros têm 7?",
+    r: "O Plano Profissional é nosso preço de lançamento — os primeiros 100 prestadores verificados de Trancoso ganham 30 dias grátis e o Selo Fundador permanente. Os demais planos têm 7 dias de trial padrão.",
+  },
+  {
+    q: "O que é o Boost Alta Temporada?",
+    r: "Um add-on opcional que dá visibilidade máxima durante os picos (dez–fev e Carnaval). Você ativa e cancela pelo painel, sem fidelidade. Exige um plano base ativo.",
+  },
+  {
+    q: "Quanto economizo no plano anual?",
+    r: "Você paga 10 meses e ganha 12 — cerca de 17% de desconto. Disponível para os planos Profissional, Elite e todos os planos Lojista.",
+  },
+  {
+    q: "Existe comissão sobre os serviços prestados?",
+    r: "Não. Você negocia diretamente com o cliente e fica com 100% do valor. Cobramos apenas a assinatura da plataforma.",
+  },
+];
+
+// ─── Subcomponentes ──────────────────────────────────────────────────────────
+
+function FaqItem({ q, r }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-border rounded-lg overflow-hidden">
+    <div className="border border-border rounded-xl overflow-hidden">
       <button
         className="w-full text-left px-5 py-4 flex justify-between items-center bg-card hover:bg-muted transition-colors"
         onClick={() => setOpen(!open)}
@@ -30,137 +206,113 @@ function FaqItem({ q, a }) {
       </button>
       {open && (
         <div className="px-5 py-4 bg-muted text-sm text-muted-foreground border-t border-border leading-relaxed">
-          {a}
+          {r}
         </div>
       )}
     </div>
   );
 }
 
-// ─── Tab Toggle ───────────────────────────────────────────────────────────────
-function TabToggle({ active, onChange }) {
-  return (
-    <div className="flex items-center justify-center mb-8">
-      <div className="inline-flex rounded-full border border-border bg-muted p-1 gap-1">
-        <button
-          onClick={() => onChange('prestador')}
-          className={`rounded-full px-6 py-2 text-sm font-semibold transition-all ${
-            active === 'prestador'
-              ? 'bg-brand-primary text-white shadow'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          Sou Prestador
-        </button>
-        <button
-          onClick={() => onChange('lojista')}
-          className={`rounded-full px-6 py-2 text-sm font-semibold transition-all ${
-            active === 'lojista'
-              ? 'bg-brand-primary text-white shadow'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          Sou Lojista
-        </button>
-      </div>
-    </div>
-  );
-}
+function PlanCard({ plano, anual, onCta, loading }) {
+  const preco = anual && plano.precoAnual
+    ? (plano.precoAnual / 12).toFixed(2).replace(".", ",")
+    : plano.preco === 0
+      ? "0"
+      : plano.preco.toFixed(2).replace(".", ",");
 
-// ─── Plan Card ────────────────────────────────────────────────────────────────
-function PlanCard({
-  badge, badgeColor, headerColor, icon, name, price,
-  trialLabel, vagasLabel, benefits,
-  ctaLabel, ctaNote, onCta,
-  onCtaAvulso, ctaAvulsoLabel,
-  loading, loadingAvulso, disabled, popular, isFree,
-}) {
+  const Icon = plano.icone;
+
   return (
-    <div className={popular ? 'relative pt-4' : 'relative'}>
-      {popular && (
+    <div className={`relative flex flex-col ${plano.destaque ? "pt-5" : "pt-0"}`}>
+      {plano.destaque && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 whitespace-nowrap">
-          <Badge className="bg-orange-500 text-white font-bold text-xs px-3 py-1 shadow">
-            <Star className="w-3 h-3 mr-1" /> Mais popular
+          <Badge className="bg-orange-500 text-white font-bold text-xs px-3 py-1 shadow-md">
+            <Star className="w-3 h-3 mr-1" /> {plano.badge}
           </Badge>
         </div>
       )}
-      <Card className={`shadow-2xl overflow-hidden relative flex flex-col ${popular ? 'border-2 border-orange-400' : 'border border-border'} ${disabled ? 'opacity-60' : ''}`}>
-        {badge && (
-          <div className="absolute top-3 right-3 z-10">
-            <Badge className={`font-bold text-xs ${badgeColor}`}>{badge}</Badge>
-          </div>
-        )}
-        <div className={`p-6 text-center text-white ${headerColor}`}>
-          {icon}
-          <h2 className="text-xl font-bold mb-1 mt-2">{name}</h2>
-          {isFree
-            ? <p className="text-3xl font-extrabold mt-1">Grátis</p>
-            : <p className="text-3xl font-extrabold mt-1">R$ {price}<span className="text-sm font-normal opacity-90">/mês</span></p>
-          }
-          {trialLabel && (
-            <p className="text-xs mt-1 flex items-center justify-center gap-1" style={{ color: 'rgba(255,255,255,0.95)' }}>
-              <Calendar className="w-3 h-3" /> {trialLabel}
-            </p>
-          )}
-          {vagasLabel && (
-            <span className="inline-flex items-center gap-1.5 bg-white/15 rounded-full px-3 py-1 text-xs font-semibold text-white mt-2">
-              {vagasLabel}
-            </span>
+      {!plano.destaque && plano.badge && (
+        <div className="absolute top-3 right-3 z-10">
+          <Badge className="bg-amber-600 text-white font-bold text-xs">
+            <Crown className="w-3 h-3 mr-1" /> {plano.badge}
+          </Badge>
+        </div>
+      )}
+
+      <Card
+        className={`flex flex-col flex-1 overflow-hidden shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-200 ${
+          plano.destaque
+            ? `border-2 ${plano.borda}`
+            : `border ${plano.borda}`
+        }`}
+      >
+        {/* Header */}
+        <div className={`p-6 text-center text-white bg-gradient-to-br ${plano.cor}`}>
+          <Icon className="w-9 h-9 mx-auto opacity-90" />
+          <h2 className="text-xl font-extrabold mb-1 mt-2">{plano.nome}</h2>
+
+          {plano.preco === 0 ? (
+            <>
+              <p className="text-3xl font-extrabold mt-1">Grátis</p>
+              <p className="text-xs mt-1 text-white/90">por 30 dias · sem cartão de crédito</p>
+            </>
+          ) : (
+            <>
+              <p className="text-3xl font-extrabold mt-1">
+                R${preco}
+                <span className="text-sm font-normal opacity-90">/mês</span>
+              </p>
+              {anual && plano.precoAnual && (
+                <p className="text-xs mt-0.5 text-white/80">
+                  R${plano.precoAnual}/ano · 2 meses grátis
+                </p>
+              )}
+              <p className="text-xs mt-1 flex items-center justify-center gap-1 text-white/95">
+                <Calendar className="w-3 h-3" /> {plano.trialLabel}
+              </p>
+            </>
           )}
         </div>
 
+        {/* Features */}
         <CardContent className="p-5 flex flex-col flex-1">
-          <ul className="space-y-2 mb-5">
-            {benefits.map((item, i) => (
+          <ul className="space-y-2 mb-5 flex-1">
+            {plano.features.map((f, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#5DCAA5' }} />
-                {item}
+                <Check className="w-4 h-4 shrink-0 mt-0.5 text-green-500" />
+                {f}
               </li>
             ))}
           </ul>
 
-          <div className="mt-auto space-y-2">
-            {!disabled ? (
+          <div className="space-y-2 mt-auto">
+            {plano.preco === 0 ? (
+              <Link to="/CadastroTipo">
+                <Button variant="outline" className="w-full font-semibold">
+                  {plano.ctaLabel}
+                </Button>
+              </Link>
+            ) : (
               <>
                 <Button
-                  className={`w-full text-sm ${popular ? 'bg-orange-500 hover:bg-orange-600 text-white' : ''}`}
-                  onClick={onCta}
+                  className={`w-full font-bold ${
+                    plano.destaque
+                      ? "bg-orange-500 hover:bg-orange-600 text-white"
+                      : ""
+                  }`}
+                  onClick={() => onCta(plano.ctaKey, anual)}
                   disabled={loading}
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                  {ctaLabel}
+                  {plano.ctaLabel}
                 </Button>
-
-                {onCtaAvulso && (
-                  <>
-                    <Button
-                      variant="outline"
-                      className="w-full text-xs text-white border-none hover:opacity-90"
-                      style={{ background: '#0d9488' }}
-                      onClick={onCtaAvulso}
-                      disabled={loadingAvulso}
-                    >
-                      {loadingAvulso ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : null}
-                      {ctaAvulsoLabel}
-                    </Button>
-                    <p className="text-center text-xs font-medium flex items-center justify-center gap-1" style={{ color: '#9FE1CB' }}>
-                      🏖 Ideal para alta temporada
-                    </p>
-                  </>
-                )}
-
-                {trialLabel && !isFree && (
-                  <div className="flex items-center gap-2 mt-3 p-2 rounded-lg text-xs text-muted-foreground"
-                    style={{ background: 'rgba(255,255,255,0.05)' }}>
-                    <Lock className="w-3 h-3 shrink-0" style={{ color: '#5DCAA5' }} />
-                    Cartão salvo no cadastro — sem cobrança no período grátis.
+                {plano.preco > 0 && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2 px-1">
+                    <Lock className="w-3 h-3 text-green-500 shrink-0" />
+                    Cartão salvo · sem cobrança no período grátis
                   </div>
                 )}
-
-                {ctaNote && <p className="text-xs text-center text-muted-foreground">{ctaNote}</p>}
               </>
-            ) : (
-              <p className="text-sm text-center py-2 text-muted-foreground">Vagas esgotadas.</p>
             )}
           </div>
         </CardContent>
@@ -169,164 +321,113 @@ function PlanCard({
   );
 }
 
-// ─── Boost Alta Temporada ─────────────────────────────────────────────────────
-function BoostCard({ onCta, loading }) {
+function BoostSection({ tipo, onCta, loading }) {
+  const isPrestador = tipo === "prestador";
+
   return (
-    <div className="mt-10 rounded-2xl overflow-hidden border-2 border-amber-500"
-      style={{ background: 'linear-gradient(135deg, #78350f 0%, #92400e 50%, #b45309 100%)' }}>
-      <div className="p-6 md:p-8 text-white flex flex-col md:flex-row items-start gap-6">
-        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-          <Sun className="w-7 h-7 text-white" />
-        </div>
-        <div className="flex-1">
-          <Badge className="bg-white/20 text-white border-none mb-2 text-xs">Complemento opcional</Badge>
-          <h3 className="text-xl font-extrabold mb-2">Boost Alta Temporada</h3>
-          <p className="text-white/80 text-sm leading-relaxed mb-5">
-            De <strong>dezembro a março e em julho</strong>, Trancoso recebe um fluxo de clientes muito acima da média.
-            O Boost garante posição máxima em todas as listagens durante a temporada, com banner exclusivo no topo do feed — perfeito para pousadas, restaurantes e lojas que querem saturar a temporada.
-            Disponível apenas para assinantes de qualquer plano pago.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <div>
-              <span className="text-3xl font-extrabold">R$ 297,00</span>
-              <span className="text-white/70 text-sm ml-1">/temporada</span>
-            </div>
-            <Button
-              className="bg-white text-amber-800 hover:bg-amber-50 font-bold rounded-pill shadow"
-              onClick={onCta}
-              disabled={loading}
-            >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-              Ativar Boost
-            </Button>
+    <div className="rounded-2xl border-2 border-amber-500 overflow-hidden my-10">
+      <div className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-600 p-5 text-white">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+            <Flame className="w-6 h-6 text-amber-200" />
           </div>
-          <p className="text-white/50 text-xs mt-3">
-            Requer plano Vitrine, Destaque ou Premium ativo. Não disponível avulso.
-          </p>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-200">Add-on temporário</p>
+            <h3 className="text-lg font-extrabold">Boost Alta Temporada</h3>
+          </div>
+          <div className="ml-auto text-right">
+            <p className="text-2xl font-extrabold">
+              +R${isPrestador ? "99" : "197"}<span className="text-sm font-normal opacity-90">/mês</span>
+            </p>
+            <p className="text-xs text-amber-200">somente dez–fev e Carnaval</p>
+          </div>
+        </div>
+        <p className="text-sm text-amber-100/90 mt-2">
+          A economia de Trancoso se concentra no Réveillon, Verão e Carnaval. O Boost dá visibilidade máxima
+          exatamente quando a demanda dispara — empilha sobre qualquer plano ativo.
+        </p>
+      </div>
+
+      <div className="bg-card p-5 flex flex-col md:flex-row gap-5 items-start md:items-center">
+        <ul className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {(isPrestador
+            ? [
+                "Visibilidade máxima nas buscas durante o pico",
+                'Selo "Disponível na Temporada"',
+                "Prioridade acima dos planos padrão do mesmo nível",
+                "Notificação de destaque para clientes da região",
+              ]
+            : [
+                "Posição fixa no topo das buscas da categoria",
+                "Destaque na página inicial durante o pico",
+                'Banner "Aberto na Temporada"',
+                "Prioridade no assistente TryA para captação",
+              ]
+          ).map((f, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+              <Check className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" /> {f}
+            </li>
+          ))}
+        </ul>
+
+        <div className="shrink-0 text-center">
+          <Button
+            className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 rounded-full shadow"
+            onClick={() => onCta(isPrestador ? "boost_prestador" : "boost_lojista", false)}
+            disabled={loading}
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : null}
+            Ativar Boost →
+          </Button>
+          <p className="text-xs text-muted-foreground mt-2">Exige plano base ativo</p>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Dados dos planos ─────────────────────────────────────────────────────────
+function AnnualStrip({ anual, onToggle }) {
+  return (
+    <div className="flex items-center justify-center gap-4 py-4 px-6 bg-muted rounded-2xl mb-8">
+      <span className={`text-sm font-semibold ${!anual ? "text-foreground" : "text-muted-foreground"}`}>
+        Mensal
+      </span>
 
-const PRESTADOR_GRATUITO = [
-  "1 serviço ativo na plataforma",
-  "Receba pedidos de orçamento",
-  "Chat com clientes",
-  "Perfil público básico",
-  "Sem destaque na busca",
-];
+      <button
+        role="switch"
+        aria-checked={anual}
+        onClick={onToggle}
+        className={`relative w-12 h-6 rounded-full transition-colors ${anual ? "bg-orange-500" : "bg-border"}`}
+      >
+        <span
+          className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${anual ? "translate-x-7" : "translate-x-1"}`}
+        />
+      </button>
 
-const PRESTADOR_PRO = [
-  "Até 10 serviços ativos",
-  "Destaque na busca de clientes",
-  "Agenda integrada de atendimentos",
-  "WhatsApp e chat direto",
-  "Selo \"Prestador Verificado\"",
-  "Painel completo de pedidos",
-  "Suporte prioritário",
-];
+      <span className={`text-sm font-semibold ${anual ? "text-foreground" : "text-muted-foreground"}`}>
+        Anual
+      </span>
+      <span className="bg-green-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+        2 meses grátis
+      </span>
+    </div>
+  );
+}
 
-const PRESTADOR_ELITE = [
-  "Serviços ilimitados",
-  "Prioridade máxima na busca",
-  "Toca TrIA — IA para mensagens e orçamentos",
-  "Toca Vision — gerador de imagens exclusivas",
-  "Dashboard financeiro avançado",
-  "Relatórios mensais de desempenho",
-  "Suporte VIP com gerente dedicado",
-];
+// ─── Página principal ────────────────────────────────────────────────────────
 
-const LOJISTA_VITRINE = [
-  "1 anúncio ativo na plataforma",
-  "Badge \"Parceiro Local\"",
-  "Métricas de impressões e cliques",
-  "CTA personalizado (link para seu site ou WhatsApp)",
-  "Alcance: todos os visitantes da plataforma",
-];
-
-const LOJISTA_DESTAQUE = [
-  "3 anúncios ativos simultâneos",
-  "Posição privilegiada no feed",
-  "Imagem em destaque no topo de cada anúncio",
-  "Relatórios semanais de performance",
-  "CTA personalizado por anúncio",
-  "Badge \"Parceiro Verificado\"",
-  "Suporte prioritário",
-];
-
-const LOJISTA_PREMIUM = [
-  "Anúncios ilimitados",
-  "Posição prioritária em todas as listagens",
-  "Toca TrIA — IA para criar copy dos anúncios",
-  "Toca Vision — imagens exclusivas para cada anúncio",
-  "Relatórios mensais completos com insights",
-  "Gerente de conta dedicado",
-  "Integração com Instagram e WhatsApp Business",
-];
-
-const FAQ_PRESTADOR = [
-  {
-    q: "Posso cancelar a qualquer momento?",
-    a: "Sim. Nos planos mensais você cancela quando quiser, sem multa. No uso avulso não há renovação automática.",
-  },
-  {
-    q: "Como funciona o período gratuito?",
-    a: "Seu cartão é salvo no cadastro mas nenhuma cobrança é feita durante o período grátis. Você pode cancelar antes do fim sem pagar nada.",
-  },
-  {
-    q: "Qual a diferença entre o Gratuito e o Profissional?",
-    a: "No plano Gratuito você pode manter 1 serviço ativo e receber pedidos. No Profissional você tem até 10 serviços, destaque na busca, agenda integrada e o selo Verificado.",
-  },
-  {
-    q: "O que é o Uso Avulso?",
-    a: "Ideal para quem trabalha só na alta temporada. Você paga apenas os meses que precisar, sem mensalidade fixa e sem renovação automática.",
-  },
-];
-
-const FAQ_LOJISTA = [
-  {
-    q: "O que é um anúncio na plataforma?",
-    a: "Um card com foto, título, descrição e botão de ação (link para seu site, WhatsApp ou telefone) exibido para os visitantes da plataforma que buscam serviços em Trancoso.",
-  },
-  {
-    q: "Posso trocar meu anúncio a qualquer momento?",
-    a: "Sim. Você pode editar o conteúdo, pausar ou ativar seus anúncios a qualquer momento pelo painel de lojista.",
-  },
-  {
-    q: "O que é o Boost Alta Temporada?",
-    a: "Um complemento vendido por temporada (dez–mar e julho) que garante posição de destaque máximo para o seu negócio durante o pico de movimento em Trancoso. Disponível apenas para assinantes de qualquer plano pago.",
-  },
-  {
-    q: "Posso ser Prestador e Lojista ao mesmo tempo?",
-    a: "Por enquanto os planos são separados por tipo de conta. Se você presta serviços E tem um negócio físico, entre em contato para entendermos o melhor encaixe.",
-  },
-];
-
-// ─── Página Principal ──────────────────────────────────────────────────────────
 export default function PlanosPage() {
+  const [aba, setAba] = useState("prestador");
+  const [anual, setAnual] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState(null);
-  const [activeTab, setActiveTab] = useState('prestador');
 
   const { data: user } = useQuery({
-    queryKey: ['currentUser'],
+    queryKey: ["currentUser"],
     queryFn: () => base44.auth.me(),
   });
 
-  useEffect(() => {
-    if (user?.user_type === 'lojista') setActiveTab('lojista');
-  }, [user?.user_type]);
-
-  const { data: allProviders } = useQuery({
-    queryKey: ['allProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list('-created_date', 500),
-    initialData: [],
-  });
-
   const { data: mySubscription } = useQuery({
-    queryKey: ['mySubscription', user?.email],
+    queryKey: ["mySubscription", user?.email],
     queryFn: async () => {
       if (!user?.email) return null;
       const subs = await base44.entities.Subscription.filter({ user_email: user.email });
@@ -335,252 +436,158 @@ export default function PlanosPage() {
     enabled: !!user,
   });
 
-  // Contadores de vagas
-  const totalPrestadores = allProviders?.filter(p =>
-    p.tipo_pessoa === 'pf' ||
-    (p.tipo_pessoa === 'mei' && !p.tem_ponto_fisico_em_trancoso) ||
-    (p.tipo_pessoa === 'pj' && !p.tem_ponto_fisico_em_trancoso)
-  ).length || 0;
+  // Contagem de vagas Fundador (prestadores ativos)
+  const { data: founderStats } = useQuery({
+    queryKey: ["founderProgress"],
+    queryFn: async () => {
+      const subs = await base44.entities.Subscription.list("-created_date", 200);
+      const taken =
+        subs?.filter(
+          s =>
+            (s.status === "active" || s.status === "trial") &&
+            (s.plan === "profissional" ||
+              s.plan === "lancamento" ||
+              s.plan === "prestador_profissional")
+        ).length || 0;
+      return { taken, remaining: Math.max(0, 100 - taken) };
+    },
+    staleTime: 60000,
+  });
 
-  const totalVerificados = allProviders?.filter(p =>
-    p.verificado === true || p.status === 'ativo'
-  ).length || 0;
-
-  const vagasPrestador = Math.max(0, PROMO_LIMIT - totalPrestadores);
-  const isPromoAtivaPrestador = vagasPrestador > 0;
-
-  const vagasBadgePrestador = vagasPrestador <= 10
-    ? `⚠️ ${vagasPrestador} vagas restantes de 50`
-    : `🔒 ${vagasPrestador} vagas restantes de 50`;
-
-  // Checkout
-  const handleCheckout = async (plan) => {
+  const handleCheckout = async (planKey, isAnual = false) => {
     if (window.self !== window.top) {
-      toast.error('O checkout só funciona no app publicado. Acesse trancosoresolve.com.br');
+      toast.error("O checkout só funciona no app publicado. Acesse trancosoresolve.com.br");
       return;
     }
     if (!user) {
       base44.auth.redirectToLogin(window.location.pathname);
       return;
     }
-    setLoadingPlan(plan);
+    setLoadingPlan(planKey);
     try {
-      const res = await base44.functions.invoke('createSubscriptionCheckout', { plan, user_email: user.email });
-      if (res.data?.error === 'vagas_esgotadas') {
+      const res = await base44.functions.invoke("createSubscriptionCheckout", {
+        plan: planKey,
+        billing: isAnual ? "annual" : "monthly",
+        user_email: user.email,
+      });
+      if (res.data?.error === "vagas_esgotadas") {
         toast.error(res.data.message);
-        setTimeout(() => handleCheckout(plan.includes('lojista') ? 'lojista_destaque' : 'regular'), 1500);
         return;
       }
       if (res.data?.url) window.location.href = res.data.url;
     } catch {
-      toast.error('Erro ao iniciar pagamento. Tente novamente.');
+      toast.error("Erro ao iniciar pagamento. Tente novamente.");
     } finally {
       setLoadingPlan(null);
     }
   };
 
-  const handleFreeSignup = () => {
-    if (!user) {
-      base44.auth.redirectToLogin(window.location.pathname);
-    } else {
-      toast.success('Você já está no plano gratuito! Explore a plataforma.');
-    }
-  };
-
-  const faqItems = activeTab === 'lojista' ? FAQ_LOJISTA : FAQ_PRESTADOR;
+  const planos = aba === "prestador" ? PLANOS_PRESTADOR : PLANOS_LOJISTA;
+  const founderRestam = founderStats?.remaining ?? 100;
 
   return (
     <div className="bg-background min-h-screen py-12">
       <div className="container mx-auto max-w-5xl px-4">
 
-        {/* Header */}
+        {/* Cabeçalho */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3">
-            Planos Trancoso Resolve
+          <h1 className="text-4xl font-extrabold text-foreground tracking-tight mb-3">
+            Escolha seu plano
           </h1>
-          <p className="text-muted-foreground text-base max-w-lg mx-auto">
-            Sem comissão. Você negocia diretamente com o cliente e fica com 100% do valor.
+          <p className="text-muted-foreground max-w-lg mx-auto text-base">
+            Sem comissão sobre serviços. Você negocia direto com o cliente e fica com 100% do valor.
           </p>
-          {totalVerificados > 0 && (
-            <p className="mt-3 text-sm text-muted-foreground flex items-center justify-center gap-2">
-              <Users className="w-4 h-4 text-orange-500" />
-              Junte-se a <strong className="text-foreground">&nbsp;{totalVerificados}&nbsp;</strong> profissionais verificados em Trancoso
-            </p>
+          {aba === "prestador" && founderRestam > 0 && founderRestam <= 100 && (
+            <div className="mt-3 inline-flex items-center gap-2 bg-orange-900/30 border border-orange-600 text-orange-200 text-sm font-semibold rounded-full px-4 py-1.5">
+              <Shield className="w-4 h-4 text-orange-400" />
+              {founderRestam === 100
+                ? "Seja um dos 100 primeiros Prestadores Fundadores de Trancoso"
+                : `Restam ${founderRestam} vagas de Prestador Fundador — preço de lançamento R$19,90/mês`}
+            </div>
           )}
         </div>
 
-        {/* Toggle */}
-        <TabToggle active={activeTab} onChange={setActiveTab} />
+        {/* Toggle Prestador / Lojista */}
+        <div className="flex items-center justify-center mb-6">
+          <div className="inline-flex bg-muted p-1 rounded-full gap-1">
+            <button
+              onClick={() => setAba("prestador")}
+              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                aba === "prestador"
+                  ? "bg-orange-500 text-white shadow"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Sou Prestador
+            </button>
+            <button
+              onClick={() => setAba("lojista")}
+              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                aba === "lojista"
+                  ? "bg-orange-500 text-white shadow"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Sou Lojista
+            </button>
+          </div>
+        </div>
 
-        {/* ── TAB PRESTADOR ───────────────────────────────────────────────── */}
-        {activeTab === 'prestador' && (
-          <>
-            {isPromoAtivaPrestador && (
-              <div className="mb-6 text-center">
-                <span className="inline-block bg-orange-900/30 border border-orange-600 text-orange-200 text-sm font-semibold rounded-full px-4 py-1.5">
-                  🎉 Restam <strong>{vagasPrestador}</strong> vagas com preço de lançamento — depois sobe para R$49,90
-                </span>
-              </div>
-            )}
+        {/* Switch Mensal / Anual */}
+        <AnnualStrip anual={anual} onToggle={() => setAnual(v => !v)} />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-              {/* Gratuito */}
-              <PlanCard
-                headerColor="bg-gradient-to-br from-slate-600 to-slate-700"
-                icon={<Check className="w-9 h-9 mx-auto opacity-90" />}
-                name="Gratuito"
-                isFree
-                trialLabel="Para sempre grátis"
-                benefits={PRESTADOR_GRATUITO}
-                ctaLabel="Começar grátis"
-                onCta={handleFreeSignup}
-                loading={false}
-              />
-
-              {/* Profissional */}
-              <PlanCard
-                badge={isPromoAtivaPrestador ? "🚀 Lançamento" : null}
-                badgeColor="bg-orange-400 text-orange-900"
-                headerColor="bg-gradient-to-br from-orange-500 to-orange-600"
-                icon={<Zap className="w-9 h-9 mx-auto opacity-90" />}
-                name="Profissional"
-                price={isPromoAtivaPrestador ? "29,90" : "49,90"}
-                trialLabel={isPromoAtivaPrestador ? "30 dias grátis inclusos" : "7 dias grátis"}
-                vagasLabel={isPromoAtivaPrestador ? vagasBadgePrestador : null}
-                benefits={PRESTADOR_PRO}
-                ctaLabel={isPromoAtivaPrestador ? "Garantir — R$ 29,90/mês" : "Assinar — R$ 49,90/mês"}
-                ctaNote={isPromoAtivaPrestador ? "✅ 30 dias grátis · Oferta dos primeiros 50" : null}
-                onCta={() => handleCheckout(isPromoAtivaPrestador ? 'lancamento' : 'regular')}
-                onCtaAvulso={() => handleCheckout('avulso_prestador')}
-                ctaAvulsoLabel="Usar por 1 mês — R$ 69,90"
-                loading={loadingPlan === 'lancamento' || loadingPlan === 'regular'}
-                loadingAvulso={loadingPlan === 'avulso_prestador'}
-                popular
-              />
-
-              {/* Elite */}
-              <PlanCard
-                badge="Elite"
-                badgeColor="bg-amber-500 text-white"
-                headerColor="bg-gradient-to-br from-amber-700 to-amber-900"
-                icon={<Crown className="w-9 h-9 mx-auto opacity-90" />}
-                name="Elite"
-                price="147,00"
-                trialLabel="7 dias grátis"
-                benefits={PRESTADOR_ELITE}
-                ctaLabel="Assinar Elite — R$ 147/mês"
-                onCta={() => handleCheckout('elite')}
-                loading={loadingPlan === 'elite'}
-              />
-            </div>
-
-            {/* Uso avulso */}
-            <div className="border border-border rounded-2xl p-6 mb-8 flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                style={{ background: 'rgba(13,148,136,0.15)' }}>
-                <Calendar className="w-5 h-5" style={{ color: '#0d9488' }} />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-foreground mb-1">Trabalha só na temporada?</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Pague apenas os meses de alta temporada (dezembro–março e julho). Sem renovação automática, sem compromisso.
-                </p>
-                <Button
-                  className="text-white rounded-pill font-semibold"
-                  style={{ background: '#0d9488' }}
-                  onClick={() => handleCheckout('avulso_prestador')}
-                  disabled={loadingPlan === 'avulso_prestador'}
-                >
-                  {loadingPlan === 'avulso_prestador' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                  Uso avulso — R$ 69,90 / mês único
-                </Button>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* ── TAB LOJISTA ─────────────────────────────────────────────────── */}
-        {activeTab === 'lojista' && (
-          <>
-            <div className="mb-6 text-center">
-              <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-                Anuncie seu negócio para moradores, turistas e donos de imóvel que buscam serviços em Trancoso.
-                Alcance real, métricas transparentes e 100% do resultado fica com você.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-              {/* Vitrine */}
-              <PlanCard
-                headerColor="bg-gradient-to-br from-olive-600 to-olive-800"
-                icon={<Store className="w-9 h-9 mx-auto opacity-90" />}
-                name="Vitrine"
-                price="89,90"
-                trialLabel="7 dias grátis"
-                benefits={LOJISTA_VITRINE}
-                ctaLabel="Assinar — R$ 89,90/mês"
-                onCta={() => handleCheckout('lojista_vitrine')}
-                loading={loadingPlan === 'lojista_vitrine'}
-              />
-
-              {/* Destaque */}
-              <PlanCard
-                headerColor="bg-gradient-to-br from-orange-500 to-orange-700"
-                icon={<Megaphone className="w-9 h-9 mx-auto opacity-90" />}
-                name="Destaque"
-                price="197,00"
-                trialLabel="7 dias grátis"
-                benefits={LOJISTA_DESTAQUE}
-                ctaLabel="Assinar — R$ 197/mês"
-                onCta={() => handleCheckout('lojista_destaque')}
-                loading={loadingPlan === 'lojista_destaque'}
-                popular
-              />
-
-              {/* Premium */}
-              <PlanCard
-                badge="Premium"
-                badgeColor="bg-amber-500 text-white"
-                headerColor="bg-gradient-to-br from-amber-700 to-amber-900"
-                icon={<Crown className="w-9 h-9 mx-auto opacity-90" />}
-                name="Premium"
-                price="397,00"
-                trialLabel="7 dias grátis"
-                benefits={LOJISTA_PREMIUM}
-                ctaLabel="Assinar — R$ 397/mês"
-                onCta={() => handleCheckout('lojista_premium')}
-                loading={loadingPlan === 'lojista_premium'}
-              />
-            </div>
-
-            {/* Boost Alta Temporada */}
-            <BoostCard
-              onCta={() => handleCheckout('boost_temporada')}
-              loading={loadingPlan === 'boost_temporada'}
+        {/* Cards de plano */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
+          {planos.map(plano => (
+            <PlanCard
+              key={plano.id}
+              plano={plano}
+              anual={anual && plano.precoAnual !== null}
+              onCta={handleCheckout}
+              loading={loadingPlan === plano.ctaKey}
             />
-          </>
-        )}
+          ))}
+        </div>
+
+        {/* Nota Mercado Pago */}
+        <p className="text-center text-muted-foreground text-xs mb-4">
+          Pagamento seguro via Mercado Pago — cancele quando quiser, sem multa.
+        </p>
 
         {/* Transparência */}
-        <div className="bg-orange-900/20 border border-orange-700/50 rounded-lg p-4 text-sm text-orange-200 text-center mt-8 mb-8">
-          <strong>Transparência total:</strong> Sem comissão sobre seus serviços ou vendas. Você negocia diretamente com o cliente e fica com 100% do valor.
+        <div className="bg-orange-900/20 border border-orange-700/50 rounded-xl p-4 text-sm text-orange-200 text-center mb-2">
+          <strong>Transparência total:</strong> Sem comissão sobre seus serviços. Você negocia diretamente com o cliente e fica com 100% do valor.
+        </div>
+
+        {/* Boost Alta Temporada */}
+        <BoostSection
+          tipo={aba}
+          onCta={handleCheckout}
+          loading={loadingPlan === (aba === "prestador" ? "boost_prestador" : "boost_lojista")}
+        />
+
+        {/* Prova social */}
+        <div className="text-center mb-12">
+          <p className="text-muted-foreground text-sm flex items-center justify-center gap-2">
+            <Users className="w-5 h-5 text-orange-500" />
+            Junte-se aos primeiros prestadores verificados de Trancoso, Caraíva e Arraial d'Ajuda
+          </p>
         </div>
 
         {/* Recursos */}
-        <section id="recursos" className="mb-10">
+        <section className="mb-10">
           <PositionamentoEstrategico />
         </section>
 
-        <p className="text-center text-muted-foreground text-sm mb-8">
-          Dúvidas? <a href="mailto:suporte@trancosoresolve.com.br" className="underline text-foreground"><strong>suporte@trancosoresolve.com.br</strong></a>
-        </p>
-
         {/* Assinatura ativa */}
-        {mySubscription && mySubscription.status === 'active' && (
-          <div className="bg-card border border-border rounded-lg p-4 text-center mb-8">
+        {mySubscription?.status === "active" && (
+          <div className="bg-card border border-border rounded-xl p-4 text-center mb-8">
             <p className="text-sm text-muted-foreground mb-1">
               Sua assinatura está ativa
-              {mySubscription.next_billing_date && ` — próxima cobrança em ${new Date(mySubscription.next_billing_date + 'T00:00:00').toLocaleDateString('pt-BR')}`}.
+              {mySubscription.next_billing_date &&
+                ` — próxima cobrança em ${new Date(
+                  mySubscription.next_billing_date + "T00:00:00"
+                ).toLocaleDateString("pt-BR")}`}.
             </p>
             <div className="flex justify-center mt-3">
               <CancelSubscriptionButton accessUntil={mySubscription.next_billing_date} />
@@ -589,14 +596,23 @@ export default function PlanosPage() {
         )}
 
         {/* FAQ */}
-        <section className="max-w-2xl mx-auto mb-12">
-          <h2 className="text-xl font-bold text-center text-foreground mb-6">Perguntas Frequentes</h2>
+        <section className="max-w-2xl mx-auto mb-16">
+          <h2 className="text-2xl font-extrabold text-foreground text-center mb-6">
+            Perguntas frequentes
+          </h2>
           <div className="space-y-3">
-            {faqItems.map(({ q, a }) => (
-              <FaqItem key={q} q={q} a={a} />
+            {FAQ_ITEMS.map(item => (
+              <FaqItem key={item.q} q={item.q} r={item.r} />
             ))}
           </div>
         </section>
+
+        <p className="text-center text-muted-foreground text-sm pb-8">
+          Dúvidas?{" "}
+          <a href="mailto:suporte@trancosoresolve.com.br" className="underline text-foreground font-semibold">
+            suporte@trancosoresolve.com.br
+          </a>
+        </p>
       </div>
     </div>
   );
