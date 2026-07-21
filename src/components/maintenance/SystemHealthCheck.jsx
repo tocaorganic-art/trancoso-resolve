@@ -41,7 +41,7 @@ export default function SystemHealthCheck() {
           results.routes.issues.push(`Rota ${route} pode estar inacessível`);
           results.routes.status = 'warning';
         }
-      } catch (error) {
+      } catch {
         results.routes.issues.push(`Erro ao verificar rota ${route}`);
         results.routes.status = 'error';
       }

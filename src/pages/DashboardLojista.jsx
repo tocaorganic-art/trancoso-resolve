@@ -34,9 +34,9 @@ function DashboardLojistaContent() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Anuncio.create({ ...data, lojista_id: user.id, ativo: true }),
+    mutationFn: (/** @type {any} */ data) => base44.entities.Anuncio.create({ ...data, lojista_id: user.id, ativo: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['myAnuncios']);
+      queryClient.invalidateQueries({ queryKey: ['myAnuncios'] });
       toast.success('Anúncio criado com sucesso!');
       setModalOpen(false);
     },
@@ -46,9 +46,9 @@ function DashboardLojistaContent() {
   });
 
   const toggleAtivoMutation = useMutation({
-    mutationFn: ({ id, ativo }) => base44.entities.Anuncio.update(id, { ativo }),
+    mutationFn: (/** @type {any} */ { id, ativo }) => base44.entities.Anuncio.update(id, { ativo }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['myAnuncios']);
+      queryClient.invalidateQueries({ queryKey: ['myAnuncios'] });
       toast.success('Status atualizado!');
     },
     onError: (error) => {

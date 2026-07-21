@@ -1,7 +1,7 @@
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function StarRating({ rating, onRatingChange, size = 16, interactive = false, className }) {
+export default function StarRating({ rating, onRatingChange = undefined, size = 16, interactive = false, className = undefined }) {
   const stars = Array.from({ length: 5 }, (_, i) => i + 1);
 
   return (

@@ -267,7 +267,7 @@ ${imageUrl ? `[O usuÃ¡rio enviou uma imagem para anÃ¡lise: ${imageUrl}]\n` :
       ...(imageUrl ? { file_urls: [imageUrl] } : {}),
     });
 
-    const responseText = typeof result === 'string' ? result : (result?.response || 'Desculpe, nÃ£o consegui processar sua mensagem. Tente novamente ou contate suporte@trancosoresolve.com.br.');
+    const responseText = typeof result === 'string' ? result : ((/** @type {any} */ (result))?.response || 'Desculpe, não consegui processar sua mensagem. Tente novamente ou contate suporte@trancosoresolve.com.br.');
 
     const assistantMsg = {
       id: (Date.now() + 1).toString(),

@@ -8,7 +8,7 @@ const DefaultFallback = () => (
   </div>
 );
 
-export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement }) {
+export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement: _unauthenticatedElement }) {
   const { isAuthenticated, isLoadingAuth, authError } = useAuth();
   const location = useLocation();
 

@@ -54,7 +54,7 @@ export default function TrIAStreamingMessage({ content, isComplete, onComplete }
                 {children}
               </blockquote>
             ),
-            code: ({ inline, children }) =>
+            code: (/** @type {any} */ { inline, children }) =>
               inline ? (
                 <code className="bg-black/30 px-1.5 py-0.5 rounded text-orange-300 font-mono text-xs">{children}</code>
               ) : (

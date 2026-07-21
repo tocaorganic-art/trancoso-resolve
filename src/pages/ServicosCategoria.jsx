@@ -271,7 +271,7 @@ export default function ServicosCategoriaPage() {
             }
           });
           
-          const ids = result?.relevant_provider_ids;
+          const ids = (/** @type {any} */ (result))?.relevant_provider_ids;
           setAiFilteredProviderIds(Array.isArray(ids) ? ids : []);
         } catch (error) {
           console.error("Search error:", error);

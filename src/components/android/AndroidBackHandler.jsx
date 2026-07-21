@@ -8,7 +8,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 export default function AndroidBackHandler() {
   const navigate = useNavigate();
   const location = useLocation();
-  const backStack = typeof window !== 'undefined' ? window.__backStack || [] : [];
 
   useEffect(() => {
     // Initialize back stack on mount
@@ -40,7 +39,7 @@ export default function AndroidBackHandler() {
 
   useEffect(() => {
     // Handle physical back button (Android)
-    const handleBackButton = (e) => {
+    const handleBackButton = (_e) => {
       const stack = window.__backStack || [];
 
       // Home page: exit app (Android behavior)

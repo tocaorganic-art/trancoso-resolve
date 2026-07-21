@@ -8,8 +8,6 @@ import { Users, FileText, TrendingUp, Percent } from "lucide-react";
 export default function TabVisaoGeral({ leads, requests, providers }) {
   const now = new Date();
   const sevenDaysAgo = subDays(now, 7);
-  const thirtyDaysAgo = subDays(now, 30);
-
   const leadsUltimos7 = useMemo(() =>
     (leads || []).filter(l => new Date(l.created_date) >= sevenDaysAgo).length,
     [leads]

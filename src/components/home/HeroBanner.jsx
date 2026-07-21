@@ -38,7 +38,7 @@ const SLIDES = [
   },
 ];
 
-export default function HeroBanner({ vagasRestantes = 0, total = 0 }) {
+export default function HeroBanner({ vagasRestantes = 0, total: _total = 0 }) {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
 

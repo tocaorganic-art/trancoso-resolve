@@ -17,7 +17,7 @@ export default function DocumentUpload() {
   const queryClient = useQueryClient();
 
   const createTransactionsMutation = useMutation({
-    mutationFn: (transactions) => base44.entities.Transaction.bulkCreate(transactions),
+    mutationFn: (/** @type {any} */ transactions) => base44.entities.Transaction.bulkCreate(transactions),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
       // A toast de sucesso geral já é disparada após este sucesso na handleUpload
@@ -162,11 +162,12 @@ Retorne um JSON válido.
       setProcessing(false);
       setProgressMessage("");
 
-      if (!aiResult || !aiResult.transactions) {
+      const aiResultAny = /** @type {any} */ (aiResult);
+      if (!aiResultAny || !aiResultAny.transactions) {
         throw new Error("A IA não conseguiu extrair transações deste documento. Verifique se a imagem está legível.");
       }
 
-      const transactions = aiResult.transactions;
+      const transactions = aiResultAny.transactions;
 
       if (transactions.length > 0) {
         // Validar e limpar transações

@@ -76,7 +76,7 @@ export default function ChatInterface({ conversationId, onConversationUpdate }) 
       let conversation;
       try {
         conversation = await base44.agents.getConversation(conversationId);
-      } catch (err) {
+      } catch {
         throw new Error('Esta conversa não existe mais. Crie uma nova conversa.');
       }
       

@@ -31,7 +31,7 @@ function loadGoogleMaps() {
   });
 }
 
-export default function ServiceLocationMap({ initialPosition, onLocationSelect }) {
+export default function ServiceLocationMap({ initialPosition = undefined, onLocationSelect = undefined }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);

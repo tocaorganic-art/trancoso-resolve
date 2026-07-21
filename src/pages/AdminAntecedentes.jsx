@@ -44,7 +44,7 @@ export default function AdminAntecedentesPage() {
   });
 
   const aprovaMutation = useMutation({
-    mutationFn: (id) =>
+    mutationFn: (/** @type {any} */ id) =>
       base44.entities.ServiceProvider.update(id, {
         status_verificacao: "aprovado",
         relatorio_verificacao: "Aprovado manualmente pelo administrador.",
@@ -57,7 +57,7 @@ export default function AdminAntecedentesPage() {
   });
 
   const reprovaMutation = useMutation({
-    mutationFn: (id) =>
+    mutationFn: (/** @type {any} */ id) =>
       base44.entities.ServiceProvider.update(id, {
         status_verificacao: "reprovado",
         relatorio_verificacao: "Reprovado manualmente pelo administrador.",
@@ -70,8 +70,8 @@ export default function AdminAntecedentesPage() {
   });
 
   const reverificaMutation = useMutation({
-    mutationFn: (id) => base44.functions.invoke('verificarAntecedentes', { service_provider_id: id }),
-    onSuccess: (_, id) => {
+    mutationFn: (/** @type {any} */ id) => base44.functions.invoke('verificarAntecedentes', { service_provider_id: id }),
+    onSuccess: (_, _id) => {
       toast.success("🔄 Verificação reenviada para Infosimples.");
       queryClient.invalidateQueries({ queryKey: ["allProviders"] });
     },
