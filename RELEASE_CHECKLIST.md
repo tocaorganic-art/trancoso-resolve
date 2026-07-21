@@ -75,9 +75,14 @@
 
 ### Deploy
 
-- [ ] Vercel mostra **Production Deployment → Ready** para o commit mergeado
+> ⚠️ **O deploy final de produção é feito pelo Base44, não pela Vercel.**
+> A Vercel faz o build e o preview. Para publicar em produção, acesse o painel
+> do Base44 (app ID `68eb21726a9614db4a82ba99`) → Configurações → pull do branch `main`.
+
+- [ ] Pull do branch `main` executado no Base44
+- [ ] Base44 confirma build concluído sem erros
 - [ ] URL de produção (`www.trancosoresolve.com.br`) abre sem erro 502/504
-- [ ] Commit do deploy bate com o SHA do squash merge
+- [ ] Commit em produção bate com o SHA do squash merge
 
 ### Validação em produção
 
@@ -91,7 +96,7 @@
 
 ### Monitoramento (primeiros 15 minutos)
 
-- [ ] Logs da Vercel: sem spike de erros
+- [ ] Logs do Base44: sem spike de erros ou exceções
 - [ ] Analytics continuam registrando page views
 - [ ] Nenhum alerta de usuário reportado
 
