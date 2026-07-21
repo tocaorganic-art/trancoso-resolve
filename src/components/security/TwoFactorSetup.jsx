@@ -62,7 +62,7 @@ export default function TwoFactorSetup({ onComplete }) {
       });
 
       if (onComplete) onComplete();
-    } catch (error) {
+    } catch {
       toast.error('Código inválido.', { description: 'Tente novamente.' });
     } finally {
       setIsVerifying(false);

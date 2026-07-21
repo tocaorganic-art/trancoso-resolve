@@ -22,7 +22,8 @@ function useChart() {
   return context
 }
 
-const ChartContainer = React.forwardRef(({ id, className, children, config, ...props }, ref) => {
+/** @type {any} */
+const ChartContainer = React.forwardRef(({ id, className, children = undefined, config, ...props }, ref) => {
   const uniqueId = React.useId()
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
 
@@ -79,6 +80,7 @@ return color ? `  --color-${key}: ${color};` : null
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
+/** @type {any} */
 const ChartTooltipContent = React.forwardRef((
   {
     active,
@@ -150,7 +152,7 @@ const ChartTooltipContent = React.forwardRef((
       )}>
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
-        {payload.map((item, index) => {
+        {payload.map((item) => {
           const key = `${nameKey || item.name || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
           const indicatorColor = color || item.payload.fill || item.color
@@ -163,7 +165,7 @@ const ChartTooltipContent = React.forwardRef((
                 indicator === "dot" && "items-center"
               )}>
               {formatter && item?.value !== undefined && item.name ? (
-                formatter(item.value, item.name, item, index, item.payload)
+                formatter(item.value, item.name, item, undefined, item.payload)
               ) : (
                 <>
                   {itemConfig?.icon ? (
@@ -216,6 +218,7 @@ ChartTooltipContent.displayName = "ChartTooltip"
 
 const ChartLegend = RechartsPrimitive.Legend
 
+/** @type {any} */
 const ChartLegendContent = React.forwardRef((
   { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
   ref

@@ -23,7 +23,7 @@ export default function PerformanceOptimizer() {
         base44.functions.invoke('logPerformance', metrics).catch(() => {
           // Silent fail
         });
-      } catch (e) {
+      } catch {
         // Silent fail
       }
     };

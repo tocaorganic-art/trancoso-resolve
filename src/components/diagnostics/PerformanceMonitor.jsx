@@ -45,7 +45,7 @@ export default function PerformanceMonitor() {
         fcp: Math.round(fcp),
         lcp: Math.round(lcp),
         fid,
-        cls: cls.toFixed(3),
+        cls,
         ttfb: Math.round(ttfb),
         score: overallScore,
       });
@@ -119,7 +119,7 @@ export default function PerformanceMonitor() {
       </CardHeader>
       <CardContent className="space-y-4">
         {metricsList.map((metric) => {
-          const status = getMetricStatus(metric.key, parseFloat(metric.value));
+          const status = getMetricStatus(metric.key, metric.value);
           return (
             <div key={metric.key}>
               <div className="flex items-center justify-between mb-2">

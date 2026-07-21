@@ -50,10 +50,10 @@ Seja conciso mas completo.
       });
 
       setMessages(prev => [...prev, { role: "assistant", content: response }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { 
-        role: "assistant", 
-        content: "Desculpe, ocorreu um erro ao processar sua pergunta. Tente novamente." 
+    } catch {
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: "Desculpe, ocorreu um erro ao processar sua pergunta. Tente novamente."
       }]);
     } finally {
       setLoading(false);

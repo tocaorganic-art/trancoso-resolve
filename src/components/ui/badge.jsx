@@ -23,8 +23,8 @@ const badgeVariants = cva(
 )
 
 function Badge({
-  className,
-  variant,
+  className = undefined,
+  variant = undefined,
   ...props
 }) {
   return (<div className={cn(badgeVariants({ variant }), className)} {...props} />);

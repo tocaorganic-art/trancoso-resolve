@@ -12,7 +12,7 @@ const Base44Image = ({
   alt = 'imagem', 
   className = '', 
   fallback = '/assets/placeholders/fallback.jpg',
-  placeholder = '/assets/placeholders/loading.svg',
+  placeholder: _placeholder = '/assets/placeholders/loading.svg',
   onLoad,
   onError,
   ...props 

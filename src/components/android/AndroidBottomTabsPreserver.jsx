@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 export default function AndroidBottomTabsPreserver() {
   const location = useLocation();
   const scrollPositionsRef = useRef({});
-  const mainContentRef = useRef(null);
+  const _mainContentRef = useRef(null);
 
   useEffect(() => {
     // Save scroll position when leaving a tab

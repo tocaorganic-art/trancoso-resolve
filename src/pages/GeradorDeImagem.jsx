@@ -8,11 +8,6 @@ import { Loader2, Sparkles, Download, Image as ImageIcon, LogIn, RefreshCw, Wand
 import { toast } from 'sonner';
 
 const STYLE_OPTIONS = ["Realista", "Ilustração", "3D", "Aquarela", "Minimalista"];
-const FORMAT_OPTIONS = [
-  { label: "Quadrado", value: "quadrado" },
-  { label: "Retrato", value: "retrato" },
-  { label: "Paisagem", value: "paisagem" },
-];
 const DETAIL_OPTIONS = ["Simples", "Detalhado", "Hiper-realista"];
 
 const TEMPLATE_PROMPTS = [
@@ -95,10 +90,10 @@ export default function GeradorDeImagemPage() {
     if (!generatedImage) return;
     setIsGenerating(true);
     try {
-      const result = await base44.integrations.Core.GenerateImage({
+      const result = await base44.integrations.Core.GenerateImage(/** @type {any} */ ({
         prompt: buildFullPrompt(),
         existing_image_urls: [generatedImage]
-      });
+      }));
       if (result.url) {
         setGeneratedImage(result.url);
         toast.success('Variação criada!');

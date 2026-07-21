@@ -56,7 +56,7 @@ export default function DisponibilidadeEditor({ providerId }) {
   }, [schedule, isLoading]);
 
   const saveMutation = useMutation({
-    mutationFn: async (data) => {
+    mutationFn: async (/** @type {any} */ data) => {
       if (schedule?.id) {
         return base44.entities.ProviderSchedule.update(schedule.id, data);
       } else {
@@ -97,13 +97,6 @@ export default function DisponibilidadeEditor({ providerId }) {
       return { ...prev, [dayKey]: { ...prev[dayKey], slots: [...current, val].sort() } };
     });
     setCustomSlotInput(prev => ({ ...prev, [dayKey]: '' }));
-  };
-
-  const toggleBlockedDate = (date) => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    setBlockedDates(prev =>
-      prev.includes(dateStr) ? prev.filter(d => d !== dateStr) : [...prev, dateStr]
-    );
   };
 
   if (isLoading || !availability) {

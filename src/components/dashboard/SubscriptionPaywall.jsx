@@ -17,7 +17,7 @@ export default function SubscriptionPaywall({ subscriptionStatus, isTrial, hasAn
       localStorage.setItem('trial_pendente', Date.now().toString());
       toast.success("Trial ativado! Carregando seu painel...");
       setTimeout(() => window.location.reload(), 1500);
-    } catch (e) {
+    } catch {
       toast.error("Não foi possível ativar o trial. Tente novamente.");
       setActivatingTrial(false);
     }

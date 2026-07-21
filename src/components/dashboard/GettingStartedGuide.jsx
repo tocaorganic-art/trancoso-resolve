@@ -4,7 +4,7 @@ import { User, Briefcase, Calendar, ArrowRight, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
-export default function GettingStartedGuide({ onDismiss }) {
+export default function GettingStartedGuide({ onDismiss = undefined }) {
   const steps = [
     {
       icon: <User className="w-6 h-6 text-blue-600" />,

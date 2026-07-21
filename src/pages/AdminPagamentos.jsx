@@ -79,7 +79,7 @@ export default function AdminPagamentosPage() {
         <AlertTriangle className="w-16 h-16 text-red-400" />
         <h2 className="text-2xl font-bold text-foreground">Acesso Restrito</h2>
         <p className="text-muted-foreground max-w-sm">Esta página é exclusiva para administradores da plataforma.</p>
-        <button onClick={() => base44.auth.redirectToLogin()} className="text-sm text-orange-600 underline">Entrar com outra conta</button>
+        <button onClick={() => base44.auth.redirectToLogin(window.location.href)} className="text-sm text-orange-600 underline">Entrar com outra conta</button>
       </div>
     );
   }
@@ -232,7 +232,7 @@ export default function AdminPagamentosPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedData.map((payment, index) => {
+                  {paginatedData.map((payment, _index) => {
                     const provider = providerMap[payment.provider_id];
                     return (
                       <tr key={payment.id} className="border-b border-border hover:bg-muted transition-colors">

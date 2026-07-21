@@ -10,7 +10,7 @@ import { cancelarAssinatura } from "@/functions/cancelarAssinatura";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function CancelSubscriptionButton({ accessUntil }) {
+export default function CancelSubscriptionButton({ accessUntil = undefined }) {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 

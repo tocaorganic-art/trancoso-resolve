@@ -3,6 +3,7 @@ import { cva } from "class-variance-authority";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/** @type {any} */
 const ToastProvider = React.forwardRef(({ ...props }, ref) => (
   <div
     ref={ref}
@@ -12,6 +13,7 @@ const ToastProvider = React.forwardRef(({ ...props }, ref) => (
 ));
 ToastProvider.displayName = "ToastProvider";
 
+/** @type {any} */
 const ToastViewport = React.forwardRef(({ ...props }, ref) => (
   <div
     ref={ref}
@@ -37,7 +39,8 @@ const toastVariants = cva(
   }
 );
 
-const Toast = React.forwardRef(({ className, variant, ...props }, ref) => {
+/** @type {any} */
+const Toast = React.forwardRef(({ className = undefined, variant = undefined, ...props }, ref) => {
   return (
     <div
       ref={ref}
@@ -48,7 +51,8 @@ const Toast = React.forwardRef(({ className, variant, ...props }, ref) => {
 });
 Toast.displayName = "Toast";
 
-const ToastAction = React.forwardRef(({ className, ...props }, ref) => (
+/** @type {any} */
+const ToastAction = React.forwardRef(({ className = undefined, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
@@ -60,7 +64,8 @@ const ToastAction = React.forwardRef(({ className, ...props }, ref) => (
 ));
 ToastAction.displayName = "ToastAction";
 
-const ToastClose = React.forwardRef(({ className, ...props }, ref) => (
+/** @type {any} */
+const ToastClose = React.forwardRef(({ className = undefined, ...props }, ref) => (
   <button
     ref={ref}
     className={cn(
@@ -75,7 +80,8 @@ const ToastClose = React.forwardRef(({ className, ...props }, ref) => (
 ));
 ToastClose.displayName = "ToastClose";
 
-const ToastTitle = React.forwardRef(({ className, ...props }, ref) => (
+/** @type {any} */
+const ToastTitle = React.forwardRef(({ className = undefined, ...props }, ref) => (
   <div
     ref={ref}
     className={cn("text-sm font-semibold", className)}
@@ -84,7 +90,8 @@ const ToastTitle = React.forwardRef(({ className, ...props }, ref) => (
 ));
 ToastTitle.displayName = "ToastTitle";
 
-const ToastDescription = React.forwardRef(({ className, ...props }, ref) => (
+/** @type {any} */
+const ToastDescription = React.forwardRef(({ className = undefined, ...props }, ref) => (
   <div
     ref={ref}
     className={cn("text-sm opacity-90", className)}
