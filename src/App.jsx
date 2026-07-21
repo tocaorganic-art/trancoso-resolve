@@ -480,26 +480,10 @@ const AuthenticatedApp = () => {
           <Route path="/servicos-jardineiro-caraiva" element={<LayoutWrapper currentPageName="JardineiroCaraiva"><AnimatedPage><JardineiroCaraiva /></AnimatedPage></LayoutWrapper>} />
           <Route path="/servicos-pedreiro-caraiva" element={<LayoutWrapper currentPageName="PedreiroCaraiva"><AnimatedPage><PedreiroCaraiva /></AnimatedPage></LayoutWrapper>} />
 
-          <Route path="/destinos/trancoso" element={
-            <LayoutWrapper currentPageName="DestinoTrancoso">
-              <AnimatedPage><DestinoTrancoso /></AnimatedPage>
-            </LayoutWrapper>
-          } />
-          <Route path="/destinos/arraial-dajuda" element={
-            <LayoutWrapper currentPageName="DestinoArraialDajuda">
-              <AnimatedPage><DestinoArraialDajuda /></AnimatedPage>
-            </LayoutWrapper>
-          } />
-          <Route path="/destinos/porto-seguro" element={
-            <LayoutWrapper currentPageName="DestinoPortoSeguro">
-              <AnimatedPage><DestinoPortoSeguro /></AnimatedPage>
-            </LayoutWrapper>
-          } />
-          <Route path="/destinos/caraiva" element={
-            <LayoutWrapper currentPageName="DestinoCaraiva">
-              <AnimatedPage><DestinoCaraiva /></AnimatedPage>
-            </LayoutWrapper>
-          } />
+          <Route path="/destinos/trancoso" element={<Navigate to="/trancoso" replace />} />
+          <Route path="/destinos/arraial-dajuda" element={<Navigate to="/arraial-dajuda" replace />} />
+          <Route path="/destinos/porto-seguro" element={<Navigate to="/porto-seguro" replace />} />
+          <Route path="/destinos/caraiva" element={<Navigate to="/caraiva" replace />} />
 
           <Route path="/RelatorioDiario" element={
             <AnimatedPage><RelatorioDiarioPage /></AnimatedPage>
