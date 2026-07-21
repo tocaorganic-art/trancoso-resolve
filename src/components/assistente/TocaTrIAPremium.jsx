@@ -7,7 +7,7 @@ import LanguageSelector from './LanguageSelector.jsx';
 
 const STORAGE_KEY = 'tria_conversations_v2';
 
-const SYSTEM_PROMPT = `Você é a Toca TrIA, assistente virtual inteligente do Trancoso Resolve — o marketplace de serviços locais em Trancoso, Bahia.
+const SYSTEM_PROMPT = `Você é a TryA, assistente virtual inteligente do Trancoso Resolve — o marketplace de serviços locais em Trancoso, Bahia.
 
 Sua missão é resolver os problemas dos usuários de forma rápida, calorosa e eficiente.
 
@@ -225,7 +225,7 @@ export default function TocaTrIAPremium() {
       const isAuthError = err?.status === 401 || err?.message?.includes('autenticad') || err?.message?.includes('401');
       setError(
         isAuthError
-          ? 'Você precisa estar logado para usar a Toca TrIA. Faça login e tente novamente.'
+          ? 'Você precisa estar logado para usar a TryA. Faça login e tente novamente.'
           : 'Não consegui processar sua mensagem. Tente novamente em instantes.'
       );
     } finally {
@@ -263,7 +263,7 @@ export default function TocaTrIAPremium() {
           <div className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full ${isLoading ? 'bg-orange-400 animate-pulse' : 'bg-[#6B7C3A]'}`} />
             <span className="text-sm font-semibold text-[#E8C99A]">
-              {isLoading ? 'Toca TrIA está pensando…' : 'Toca TrIA · Online'}
+              {isLoading ? 'TryA está pensando…' : 'TryA · Online'}
             </span>
           </div>
 
