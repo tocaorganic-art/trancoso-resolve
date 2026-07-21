@@ -452,7 +452,7 @@ function App() {
               <AuthenticatedApp />
             </Router>
             <Toaster />
-            <VisualEditAgent />
+            {import.meta.env.DEV && <VisualEditAgent />}
             <Analytics />
             <SpeedInsights />
           </QueryClientProvider>
