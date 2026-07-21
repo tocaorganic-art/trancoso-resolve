@@ -36,11 +36,11 @@ const BLOCK_MESSAGE =
  * @returns {{ blocked: boolean, reason: string }}
  */
 export function checkContactData(message) {
-  if (!message) return { blocked: false };
+  if (!message) return { blocked: false, reason: '' };
   for (const pattern of CONTACT_PATTERNS) {
     if (pattern.test(message)) {
       return { blocked: true, reason: BLOCK_MESSAGE };
     }
   }
-  return { blocked: false };
+  return { blocked: false, reason: '' };
 }

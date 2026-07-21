@@ -30,7 +30,7 @@ export function playMessageSound() {
 
     oscillator.start(ctx.currentTime);
     oscillator.stop(ctx.currentTime + 0.3);
-  } catch (e) {
+  } catch {
     // Browser may block autoplay — silently ignore
   }
 }

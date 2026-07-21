@@ -43,15 +43,15 @@ export default function BookingForm({ provider, services, user, onCancel }) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (payload) => base44.entities.ServiceRequest.create(payload),
+    mutationFn: (/** @type {any} */ payload) => base44.entities.ServiceRequest.create(payload),
     onMutate: async (payload) => {
       await queryClient.cancelQueries({ queryKey: ['serviceRequests'] });
       const previous = queryClient.getQueryData(['serviceRequests']);
       const optimistic = { ...payload, id: 'temp-' + Date.now(), status: 'Pendente' };
-      queryClient.setQueryData(['serviceRequests'], (old) => old ? [optimistic, ...old] : [optimistic]);
+      queryClient.setQueryData(['serviceRequests'], (/** @type {any} */ old) => old ? [optimistic, ...old] : [optimistic]);
       return { previous };
     },
-    onSuccess: (_result, payload) => {
+    onSuccess: (_result, /** @type {any} */ payload) => {
       setSuccess(true);
       queryClient.invalidateQueries({ queryKey: ['serviceRequests'] });
       const selectedService = services?.find(s => s.id === payload.service_id);
@@ -103,7 +103,7 @@ export default function BookingForm({ provider, services, user, onCancel }) {
           date: data.date ? format(data.date, "yyyy-MM-dd") : null,
           time: data.time || null,
         });
-      } catch (error) {
+      } catch {
         toast.error("Erro ao buscar dados do prestador.");
       }
     };

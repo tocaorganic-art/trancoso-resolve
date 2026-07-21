@@ -39,7 +39,7 @@ import ProFloatingButton from "./components/banners/ProFloatingButton";
 import CompletarPerfilModal from "./components/auth/CompletarPerfilModal";
 import PWAPrompt from "./components/optimization/PWAPrompt";
 
-export default function Layout({ children, currentPageName }) {
+export default function Layout({ children, currentPageName: _currentPageName }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -76,10 +76,6 @@ export default function Layout({ children, currentPageName }) {
       '/Chat': 'Minhas Conversas | Trancoso Resolve',
       '/About': 'Sobre Nós | Trancoso Resolve',
       '/Contact': 'Contato | Trancoso Resolve',
-      '/Planos': 'Planos e Preços | Trancoso Resolve',
-      '/SejaPrestador': 'Seja um Prestador | Trancoso Resolve',
-      '/ComoFunciona': 'Como Funciona | Trancoso Resolve',
-      '/Assistentevirtual': 'Assistente IA | Trancoso Resolve',
       '/login': 'Entrar | Trancoso Resolve',
       '/register': 'Cadastrar | Trancoso Resolve',
     };
@@ -307,7 +303,7 @@ export default function Layout({ children, currentPageName }) {
                     </DropdownMenuContent>
                   </DropdownMenu> :
 
-                <Button onClick={() => {sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="bg-brand-primary text-white hover:bg-orange-600 transition-colors duration-200" size="sm" data-testid="login-button">
+                <Button onClick={() => {sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin(window.location.href);}} className="bg-brand-primary text-white hover:bg-orange-600 transition-colors duration-200" size="sm" data-testid="login-button">
                     {t('nav.login')}
                   </Button>
                 }
@@ -340,7 +336,7 @@ export default function Layout({ children, currentPageName }) {
                     <Link to={createPageUrl("ComoFunciona")} className="block text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>{t('nav.howItWorks')}</Link>
                     <Link to={createPageUrl("SejaPrestador")} className="block text-base font-semibold text-foreground hover:text-orange-500 py-3 min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>{t('nav.beProvider')}</Link>
                     <div className="pt-2 border-t border-border flex items-center gap-2">
-                      <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin();}} className="flex-1 bg-brand-primary text-white hover:bg-orange-600 transition-colors duration-200 min-h-[44px]" size="sm">
+                      <Button onClick={() => {setMobileMenuOpen(false);sessionStorage.setItem('loginTimestamp', Date.now().toString());base44.auth.redirectToLogin(window.location.href);}} className="flex-1 bg-brand-primary text-white hover:bg-orange-600 transition-colors duration-200 min-h-[44px]" size="sm">
                         {t('nav.login')}
                       </Button>
                       {/* Language + theme in mobile menu */}

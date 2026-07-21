@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 // Ex: "https://exemplo.com/toca-video.mp4"
 // Ex YouTube: "https://www.youtube.com/watch?v=VIDEO_ID"
 // Deixe vazio ("") para usar o fallback de áudio por navegador
+/** @type {string} */
 const TOCA_VIDEO_URL = "";
 
 const ROTEIRO_TOCA = "Oi! Eu sou a Toca, sua anfitriã aqui em Trancoso. Vou te mostrar como é fácil resolver seu corre. Primeiro, é só encontrar o serviço: navegue pelas categorias ou use a busca pra achar exatamente o que você precisa, de uma faxina a um passeio exclusivo. Depois, agende com facilidade: escolha o melhor profissional pelas avaliações, veja os detalhes, marque a data e envie sua solicitação em poucos cliques. E pronto, problema resolvido: o prestador confirma, faz o serviço, e no final você avalia e ajuda nossa comunidade a crescer. Se você é prestador, também é simples: crie seu perfil de graça, receba as propostas e faça seu negócio crescer aqui na vila. Bora resolver?";

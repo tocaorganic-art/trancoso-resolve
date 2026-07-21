@@ -119,7 +119,7 @@ export default function DestinoHub() {
       <section className="py-16">
         <div className="container mx-auto max-w-2xl px-4">
           <h2 className="text-2xl font-bold text-center mb-8">Pedir orçamento em {label}</h2>
-          <LeadCaptureForm cidade={label} />
+          <LeadCaptureForm serviceLabel={label} />
         </div>
       </section>
 

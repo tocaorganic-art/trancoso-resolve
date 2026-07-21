@@ -12,7 +12,7 @@ function formatPhone(value) {
   return value;
 }
 
-export default function LeadCaptureForm({ serviceInterest, serviceLabel, source }) {
+export default function LeadCaptureForm({ serviceInterest = undefined, serviceLabel = undefined, source = undefined }) {
   const [form, setForm] = useState({ name: '', phone: '', message: '' });
   const [status, setStatus] = useState('idle');
 
@@ -85,7 +85,7 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
               onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
               placeholder="Seu nome"
               className="w-full rounded-lg border px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2"
-              style={{ borderColor: '#E8D5B7', color: '#2C1A0E', focusRingColor: '#8B6914' }}
+              style={{ borderColor: '#E8D5B7', color: '#2C1A0E' }}
             />
           </div>
           <div>

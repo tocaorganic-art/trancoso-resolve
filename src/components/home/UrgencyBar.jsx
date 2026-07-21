@@ -4,7 +4,7 @@ import { X, ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 
-export default function UrgencyBar({ user }) {
+export default function UrgencyBar({ user: _user }) {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {

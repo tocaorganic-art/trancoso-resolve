@@ -103,11 +103,11 @@ function MinhaAgendaContent() {
   });
 
   const updateRequestMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.ServiceRequest.update(id, data),
-    onMutate: async ({ id, data }) => {
+    mutationFn: (/** @type {any} */ { id, data }) => base44.entities.ServiceRequest.update(id, data),
+    onMutate: async (/** @type {any} */ { id, data }) => {
       await queryClient.cancelQueries({ queryKey: ['serviceRequests', user?.email] });
       const previous = queryClient.getQueryData(['serviceRequests', user?.email]);
-      queryClient.setQueryData(['serviceRequests', user?.email], (old) =>
+      queryClient.setQueryData(['serviceRequests', user?.email], (/** @type {any} */ old) =>
         (old || []).map((r) => r.id === id ? { ...r, ...data } : r)
       );
       return { previous };

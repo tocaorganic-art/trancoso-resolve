@@ -16,7 +16,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
   });
 
   const mutation = useMutation({
-    mutationFn: (data) => base44.auth.updateMe(data),
+    mutationFn: (/** @type {any} */ data) => base44.auth.updateMe(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       toast.success('Perfil concluído! Bem-vindo(a) ao Trancoso Resolve.');

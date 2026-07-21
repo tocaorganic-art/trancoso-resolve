@@ -18,7 +18,7 @@ export default function ReviewModal({ request, provider, user, onClose }) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (reviewData) => base44.entities.ServiceReview.create(reviewData),
+    mutationFn: (/** @type {any} */ reviewData) => base44.entities.ServiceReview.create(reviewData),
     onSuccess: () => {
       toast.success("Avaliação enviada com sucesso! Obrigado pelo seu feedback.");
       queryClient.invalidateQueries({ queryKey: ['myReviews', user.id] });

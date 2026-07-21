@@ -33,10 +33,10 @@ function AdminUserManagementContent() {
     initialData: [],
   });
 
-  const updateUserMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.User.update(id, data),
+  const _updateUserMutation = useMutation({
+    mutationFn: (/** @type {any} */ { id, data }) => base44.entities.User.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['allUsers']);
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       toast.success('Usuário atualizado!');
     },
   });
@@ -65,7 +65,7 @@ function AdminUserManagementContent() {
         )
       );
       
-      queryClient.invalidateQueries(['allUsers']);
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       toast.success(`${selectedUsers.length} usuários atualizados para "${newRole}"!`);
       setSelectedUsers([]);
     } catch (error) {
@@ -86,7 +86,7 @@ function AdminUserManagementContent() {
         )
       );
       
-      queryClient.invalidateQueries(['allUsers']);
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       toast.success(`${selectedUsers.length} usuários atualizados para "${newUserType}"!`);
       setSelectedUsers([]);
     } catch (error) {

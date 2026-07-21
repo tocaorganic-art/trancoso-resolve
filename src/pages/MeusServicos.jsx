@@ -49,18 +49,18 @@ function MeusServicosContent() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.ServiceListing.create({ ...data, provider_id: provider.id, active: true }),
+    mutationFn: (/** @type {any} */ data) => base44.entities.ServiceListing.create({ ...data, provider_id: provider.id, active: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['myServiceListings']);
+      queryClient.invalidateQueries({ queryKey: ['myServiceListings'] });
       toast.success('Serviço criado com sucesso!');
       setModalOpen(false);
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.ServiceListing.update(id, data),
+    mutationFn: (/** @type {any} */ { id, data }) => base44.entities.ServiceListing.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['myServiceListings']);
+      queryClient.invalidateQueries({ queryKey: ['myServiceListings'] });
       toast.success('Serviço atualizado!');
       setModalOpen(false);
       setEditingService(null);
@@ -68,11 +68,11 @@ function MeusServicosContent() {
   });
 
   const toggleActiveMutation = useMutation({
-    mutationFn: ({ id, active }) => base44.entities.ServiceListing.update(id, { active }),
-    onMutate: async ({ id, active }) => {
+    mutationFn: (/** @type {any} */ { id, active }) => base44.entities.ServiceListing.update(id, { active }),
+    onMutate: async (/** @type {any} */ { id, active }) => {
       await queryClient.cancelQueries({ queryKey: ['myServiceListings', provider?.id] });
       const previous = queryClient.getQueryData(['myServiceListings', provider?.id]);
-      queryClient.setQueryData(['myServiceListings', provider?.id], (old) =>
+      queryClient.setQueryData(['myServiceListings', provider?.id], (/** @type {any} */ old) =>
         (old || []).map((s) => s.id === id ? { ...s, active } : s)
       );
       return { previous };
@@ -87,14 +87,14 @@ function MeusServicosContent() {
       toast.error('Erro ao atualizar status.', { description: error.message });
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['myServiceListings']);
+      queryClient.invalidateQueries({ queryKey: ['myServiceListings'] });
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => base44.entities.ServiceListing.delete(id),
+    mutationFn: (/** @type {any} */ id) => base44.entities.ServiceListing.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries(['myServiceListings']);
+      queryClient.invalidateQueries({ queryKey: ['myServiceListings'] });
       toast.success('Serviço removido!');
     },
   });

@@ -48,7 +48,7 @@ export default function VerificacaoDocumentoPage() {
     }
   }, [user, isLoadingUser, navigate]);
 
-  const handleVerificationComplete = async (result) => {
+  const handleVerificationComplete = async (_result) => {
     // Aguardar atualização do estado e redirecionar
     setTimeout(() => {
       navigate('/Dashboard');

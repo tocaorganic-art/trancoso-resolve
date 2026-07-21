@@ -5,7 +5,7 @@ import { MessageCircle, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
-export default function StartChatButton({ provider, service, className = "" }) {
+export default function StartChatButton({ provider, service = undefined, className = "" }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -17,7 +17,7 @@ export default function StartChatButton({ provider, service, className = "" }) {
   const startChatMutation = useMutation({
     mutationFn: async () => {
       if (!currentUser) {
-        base44.auth.redirectToLogin();
+        base44.auth.redirectToLogin(window.location.href);
         return;
       }
 
@@ -56,7 +56,7 @@ export default function StartChatButton({ provider, service, className = "" }) {
 
   const handleClick = () => {
     if (!currentUser) {
-      base44.auth.redirectToLogin();
+      base44.auth.redirectToLogin(window.location.href);
       return;
     }
     startChatMutation.mutate();

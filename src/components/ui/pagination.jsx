@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button";
 
 const Pagination = ({
-  className,
+  className = undefined,
   ...props
 }) => (
   <nav
@@ -16,7 +16,8 @@ const Pagination = ({
 )
 Pagination.displayName = "Pagination"
 
-const PaginationContent = React.forwardRef(({ className, ...props }, ref) => (
+/** @type {any} */
+const PaginationContent = React.forwardRef(({ className = undefined, ...props }, ref) => (
   <ul
     ref={ref}
     className={cn("flex flex-row items-center gap-1", className)}
@@ -24,13 +25,14 @@ const PaginationContent = React.forwardRef(({ className, ...props }, ref) => (
 ))
 PaginationContent.displayName = "PaginationContent"
 
-const PaginationItem = React.forwardRef(({ className, ...props }, ref) => (
+/** @type {any} */
+const PaginationItem = React.forwardRef(({ className = undefined, ...props }, ref) => (
   <li ref={ref} className={cn("", className)} {...props} />
 ))
 PaginationItem.displayName = "PaginationItem"
 
 const PaginationLink = ({
-  className,
+  className = undefined,
   isActive,
   size = "icon",
   ...props
@@ -46,7 +48,7 @@ const PaginationLink = ({
 PaginationLink.displayName = "PaginationLink"
 
 const PaginationPrevious = ({
-  className,
+  className = undefined,
   ...props
 }) => (
   <PaginationLink
@@ -61,7 +63,7 @@ const PaginationPrevious = ({
 PaginationPrevious.displayName = "PaginationPrevious"
 
 const PaginationNext = ({
-  className,
+  className = undefined,
   ...props
 }) => (
   <PaginationLink
@@ -76,7 +78,7 @@ const PaginationNext = ({
 PaginationNext.displayName = "PaginationNext"
 
 const PaginationEllipsis = ({
-  className,
+  className = undefined,
   ...props
 }) => (
   <span

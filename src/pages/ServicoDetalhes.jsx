@@ -175,7 +175,7 @@ export default function ServicoDetalhesPage() {
           src={imageSrc}
           alt={`Imagem de capa do serviço: ${service.title}`}
           className="absolute inset-0 w-full h-full object-cover opacity-30"
-          onError={e => { e.target.style.display = 'none'; }}
+          onError={e => { /** @type {any} */ (e.target).style.display = 'none'; }}
         />
       </div>
 
@@ -269,10 +269,10 @@ export default function ServicoDetalhesPage() {
                       <CalendarIcon className="w-5 h-5 mr-2" />
                       Agendar Agora
                     </Button>
-                    <StartChatButton provider={provider} size="lg" className="flex-1" />
+                    <StartChatButton provider={provider} className="flex-1" />
                   </>
                 ) : (
-                  <Button size="lg" className="w-full" onClick={() => base44.auth.redirectToLogin()}>
+                  <Button size="lg" className="w-full" onClick={() => base44.auth.redirectToLogin(window.location.href)}>
                     Faça login para agendar
                   </Button>
                 )}

@@ -141,7 +141,7 @@ export default function RequestDetailsModal({ request, service, isOpen, onClose,
                 <CardContent className="p-4">
                      <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2"><MapPin className="w-4 h-4"/> Localização do Serviço</h4>
                      <div className="h-48 w-full rounded-md overflow-hidden mb-3">
-                        <ServiceLocationMap locations={[{ position: [request.location.lat, request.location.lng]}]} />
+                        <ServiceLocationMap initialPosition={[request.location.lat, request.location.lng]} />
                      </div>
                      <p className="text-sm text-slate-600">
                         {request.location.address}, {request.location.number}

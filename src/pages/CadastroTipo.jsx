@@ -90,7 +90,7 @@ export default function CadastroTipoPage() {
   };
 
   const updateUserMutation = useMutation({
-    mutationFn: async (userType) => {
+    mutationFn: async (/** @type {any} */ userType) => {
       const updated = await base44.auth.updateMe({ user_type: userType });
       return { updated, userType };
     },
