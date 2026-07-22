@@ -309,3 +309,175 @@ p, span, h1, h2, h3, h4, h5, h6, li, td, th, label, input, textarea {
 .dark img, .dark video, .dark canvas, .dark svg {
   background-color: transparent !important;
 }
+
+/* ================================================================
+   NUNITO — reforço universal de fonte
+   Garante Nunito em todos os elementos, inclusive terceiros.
+   ================================================================ */
+*, *::before, *::after,
+button, input, select, textarea, code, pre {
+  font-family: "Nunito", ui-rounded, "Segoe UI", system-ui, sans-serif;
+}
+
+/* ================================================================
+   DARK MODE — correção universal de contraste
+   Componentes que usam text-slate-* / text-gray-* / text-blue-*
+   sem variante dark: ficam ilegíveis no tema escuro.
+   Estas regras (fora de @layer) têm especificidade maior que
+   utilities Tailwind e corrigem tudo sem tocar cada arquivo.
+   ================================================================ */
+
+/* Textos escuros → claros no dark */
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-gray-950,
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-zinc-950,
+.dark .text-zinc-900,
+.dark .text-zinc-800,
+.dark .text-stone-950,
+.dark .text-stone-900 {
+  color: hsl(var(--foreground));
+}
+
+.dark .text-slate-700,
+.dark .text-gray-700,
+.dark .text-zinc-700,
+.dark .text-stone-700 {
+  color: hsl(var(--card-foreground));
+}
+
+.dark .text-slate-600,
+.dark .text-gray-600,
+.dark .text-zinc-600,
+.dark .text-stone-600 {
+  color: hsl(var(--muted-foreground));
+}
+
+.dark .text-slate-500,
+.dark .text-gray-500,
+.dark .text-zinc-500 {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Azul/teal/índigo/violeta → laranja queimado no dark */
+.dark .text-blue-900,
+.dark .text-blue-800,
+.dark .text-blue-700,
+.dark .text-blue-600 {
+  color: hsl(var(--primary));
+}
+.dark .text-blue-500,
+.dark .text-blue-400 {
+  color: var(--orange-400);
+}
+.dark .text-teal-700,
+.dark .text-teal-600,
+.dark .text-teal-500 {
+  color: var(--orange-400);
+}
+.dark .text-cyan-700,
+.dark .text-cyan-600,
+.dark .text-cyan-500 {
+  color: var(--orange-400);
+}
+.dark .text-indigo-700,
+.dark .text-indigo-600,
+.dark .text-indigo-500 {
+  color: hsl(var(--primary));
+}
+.dark .text-violet-700,
+.dark .text-violet-600,
+.dark .text-violet-500 {
+  color: hsl(var(--primary));
+}
+.dark .text-purple-700,
+.dark .text-purple-600,
+.dark .text-purple-500 {
+  color: hsl(var(--primary));
+}
+
+/* Verde → olive mais claro no dark */
+.dark .text-green-800,
+.dark .text-green-700,
+.dark .text-green-600 {
+  color: var(--olive-300);
+}
+.dark .text-emerald-700,
+.dark .text-emerald-600 {
+  color: var(--olive-300);
+}
+
+/* Fundo branco/cinza claro → superfície escura no dark */
+.dark .bg-white {
+  background-color: hsl(var(--card));
+}
+.dark .bg-slate-50,
+.dark .bg-gray-50,
+.dark .bg-zinc-50 {
+  background-color: hsl(var(--card));
+}
+.dark .bg-slate-100,
+.dark .bg-gray-100,
+.dark .bg-zinc-100 {
+  background-color: hsl(var(--muted));
+}
+.dark .bg-slate-200,
+.dark .bg-gray-200,
+.dark .bg-zinc-200 {
+  background-color: hsl(var(--border));
+}
+
+/* Bordas */
+.dark .border-slate-200,
+.dark .border-gray-200,
+.dark .border-zinc-200 {
+  border-color: hsl(var(--border));
+}
+.dark .border-slate-300,
+.dark .border-gray-300,
+.dark .border-zinc-300 {
+  border-color: hsl(var(--border));
+}
+
+/* bg-orange-50, bg-green-50 etc (soft surfaces) → darker equivalent */
+.dark .bg-orange-50 {
+  background-color: rgba(232, 87, 26, 0.12);
+}
+.dark .bg-green-50 {
+  background-color: rgba(62, 142, 90, 0.12);
+}
+.dark .bg-amber-50 {
+  background-color: rgba(229, 154, 18, 0.10);
+}
+.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.10);
+}
+.dark .bg-orange-100 {
+  background-color: rgba(232, 87, 26, 0.18);
+}
+.dark .bg-green-100 {
+  background-color: rgba(62, 142, 90, 0.18);
+}
+.dark .bg-amber-100 {
+  background-color: rgba(229, 154, 18, 0.16);
+}
+.dark .bg-blue-100 {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+/* Borda colorida soft */
+.dark .border-orange-200 {
+  border-color: rgba(232, 87, 26, 0.30);
+}
+.dark .border-green-200 {
+  border-color: rgba(62, 142, 90, 0.30);
+}
+.dark .border-amber-200 {
+  border-color: rgba(229, 154, 18, 0.28);
+}
+.dark .border-blue-200 {
+  border-color: rgba(59, 130, 246, 0.25);
+}

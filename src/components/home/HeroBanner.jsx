@@ -104,7 +104,7 @@ export default function HeroBanner({ vagasRestantes = 0, total = 0 }) {
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Link to={slide.cta.to}>
-            <Button className="bg-white text-slate-900 hover:bg-slate-100 font-bold px-6 py-3 text-sm w-full sm:w-auto">
+            <Button className="bg-white text-neutral-900 hover:bg-neutral-100 font-bold px-6 py-3 text-sm w-full sm:w-auto">
               {slide.cta.label}
               {slide.cta.icon && <ArrowRight className="w-4 h-4 ml-1" />}
             </Button>
