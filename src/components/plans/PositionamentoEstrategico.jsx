@@ -4,14 +4,14 @@ const Section = ({ icon, title, subtitle, text, benefits, color }) => (
   <div className={`rounded-2xl border p-6 md:p-8 ${color}`}>
     <div className="flex items-center gap-3 mb-3">
       {icon}
-      <h3 className="text-xl font-bold text-slate-900">{title}</h3>
+      <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-50">{title}</h3>
     </div>
-    {subtitle && <p className="text-xs font-semibold uppercase tracking-widest text-orange-600 mb-2">{subtitle}</p>}
-    <p className="text-slate-600 text-sm mb-4 leading-relaxed">{text}</p>
+    {subtitle && <p className="text-xs font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400 mb-2">{subtitle}</p>}
+    <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-4 leading-relaxed">{text}</p>
     <ul className="space-y-2">
       {benefits.map((b, i) => (
-        <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-          <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+        <li key={i} className="flex items-start gap-2 text-sm text-neutral-700 dark:text-neutral-300">
+          <CheckCircle className="w-4 h-4 text-olive-500 dark:text-olive-400 shrink-0 mt-0.5" />
           <span>{b}</span>
         </li>
       ))}
@@ -23,11 +23,11 @@ export default function PositionamentoEstrategico() {
   return (
     <div className="mt-16 max-w-4xl mx-auto">
       <div className="text-center mb-10">
-        <p className="text-xs font-semibold uppercase tracking-widest text-orange-500 mb-2">Inovação & Vantagem Competitiva</p>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+        <p className="text-xs font-semibold uppercase tracking-widest text-orange-500 dark:text-orange-400 mb-2">Inovação &amp; Vantagem Competitiva</p>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-900 dark:text-neutral-50 mb-3">
           Trancoso Resolve, TryA e Toca Vision:<br className="hidden md:block" /> inovação ao alcance de prestadores e lojistas.
         </h2>
-        <p className="text-slate-600 text-sm max-w-2xl mx-auto">
+        <p className="text-neutral-600 dark:text-neutral-300 text-sm max-w-2xl mx-auto">
           O Trancoso Resolve, impulsionado pelas tecnologias TryA e Toca Vision, redefine o padrão de excelência e acessibilidade para prestadores de serviços e lojistas no Brasil. A plataforma não apenas conecta profissionais a clientes, mas os capacita com ferramentas de inteligência artificial de ponta, tornando acessíveis recursos antes restritos a grandes corporações e agências especializadas.
         </p>
       </div>

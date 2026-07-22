@@ -14,32 +14,35 @@ export default function PlanCard({ plan, isCurrentPlan }) {
         className={cn(
             "flex flex-col shadow-lg transition-all hover:shadow-xl hover:-translate-y-2",
             isFeatured && "scale-105 ring-2",
-            isCurrentPlan ? "bg-slate-50" : "bg-white"
+            isCurrentPlan ? "bg-neutral-100 dark:bg-neutral-800" : "bg-white dark:bg-card"
         )}
         style={{ borderColor: isFeatured ? plan.color_theme : undefined }}
     >
-        <CardHeader className="relative text-center p-6" style={{ backgroundColor: isFeatured ? plan.color_theme : (isCurrentPlan ? '#e2e8f0' : '#f8fafc')}}>
+        <CardHeader className="relative text-center p-6" style={{ backgroundColor: isFeatured ? plan.color_theme : undefined }}>
+            {!isFeatured && <div className="absolute inset-0 rounded-t-lg bg-neutral-50 dark:bg-neutral-800/60" />}
+            <div className="relative">
             {isFeatured && <Badge className="absolute -top-3 right-5 bg-amber-400 text-black">Mais Popular</Badge>}
-            <h2 className={cn("text-2xl font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>{plan.name}</h2>
-            
+            <h2 className={cn("text-2xl font-bold", isFeatured ? 'text-white' : 'text-neutral-900 dark:text-neutral-50')}>{plan.name}</h2>
+
             {plan.monthly_price > 0 ? (
-                <div className={cn("font-bold", isFeatured ? 'text-white' : 'text-slate-900')}>
+                <div className={cn("font-bold", isFeatured ? 'text-white' : 'text-neutral-900 dark:text-neutral-50')}>
                     <span className="text-4xl">R${plan.monthly_price.toFixed(2).split('.')[0]}</span>
                     <span className="text-2xl">,{plan.monthly_price.toFixed(2).split('.')[1]}</span>
                     <span className="text-base font-normal">/mês</span>
                 </div>
             ) : (
-                <span className="text-4xl font-extrabold text-green-600">Grátis</span>
+                <span className="text-4xl font-extrabold text-olive-500 dark:text-olive-400">Grátis</span>
             )}
+            </div>
         </CardHeader>
 
         <CardContent className="flex-grow p-6 space-y-4">
-            <p className="text-slate-600 text-sm h-12">{plan.description}</p>
-            
-            <ul className="space-y-3 text-slate-700">
+            <p className="text-neutral-600 dark:text-neutral-300 text-sm h-12">{plan.description}</p>
+
+            <ul className="space-y-3 text-neutral-700 dark:text-neutral-300">
                 {(plan.features || []).map((feature, index) => (
                     <li key={index} className="flex items-start gap-3">
-                        <Check className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
+                        <Check className="w-5 h-5 text-olive-500 dark:text-olive-400 mt-0.5 shrink-0" />
                         <span>{feature}</span>
                     </li>
                 ))}
