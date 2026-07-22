@@ -4,22 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Star, Utensils, Waves, Sun, Heart } from "lucide-react";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import CategoryIcon from "@/lib/categoryIcons";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 
 const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 const HERO_IMAGE = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80";
 
 const servicos = [
-  { slug: 'diarista-arraial-dajuda', label: 'Diarista', emoji: '🧹', path: '/arraial-dajuda/diarista' },
-  { slug: 'eletricista-arraial-dajuda', label: 'Eletricista', emoji: '⚡', path: '/arraial-dajuda/eletricista' },
-  { slug: 'piscineiro-arraial-dajuda', label: 'Piscineiro', emoji: '🏊', path: '/arraial-dajuda/piscineiro' },
-  { slug: 'chef-arraial-dajuda', label: 'Chef Particular', emoji: '👨‍🍳', path: '/arraial-dajuda/chef' },
-  { slug: 'jardineiro-arraial-dajuda', label: 'Jardineiro', emoji: '🌿', path: '/arraial-dajuda/jardineiro' },
-  { slug: 'encanador-arraial-dajuda', label: 'Encanador', emoji: '🔧', path: '/arraial-dajuda/encanador' },
-  { slug: 'pedreiro-arraial-dajuda', label: 'Pedreiro', emoji: '🏗️', path: '/arraial-dajuda/pedreiro' },
-  { slug: 'pintor-arraial-dajuda', label: 'Pintor', emoji: '🖌️', path: '/arraial-dajuda/pintor' },
-  { slug: 'seguranca-arraial-dajuda', label: 'Segurança', emoji: '🛡️', path: '/arraial-dajuda/seguranca' },
-  { slug: 'motorista-arraial-dajuda', label: 'Motorista', emoji: '🚗', path: '/arraial-dajuda/motorista' },
+  { slug: 'diarista-arraial-dajuda', label: 'Diarista', path: '/arraial-dajuda/diarista' },
+  { slug: 'eletricista-arraial-dajuda', label: 'Eletricista', path: '/arraial-dajuda/eletricista' },
+  { slug: 'piscineiro-arraial-dajuda', label: 'Piscineiro', path: '/arraial-dajuda/piscineiro' },
+  { slug: 'chef-arraial-dajuda', label: 'Chef Particular', path: '/arraial-dajuda/chef' },
+  { slug: 'jardineiro-arraial-dajuda', label: 'Jardineiro', path: '/arraial-dajuda/jardineiro' },
+  { slug: 'encanador-arraial-dajuda', label: 'Encanador', path: '/arraial-dajuda/encanador' },
+  { slug: 'pedreiro-arraial-dajuda', label: 'Pedreiro', path: '/arraial-dajuda/pedreiro' },
+  { slug: 'pintor-arraial-dajuda', label: 'Pintor', path: '/arraial-dajuda/pintor' },
+  { slug: 'seguranca-arraial-dajuda', label: 'Segurança', path: '/arraial-dajuda/seguranca' },
+  { slug: 'motorista-arraial-dajuda', label: 'Motorista', path: '/arraial-dajuda/motorista' },
 ];
 
 export default function DestinoArraialDajuda() {
@@ -118,7 +119,7 @@ export default function DestinoArraialDajuda() {
             {servicos.map((s) => (
               <Link key={s.slug} to={s.path}>
                 <div className="bg-card rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-200 border border-border hover:border-orange-300 group h-full flex flex-col items-center justify-center">
-                  <span className="text-2xl block mb-2" aria-hidden="true">{s.emoji}</span>
+                  <CategoryIcon category={s.label} className="w-7 h-7 mb-2" />
                   <span className="text-xs font-bold text-foreground group-hover:text-orange-700 transition-colors">{s.label}</span>
                 </div>
               </Link>
@@ -130,13 +131,13 @@ export default function DestinoArraialDajuda() {
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {[
-              { slug: 'trancoso', nome: 'Trancoso', emoji: '🎨', desc: 'O luxo do Quadrado e praias exclusivas.', path: '/destinos/trancoso' },
-              { slug: 'porto-seguro', nome: 'Porto Seguro', emoji: '⚓', desc: 'A maior cidade da região com infraestrutura completa.', path: '/destinos/porto-seguro' },
-              { slug: 'caraiva', nome: 'Caraíva', emoji: '🌊', desc: 'O paraíso preservado — sem asfalto, só natureza.', path: '/destinos/caraiva' },
+              { slug: 'trancoso', nome: 'Trancoso', desc: 'O luxo do Quadrado e praias exclusivas.', path: '/destinos/trancoso' },
+              { slug: 'porto-seguro', nome: 'Porto Seguro', desc: 'A maior cidade da região com infraestrutura completa.', path: '/destinos/porto-seguro' },
+              { slug: 'caraiva', nome: 'Caraíva', desc: 'O paraíso preservado — sem asfalto, só natureza.', path: '/destinos/caraiva' },
             ].map((d) => (
               <Link key={d.slug} to={d.path}>
                 <div className="bg-card rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border border-border hover:border-orange-300 group flex gap-4 items-start">
-                  <span className="text-3xl">{d.emoji}</span>
+                  <MapPin className="w-7 h-7 shrink-0" style={{ color: '#E8571A' }} aria-hidden="true" />
                   <div>
                     <h3 className="font-bold text-foreground group-hover:text-orange-700 transition-colors mb-1">{d.nome}</h3>
                     <p className="text-sm text-muted-foreground">{d.desc}</p>

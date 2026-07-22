@@ -6,6 +6,7 @@ import { DESTINO_MAP, CATEGORIA_MAP, BASE_URL } from '@/data/seoLocal';
 import LeadCaptureForm from '@/components/servicos/LeadCaptureForm';
 import WhatsAppStickyBar from '@/components/servicos/WhatsAppStickyBar';
 import { trackContatoWhatsApp } from '@/utils/analytics';
+import CategoryIcon from '@/lib/categoryIcons';
 
 const WHATSAPP_NUMBER = '5573998283579';
 
@@ -43,7 +44,6 @@ export default function ServicoDestino() {
   const cat = CATEGORIA_MAP[categoria];
   const destinoLabel = dest?.label || '';
   const categoriaLabel = cat?.label || '';
-  const emoji = cat?.emoji || '';
   const faqs = FAQS[categoria] || [];
   const waMsg = encodeURIComponent(`Olá! Preciso de ${categoriaLabel.toLowerCase()} em ${destinoLabel}. Podem me ajudar?`);
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMsg}`;
@@ -95,7 +95,7 @@ export default function ServicoDestino() {
           <div className="inline-flex items-center gap-2 bg-orange-700/40 border border-orange-400/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-200 mb-6">
             <MapPin className="w-4 h-4" /> {destinoLabel}, Bahia
           </div>
-          <div className="text-5xl mb-4">{emoji}</div>
+          <CategoryIcon category={categoria} className="w-14 h-14 mb-4 mx-auto" color="#FFFFFF" />
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
             {categoriaLabel} em {destinoLabel}
           </h1>

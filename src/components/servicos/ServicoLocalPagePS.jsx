@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { CheckCircle, ArrowRight, MapPin } from 'lucide-react';
+import CategoryIcon from '@/lib/categoryIcons';
 import { Button } from '@/components/ui/button';
 import LeadCaptureForm from '@/components/servicos/LeadCaptureForm';
 
@@ -23,7 +24,6 @@ export default function ServicoLocalPagePS({
   cta,
   ctaButton,
   category,
-  heroEmoji,
   serviceLabel,
 }) {
   useEffect(() => {
@@ -98,7 +98,7 @@ export default function ServicoLocalPagePS({
             <MapPin className="w-4 h-4" />
             <span>Porto Seguro, Bahia</span>
           </div>
-          <span className="text-5xl mb-4 block" aria-hidden="true">{heroEmoji}</span>
+          <CategoryIcon category={category || serviceLabel} className="w-14 h-14 mb-4 mx-auto" color="#FFFFFF" />
           <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-5">{h1}</h1>
           <p className="text-lg text-orange-100 leading-relaxed mb-8 max-w-2xl">{intro}</p>
           <Link to={searchUrl} className="block sm:inline-block w-full sm:w-auto">

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CheckCircle, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { LogoMark } from '@/components/brand/Logo';
 
 export default function CompletarPerfilModal({ user, open, onClose }) {
   const queryClient = useQueryClient();
@@ -83,11 +84,7 @@ export default function CompletarPerfilModal({ user, open, onClose }) {
             <X className="w-4 h-4 text-white" />
           </button>
           <div className="flex items-center gap-3 mb-3">
-            <img
-              src="/brand/logo-mark.svg"
-              alt="Logo"
-              className="h-8 w-8 rounded"
-            />
+            <LogoMark className="h-8 w-8" />
             <span className="font-bold text-base">Trancoso Resolve</span>
           </div>
           <h2 className="text-xl font-bold leading-tight">Complete seu cadastro</h2>
