@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ArrowRight } from "lucide-react";
+import CategoryIcon from "@/lib/categoryIcons";
 
 const CATEGORIAS = [
-  { emoji: "🧹", label: "Diarista", cat: "Limpeza" },
-  { emoji: "⚡", label: "Eletricista", cat: "Eletricista" },
-  { emoji: "🔧", label: "Encanador", cat: "Encanador" },
-  { emoji: "🌿", label: "Jardineiro", cat: "Jardinagem" },
-  { emoji: "🏊", label: "Piscineiro", cat: "Piscineiro" },
-  { emoji: "🏗️", label: "Pedreiro", cat: "Pedreiro" },
-  { emoji: "👨‍🍳", label: "Cozinheiro", cat: "Cozinheiro" },
+  { label: "Diarista", cat: "Limpeza" },
+  { label: "Eletricista", cat: "Eletricista" },
+  { label: "Encanador", cat: "Encanador" },
+  { label: "Jardineiro", cat: "Jardinagem" },
+  { label: "Piscineiro", cat: "Piscineiro" },
+  { label: "Pedreiro", cat: "Pedreiro" },
+  { label: "Cozinheiro", cat: "Cozinheiro" },
 ];
 
 export default function CategoriasGrid() {
@@ -22,14 +23,14 @@ export default function CategoriasGrid() {
         <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-3">
           {CATEGORIAS.map((item) => (
             <Link key={item.cat} to={createPageUrl("ServicosCategoria", `?cat=${item.cat}`)}>
-              <div className="bg-white rounded-2xl p-3 md:p-4 text-center shadow-sm hover:shadow-md border-2 border-slate-100 hover:border-cyan-400 transition-all cursor-pointer group flex flex-col items-center justify-center aspect-square">
-                <span className="text-2xl md:text-3xl block mb-1">{item.emoji}</span>
-                <span className="text-xs font-bold text-slate-700 group-hover:text-cyan-600 transition-colors leading-tight">{item.label}</span>
+              <div className="bg-white rounded-2xl p-3 md:p-4 text-center shadow-sm hover:shadow-md border-2 border-slate-100 hover:border-orange-400 transition-all cursor-pointer group flex flex-col items-center justify-center aspect-square">
+                <CategoryIcon category={item.label} className="w-7 h-7 md:w-8 md:h-8 mb-1.5" />
+                <span className="text-xs font-bold text-slate-700 group-hover:text-orange-600 transition-colors leading-tight">{item.label}</span>
               </div>
             </Link>
           ))}
           <Link to={createPageUrl("ServicosCategoria")}>
-            <div className="bg-cyan-500 rounded-2xl p-3 md:p-4 text-center shadow-sm hover:shadow-md border-2 border-cyan-400 hover:border-cyan-600 transition-all cursor-pointer group flex flex-col items-center justify-center aspect-square">
+            <div className="bg-orange-500 rounded-2xl p-3 md:p-4 text-center shadow-sm hover:shadow-md border-2 border-orange-400 hover:border-orange-600 transition-all cursor-pointer group flex flex-col items-center justify-center aspect-square">
               <ArrowRight className="w-6 h-6 md:w-8 md:h-8 text-white mb-1" />
               <span className="text-xs font-bold text-white leading-tight">Ver todos</span>
             </div>

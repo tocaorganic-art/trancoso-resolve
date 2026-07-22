@@ -4,18 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Star, Utensils, Anchor, Sun, Heart } from "lucide-react";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import CategoryIcon from "@/lib/categoryIcons";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 
 const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 const HERO_IMAGE = "https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&w=1600&q=80";
 
 const servicos = [
-  { slug: 'diarista-porto-seguro', label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-porto-seguro' },
-  { slug: 'eletricista-porto-seguro', label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-porto-seguro' },
-  { slug: 'piscineiro-porto-seguro', label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-porto-seguro' },
-  { slug: 'cozinheiro-porto-seguro', label: 'Cozinheiro', emoji: '👨‍🍳', path: '/servicos/cozinheiro-porto-seguro' },
-  { slug: 'jardineiro-porto-seguro', label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-porto-seguro' },
-  { slug: 'pedreiro-porto-seguro', label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-porto-seguro' },
+  { slug: 'diarista-porto-seguro', label: 'Diarista', path: '/servicos/diarista-porto-seguro' },
+  { slug: 'eletricista-porto-seguro', label: 'Eletricista', path: '/servicos/eletricista-porto-seguro' },
+  { slug: 'piscineiro-porto-seguro', label: 'Piscineiro', path: '/servicos/piscineiro-porto-seguro' },
+  { slug: 'cozinheiro-porto-seguro', label: 'Cozinheiro', path: '/servicos/cozinheiro-porto-seguro' },
+  { slug: 'jardineiro-porto-seguro', label: 'Jardineiro', path: '/servicos/jardineiro-porto-seguro' },
+  { slug: 'pedreiro-porto-seguro', label: 'Pedreiro', path: '/servicos/pedreiro-porto-seguro' },
 ];
 
 export default function DestinoPortoSeguro() {
@@ -114,7 +115,7 @@ export default function DestinoPortoSeguro() {
             {servicos.map((s) => (
               <Link key={s.slug} to={s.path}>
                 <div className="bg-card rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-200 border border-border hover:border-orange-300 group h-full flex flex-col items-center justify-center">
-                  <span className="text-2xl block mb-2" aria-hidden="true">{s.emoji}</span>
+                  <CategoryIcon category={s.label} className="w-7 h-7 mb-2" />
                   <span className="text-xs font-bold text-foreground group-hover:text-orange-700 transition-colors">{s.label}</span>
                 </div>
               </Link>
@@ -126,12 +127,12 @@ export default function DestinoPortoSeguro() {
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { slug: 'trancoso', nome: 'Trancoso', emoji: '🏄', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
-              { slug: 'caraiva', nome: 'Caraíva', emoji: '🌊', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
+              { slug: 'trancoso', nome: 'Trancoso', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
+              { slug: 'caraiva', nome: 'Caraíva', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
             ].map((d) => (
               <Link key={d.slug} to={d.path}>
                 <div className="bg-card rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border border-border hover:border-orange-300 group flex gap-4 items-start">
-                  <span className="text-3xl">{d.emoji}</span>
+                  <MapPin className="w-7 h-7 shrink-0" style={{ color: '#E8571A' }} aria-hidden="true" />
                   <div>
                     <h3 className="font-bold text-foreground group-hover:text-orange-700 transition-colors mb-1">{d.nome}</h3>
                     <p className="text-sm text-muted-foreground">{d.desc}</p>

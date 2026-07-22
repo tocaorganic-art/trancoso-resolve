@@ -4,18 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Star, Waves, TreePine, Heart, Leaf } from "lucide-react";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
+import CategoryIcon from "@/lib/categoryIcons";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 
 const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm"));
 const HERO_IMAGE = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80";
 
 const servicos = [
-  { slug: 'diarista-caraiva', label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-caraiva' },
-  { slug: 'eletricista-caraiva', label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-caraiva' },
-  { slug: 'piscineiro-caraiva', label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-caraiva' },
-  { slug: 'cozinheiro-caraiva', label: 'Cozinheiro', emoji: '👨‍🍳', path: '/servicos/cozinheiro-caraiva' },
-  { slug: 'jardineiro-caraiva', label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-caraiva' },
-  { slug: 'pedreiro-caraiva', label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-caraiva' },
+  { slug: 'diarista-caraiva', label: 'Diarista', path: '/servicos/diarista-caraiva' },
+  { slug: 'eletricista-caraiva', label: 'Eletricista', path: '/servicos/eletricista-caraiva' },
+  { slug: 'piscineiro-caraiva', label: 'Piscineiro', path: '/servicos/piscineiro-caraiva' },
+  { slug: 'cozinheiro-caraiva', label: 'Cozinheiro', path: '/servicos/cozinheiro-caraiva' },
+  { slug: 'jardineiro-caraiva', label: 'Jardineiro', path: '/servicos/jardineiro-caraiva' },
+  { slug: 'pedreiro-caraiva', label: 'Pedreiro', path: '/servicos/pedreiro-caraiva' },
 ];
 
 export default function DestinoCaraiva() {
@@ -114,7 +115,7 @@ export default function DestinoCaraiva() {
             {servicos.map((s) => (
               <Link key={s.slug} to={s.path}>
                 <div className="bg-card rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-200 border border-border hover:border-orange-300 group h-full flex flex-col items-center justify-center">
-                  <span className="text-2xl block mb-2" aria-hidden="true">{s.emoji}</span>
+                  <CategoryIcon category={s.label} className="w-7 h-7 mb-2" />
                   <span className="text-xs font-bold text-foreground group-hover:text-orange-700 transition-colors">{s.label}</span>
                 </div>
               </Link>
@@ -126,12 +127,12 @@ export default function DestinoCaraiva() {
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { slug: 'trancoso', nome: 'Trancoso', emoji: '🏄', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
-              { slug: 'porto-seguro', nome: 'Porto Seguro', emoji: '⚓', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
+              { slug: 'trancoso', nome: 'Trancoso', desc: 'O destino mais icônico — villas de luxo, pousadas e o famoso Quadrado.', path: '/destinos/trancoso' },
+              { slug: 'porto-seguro', nome: 'Porto Seguro', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
             ].map((d) => (
               <Link key={d.slug} to={d.path}>
                 <div className="bg-card rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border border-border hover:border-orange-300 group flex gap-4 items-start">
-                  <span className="text-3xl">{d.emoji}</span>
+                  <MapPin className="w-7 h-7 shrink-0" style={{ color: '#E8571A' }} aria-hidden="true" />
                   <div>
                     <h3 className="font-bold text-foreground group-hover:text-orange-700 transition-colors mb-1">{d.nome}</h3>
                     <p className="text-sm text-muted-foreground">{d.desc}</p>

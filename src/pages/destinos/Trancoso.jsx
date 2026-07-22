@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Star, Utensils, Waves, Sun, Heart } from "lucide-react";
+import CategoryIcon from "@/lib/categoryIcons";
 import WhatsAppStickyBar from "@/components/servicos/WhatsAppStickyBar";
 import { useDestinationSeo } from "@/hooks/useDestinationSeo";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,16 +12,16 @@ const LeadCaptureForm = lazy(() => import("@/components/servicos/LeadCaptureForm
 const HERO_IMAGE = "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=80";
 
 const servicos = [
-  { slug: 'diarista-trancoso', label: 'Diarista', emoji: '🧹', path: '/servicos/diarista-trancoso' },
-  { slug: 'eletricista-trancoso', label: 'Eletricista', emoji: '⚡', path: '/servicos/eletricista-trancoso' },
-  { slug: 'piscineiro-trancoso', label: 'Piscineiro', emoji: '🏊', path: '/servicos/piscineiro-trancoso' },
-  { slug: 'chef-trancoso', label: 'Chef Particular', emoji: '👨‍🍳', path: '/servicos/chef-trancoso' },
-  { slug: 'jardineiro-trancoso', label: 'Jardineiro', emoji: '🌿', path: '/servicos/jardineiro-trancoso' },
-  { slug: 'encanador-trancoso', label: 'Encanador', emoji: '🔧', path: '/servicos/encanador-trancoso' },
-  { slug: 'pedreiro-trancoso', label: 'Pedreiro', emoji: '🏗️', path: '/servicos/pedreiro-trancoso' },
-  { slug: 'pintor-trancoso', label: 'Pintor', emoji: '🖌️', path: '/servicos/pintor-trancoso' },
-  { slug: 'seguranca-trancoso', label: 'Segurança', emoji: '🛡️', path: '/servicos/seguranca-trancoso' },
-  { slug: 'motorista-trancoso', label: 'Motorista', emoji: '🚗', path: '/servicos/motorista-trancoso' },
+  { slug: 'diarista-trancoso', label: 'Diarista', path: '/servicos/diarista-trancoso' },
+  { slug: 'eletricista-trancoso', label: 'Eletricista', path: '/servicos/eletricista-trancoso' },
+  { slug: 'piscineiro-trancoso', label: 'Piscineiro', path: '/servicos/piscineiro-trancoso' },
+  { slug: 'chef-trancoso', label: 'Chef Particular', path: '/servicos/chef-trancoso' },
+  { slug: 'jardineiro-trancoso', label: 'Jardineiro', path: '/servicos/jardineiro-trancoso' },
+  { slug: 'encanador-trancoso', label: 'Encanador', path: '/servicos/encanador-trancoso' },
+  { slug: 'pedreiro-trancoso', label: 'Pedreiro', path: '/servicos/pedreiro-trancoso' },
+  { slug: 'pintor-trancoso', label: 'Pintor', path: '/servicos/pintor-trancoso' },
+  { slug: 'seguranca-trancoso', label: 'Segurança', path: '/servicos/seguranca-trancoso' },
+  { slug: 'motorista-trancoso', label: 'Motorista', path: '/servicos/motorista-trancoso' },
 ];
 
 const bairros = [
@@ -125,7 +126,7 @@ export default function DestinoTrancoso() {
             {servicos.map((s) => (
               <Link key={s.slug} to={s.path}>
                 <div className="bg-card rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-200 border border-border hover:border-orange-300 group h-full flex flex-col items-center justify-center">
-                  <span className="text-2xl block mb-2" aria-hidden="true">{s.emoji}</span>
+                  <CategoryIcon category={s.label} className="w-7 h-7 mb-2" />
                   <span className="text-xs font-bold text-foreground group-hover:text-orange-700 transition-colors">{s.label}</span>
                 </div>
               </Link>
@@ -153,12 +154,12 @@ export default function DestinoTrancoso() {
           <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Explore Outros Destinos</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { slug: 'porto-seguro', nome: 'Porto Seguro', emoji: '⚓', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
-              { slug: 'caraiva', nome: 'Caraíva', emoji: '🌊', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
+              { slug: 'porto-seguro', nome: 'Porto Seguro', desc: 'A maior cidade da região — hotéis, resorts e residências de alto padrão.', path: '/destinos/porto-seguro' },
+              { slug: 'caraiva', nome: 'Caraíva', desc: 'O paraíso preservado — sem asfalto, sem carros, só natureza e charme.', path: '/destinos/caraiva' },
             ].map((d) => (
               <Link key={d.slug} to={d.path}>
                 <div className="bg-card rounded-2xl p-6 shadow-sm hover:shadow-md transition-all border border-border hover:border-orange-300 group flex gap-4 items-start">
-                  <span className="text-3xl">{d.emoji}</span>
+                  <MapPin className="w-7 h-7 shrink-0" style={{ color: '#E8571A' }} aria-hidden="true" />
                   <div>
                     <h3 className="font-bold text-foreground group-hover:text-orange-700 transition-colors mb-1">{d.nome}</h3>
                     <p className="text-sm text-muted-foreground">{d.desc}</p>

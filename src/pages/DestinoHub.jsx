@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { DESTINO_MAP, CATEGORIAS, BASE_URL } from '@/data/seoLocal';
 import LeadCaptureForm from '@/components/servicos/LeadCaptureForm';
 import WhatsAppStickyBar from '@/components/servicos/WhatsAppStickyBar';
+import CategoryIcon from '@/lib/categoryIcons';
 
 export default function DestinoHub() {
   const { destino } = useParams();
@@ -103,10 +104,10 @@ export default function DestinoHub() {
             Escolha o serviço que precisa
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {CATEGORIAS.map(({ slug, label: catLabel, emoji }) => (
+            {CATEGORIAS.map(({ slug, label: catLabel }) => (
               <Link key={slug} to={`/${destino}/${slug}`} className="group">
                 <div className="flex flex-col items-center p-5 rounded-2xl border border-border bg-white hover:border-orange-400 hover:shadow-md transition-all text-center gap-2">
-                  <span className="text-3xl">{emoji}</span>
+                  <CategoryIcon category={slug} className="w-8 h-8" />
                   <span className="font-semibold text-sm text-neutral-900 group-hover:text-orange-700 transition-colors">{catLabel}</span>
                 </div>
               </Link>
