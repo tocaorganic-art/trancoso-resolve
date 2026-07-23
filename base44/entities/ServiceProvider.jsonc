@@ -233,7 +233,18 @@
     "occupation"
   ],
   "rls": {
-    "read": true,
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
     "write": {
       "created_by": "{{user.email}}"
     }

@@ -32,10 +32,6 @@ export default function ContactPage() {
         source: 'pagina-contato',
         type: form.subject === 'Sou prestador' ? 'prestador' : 'cliente',
       });
-      // Notificação interna em background
-      base44.functions.invoke('notifyNewLead', {
-        message: `Novo contato via /Contact\nNome: ${form.name}\nEmail: ${form.email}\nAssunto: ${form.subject}\nMensagem: ${form.message}`
-      }).catch(() => {});
       setStatus('success');
     } catch {
       setStatus('error');

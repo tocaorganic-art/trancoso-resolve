@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
+import { publicProviders } from "@/api/publicProviders";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Card, CardContent } from "@/components/ui/card";
@@ -33,7 +34,7 @@ export default function ServicoDetalhesPage() {
   const { data: provider } = useQuery({
     queryKey: ['serviceProvider', service?.provider_id],
     queryFn: async () => {
-      const providers = await base44.entities.ServiceProvider.filter({ id: service.provider_id });
+      const providers = await publicProviders.filter({ id: service.provider_id });
       return providers?.[0];
     },
     enabled: !!service?.provider_id,

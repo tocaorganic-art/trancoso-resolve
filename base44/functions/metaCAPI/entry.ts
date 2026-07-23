@@ -17,6 +17,10 @@ const CAPI_URL = `https://graph.facebook.com/v19.0/${PIXEL_ID}/events`;
 
 Deno.serve(async (req) => {
   try {
+    const ingestSecret = Deno.env.get('META_CAPI_INGEST_SECRET');
+    if (!ingestSecret || req.headers.get('x-capi-secret') !== ingestSecret) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const token = Deno.env.get('META_CAPI_TOKEN');
     if (!token) {
       // Sem token configurado — retorna 200 para não quebrar o frontend
@@ -35,6 +39,10 @@ Deno.serve(async (req) => {
 
     if (!event_name) {
       return Response.json({ error: 'event_name required' }, { status: 400 });
+    }
+    const allowedEvents = new Set(['PageView', 'Search', 'ViewContent', 'Lead', 'CompleteRegistration', 'InitiateCheckout', 'Purchase']);
+    if (!allowedEvents.has(event_name)) {
+      return Response.json({ error: 'Unsupported event_name' }, { status: 400 });
     }
 
     const event_time = Math.floor(Date.now() / 1000);

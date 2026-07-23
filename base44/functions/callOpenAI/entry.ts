@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
         ];
 
         // Configura a chamada da OpenAI
-        const completionConfig = {
+        const completionConfig: Record<string, unknown> = {
             model: "gpt-4o-mini",
             messages: openAIMessages,
             temperature: 0.7,

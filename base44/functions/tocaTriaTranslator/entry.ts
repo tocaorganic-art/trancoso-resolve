@@ -50,10 +50,20 @@ Deno.serve(async (req) => {
 
   try {
     const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const { text, sourceLanguage, targetLanguage } = await req.json();
 
     if (!text || !sourceLanguage || !targetLanguage) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+    if (typeof text !== 'string' || text.length > 2000) {
+      return Response.json({ error: 'Text must contain at most 2000 characters' }, { status: 400 });
+    }
+    if (!languageNames[sourceLanguage] || !languageNames[targetLanguage]) {
+      return Response.json({ error: 'Unsupported language' }, { status: 400 });
     }
 
     const translated = await getTranslation(base44, text, sourceLanguage, targetLanguage);

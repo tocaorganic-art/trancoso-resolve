@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import { publicProviders } from '@/api/publicProviders';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -115,7 +116,7 @@ export default function MeusPedidosPage() {
 
   const { data: providers } = useQuery({
     queryKey: ['allProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list(),
+    queryFn: () => publicProviders.list(),
     initialData: [],
   });
 

@@ -2,6 +2,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
   try {
+    const expectedSecret = Deno.env.get('AUTOMATION_WEBHOOK_SECRET');
+    const providedSecret = req.headers.get('x-automation-secret');
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const base44 = createClientFromRequest(req);
     const payload = await req.json();
 

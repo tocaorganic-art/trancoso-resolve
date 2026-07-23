@@ -11,6 +11,10 @@ async function sha256Hash(str) {
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Forbidden' }, { status: 403 });
+    }
     const pixelId = '1469130194903035';
     const accessToken = Deno.env.get('META_CONVERSIONS_API_TOKEN');
     const testEventCode = 'TEST67488';
