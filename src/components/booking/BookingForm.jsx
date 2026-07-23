@@ -2,6 +2,7 @@ import { useState } from "react";
 import { trackSolicitacaoServico } from '@/utils/analytics';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
+import { publicProviders } from "@/api/publicProviders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -91,7 +92,7 @@ export default function BookingForm({ provider, services, user, onCancel }) {
     const createRequest = async () => {
       try {
         // Buscar ServiceProvider pelo ID para pegar o email
-        const providers = await base44.entities.ServiceProvider.filter({ id: provider.id });
+        const providers = await publicProviders.filter({ id: provider.id });
         const providerEmail = providers[0]?.email || providers[0]?.created_by || provider.email;
         
         mutation.mutate({

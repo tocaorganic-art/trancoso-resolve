@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import usePullToRefresh from "@/hooks/usePullToRefresh";
 import { base44 } from "@/api/base44Client";
+import { publicProviders } from "@/api/publicProviders";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,7 @@ export default function ServicosCategoriaPage() {
     queryKey: ['serviceProviders'],
     queryFn: async () => {
       try {
-        const result = await base44.entities.ServiceProvider.filter({ availability: { '$ne': 'Indisponível' } }, '-rating');
+        const result = await publicProviders.filter({ availability: { '$ne': 'Indisponível' } }, '-rating', 200);
         return Array.isArray(result) ? result : [];
       } catch (err) {
         console.error('ServiceProvider query error:', err);

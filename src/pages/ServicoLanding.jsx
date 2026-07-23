@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { publicProviders } from "@/api/publicProviders";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -284,7 +284,7 @@ export default function ServicoLandingPage() {
 
   const { data: providers, isLoading } = useQuery({
     queryKey: ['providers-by-occupation', config.occupation],
-    queryFn: () => base44.entities.ServiceProvider.filter({}, '-rating', 20),
+    queryFn: () => publicProviders.filter({}, '-rating', 20),
     select: (data) => data?.filter(p =>
       p.occupation === config.occupation &&
       p.status_verificacao !== 'reprovado'

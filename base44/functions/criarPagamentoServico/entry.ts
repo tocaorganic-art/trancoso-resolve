@@ -2,6 +2,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 import Stripe from 'npm:stripe@14.21.0';
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
+const PLATFORM_FEE_RATE = 0;
 
 // Logging helper
 function logStructured(action, data, level = 'info') {
@@ -17,6 +18,8 @@ function logStructured(action, data, level = 'info') {
 }
 
 Deno.serve(async (req) => {
+  let requestIdForLog = null;
+  let userEmailForLog = null;
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
@@ -25,19 +28,61 @@ Deno.serve(async (req) => {
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    userEmailForLog = user.email;
 
     const body = await req.json();
-    const { request_id, amount_brl, service_date, provider_id } = body;
+    const { request_id } = body;
+    requestIdForLog = request_id;
 
-    if (!request_id || !amount_brl || !provider_id) {
-      return Response.json({ error: 'Campos obrigatórios: request_id, amount_brl, provider_id' }, { status: 400 });
+    if (!request_id) {
+      return Response.json({ error: 'Campo obrigatório: request_id' }, { status: 400 });
     }
 
-    // SEGURANÇA: Usa email do usuário autenticado, não do body
-    const clientEmail = user.email;
+    const requests = await base44.asServiceRole.entities.ServiceRequest.filter({ id: request_id });
+    const serviceRequest = requests?.[0];
+    if (!serviceRequest) {
+      return Response.json({ error: 'Solicitação não encontrada' }, { status: 404 });
+    }
 
-    const amountCents = Math.round(amount_brl * 100);
-    const platformFee = Math.round(amountCents * 0.20);
+    const isOwner = serviceRequest.client_email === user.email || serviceRequest.created_by === user.email;
+    if (!isOwner && user.role !== 'admin') {
+      return Response.json({ error: 'Forbidden' }, { status: 403 });
+    }
+    if (serviceRequest.status !== 'Confirmado') {
+      return Response.json({ error: 'A solicitação precisa estar confirmada antes do pagamento' }, { status: 409 });
+    }
+
+    const listings = await base44.asServiceRole.entities.ServiceListing.filter({ id: serviceRequest.service_id });
+    const listing = listings?.[0];
+    if (!listing || !listing.active || listing.provider_id !== serviceRequest.provider_id) {
+      return Response.json({ error: 'Serviço ou prestador inválido' }, { status: 409 });
+    }
+    if (!Number.isFinite(listing.price) || listing.price <= 0) {
+      return Response.json({ error: 'Serviço sem preço válido' }, { status: 409 });
+    }
+
+    const existingPayments = await base44.asServiceRole.entities.Payment.filter({ request_id });
+    const existing = existingPayments?.find(payment =>
+      !['canceled', 'refunded'].includes(payment.status)
+    );
+    if (existing?.stripe_payment_intent_id) {
+      const existingIntent = await stripe.paymentIntents.retrieve(existing.stripe_payment_intent_id);
+      return Response.json({
+        ok: true,
+        reused: true,
+        payment_id: existing.id,
+        client_secret: existingIntent.client_secret,
+        payment_intent_id: existingIntent.id,
+        amount_total: existing.amount_total,
+        amount_provider: existing.amount_provider,
+        amount_platform: existing.amount_platform,
+      });
+    }
+
+    const clientEmail = user.email;
+    const provider_id = serviceRequest.provider_id;
+    const amountCents = Math.round(listing.price * 100);
+    const platformFee = Math.round(amountCents * PLATFORM_FEE_RATE);
     const providerAmount = amountCents - platformFee;
 
     // Busca conta Stripe do prestador (se já tiver feito onboarding)
@@ -63,7 +108,7 @@ Deno.serve(async (req) => {
 
     // Se o prestador já tem conta Connect, configura o split
     if (providerAccount?.stripe_account_id && providerAccount?.charges_enabled) {
-      paymentIntentParams.application_fee_amount = platformFee;
+      if (platformFee > 0) paymentIntentParams.application_fee_amount = platformFee;
       paymentIntentParams.transfer_data = {
         destination: providerAccount.stripe_account_id,
       };
@@ -72,11 +117,13 @@ Deno.serve(async (req) => {
       console.log(`[criarPagamento] Prestador sem conta Connect. Split manual será feito na captura.`);
     }
 
-    const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams);
+    const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams, {
+      idempotencyKey: `service-request-${request_id}`,
+    });
     console.log(`[criarPagamento] PaymentIntent criado: ${paymentIntent.id}, amount: ${amountCents}`);
 
     // Calcula prazo de auto-captura: 48h após a data do serviço
-    const serviceDateTime = service_date ? new Date(service_date) : new Date();
+    const serviceDateTime = serviceRequest.date ? new Date(`${serviceRequest.date}T12:00:00`) : new Date();
     serviceDateTime.setDate(serviceDateTime.getDate() + 1); // dia seguinte ao serviço
     const autoCaptureAfter = new Date(serviceDateTime.getTime() + 48 * 60 * 60 * 1000).toISOString();
 
@@ -92,7 +139,7 @@ Deno.serve(async (req) => {
       currency: 'brl',
       stripe_payment_intent_id: paymentIntent.id,
       status: 'requires_payment_method',
-      service_date: service_date || null,
+      service_date: serviceRequest.date || null,
       auto_capture_after: autoCaptureAfter,
     });
 
@@ -112,8 +159,8 @@ Deno.serve(async (req) => {
     logStructured('criarPagamento_error', {
       errorMessage: error.message,
       errorCode: error.code,
-      requestId: body.request_id,
-      userEmail: user?.email
+      requestId: requestIdForLog,
+      userEmail: userEmailForLog
     }, 'error');
     
     return Response.json({ error: error.message }, { status: 500 });

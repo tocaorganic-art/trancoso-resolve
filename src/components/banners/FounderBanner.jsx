@@ -5,7 +5,8 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Shield, X } from "lucide-react";
 
-const FOUNDER_LIMIT = 100;
+const FOUNDER_LIMIT = 50;
+const FOUNDER_PRICE = "R$29,90/mês";
 
 export default function FounderBanner() {
   const [dismissed, setDismissed] = useState(
@@ -30,16 +31,8 @@ export default function FounderBanner() {
   const { data: founderStats } = useQuery({
     queryKey: ["founderProgress"],
     queryFn: async () => {
-      const subs = await base44.entities.Subscription.list("-created_date", 200);
-      const taken =
-        subs?.filter(
-          s =>
-            (s.status === "active" || s.status === "trial") &&
-            (s.plan === "profissional" ||
-              s.plan === "lancamento" ||
-              s.plan === "prestador_profissional")
-        ).length || 0;
-      return { taken, remaining: Math.max(0, FOUNDER_LIMIT - taken) };
+      const response = await base44.functions.invoke("getFounderStats", {});
+      return response.data;
     },
     staleTime: 60000,
   });
@@ -103,7 +96,7 @@ export default function FounderBanner() {
             Os primeiros {FOUNDER_LIMIT} prestadores verificados ganham o{" "}
             <strong className="text-foreground">Selo Fundador</strong> para sempre — e o preço
             de lançamento{" "}
-            <strong className="text-orange-400">R$19,90/mês</strong> nunca mais vai baixar assim.
+            <strong className="text-orange-400">{FOUNDER_PRICE}</strong> é reservado a esse lote.
           </p>
 
           <div className="mt-3 max-w-sm">

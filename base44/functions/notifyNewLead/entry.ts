@@ -2,11 +2,16 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 Deno.serve(async (req) => {
   try {
+    const expectedSecret = Deno.env.get('AUTOMATION_WEBHOOK_SECRET');
+    const providedSecret = req.headers.get('x-automation-secret');
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const base44 = createClientFromRequest(req);
     const body = await req.json();
 
     // Suporta chamada direta (leadId) e automação de entity (body.data ou event.entity_id)
-    let lead = body.data || null;
+    let lead = null;
 
     if (!lead) {
       const leadId = body.leadId || body.event?.entity_id;

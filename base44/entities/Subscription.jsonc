@@ -11,7 +11,13 @@
       "type": "string",
       "enum": [
         "trial",
-        "monthly"
+        "monthly",
+        "lancamento",
+        "regular",
+        "empresa_lancamento",
+        "empresa_regular",
+        "avulso_prestador",
+        "avulso_empresa"
       ],
       "default": "trial",
       "description": "Plano da assinatura"

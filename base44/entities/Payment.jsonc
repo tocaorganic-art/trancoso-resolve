@@ -24,11 +24,11 @@
     },
     "amount_provider": {
       "type": "number",
-      "description": "80% para o prestador (centavos)"
+      "description": "Valor destinado ao prestador (centavos)"
     },
     "amount_platform": {
       "type": "number",
-      "description": "20% para a plataforma (centavos)"
+      "description": "Taxa da plataforma (centavos; atualmente zero)"
     },
     "currency": {
       "type": "string",

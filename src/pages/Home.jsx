@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import usePullToRefresh from "@/hooks/usePullToRefresh";
 import { base44 } from "@/api/base44Client";
+import { publicProviders } from "@/api/publicProviders";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Card, CardContent } from "@/components/ui/card";
@@ -499,12 +500,12 @@ export default function HomePage() {
 
   const { data: providers } = useQuery({
     queryKey: ['serviceProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list('-rating', 50),
+    queryFn: () => publicProviders.list('-rating', 50),
   });
 
   const { data: allProviders } = useQuery({
     queryKey: ['allProviders'],
-    queryFn: () => base44.entities.ServiceProvider.list('-created_date', 200),
+    queryFn: () => publicProviders.list('-created_date', 200),
     initialData: [],
     staleTime: 5 * 60 * 1000,
   });

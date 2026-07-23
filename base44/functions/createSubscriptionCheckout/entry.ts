@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { plan, success_url, cancel_url } = await req.json();
+    const { plan } = await req.json();
 
     // ─── Verificar limite de vagas para plano lançamento prestador ────────────
     if (plan === 'lancamento') {
@@ -58,11 +58,10 @@ Deno.serve(async (req) => {
     const isAvulso = plan.startsWith('avulso_');
     const isLancamento = plan === 'lancamento' || plan === 'empresa_lancamento';
 
-    const successUrl = success_url ||
-      (isAvulso
-        ? `${BASE_URL}/AssinaturaConfirmada?avulso=true&session_id={CHECKOUT_SESSION_ID}`
-        : `${BASE_URL}/AssinaturaConfirmada?session_id={CHECKOUT_SESSION_ID}`);
-    const cancelUrl = cancel_url || `${BASE_URL}/Planos`;
+    const successUrl = isAvulso
+      ? `${BASE_URL}/AssinaturaConfirmada?avulso=true&session_id={CHECKOUT_SESSION_ID}`
+      : `${BASE_URL}/AssinaturaConfirmada?session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${BASE_URL}/Planos`;
 
     let sessionParams = {
       payment_method_types: ['card'],

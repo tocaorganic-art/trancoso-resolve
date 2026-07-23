@@ -24,7 +24,7 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
     e.preventDefault();
     setStatus('loading');
     try {
-      const lead = await base44.entities.LeadPreLancamento.create({
+      await base44.entities.LeadPreLancamento.create({
         name: form.name,
         phone: form.phone,
         whatsapp: form.phone,
@@ -33,9 +33,6 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
         source: source || `pagina-servico-${(serviceInterest || '').toLowerCase().replace(/\s+/g, '-')}`,
         type: 'cliente',
       });
-      if (lead?.id) {
-        base44.functions.invoke('notifyNewLead', { leadId: lead.id }).catch(() => {});
-      }
       trackLead({ service_interest: serviceInterest, source: source });
       setStatus('success');
     } catch {
@@ -69,16 +66,17 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
         Precisa de {displayLabel} agora?
       </h2>
       <p className="text-sm mb-6" style={{ color: '#6B4F3A' }}>
-        Deixe seu contato e entraremos em 5 minutos pelo WhatsApp
+        Deixe seu WhatsApp. Retornamos em até 24 horas úteis.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+            <label htmlFor="lead-name" className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
               Nome <span className="text-red-500">*</span>
             </label>
             <input
+              id="lead-name"
               type="text"
               required
               value={form.name}
@@ -89,10 +87,11 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+            <label htmlFor="lead-phone" className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
               WhatsApp <span className="text-red-500">*</span>
             </label>
             <input
+              id="lead-phone"
               type="tel"
               required
               value={form.phone}
@@ -105,10 +104,11 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+          <label htmlFor="lead-message" className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
             Mensagem (opcional)
           </label>
           <textarea
+            id="lead-message"
             value={form.message}
             onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
             placeholder="Descreva brevemente o que precisa..."
