@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
-    "test": "node --test src/lib/__tests__/*.test.js",
+    "test": "node --test 'src/**/*.test.js'",
     "preview": "vite preview",
     "prerender": "node scripts/prerender-head.js",
     "sitemap": "node scripts/generate-sitemap.js",
