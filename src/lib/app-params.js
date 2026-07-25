@@ -71,7 +71,25 @@ export const computeAppParams = ({ isProd, storage, location, history, env = {} 
 		storage.setItem(PURGE_MARKER_KEY, '1');
 	}
 
-	if (getValue('clear_access_token') === 'true') {
+	// clear_access_token é um comando efêmero, não um parâmetro de configuração:
+	// não usa getValue() porque getValue() persiste o que lê no storage, o que
+	// faria o próprio comando de logout virar um valor lido (e reaplicado) em
+	// toda carga futura, apagando qualquer login feito depois. Lido direto da
+	// URL, nunca gravado, e removido tanto da URL quanto de um storage legado -
+	// em qualquer ambiente, sem depender de isProd.
+	const clearUrlParams = new URLSearchParams(location.search);
+	const clearAccessTokenRequested = clearUrlParams.get('clear_access_token') === 'true';
+	if (clearUrlParams.has('clear_access_token')) {
+		clearUrlParams.delete('clear_access_token');
+		const newUrl = `${location.pathname}${clearUrlParams.toString() ? `?${clearUrlParams.toString()}` : ""
+			}${location.hash}`;
+		history.replaceState({}, '', newUrl);
+	}
+	const legacyClearFlagPersisted = !!storage.getItem('base44_clear_access_token');
+	// Remove a chave legada incondicionalmente: versões antigas deste módulo
+	// podem tê-la persistido, e ela nunca deve voltar a ser lida.
+	storage.removeItem('base44_clear_access_token');
+	if (clearAccessTokenRequested || legacyClearFlagPersisted) {
 		storage.removeItem('base44_access_token');
 		storage.removeItem('token');
 	}

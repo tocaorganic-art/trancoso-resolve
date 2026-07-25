@@ -245,3 +245,92 @@ test('clear_access_token=true continua limpando o token em qualquer ambiente', (
 	assert.equal(storage._dump().base44_access_token, undefined);
 	assert.equal(result.token, null);
 });
+
+// ── clear_access_token: comando efêmero, nunca persistido ──
+
+test('clear_access_token: link de logout remove token, remove o parâmetro da URL e não persiste base44_clear_access_token', () => {
+	const { result, storage, history } = run({
+		isProd: true,
+		search: '?clear_access_token=true',
+		storageSeed: { base44_kan14_purge_v1: '1', base44_access_token: 'token-legitimo', token: 'token-legitimo' },
+	});
+	assert.equal(result.token, null);
+	assert.equal(storage._dump().base44_access_token, undefined);
+	assert.equal(storage._dump().token, undefined);
+	assert.equal(storage._dump().base44_clear_access_token, undefined);
+	assert.ok(history._calls.length >= 1, 'clear_access_token deve ser removido da URL');
+});
+
+test('clear_access_token: novo login depois do comando sobrevive a dois refreshes seguidos', () => {
+	const storage = makeStorage({ base44_kan14_purge_v1: '1', base44_access_token: 'token-antigo', token: 'token-antigo' });
+	const env = officialEnv;
+	// Abre o link de logout.
+	const afterClear = computeAppParams({
+		isProd: true, storage, location: makeLocation('?clear_access_token=true'), history: makeHistory(), env,
+	});
+	assert.equal(afterClear.token, null);
+	// Novo login legítimo: o SDK grava o token via setToken.
+	storage.setItem('base44_access_token', 'token-novo-do-sdk');
+	storage.setItem('token', 'token-novo-do-sdk');
+	// Refresh 1.
+	const refresh1 = computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
+	assert.equal(refresh1.token, 'token-novo-do-sdk');
+	// Refresh 2.
+	const refresh2 = computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
+	assert.equal(refresh2.token, 'token-novo-do-sdk');
+});
+
+test('clear_access_token: valor legado base44_clear_access_token=true é removido e não afeta login posterior', () => {
+	const storage = makeStorage({
+		base44_kan14_purge_v1: '1',
+		base44_clear_access_token: 'true',
+		base44_access_token: 'token-que-sera-limpo-pelo-legado',
+	});
+	const env = officialEnv;
+	// 1ª carga: encontra o marcador legado, limpa a sessão da época e remove o marcador.
+	const firstLoad = computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
+	assert.equal(firstLoad.token, null);
+	assert.equal(storage._dump().base44_clear_access_token, undefined);
+	// Login legítimo depois disso.
+	storage.setItem('base44_access_token', 'token-legitimo-posterior');
+	storage.setItem('token', 'token-legitimo-posterior');
+	// 2ª carga: sem o marcador legado, o novo login não é apagado.
+	const secondLoad = computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
+	assert.equal(secondLoad.token, 'token-legitimo-posterior');
+});
+
+test('clear_access_token: link repetido faz logout naquela carga sem criar efeito persistente', () => {
+	const storage = makeStorage({ base44_kan14_purge_v1: '1' });
+	const env = officialEnv;
+	// Login, depois logout via link, depois login de novo, depois abre o link de novo.
+	storage.setItem('base44_access_token', 'sessao-1');
+	const firstClear = computeAppParams({
+		isProd: true, storage, location: makeLocation('?clear_access_token=true'), history: makeHistory(), env,
+	});
+	assert.equal(firstClear.token, null);
+	storage.setItem('base44_access_token', 'sessao-2');
+	// Uma carga normal no meio do caminho não deve ser afetada por nenhum resíduo do comando anterior.
+	const normalLoad = computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
+	assert.equal(normalLoad.token, 'sessao-2');
+	const secondClear = computeAppParams({
+		isProd: true, storage, location: makeLocation('?clear_access_token=true'), history: makeHistory(), env,
+	});
+	assert.equal(secondClear.token, null);
+});
+
+test('clear_access_token combinado com access_token malicioso na URL: sessão existente removida, token da URL ignorado, nada persistido', () => {
+	const { result, storage } = run({
+		isProd: true,
+		search: '?clear_access_token=true&access_token=token-malicioso',
+		storageSeed: { base44_kan14_purge_v1: '1', base44_access_token: 'token-legitimo', token: 'token-legitimo' },
+	});
+	assert.equal(result.token, null);
+	assert.notEqual(result.token, 'token-malicioso');
+	assert.equal(storage._dump().base44_access_token, undefined);
+	assert.equal(storage._dump().token, undefined);
+});
+
+test('clear_access_token: em desenvolvimento também nunca persiste base44_clear_access_token', () => {
+	const { storage } = run({ isProd: false, search: '?clear_access_token=true' });
+	assert.equal(storage._dump().base44_clear_access_token, undefined);
+});
