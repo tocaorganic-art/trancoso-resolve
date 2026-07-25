@@ -91,9 +91,9 @@ test('produção: nada malicioso é persistido no storage', () => {
 	assert.equal(dump.base44_access_token, undefined);
 });
 
-// ── Produção: localStorage contaminado por versão antiga é purgado ──
+// ── Produção: localStorage contaminado por versão antiga é purgado (1x) ──
 
-test('produção: app_id/server_url falsos já salvos no localStorage são purgados', () => {
+test('produção: app_id/server_url falsos já salvos no localStorage são purgados na 1ª carga', () => {
 	const { result, storage } = run({
 		isProd: true,
 		storageSeed: {
@@ -109,7 +109,7 @@ test('produção: app_id/server_url falsos já salvos no localStorage são purga
 	assert.equal(storage._dump().base44_server_url, undefined);
 });
 
-test('produção: token antigo salvo no localStorage é purgado (força novo login)', () => {
+test('produção: token antigo salvo no localStorage é purgado na 1ª carga (força novo login)', () => {
 	const { result, storage } = run({
 		isProd: true,
 		storageSeed: { base44_access_token: 'token-antigo-injetado', token: 'token-antigo-injetado' },
@@ -117,9 +117,11 @@ test('produção: token antigo salvo no localStorage é purgado (força novo log
 	assert.equal(result.token, null);
 	assert.equal(storage._dump().base44_access_token, undefined);
 	assert.equal(storage._dump().token, undefined);
+	// Marcador de purge único gravado, para não repetir a purga nas próximas cargas.
+	assert.equal(storage._dump().base44_kan14_purge_v1, '1');
 });
 
-test('produção: combinação dos três valores contaminados é purgada de uma vez', () => {
+test('produção: combinação dos três valores contaminados é purgada de uma vez na 1ª carga', () => {
 	const { result } = run({
 		isProd: true,
 		storageSeed: {
@@ -140,6 +142,62 @@ test('produção: dois refreshes consecutivos não entram em loop e convergem pa
 	const second = computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
 	assert.deepEqual(first, second);
 	assert.equal(second.appId, OFFICIAL_APP_ID);
+});
+
+// ── Produção: sessão legítima do SDK sobrevive a refresh (bug corrigido) ──
+
+test('produção: token legítimo gravado pelo SDK sobrevive a um refresh (marcador de purge já presente)', () => {
+	// Simula: usuário já visitou o site uma vez (marcador de purge já setado),
+	// depois fez login legítimo pelo SDK (que grava base44_access_token via setToken).
+	const storage = makeStorage({
+		base44_kan14_purge_v1: '1',
+		base44_access_token: 'token-legitimo-do-sdk',
+		token: 'token-legitimo-do-sdk',
+	});
+	const { result } = run({ isProd: true, storageSeed: storage._dump() });
+	assert.equal(result.token, 'token-legitimo-do-sdk');
+});
+
+test('produção: dois refreshes seguidos após login legítimo mantêm a mesma sessão (sem logout forçado)', () => {
+	const storage = makeStorage({ base44_kan14_purge_v1: '1' });
+	const env = officialEnv;
+	// 1ª carga: sem login ainda.
+	computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
+	// Login legítimo: o SDK grava o token (fora do computeAppParams, como o setToken real faz).
+	storage.setItem('base44_access_token', 'token-legitimo-do-sdk');
+	storage.setItem('token', 'token-legitimo-do-sdk');
+	// Refresh 1 após login.
+	const afterLogin = computeAppParams({ isProd: true, storage, location: makeLocation(), history: makeHistory(), env });
+	assert.equal(afterLogin.token, 'token-legitimo-do-sdk');
+	// Navega para outra página e dá refresh de novo (refresh 2).
+	const afterSecondRefresh = computeAppParams({
+		isProd: true, storage, location: makeLocation(), history: makeHistory(), env,
+	});
+	assert.equal(afterSecondRefresh.token, 'token-legitimo-do-sdk');
+});
+
+test('produção: mesmo com sessão legítima em storage, access_token malicioso na URL nunca é aceito', () => {
+	const storage = makeStorage({
+		base44_kan14_purge_v1: '1',
+		base44_access_token: 'token-legitimo-do-sdk',
+	});
+	const { result } = run({
+		isProd: true,
+		search: '?access_token=token-malicioso-na-url',
+		storageSeed: storage._dump(),
+	});
+	// A URL nunca vence: ou fica o token legítimo do storage, ou nada — nunca o da URL.
+	assert.notEqual(result.token, 'token-malicioso-na-url');
+	assert.equal(result.token, 'token-legitimo-do-sdk');
+});
+
+test('produção: logout (auth.logout) remove o token e a próxima carga não reaparece com sessão', () => {
+	const storage = makeStorage({ base44_kan14_purge_v1: '1', base44_access_token: 'token-legitimo', token: 'token-legitimo' });
+	// auth.logout() do SDK remove as mesmas duas chaves.
+	storage.removeItem('base44_access_token');
+	storage.removeItem('token');
+	const { result } = run({ isProd: true, storageSeed: storage._dump() });
+	assert.equal(result.token, null);
 });
 
 test('produção: sem env oficial configurada, appId/serverUrl falham de forma segura (null), nunca usam a URL', () => {
