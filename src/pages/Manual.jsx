@@ -9,7 +9,7 @@ const faqContent = {
     title: <><BookOpen className="w-5 h-5" /> Guia Geral</>,
     items: [
       { question: "O que é o Trancoso Resolve?", answer: "Somos uma plataforma que conecta clientes a prestadores de serviço locais de confiança em Trancoso, facilitando a busca, agendamento e avaliação de serviços." },
-      { question: "Como criar uma conta?", answer: "Clique em 'Entrar' no canto superior direito. Você pode se cadastrar rapidamente usando sua conta do Google, ou com seu e-mail e uma senha. Após o cadastro, escolha se você é 'cliente' ou 'prestador'." },
+      { question: "Como criar uma conta?", answer: "Clique em 'Entrar' no canto superior direito. Durante o beta, o cadastro e o acesso são realizados por e-mail e senha. Após o cadastro, escolha se você é 'cliente' ou 'prestador'." },
       { question: "É seguro usar a plataforma?", answer: "Sim. Verificamos nossos prestadores e usamos um sistema de avaliação transparente para garantir a qualidade. Seus dados são protegidos seguindo as diretrizes da LGPD. Visite nossa página de Segurança para mais detalhes." },
       { question: "Como funciona o pagamento?", answer: "Atualmente, a negociação e o pagamento são feitos diretamente entre o cliente e o prestador. A plataforma facilita o contato inicial e o agendamento." },
       { question: "A plataforma cobra alguma taxa dos clientes?", answer: "Não. Para clientes, o uso da plataforma para buscar e contratar serviços é totalmente gratuito." },
