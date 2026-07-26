@@ -1,0 +1,59 @@
+{
+  "name": "ServiceProviderPrivate",
+  "type": "object",
+  "properties": {
+    "provider_id": {
+      "type": "string",
+      "description": "ID do registro ServiceProvider correspondente"
+    },
+    "cpf": {
+      "type": "string",
+      "description": "CPF do prestador ou responsável (PII — nunca expor publicamente)"
+    },
+    "cnpj": {
+      "type": "string",
+      "description": "CNPJ da empresa ou MEI (PII — nunca expor publicamente)"
+    },
+    "verification_document_url": {
+      "type": "string",
+      "description": "URL do documento de identidade enviado para verificação (PII)"
+    },
+    "full_body_photo_url": {
+      "type": "string",
+      "description": "URL da foto de corpo inteiro enviada para verificação de identidade (PII)"
+    },
+    "autorizou_verificacao": {
+      "type": "boolean",
+      "default": false,
+      "description": "Prestador autorizou a consulta de antecedentes criminais (consentimento LGPD)"
+    },
+    "data_consentimento": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que o consentimento foi registrado"
+    }
+  },
+  "required": [
+    "provider_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        { "created_by": "{{user.email}}" },
+        { "user_condition": { "role": "admin" } }
+      ]
+    },
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "$or": [
+        { "created_by": "{{user.email}}" },
+        { "user_condition": { "role": "admin" } }
+      ]
+    },
+    "delete": {
+      "user_condition": { "role": "admin" }
+    }
+  }
+}
