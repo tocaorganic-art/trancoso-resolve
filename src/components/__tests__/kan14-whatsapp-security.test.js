@@ -112,8 +112,10 @@ describe('enviarMensagemWhatsApp — segurança (KAN-14)', () => {
   });
 
   describe('logging e rastreabilidade', () => {
-    it('registra caller (email ou id do usuário) no log', () => {
-      assert.match(src, /user\.email\s*\|\|\s*user\.id/);
+    it('registra caller por ID interno (não por e-mail — PII)', () => {
+      // Deve usar user.id, jamais user.email diretamente no log
+      assert.match(src, /caller=\$\{user\.id\}/);
+      assert.ok(!src.includes('caller=${user.email}'), 'e-mail não deve aparecer no log');
     });
 
     it('persiste log com asServiceRole', () => {
