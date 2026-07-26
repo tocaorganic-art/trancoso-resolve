@@ -79,6 +79,8 @@ export default function Layout({ children, currentPageName }) {
       '/Contact': 'Contato | Trancoso Resolve',
       '/login': 'Entrar | Trancoso Resolve',
       '/register': 'Cadastrar | Trancoso Resolve',
+      '/prestador-fundador': 'Prestador Fundador — Garanta sua Vaga | Trancoso Resolve',
+      '/AssinaturaConfirmada': 'Assinatura Confirmada | Trancoso Resolve',
     };
 
     const pageDescriptions = {
@@ -95,6 +97,8 @@ export default function Layout({ children, currentPageName }) {
       '/Assistentevirtual': 'Converse com o TryA, o assistente inteligente da Trancoso Resolve. Encontre o profissional certo para sua necessidade em segundos.',
       '/login': 'Acesse sua conta na Trancoso Resolve para gerenciar pedidos, contratar serviços e conectar-se com profissionais verificados em Trancoso.',
       '/register': 'Crie sua conta gratuita na Trancoso Resolve e acesse os melhores profissionais verificados de Trancoso, Bahia.',
+      '/prestador-fundador': 'Seja um dos 100 Prestadores Fundadores do Trancoso Resolve. Assine por R$ 19,90/mês e garanta seu Selo Fundador com benefícios exclusivos. Vagas limitadas.',
+      '/AssinaturaConfirmada': 'Sua assinatura foi confirmada com sucesso. Bem-vindo ao Trancoso Resolve!',
     };
 
     const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
@@ -172,7 +176,7 @@ export default function Layout({ children, currentPageName }) {
   ];
 
 
-  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat', '/About', '/Contact', '/ServicoLanding', '/SolicitacaoConfirmada', '/Planos'];
+  const publicPages = ['/', '/Home', '/ServicosCategoria', '/PrestadorPerfil', '/ServicoDetalhes', '/MeusPedidos', '/PoliticaPrivacidade', '/Manual', '/SejaPrestador', '/ComoFunciona', '/Seguranca', '/Assistentevirtual', '/GeradorDeImagem', '/Chat', '/About', '/Contact', '/ServicoLanding', '/SolicitacaoConfirmada', '/Planos', '/prestador-fundador', '/AssinaturaConfirmada'];
   const isPublicPage = publicPages.some((page) => {
     const pagePath = page === '/Home' ? '/' : page;
     const currentLocationPath = location.pathname === '/Home' ? '/' : location.pathname;
