@@ -1,18 +1,19 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-// Pagamento de serviço via Mercado Pago com escrow.
+// Pagamento de serviço via Mercado Pago.
 //
 // REGRA P0: backend controla todos os valores financeiros.
 // Frontend envia apenas request_id — nunca amount, price ou qualquer valor.
 // O preço é lido de ServiceListing.price no banco de dados.
 //
+// Política comercial aprovada: SEM comissão de plataforma.
+// O prestador negocia diretamente com o cliente e recebe 100% do valor.
+//
 // Variáveis de ambiente necessárias:
 //   MP_ACCESS_TOKEN      — token de acesso Mercado Pago (nunca expor ao frontend)
 //   MP_NOTIFICATION_URL  — URL do webhook para receber notificações
 //   BASE_URL             — URL base do app
-//   PLATFORM_FEE_PCT     — taxa da plataforma em % (padrão: 20)
 
-const PLATFORM_FEE_PCT = Number(Deno.env.get('PLATFORM_FEE_PCT') || '20');
 const MAX_DESCRICAO_CHARS = 256;
 
 Deno.serve(async (req) => {
@@ -69,10 +70,8 @@ Deno.serve(async (req) => {
       }, { status: 422 });
     }
 
-    // --- Calcula split de plataforma (server-side) ---
+    // Sem comissão: prestador recebe 100% do valor negociado.
     const amountBrl = listing.price;
-    const platformFeeBrl = Math.round(amountBrl * PLATFORM_FEE_PCT) / 100;
-    const providerAmountBrl = amountBrl - platformFeeBrl;
 
     const BASE_URL = Deno.env.get('BASE_URL') || 'https://www.trancosoresolve.com.br';
     const notificationUrl = Deno.env.get('MP_NOTIFICATION_URL');
@@ -104,8 +103,6 @@ Deno.serve(async (req) => {
       metadata: {
         request_id,
         provider_id: serviceRequest.provider_id,
-        platform_fee_brl: platformFeeBrl,
-        provider_amount_brl: providerAmountBrl,
       },
     };
 
@@ -144,10 +141,8 @@ Deno.serve(async (req) => {
     const payment = await base44.asServiceRole.entities.Payment.create({
       request_id,
       provider_id: serviceRequest.provider_id,
-      client_email: user.email,
+      client_id: user.id,
       amount_total: Math.round(amountBrl * 100),
-      amount_provider: Math.round(providerAmountBrl * 100),
-      amount_platform: Math.round(platformFeeBrl * 100),
       currency: 'brl',
       gateway: 'mercadopago',
       mp_preference_id: preferenceId,
@@ -157,7 +152,7 @@ Deno.serve(async (req) => {
       external_reference: preferencePayload.external_reference as string,
     });
 
-    console.log(`[criarPagamentoServicoMercadoPago] preference=${preferenceId} request=${request_id} user=${user.email} amount=${amountBrl}`);
+    console.log(`[criarPagamentoServicoMercadoPago] preference=${preferenceId} request=${request_id} user=${user.id} amount=${amountBrl}`);
 
     return Response.json({
       ok: true,
