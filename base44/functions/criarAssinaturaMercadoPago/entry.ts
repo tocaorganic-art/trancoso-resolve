@@ -3,38 +3,26 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // Catálogo de planos — SOMENTE backend pode mapear plano → preço.
 // Nunca expor ao frontend. Frontend envia apenas o identificador do plano.
 //
+// Regras comerciais aprovadas (não alterar sem autorização):
+//   - Profissional Fundador: R$ 19,90/mês, 7 dias grátis, 100 Selos Fundadores
+//   - Quando os Selos Fundadores acabarem, o preço NÃO muda automaticamente.
+//     O backend retorna vagas_esgotadas e o fluxo para até decisão manual.
+//
 // Variáveis de ambiente necessárias:
 //   MP_ACCESS_TOKEN    — token de acesso Mercado Pago (server-side, nunca expor)
 //   MP_NOTIFICATION_URL — URL do webhook para receber notificações de pagamento
 //   BASE_URL           — URL base do app (ex: https://www.trancosoresolve.com.br)
 const PLANOS: Record<string, { nome: string; valor: number; frequencia: 'monthly'; trial_days?: number }> = {
-  lancamento: {
-    nome: 'Prestador Lançamento',
-    valor: 29.90,
-    frequencia: 'monthly',
-    trial_days: 60,
-  },
-  regular: {
-    nome: 'Prestador Mensal',
-    valor: 49.90,
-    frequencia: 'monthly',
-    trial_days: 7,
-  },
-  empresa_lancamento: {
-    nome: 'Empresas Lançamento',
-    valor: 59.90,
-    frequencia: 'monthly',
-    trial_days: 7,
-  },
-  empresa_regular: {
-    nome: 'Empresas Mensal',
-    valor: 89.90,
+  fundador: {
+    nome: 'Prestador Fundador',
+    valor: 19.90,
     frequencia: 'monthly',
     trial_days: 7,
   },
 };
 
-const VAGAS_LANCAMENTO = 50;
+// 100 Selos Fundadores — quando esgotados, retorna vagas_esgotadas (sem redirect automático).
+const VAGAS_FUNDADORES = 100;
 
 Deno.serve(async (req) => {
   try {
@@ -62,23 +50,27 @@ Deno.serve(async (req) => {
 
     const planoConfig = PLANOS[plano];
 
-    // --- Limite de vagas para planos de lançamento ---
-    if (plano === 'lancamento' || plano === 'empresa_lancamento') {
+    // --- Limite de Selos Fundadores ---
+    // Quando os 100 Selos Fundadores acabarem, retorna vagas_esgotadas.
+    // O preço NÃO muda automaticamente — decisão de precificação é manual.
+    if (plano === 'fundador') {
       const ativas = await base44.asServiceRole.entities.Subscription.filter({
-        plano,
+        plano: 'fundador',
         status: 'ativa',
       });
       const trials = await base44.asServiceRole.entities.Subscription.filter({
-        plano,
+        plano: 'fundador',
         status: 'trial',
       });
-      const total = (ativas?.length || 0) + (trials?.length || 0);
-      if (total >= VAGAS_LANCAMENTO) {
-        const alternativa = plano === 'lancamento' ? 'regular' : 'empresa_regular';
+      const pendentes = await base44.asServiceRole.entities.Subscription.filter({
+        plano: 'fundador',
+        status: 'pendente',
+      });
+      const total = (ativas?.length || 0) + (trials?.length || 0) + (pendentes?.length || 0);
+      if (total >= VAGAS_FUNDADORES) {
         return Response.json({
           error: 'vagas_esgotadas',
-          mensagem: 'As vagas deste plano de lançamento estão esgotadas.',
-          redirect_para: alternativa,
+          mensagem: 'Os Selos Fundadores estão esgotados. Entre em contato para ser avisado quando novas vagas abrirem.',
         }, { status: 409 });
       }
     }
@@ -148,7 +140,7 @@ Deno.serve(async (req) => {
       criado_em: new Date().toISOString(),
     });
 
-    console.log(`[criarAssinaturaMercadoPago] preapproval=${preapprovalId} plano=${plano} user=${user.email}`);
+    console.log(`[criarAssinaturaMercadoPago] preapproval=${preapprovalId} plano=${plano} user=${user.id}`);
 
     return Response.json({
       ok: true,
