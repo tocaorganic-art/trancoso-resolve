@@ -3,23 +3,42 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // Webhook do Mercado Pago — recebe notificações de pagamento e assinaturas.
 //
 // Segurança:
-//   - Valida assinatura HMAC-SHA256 se MP_WEBHOOK_SECRET estiver configurado
+//   - Valida assinatura HMAC-SHA256 (MP_WEBHOOK_SECRET OBRIGATÓRIO; ausência = 503)
 //   - Idempotência: grava notification_id no MpWebhookLog antes de processar;
 //     notificações duplicadas são ignoradas com 200 (MP reenviar é esperado)
+//   - payload_snapshot: gravado apenas com campos de metadados seguros (sem PII/financeiro)
 //
 // Variáveis de ambiente necessárias:
 //   MP_ACCESS_TOKEN    — token de acesso MP (para buscar detalhes via API)
-//   MP_WEBHOOK_SECRET  — secret para validação HMAC (recomendado em produção)
+//   MP_WEBHOOK_SECRET  — secret para validação HMAC (OBRIGATÓRIO; ausente = falha segura)
 
 const TOPICS_SUPORTADOS = new Set(['payment', 'preapproval', 'merchant_order']);
 
-async function validarAssinatura(req: Request, rawBody: string): Promise<boolean> {
+// Campos seguros para armazenar no snapshot de auditoria.
+// Nunca incluir: payer, card, transaction_details, fee_details, personal_data.
+const SNAPSHOT_CAMPOS_SEGUROS = new Set([
+  'action', 'api_version', 'data', 'date_created',
+  'id', 'live_mode', 'type', 'topic', 'user_id',
+]);
+
+function sanitizarPayload(raw: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(raw).filter(([k]) => SNAPSHOT_CAMPOS_SEGUROS.has(k))
+  );
+}
+
+async function validarAssinatura(req: Request, rawBody: string): Promise<{ ok: boolean; erro?: string }> {
   const secret = Deno.env.get('MP_WEBHOOK_SECRET');
-  if (!secret) return true; // sem secret configurado: aceita (log de aviso)
+  if (!secret) {
+    // Ausência da secret é falha de configuração, não falha de autenticação.
+    // Retornar 503 (e não 400) para que o MP reencaminhe quando o secret for configurado.
+    console.error('[mercadoPagoWebhook] CRÍTICO: MP_WEBHOOK_SECRET não configurado — rejeitando');
+    return { ok: false, erro: 'Webhook não configurado corretamente. Configure MP_WEBHOOK_SECRET.' };
+  }
 
   const xSignature = req.headers.get('x-signature');
   const xRequestId = req.headers.get('x-request-id');
-  if (!xSignature || !xRequestId) return false;
+  if (!xSignature || !xRequestId) return { ok: false };
 
   // Formato MP: ts=<timestamp>,v1=<hash>
   const parts = Object.fromEntries(xSignature.split(',').map((p) => p.split('=')));
@@ -40,7 +59,7 @@ async function validarAssinatura(req: Request, rawBody: string): Promise<boolean
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
 
-  return computed === v1;
+  return computed === v1 ? { ok: true } : { ok: false };
 }
 
 async function buscarPagamentoMP(mpToken: string, paymentId: string): Promise<Record<string, unknown> | null> {
@@ -80,11 +99,13 @@ const STATUS_PREAPPROVAL_MAP: Record<string, string> = {
 Deno.serve(async (req) => {
   const rawBody = await req.text();
 
-  // --- Validação de assinatura ---
-  const assinaturaValida = await validarAssinatura(req, rawBody);
-  if (!assinaturaValida) {
-    console.error('[mercadoPagoWebhook] assinatura inválida');
-    return Response.json({ error: 'Invalid signature' }, { status: 400 });
+  // --- Validação de assinatura (falha segura) ---
+  const validacao = await validarAssinatura(req, rawBody);
+  if (!validacao.ok) {
+    const statusCode = validacao.erro ? 503 : 400;
+    const msg = validacao.erro || 'Assinatura inválida';
+    console.error(`[mercadoPagoWebhook] ${msg}`);
+    return Response.json({ error: msg }, { status: statusCode });
   }
 
   const mpToken = Deno.env.get('MP_ACCESS_TOKEN');
@@ -129,12 +150,13 @@ Deno.serve(async (req) => {
   }
 
   // --- Grava log antes de processar (idempotência) ---
+  // payload_snapshot contém apenas metadados de auditoria (sem PII ou dados financeiros).
   const logEntry = await base44.asServiceRole.entities.MpWebhookLog.create({
     notification_id: notificationId,
     topic,
     resource_id: resourceId,
     status: 'processado',
-    payload_snapshot: payload,
+    payload_snapshot: sanitizarPayload(payload),
     recebido_em: new Date().toISOString(),
   });
 
