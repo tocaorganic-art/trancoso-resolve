@@ -1,0 +1,45 @@
+{
+  "name": "MpWebhookLog",
+  "type": "object",
+  "description": "Registro idempotente de notificações recebidas do Mercado Pago. Cada notification_id é gravado antes de processar — se já existir, o evento é ignorado.",
+  "properties": {
+    "notification_id": {
+      "type": "string",
+      "description": "ID único da notificação MP (campo 'id' do payload). Chave de idempotência."
+    },
+    "topic": {
+      "type": "string",
+      "description": "Tipo do evento: payment, preapproval, merchant_order"
+    },
+    "resource_id": {
+      "type": "string",
+      "description": "ID do recurso MP (payment.id, preapproval.id, etc)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["processado", "duplicado", "ignorado", "erro"],
+      "description": "Resultado do processamento"
+    },
+    "payload_snapshot": {
+      "type": "object",
+      "description": "Snapshot do payload recebido para auditoria/reconciliação"
+    },
+    "erro": {
+      "type": "string",
+      "description": "Mensagem de erro se status=erro"
+    },
+    "recebido_em": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["notification_id", "topic"],
+  "rls": {
+    "read": {
+      "user_condition": { "role": "admin" }
+    },
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}
