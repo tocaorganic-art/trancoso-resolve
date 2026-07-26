@@ -13,7 +13,6 @@ describe('criarPagamentoServicoMercadoPago — KAN-16 Mercado Pago service payme
     it('lê preço do ServiceListing, nunca do body da requisição', () => {
       assert.match(src, /ServiceListing\.filter/);
       assert.match(src, /listing\.price/);
-      // Garante que amount não vem do body
       const bodyDestructure = src.match(/const\s*\{[^}]*\}\s*=\s*body/);
       if (bodyDestructure) {
         const destructure = bodyDestructure[0];
@@ -25,21 +24,21 @@ describe('criarPagamentoServicoMercadoPago — KAN-16 Mercado Pago service payme
 
     it('frontend envia apenas request_id (não amount)', () => {
       assert.match(src, /request_id/);
-      // Verifica que o campo aceito do body é apenas request_id e service_date
       const bodyDestructure = src.match(/const\s*\{([^}]*)\}\s*=\s*body/)?.[1] || '';
       assert.ok(!bodyDestructure.includes('amount'), 'body não deve aceitar amount');
       assert.ok(!bodyDestructure.includes('price'), 'body não deve aceitar price');
     });
 
-    it('calcula taxa de plataforma no backend (não no frontend)', () => {
-      assert.match(src, /PLATFORM_FEE_PCT/);
-      assert.match(src, /platformFeeBrl/);
-      assert.match(src, /providerAmountBrl/);
+    it('sem comissão de plataforma — prestador recebe 100%', () => {
+      // Política aprovada: sem comissão. PLATFORM_FEE_PCT não deve existir.
+      assert.ok(!src.includes('PLATFORM_FEE_PCT'), 'comissão de plataforma foi removida');
+      assert.ok(!src.includes('platformFeeBrl'), 'cálculo de taxa foi removido');
+      assert.ok(!src.includes('providerAmountBrl'), 'split de valor foi removido');
     });
 
-    it('armazena split calculado no metadata da preference', () => {
-      assert.match(src, /platform_fee_brl/);
-      assert.match(src, /provider_amount_brl/);
+    it('NÃO armazena platform_fee ou provider_amount_brl (sem split)', () => {
+      assert.ok(!src.includes('platform_fee_brl'), 'platform_fee_brl não deve existir');
+      assert.ok(!src.includes('provider_amount_brl'), 'provider_amount_brl não deve existir');
     });
 
     it('usa BRL como moeda', () => {
@@ -57,14 +56,12 @@ describe('criarPagamentoServicoMercadoPago — KAN-16 Mercado Pago service payme
     });
 
     it('verifica que o usuário autenticado é o cliente da solicitação', () => {
-      assert.match(src, /client_email.*user\.email|user\.email.*client_email/);
       assert.match(src, /status:\s*403/);
     });
 
-    it('usa email do usuário autenticado, não do body', () => {
-      const authIdx = src.indexOf('user.email');
-      const bodyIdx = src.indexOf('= body');
-      assert.ok(authIdx > -1, 'user.email deve ser usado para identificar o cliente');
+    it('log usa user.id e não user.email (PII)', () => {
+      assert.ok(!src.includes('user=${user.email}'), 'email não deve aparecer no log');
+      assert.ok(src.includes('user=${user.id}'), 'deve usar user.id no log');
     });
   });
 
