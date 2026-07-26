@@ -68,6 +68,20 @@ export const PAGES = {
     "DashboardLojista": DashboardLojista,
 }
 
+// Páginas que exigem role === 'admin' para acesso.
+// Qualquer chave adicionada aqui fica protegida pelo AdminRoute no App.jsx.
+export const ADMIN_PAGE_NAMES = new Set([
+  'AdminAssinaturas',
+  'ManutencaoSistema',
+  'MonitoringDashboard',
+  'AdminControleFinanceiro',
+  'AdminUserManagement',
+  'DeployDashboard',
+  'DiagnosticosCompletos',
+  'Base44ReportViewer',
+  'Base44Templates',
+]);
+
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
