@@ -11,7 +11,7 @@ import VisualEditAgent from '@/lib/VisualEditAgent'
 import NavigationTracker from '@/lib/NavigationTracker'
 import AndroidBackHandler from '@/components/android/AndroidBackHandler'
 import AndroidBottomTabsPreserver from '@/components/android/AndroidBottomTabsPreserver'
-import { pagesConfig } from './pages.config'
+import { pagesConfig, ADMIN_PAGE_NAMES } from './pages.config'
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -21,6 +21,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Login from '@/pages/Login';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminRoute from '@/components/AdminRoute';
 // Páginas carregadas sob demanda (code-splitting) para reduzir o bundle inicial.
 const FilaVerificacaoPage = lazy(() => import('@/pages/FilaVerificacao'));
 const AdminPagamentosPage = lazy(() => import('@/pages/AdminPagamentos'));
@@ -137,18 +138,35 @@ const AuthenticatedApp = () => {
               <AnimatedPage><MainPage /></AnimatedPage>
             </LayoutWrapper>
           } />
-          {Object.entries(Pages).map(([path, Page]) => (
-            <Route
-              key={path}
-              path={`/${path}`}
-              element={
-                <LayoutWrapper currentPageName={path}>
-                  <AnimatedPage><Page /></AnimatedPage>
-                </LayoutWrapper>
-              }
-            />
-          ))}
-          <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+          {Object.entries(Pages)
+            .filter(([path]) => !ADMIN_PAGE_NAMES.has(path))
+            .map(([path, Page]) => (
+              <Route
+                key={path}
+                path={`/${path}`}
+                element={
+                  <LayoutWrapper currentPageName={path}>
+                    <AnimatedPage><Page /></AnimatedPage>
+                  </LayoutWrapper>
+                }
+              />
+            ))}
+          <Route element={<AdminRoute />}>
+            {Object.entries(Pages)
+              .filter(([path]) => ADMIN_PAGE_NAMES.has(path))
+              .map(([path, Page]) => (
+                <Route
+                  key={path}
+                  path={`/${path}`}
+                  element={
+                    <LayoutWrapper currentPageName={path}>
+                      <AnimatedPage><Page /></AnimatedPage>
+                    </LayoutWrapper>
+                  }
+                />
+              ))}
+          </Route>
+          <Route element={<AdminRoute />}>
             <Route path="/FilaVerificacao" element={
               <LayoutWrapper currentPageName="FilaVerificacao">
                 <AnimatedPage><FilaVerificacaoPage /></AnimatedPage>
@@ -217,7 +235,7 @@ const AuthenticatedApp = () => {
           <Route path="/AssinaturaConfirmada" element={
             <AnimatedPage><AssinaturaConfirmadaPage /></AnimatedPage>
           } />
-          <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+          <Route element={<AdminRoute />}>
             <Route path="/admin/seo" element={
               <AnimatedPage><SeoDashboard /></AnimatedPage>
             } />
