@@ -14,26 +14,23 @@ describe('criarAssinaturaMercadoPago — KAN-15 Mercado Pago subscriptions', () 
       assert.match(src, /const PLANOS.*Record/s);
     });
 
-    it('inclui todos os planos esperados', () => {
-      const planos = ['lancamento', 'regular', 'empresa_lancamento', 'empresa_regular'];
-      for (const plano of planos) {
-        assert.ok(src.includes(`${plano}:`), `plano '${plano}' deve estar em PLANOS`);
-      }
+    it('inclui o plano fundador aprovado', () => {
+      assert.ok(src.includes("fundador:"), "plano 'fundador' deve estar em PLANOS");
     });
 
-    it('define valor monetário para cada plano no backend (frontend não envia valor)', () => {
-      // Verifica que valores financeiros estão definidos server-side
-      assert.match(src, /valor:\s*\d+\.\d{2}/);
-      // Verifica que os valores conhecidos estão presentes
-      assert.ok(src.includes('29.90'), 'plano lancamento deve custar R$29,90');
-      assert.ok(src.includes('49.90'), 'plano regular deve custar R$49,90');
-      assert.ok(src.includes('59.90'), 'plano empresa_lancamento deve custar R$59,90');
-      assert.ok(src.includes('89.90'), 'plano empresa_regular deve custar R$89,90');
+    it('define preço aprovado: R$ 19,90/mês', () => {
+      assert.ok(src.includes('19.90'), 'plano fundador deve custar R$19,90');
+      assert.ok(!src.includes('29.90'), 'preço antigo R$29,90 não deve mais existir');
+      assert.ok(!src.includes('49.90'), 'preço antigo R$49,90 não deve mais existir');
+    });
+
+    it('define trial de 7 dias conforme regra comercial', () => {
+      assert.match(src, /trial_days:\s*7/);
+      assert.ok(!src.includes('trial_days: 60'), 'trial de 60 dias não é mais válido');
     });
 
     it('lê MP_ACCESS_TOKEN do ambiente (nunca do body da requisição)', () => {
       assert.match(src, /Deno\.env\.get\('MP_ACCESS_TOKEN'\)/);
-      // Garante que token não é aceito do body
       const bodyIdx = src.indexOf('body = await req.json()');
       const tokenIdx = src.indexOf('MP_ACCESS_TOKEN');
       assert.ok(tokenIdx < bodyIdx || bodyIdx === -1 || tokenIdx !== -1,
@@ -55,24 +52,22 @@ describe('criarAssinaturaMercadoPago — KAN-15 Mercado Pago subscriptions', () 
     });
   });
 
-  describe('controle de vagas de lançamento', () => {
-    it('define limite de vagas VAGAS_LANCAMENTO', () => {
-      assert.match(src, /const VAGAS_LANCAMENTO\s*=\s*50/);
+  describe('controle de Selos Fundadores', () => {
+    it('define limite de VAGAS_FUNDADORES = 100', () => {
+      assert.match(src, /const VAGAS_FUNDADORES\s*=\s*100/);
     });
 
-    it('consulta assinaturas existentes antes de criar para planos de lançamento', () => {
+    it('consulta assinaturas existentes antes de criar', () => {
       assert.match(src, /Subscription\.filter/);
     });
 
-    it('retorna 409 com redirect quando vagas esgotadas', () => {
+    it('retorna 409 quando vagas esgotadas', () => {
       assert.match(src, /status:\s*409/);
       assert.match(src, /vagas_esgotadas/);
-      assert.match(src, /redirect_para/);
     });
 
-    it('sugere plano alternativo correto quando esgotado', () => {
-      assert.ok(src.includes("'regular'"), "deve sugerir 'regular' para lançamento esgotado");
-      assert.ok(src.includes("'empresa_regular'"), "deve sugerir 'empresa_regular' para empresa_lancamento esgotado");
+    it('NÃO redireciona automaticamente para plano mais caro (preço não muda sem autorização)', () => {
+      assert.ok(!src.includes('redirect_para'), 'redirect automático de preço não deve existir');
     });
   });
 
@@ -125,11 +120,14 @@ describe('criarAssinaturaMercadoPago — KAN-15 Mercado Pago subscriptions', () 
       assert.match(src, /user\.id/);
     });
 
+    it('log usa user.id e não user.email (PII)', () => {
+      assert.ok(!src.includes('user=${user.email}'), 'email não deve aparecer no log');
+      assert.ok(src.includes('user=${user.id}'), 'deve usar user.id no log');
+    });
+
     it('retorna checkout_url e preapproval_id na resposta de sucesso', () => {
       assert.match(src, /checkout_url/);
       assert.match(src, /preapproval_id/);
-      // Token MP nunca vai para o body da resposta — é usado apenas no header Authorization
-      const successLine = 'return Response.json({\n      ok: true,\n      checkout_url: checkoutUrl,\n      preapproval_id: preapprovalId,\n    });';
       assert.ok(src.includes('ok: true'), 'resposta de sucesso deve ter ok: true');
       assert.ok(src.includes('checkout_url: checkoutUrl'), 'resposta deve incluir checkout_url');
       assert.ok(src.includes('preapproval_id: preapprovalId'), 'resposta deve incluir preapproval_id');
