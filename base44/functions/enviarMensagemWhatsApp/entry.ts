@@ -162,7 +162,7 @@ Deno.serve(async (req) => {
       referencia_tipo: referencia_tipo || null,
     });
 
-    console.log(`[enviarMensagemWhatsApp] status=${status} tipo=${tipo} tel=${telE164} caller=${user.email || user.id} log=${logEntry?.id}`);
+    console.log(`[enviarMensagemWhatsApp] status=${status} tipo=${tipo} tel=${telE164} caller=${user.id} log=${logEntry?.id}`);
 
     if (resultado.erro) {
       return Response.json({ success: false, error: resultado.erro, log_id: logEntry?.id }, { status: 502 });
