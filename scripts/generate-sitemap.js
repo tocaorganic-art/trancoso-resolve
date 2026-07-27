@@ -11,7 +11,6 @@ const routes = [
   { path: '/Planos',          priority: '0.8', changefreq: 'monthly' },
   { path: '/About',           priority: '0.7', changefreq: 'monthly' },
   { path: '/Contact',         priority: '0.7', changefreq: 'monthly' },
-  { path: '/investidores',    priority: '0.6', changefreq: 'monthly' },
   { path: '/cadastro',        priority: '0.7', changefreq: 'monthly' },
   { path: '/TermosDeServico',         priority: '0.4', changefreq: 'yearly' },
   { path: '/PoliticaPrivacidade',     priority: '0.4', changefreq: 'yearly' },

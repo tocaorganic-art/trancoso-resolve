@@ -260,6 +260,14 @@ const ROUTES = [
     title: 'Morar em Trancoso, BA — Guia Completo | Trancoso Resolve',
     description: 'Guia completo para quem quer morar em Trancoso, Bahia: serviços essenciais, infraestrutura, profissionais locais e dicas de quem vive no Quadrado.',
   },
+
+  // ── Páginas privadas (preview bonito, fora do Google) ──────────────────
+  {
+    path: '/investidores',
+    title: 'Trancoso Resolve para Investidores',
+    description: 'Tese de investimento da Trancoso Resolve: marketplace curado de serviços locais em Trancoso, Bahia. Modelo financeiro editável, plano de 18 meses e data room.',
+    noIndex: true,
+  },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -278,10 +286,12 @@ function injectHead(html, route) {
   const desc      = escapeForAttr(route.description);
   const ogTitle   = escapeForAttr(route.ogTitle        || route.title);
   const ogDesc    = escapeForAttr(route.ogDescription  || route.description);
+  const robots    = route.noIndex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
 
   return html
     .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
     .replace(/(<meta name="description" content=")[^"]*(")/,   `$1${desc}$2`)
+    .replace(/(<meta name="robots" content=")[^"]*(")/,        `$1${robots}$2`)
     .replace(/(<link rel="canonical" href=")[^"]*(")/,         `$1${canonical}$2`)
     .replace(/(<meta property="og:url" content=")[^"]*(")/,    `$1${canonical}$2`)
     .replace(/(<meta property="og:title" content=")[^"]*(")/,  `$1${ogTitle}$2`)
