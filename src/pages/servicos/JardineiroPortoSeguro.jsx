@@ -6,13 +6,13 @@ export default function JardineiroPortoSeguro() {
       title="Jardineiro em Porto Seguro | Trancoso Resolve"
       metaDescription="Encontre jardineiro verificado em Porto Seguro, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="jardineiro Porto Seguro, jardineiro Porto Seguro BA, profissional Porto Seguro Bahia, paisagismo Porto Seguro"
-      canonicalUrl="https://trancosoresolve.com.br/servicos/jardineiro-porto-seguro"
+      canonicalUrl="https://www.trancosoresolve.com.br/servicos/jardineiro-porto-seguro"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Jardineiro Porto Seguro",
         "description": "Jardineiros verificados em Porto Seguro, BA. Manutenção e paisagismo para pousadas, hotéis e residências.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Porto Seguro, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.4497, "longitude": -39.0647 }
       }}

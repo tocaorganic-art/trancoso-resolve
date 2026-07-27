@@ -6,13 +6,13 @@ export default function CozinheiroPortoSeguro() {
       title="Cozinheiro em Porto Seguro | Trancoso Resolve"
       metaDescription="Encontre cozinheiro verificado em Porto Seguro, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="cozinheiro Porto Seguro, chef Porto Seguro BA, profissional Porto Seguro Bahia, cozinheiro Porto Seguro"
-      canonicalUrl="https://trancosoresolve.com.br/servicos/cozinheiro-porto-seguro"
+      canonicalUrl="https://www.trancosoresolve.com.br/servicos/cozinheiro-porto-seguro"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Cozinheiro Porto Seguro",
         "description": "Cozinheiros e chefs verificados em Porto Seguro, BA. Atendimento para pousadas, resorts e eventos.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Porto Seguro, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.4497, "longitude": -39.0647 }
       }}

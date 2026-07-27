@@ -6,13 +6,13 @@ export default function PedreiroCaraiva() {
       title="Pedreiro em Caraíva | Trancoso Resolve"
       metaDescription="Encontre pedreiro verificado em Caraíva, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="pedreiro Caraíva, pedreiro Caraíva Bahia, profissional Caraíva BA, serviços Caraíva, obra Caraíva"
-      canonicalUrl="https://trancosoresolve.com.br/servicos/pedreiro-caraiva"
+      canonicalUrl="https://www.trancosoresolve.com.br/servicos/pedreiro-caraiva"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Pedreiro Caraíva",
         "description": "Pedreiros verificados em Caraíva, BA. Obras e reformas para pousadas e villas.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Caraíva, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.7397, "longitude": -39.1731 }
       }}

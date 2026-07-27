@@ -11,7 +11,6 @@ const routes = [
   { path: '/Planos',          priority: '0.8', changefreq: 'monthly' },
   { path: '/About',           priority: '0.7', changefreq: 'monthly' },
   { path: '/Contact',         priority: '0.7', changefreq: 'monthly' },
-  { path: '/investidores',    priority: '0.6', changefreq: 'monthly' },
   { path: '/cadastro',        priority: '0.7', changefreq: 'monthly' },
   { path: '/TermosDeServico',         priority: '0.4', changefreq: 'yearly' },
   { path: '/PoliticaPrivacidade',     priority: '0.4', changefreq: 'yearly' },
@@ -45,6 +44,16 @@ const routes = [
   { path: '/servicos/cozinheiro-caraiva',  priority: '0.7', changefreq: 'monthly' },
   { path: '/servicos/jardineiro-caraiva',  priority: '0.7', changefreq: 'monthly' },
   { path: '/servicos/pedreiro-caraiva',    priority: '0.7', changefreq: 'monthly' },
+  { path: '/servicos/diarista-arraial-dajuda',    priority: '0.8', changefreq: 'monthly' },
+  { path: '/servicos/eletricista-arraial-dajuda', priority: '0.8', changefreq: 'monthly' },
+  { path: '/servicos/piscineiro-arraial-dajuda',  priority: '0.7', changefreq: 'monthly' },
+  { path: '/servicos/cozinheiro-arraial-dajuda',  priority: '0.7', changefreq: 'monthly' },
+  { path: '/servicos/jardineiro-arraial-dajuda',  priority: '0.7', changefreq: 'monthly' },
+  { path: '/servicos/pedreiro-arraial-dajuda',    priority: '0.7', changefreq: 'monthly' },
+  { path: '/servicos/dj-trancoso',                priority: '0.7', changefreq: 'monthly' },
+  { path: '/destinos/casamento-trancoso',  priority: '0.7', changefreq: 'monthly' },
+  { path: '/destinos/reveillon-trancoso',  priority: '0.7', changefreq: 'monthly' },
+  { path: '/guides/morar-em-trancoso',     priority: '0.6', changefreq: 'monthly' },
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

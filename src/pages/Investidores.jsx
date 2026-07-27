@@ -32,6 +32,7 @@ function InvestidoresContent() {
     description: t.meta.description,
     canonical: '/investidores',
     ogImage: undefined,
+    noIndex: true,
   });
 
   const schema = {
