@@ -89,6 +89,14 @@ export const INVESTOR_METRICS = [
   },
 ];
 
+// Status das janelas do plano de 18 meses. Nenhuma marcada como concluída:
+// a auditoria técnica mantém os gates críticos em aberto, então não há evidência
+// que sustente "concluído" ou "atual". Propriedade semântica, igual nos 3 idiomas.
+export const PLAN_PHASE_STATUS = ['planejado', 'dependente', 'dependente', 'dependente', 'dependente'];
+
+// Ordem dos nós do ecossistema — os rótulos traduzidos vêm de content.js.
+export const ECOSYSTEM_NODE_IDS = ['prestadores', 'moradores', 'anfitrioes', 'visitantes', 'parceiros', 'categorias'];
+
 export function formatMetric(metric) {
   switch (metric.format) {
     case 'currency':

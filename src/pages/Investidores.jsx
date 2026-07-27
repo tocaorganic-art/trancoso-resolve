@@ -7,6 +7,7 @@ import ProblemSection from '@/components/investors/ProblemSection';
 import RegionalContextSection from '@/components/investors/RegionalContextSection';
 import ProductSection from '@/components/investors/ProductSection';
 import ClientsUsersSection from '@/components/investors/ClientsUsersSection';
+import EcosystemSection from '@/components/investors/EcosystemSection';
 import CompetitorsSection from '@/components/investors/CompetitorsSection';
 import DifferentiationSection from '@/components/investors/DifferentiationSection';
 import RevenueModelSection from '@/components/investors/RevenueModelSection';
@@ -61,6 +62,7 @@ function InvestidoresContent() {
         <RegionalContextSection />
         <ProductSection />
         <ClientsUsersSection />
+        <EcosystemSection />
         <CompetitorsSection />
         <DifferentiationSection />
         <RevenueModelSection />
