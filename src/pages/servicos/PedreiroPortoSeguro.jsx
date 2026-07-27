@@ -6,13 +6,13 @@ export default function PedreiroPortoSeguro() {
       title="Pedreiro em Porto Seguro | Trancoso Resolve"
       metaDescription="Encontre pedreiro verificado em Porto Seguro, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="pedreiro Porto Seguro, pedreiro Porto Seguro BA, profissional Porto Seguro Bahia, obra Porto Seguro"
-      canonicalUrl="https://trancosoresolve.com.br/servicos/pedreiro-porto-seguro"
+      canonicalUrl="https://www.trancosoresolve.com.br/servicos/pedreiro-porto-seguro"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Pedreiro Porto Seguro",
         "description": "Pedreiros verificados em Porto Seguro, BA. Obras e reformas para hotéis, pousadas e residências.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Porto Seguro, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.4497, "longitude": -39.0647 }
       }}

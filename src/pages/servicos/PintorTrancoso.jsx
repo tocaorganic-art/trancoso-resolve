@@ -6,13 +6,13 @@ export default function PintorTrancoso() {
       title="Pintor em Trancoso, BA | Pintura Residencial e Comercial | Trancoso Resolve"
       metaDescription="Contrate pintor verificado em Trancoso, Bahia. Pintura interna, externa, textura e acabamentos finos para villas, pousadas e residências. Profissionais avaliados, orçamento grátis."
       keywords="pintor Trancoso, pintor Trancoso Bahia, profissional Trancoso BA, serviços Trancoso, pintura Trancoso"
-      canonicalUrl="https://trancosoresolve.com.br/servicos/pintor-trancoso"
+      canonicalUrl="https://www.trancosoresolve.com.br/servicos/pintor-trancoso"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Pintor Trancoso",
         "description": "Pintores verificados em Trancoso, BA. Pintura e acabamentos para villas, pousadas e residências.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Trancoso, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
       }}
