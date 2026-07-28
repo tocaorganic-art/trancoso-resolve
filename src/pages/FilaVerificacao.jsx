@@ -57,13 +57,24 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: provider } = useQuery({
-    queryKey: ['providerForVerificacao', verificacao?.user_email],
+    queryKey: ['providerForVerificacao', verificacao?.provider_id, verificacao?.user_email],
     queryFn: async () => {
-      if (!verificacao?.user_email) return null;
-      const results = await base44.entities.ServiceProvider.filter({ email: verificacao.user_email });
-      return results[0] || null;
+      if (!verificacao?.provider_id && !verificacao?.user_email) return null;
+      // KAN-13: dados públicos do prestador + dados PII de ServiceProviderPrivate
+      let pub = null;
+      if (verificacao.provider_id) {
+        pub = await base44.entities.ServiceProvider.get(verificacao.provider_id);
+      } else {
+        const results = await base44.entities.ServiceProvider.filter({ email: verificacao.user_email });
+        pub = results[0] || null;
+      }
+      if (!pub) return null;
+      // Carregar PII da entidade privada (admin vê pelo RLS)
+      const privResults = await base44.entities.ServiceProviderPrivate.filter({ provider_id: pub.id });
+      const priv = privResults[0] || {};
+      return { ...pub, cpf: priv.cpf, cnpj: priv.cnpj, full_body_photo_url: priv.full_body_photo_url };
     },
-    enabled: !!verificacao?.user_email && isOpen,
+    enabled: !!(verificacao?.provider_id || verificacao?.user_email) && isOpen,
   });
 
   const normalizeStatus = (status) => {
@@ -308,18 +319,12 @@ export default function FilaVerificacaoPage() {
         admin_action_date: new Date().toISOString(),
       });
 
-      // Se aprovado, atualizar ServiceProvider para aprovado
-      if (action === "aprovar" && verificacao.provider_id) {
-        await base44.entities.ServiceProvider.update(verificacao.provider_id, {
-          status_verificacao: "aprovado",
-          verified: true,
-          verification_approved_date: new Date().toISOString(),
-        });
-      } else if (action === "rejeitar" && verificacao.provider_id) {
-        await base44.entities.ServiceProvider.update(verificacao.provider_id, {
-          status_verificacao: "reprovado",
-          verified: false,
-          rejection_reason: motivo,
+      // KAN-13: status de verificação atualizado via function backend (nunca SDK direto)
+      if (verificacao.provider_id) {
+        await base44.functions.invoke('atualizarStatusVerificacao', {
+          provider_id: verificacao.provider_id,
+          acao: action === "aprovar" ? "aprovar" : "reprovar",
+          motivo: motivo || undefined,
         });
       }
 
