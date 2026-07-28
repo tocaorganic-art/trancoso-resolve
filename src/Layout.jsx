@@ -98,7 +98,15 @@ export default function Layout({ children, currentPageName }) {
     };
 
     const currentPath = location.pathname === '/Home' ? '/' : location.pathname;
-    const currentTitle = pageTitles[currentPath] || 'Trancoso Resolve';
+
+    // Só sobrescreve SEO para rotas conhecidas por este dicionário.
+    // Rotas desconhecidas (ex: /servicos/*, /trancoso, /destinos/*) gerenciam
+    // seus próprios meta tags via useSEO / useDestinationSeo / ServicoLocalPage.
+    // Isso evita que o effect do Layout (pai) sobreponha o effect da página (filho),
+    // já que React executa effects de filho → pai.
+    if (!(currentPath in pageTitles)) return;
+
+    const currentTitle = pageTitles[currentPath];
     const currentDescription = pageDescriptions[currentPath] || 'A forma mais fácil de encontrar e contratar serviços de confiança em Trancoso, Bahia.';
 
     document.title = currentTitle;

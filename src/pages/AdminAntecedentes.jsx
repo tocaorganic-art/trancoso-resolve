@@ -43,12 +43,13 @@ export default function AdminAntecedentesPage() {
     staleTime: 0,
   });
 
+  // KAN-13: status de verificação atualizado via function backend (nunca SDK direto)
   const aprovaMutation = useMutation({
     mutationFn: (id) =>
-      base44.entities.ServiceProvider.update(id, {
-        status_verificacao: "aprovado",
-        relatorio_verificacao: "Aprovado manualmente pelo administrador.",
-        data_verificacao: new Date().toISOString(),
+      base44.functions.invoke('atualizarStatusVerificacao', {
+        provider_id: id,
+        acao: 'aprovar',
+        motivo: 'Aprovado manualmente pelo administrador.',
       }),
     onSuccess: () => {
       toast.success("✅ Prestador aprovado manualmente.");
@@ -58,10 +59,10 @@ export default function AdminAntecedentesPage() {
 
   const reprovaMutation = useMutation({
     mutationFn: (id) =>
-      base44.entities.ServiceProvider.update(id, {
-        status_verificacao: "reprovado",
-        relatorio_verificacao: "Reprovado manualmente pelo administrador.",
-        data_verificacao: new Date().toISOString(),
+      base44.functions.invoke('atualizarStatusVerificacao', {
+        provider_id: id,
+        acao: 'reprovar',
+        motivo: 'Reprovado manualmente pelo administrador.',
       }),
     onSuccess: () => {
       toast.success("❌ Prestador reprovado.");

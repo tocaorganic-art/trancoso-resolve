@@ -4,14 +4,24 @@ import Stripe from 'npm:stripe@14.21.0';
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
 
 // Função agendada: captura automaticamente pagamentos que passaram 48h sem confirmação do cliente
+// Callers autorizados:
+//   1. Cron scheduler: Authorization: Bearer <CRON_SECRET>
+//   2. Admin autenticado: user.role === 'admin'
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Verifica autenticação: apenas admin ou chamada interna (automação)
-    const user = await base44.auth.me().catch(() => null);
-    if (user && user.role !== 'admin') {
-      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+    // --- Verificação de autorização ---
+    const cronSecret = Deno.env.get('CRON_SECRET');
+    const authHeader = req.headers.get('Authorization');
+    const isCron = !!cronSecret && authHeader === `Bearer ${cronSecret}`;
+
+    if (!isCron) {
+      // Fallback para admin autenticado
+      const user = await base44.auth.me().catch(() => null);
+      if (!user || user.role !== 'admin') {
+        return Response.json({ error: 'Forbidden: acesso restrito a cron ou admin' }, { status: 403 });
+      }
     }
 
     const body = await req.json().catch(() => ({}));
