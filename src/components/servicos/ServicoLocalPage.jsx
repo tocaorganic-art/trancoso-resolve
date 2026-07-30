@@ -37,6 +37,19 @@ export default function ServicoLocalPage({
     const seoDesc = metaDescription || `Encontre ${serviceLabel || category} verificado em ${locationLabel}. Profissionais avaliados, atendimento rápido e seguro.`;
     const label = serviceLabel || category || 'profissional';
 
+    const snap = (sel) => document.querySelector(sel)?.getAttribute('content') ?? null;
+    const snapHref = (sel) => document.querySelector(sel)?.href ?? null;
+    const prev = {
+      title: document.title,
+      desc: snap('meta[name="description"]'),
+      ogTitle: snap('meta[property="og:title"]'),
+      ogDesc: snap('meta[property="og:description"]'),
+      ogUrl: snap('meta[property="og:url"]'),
+      twTitle: snap('meta[name="twitter:title"]'),
+      twDesc: snap('meta[name="twitter:description"]'),
+      canonical: snapHref('link[rel="canonical"]'),
+    };
+
     document.title = seoTitle;
 
     let meta = document.querySelector('meta[name="description"]');
@@ -141,7 +154,22 @@ export default function ServicoLocalPage({
     breadcrumbScript.text = JSON.stringify(breadcrumbSchema);
     document.head.appendChild(breadcrumbScript);
 
+    const setMeta = (attr, name, val) => {
+      const sel = attr === 'property' ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      const el = document.querySelector(sel);
+      if (el && val !== null) el.setAttribute('content', val);
+    };
+
     return () => {
+      document.title = prev.title;
+      setMeta('name', 'description', prev.desc);
+      setMeta('property', 'og:title', prev.ogTitle);
+      setMeta('property', 'og:description', prev.ogDesc);
+      if (prev.ogUrl !== null) setMeta('property', 'og:url', prev.ogUrl);
+      setMeta('name', 'twitter:title', prev.twTitle);
+      setMeta('name', 'twitter:description', prev.twDesc);
+      const canonicalEl = document.querySelector('link[rel="canonical"]');
+      if (canonicalEl && prev.canonical) canonicalEl.href = prev.canonical;
       document.getElementById('page-schema-ld')?.remove();
       document.getElementById('page-faq-ld')?.remove();
       document.getElementById('page-breadcrumb-ld')?.remove();
