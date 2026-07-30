@@ -100,9 +100,9 @@ describe('mercadoPagoWebhook — KAN-17 server-side validation & idempotency', (
       assert.ok(src.includes("rejected:"), "deve mapear 'rejected'");
     });
 
-    it('não reverte pagamento já pago (exceto reembolso/chargeback)', () => {
-      assert.match(src, /status === 'pago'/);
-      assert.match(src, /reembolsado.*chargeback|chargeback.*reembolsado/s);
+    it('não reverte pagamento já capturado (exceto reembolso/chargeback)', () => {
+      assert.match(src, /status === 'captured'/);
+      assert.match(src, /refunded.*disputed|disputed.*refunded/s);
     });
 
     it('usa external_reference para localizar ServiceRequest', () => {
