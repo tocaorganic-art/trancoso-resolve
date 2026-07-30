@@ -60,13 +60,18 @@
       "default": 99,
       "description": "Valor da mensalidade em R$"
     },
+    "mp_preapproval_id": {
+      "type": "string",
+      "description": "ID do preapproval no Mercado Pago (chave de reconcilia\u00e7\u00e3o do webhook)"
+    },
     "payment_method": {
       "type": "string",
       "enum": [
         "stripe",
+        "mercadopago",
         "manual"
       ],
-      "default": "stripe",
+      "default": "mercadopago",
       "description": "M\u00e9todo de pagamento"
     },
     "notes": {
