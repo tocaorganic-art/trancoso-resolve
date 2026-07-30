@@ -24,12 +24,15 @@ describe('mercadoPagoWebhook — KAN-17 server-side validation & idempotency', (
       assert.match(src, /Deno\.env\.get\('MP_WEBHOOK_SECRET'\)/);
     });
 
-    it('aceita quando não há secret configurado (modo permissivo)', () => {
-      assert.match(src, /if \(!secret\) return true/);
+    it('falha com 503 quando MP_WEBHOOK_SECRET não está configurado (fail-closed)', () => {
+      // Ausência da secret não pode ser aceita silenciosamente — é falha de configuração
+      assert.ok(!src.includes('if (!secret) return true'), 'fail-open não deve existir');
+      assert.match(src, /status:\s*503/);
+      assert.match(src, /MP_WEBHOOK_SECRET/);
     });
 
     it('rejeita com 400 se assinatura inválida', () => {
-      assert.match(src, /Invalid signature/);
+      assert.match(src, /Invalid signature|Assinatura inválida/);
       assert.match(src, /status:\s*400/);
     });
 
@@ -150,6 +153,16 @@ describe('mercadoPagoWebhook — KAN-17 server-side validation & idempotency', (
 
     it('tem campo payload_snapshot para auditoria', () => {
       assert.match(entitySrc, /payload_snapshot/);
+    });
+
+    it('payload_snapshot é sanitizado antes de gravar (sem PII ou dados financeiros)', () => {
+      // Deve existir uma função de sanitização
+      assert.match(src, /sanitizarPayload/);
+      // Deve usar campos seguros, não o payload bruto
+      assert.match(src, /SNAPSHOT_CAMPOS_SEGUROS/);
+      // Nunca gravar payload raw diretamente
+      assert.ok(!src.includes('payload_snapshot: payload,'), 'payload raw não deve ser gravado diretamente');
+      assert.ok(src.includes('payload_snapshot: sanitizarPayload(payload)'), 'deve usar sanitizarPayload');
     });
 
     it('RLS bloqueado: apenas admin pode ler, create/update/delete negados', () => {
