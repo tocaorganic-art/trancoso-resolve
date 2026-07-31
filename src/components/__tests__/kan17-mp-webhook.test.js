@@ -78,8 +78,17 @@ describe('mercadoPagoWebhook — KAN-17 server-side validation & idempotency', (
       assert.ok(src.includes("'payment'"), "deve suportar tópico 'payment'");
     });
 
-    it('suporta tópico preapproval', () => {
-      assert.ok(src.includes("'preapproval'"), "deve suportar tópico 'preapproval'");
+    it('suporta tópico subscription_preapproval (nome oficial MP)', () => {
+      assert.ok(src.includes("'subscription_preapproval'"), "deve suportar tópico 'subscription_preapproval'");
+    });
+
+    it('suporta tópico subscription_authorized_payment (cobrança recorrente)', () => {
+      assert.ok(src.includes("'subscription_authorized_payment'"), "deve suportar tópico 'subscription_authorized_payment'");
+    });
+
+    it('não aceita tópico preapproval isolado (obsoleto/incorreto)', () => {
+      // 'preapproval' como tópico isolado não é emitido pelo MP v2 — usar subscription_preapproval
+      assert.ok(!src.includes("=== 'preapproval'"), "comparação topic === 'preapproval' não deve existir");
     });
 
     it('ignora tópicos desconhecidos com 200', () => {
@@ -89,6 +98,12 @@ describe('mercadoPagoWebhook — KAN-17 server-side validation & idempotency', (
   });
 
   describe('processamento de pagamentos', () => {
+    it('trata subscription_authorized_payment como payment (data.id é payment ID)', () => {
+      // subscription_authorized_payment dispara cobrança recorrente — data.id é payment ID, mesmo fluxo
+      assert.match(src, /subscription_authorized_payment/);
+      assert.match(src, /subscription_authorized_payment.*processarPagamento|processarPagamento.*subscription_authorized_payment/s);
+    });
+
     it('busca detalhes do payment via API MP (não confia no payload)', () => {
       assert.match(src, /buscarPagamentoMP/);
       assert.match(src, /mercadopago\.com\/v1\/payments\//);
@@ -116,8 +131,8 @@ describe('mercadoPagoWebhook — KAN-17 server-side validation & idempotency', (
     });
   });
 
-  describe('processamento de assinaturas (preapproval)', () => {
-    it('busca preapproval via API MP', () => {
+  describe('processamento de assinaturas (subscription_preapproval)', () => {
+    it('busca preapproval via API MP ao receber subscription_preapproval', () => {
       assert.match(src, /buscarPreapprovalMP/);
       assert.match(src, /mercadopago\.com\/preapproval\//);
     });

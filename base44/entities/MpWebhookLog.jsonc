@@ -9,7 +9,7 @@
     },
     "topic": {
       "type": "string",
-      "description": "Tipo do evento: payment, subscription_preapproval, subscription_authorized_payment"
+      "description": "Tipo do evento MP: payment, subscription_preapproval, subscription_authorized_payment"
     },
     "resource_id": {
       "type": "string",

@@ -12,7 +12,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 //   MP_ACCESS_TOKEN    — token de acesso MP (para buscar detalhes via API)
 //   MP_WEBHOOK_SECRET  — secret para validação HMAC (OBRIGATÓRIO; ausente = falha segura)
 
-const TOPICS_SUPORTADOS = new Set(['payment', 'preapproval']);
+// Tópicos oficiais do Mercado Pago Webhooks v2:
+//   payment                     — pagamento avulso criado ou atualizado
+//   subscription_preapproval    — assinatura (preapproval) criada ou atualizada
+//   subscription_authorized_payment — cobrança recorrente autorizada dentro de uma assinatura
+const TOPICS_SUPORTADOS = new Set(['payment', 'subscription_preapproval', 'subscription_authorized_payment']);
 
 // Campos seguros para armazenar no snapshot de auditoria.
 // Nunca incluir: payer, card, transaction_details, fee_details, personal_data.
@@ -210,9 +214,10 @@ Deno.serve(async (req) => {
   });
 
   try {
-    if (topic === 'payment') {
+    if (topic === 'payment' || topic === 'subscription_authorized_payment') {
+      // subscription_authorized_payment: data.id é um payment ID — mesmo fluxo de pagamento avulso.
       await processarPagamento(base44, mpToken, resourceId);
-    } else if (topic === 'preapproval') {
+    } else if (topic === 'subscription_preapproval') {
       await processarPreapproval(base44, mpToken, resourceId);
     }
 
