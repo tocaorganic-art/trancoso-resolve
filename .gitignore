@@ -57,3 +57,5 @@ ruvector.db
 .claude/skills/
 .claude/.proven-config-version
 .claude/proven-config.json
+
+# Ruflo local secrets and runtime data
