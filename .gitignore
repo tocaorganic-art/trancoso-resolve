@@ -28,3 +28,32 @@ dist-ssr
 *.sw?
 
 .env
+
+# Ruflo local environment and runtime data
+.env.local
+.env.*.local
+.swarm/
+ruvector.db
+*.db-wal
+*.db-shm
+
+# Ruflo generated state
+.claude-flow/data/
+.claude-flow/logs/
+.claude-flow/sessions/
+.claude-flow/daemon-state.json
+.claude-flow/daemon.pid
+.claude-flow/embeddings.json
+.claude-flow/harness-active-policy.json
+.claude-flow/memory-package.json
+.claude-flow/metrics/
+.claude-flow/policy/
+.claude-flow/security/
+
+# Ruflo generated Claude assets
+.claude/agents/
+.claude/commands/
+.claude/helpers/
+.claude/skills/
+.claude/.proven-config-version
+.claude/proven-config.json
