@@ -288,7 +288,17 @@ function injectHead(html, route) {
   const ogDesc    = escapeForAttr(route.ogDescription  || route.description);
   const robots    = route.noIndex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
 
-  return html
+  let out = html;
+
+  // Em rotas que não são a home, remove o JSON-LD estático herdado do
+  // index.html base (LocalBusiness, Organization, WebSite, FAQ). Cada página
+  // injeta o próprio schema via JS (SchemaMarkup / useDestinationSeo),
+  // evitando duplicação de dados estruturados fora de contexto.
+  if (route.path !== '/') {
+    out = out.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '');
+  }
+
+  return out
     .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
     .replace(/(<meta name="description" content=")[^"]*(")/,   `$1${desc}$2`)
     .replace(/(<meta name="robots" content=")[^"]*(")/,        `$1${robots}$2`)
