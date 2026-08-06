@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 
 export default function TermosDeServico() {
-  useEffect(() => {
-    document.title = 'Termos de Serviço - Trancoso Resolve';
-    const meta = document.querySelector('meta[name="description"]') || 
-                 (() => { const m = document.createElement('meta'); m.name = 'description'; document.head.appendChild(m); return m; })();
-    meta.content = 'Termos e Condições de Uso da Plataforma Trancoso Resolve.';
-  }, []);
+  useSEO({
+    title: 'Termos de Serviço - Trancoso Resolve',
+    description: 'Termos e Condições de Uso da Plataforma Trancoso Resolve.',
+    canonical: '/TermosDeServico',
+    ogImage: OG_IMAGE,
+  });
 
   return (
     <div className="min-h-screen bg-background text-foreground py-12 px-4">

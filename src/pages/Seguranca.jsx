@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 import { toast } from 'sonner';
 
 // ─── 2FA Settings Panel ────────────────────────────────────────────────
@@ -233,16 +234,14 @@ export default function SegurancaPage() {
 
   const isPrestador = user?.user_type === 'prestador';
 
+  useSEO({
+    title: 'Segurança em Trancoso Resolve — Prestadores Verificados e Proteção de Dados',
+    description: 'Todos os prestadores do Trancoso Resolve passam por verificação de identidade e consulta de antecedentes criminais. Sua segurança é nossa prioridade.',
+    canonical: '/Seguranca',
+    ogImage: OG_IMAGE,
+  });
+
   useEffect(() => {
-    document.title = "Segurança em Trancoso Resolve — Prestadores Verificados e Proteção de Dados";
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Todos os prestadores do Trancoso Resolve passam por verificação de identidade e consulta de antecedentes criminais. Sua segurança é nossa prioridade.";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/Seguranca`;
-
     const schemaId = 'schema-seguranca';
     const existing = document.getElementById(schemaId);
     if (existing) existing.remove();

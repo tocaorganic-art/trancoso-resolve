@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { createPageUrl } from '@/utils';
 import TocaAvatar from '@/components/toca/TocaAvatar';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 
 const ProcessStep = ({ icon, title, description }) => (
   <div className="flex flex-col items-center text-center">
@@ -27,30 +28,14 @@ const ProcessStepPrestador = ({ icon, title, description }) => (
 );
 
 export default function ComoFuncionaPage() {
+  useSEO({
+    title: 'Como Funciona o Trancoso Resolve — Contrate Profissionais em Trancoso, BA',
+    description: 'Entenda como contratar profissionais em Trancoso em 3 passos simples. Busque, agende e resolve — com profissionais verificados e avaliados pela comunidade.',
+    canonical: '/ComoFunciona',
+    ogImage: OG_IMAGE,
+  });
+
   useEffect(() => {
-    document.title = "Como Funciona o Trancoso Resolve — Contrate Profissionais em Trancoso, BA";
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Entenda como contratar profissionais em Trancoso em 3 passos simples. Busque, agende e resolve — com profissionais verificados e avaliados pela comunidade.";
-
-    // Canonical
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/ComoFunciona`;
-
-    // OG tags
-    let ogUrl = document.querySelector('meta[property="og:url"]');
-    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = `${window.location.origin}/ComoFunciona`;
-
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
-    ogTitle.content = 'Como Funciona o Trancoso Resolve — Contrate Profissionais em Trancoso, BA';
-
-    let ogDesc = document.querySelector('meta[property="og:description"]');
-    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
-    ogDesc.content = 'Entenda como contratar profissionais em Trancoso em 3 passos simples. Busque, agende e resolve — com profissionais verificados e avaliados pela comunidade.';
-
     const schemaId = 'schema-como-funciona';
     const existing = document.getElementById(schemaId);
     if (existing) existing.remove();

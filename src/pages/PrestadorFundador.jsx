@@ -8,6 +8,7 @@ import {
   CalendarCheck, Crown, HelpCircle, MapPin, Lock, Users,
 } from "lucide-react";
 import FounderCounter from "@/components/prestador-fundador/FounderCounter";
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 import FounderBadge from "@/components/prestador-fundador/FounderBadge";
 
 const BENEFICIOS = [
@@ -82,6 +83,13 @@ const FAQ = [
 ];
 
 export default function PrestadorFundador() {
+  useSEO({
+    title: 'Prestador Fundador — Garanta sua Vaga | Trancoso Resolve',
+    description: 'Seja um dos 100 Prestadores Fundadores do Trancoso Resolve. Assine por R$ 19,90/mês e garanta seu Selo Fundador com benefícios exclusivos. Vagas limitadas.',
+    canonical: '/prestador-fundador',
+    ogImage: OG_IMAGE,
+  });
+
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}

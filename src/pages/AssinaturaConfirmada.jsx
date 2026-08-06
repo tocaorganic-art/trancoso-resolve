@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 import { CheckCircle, Calendar, CreditCard, ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -15,8 +16,14 @@ const PLAN_INFO = {
 export default function AssinaturaConfirmada() {
   const [params, setParams] = useState({ avulso: false, plan: null });
 
+  useSEO({
+    title: "Assinatura Confirmada - Trancoso Resolve",
+    description: "Sua assinatura foi confirmada com sucesso. Bem-vindo ao Trancoso Resolve!",
+    canonical: "/AssinaturaConfirmada",
+    ogImage: OG_IMAGE,
+  });
+
   useEffect(() => {
-    document.title = "Assinatura Confirmada - Trancoso Resolve";
     const urlParams = new URLSearchParams(window.location.search);
     const avulso = urlParams.get('avulso') === 'true';
     const plan = urlParams.get('plan') || null;

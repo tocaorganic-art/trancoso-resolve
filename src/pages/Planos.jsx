@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -417,6 +418,13 @@ function AnnualStrip({ anual, onToggle }) {
 // ─── Página principal ────────────────────────────────────────────────────────
 
 export default function PlanosPage() {
+  useSEO({
+    title: 'Planos e Preços - Trancoso Resolve',
+    description: 'Escolha o plano ideal para expandir seus serviços em Trancoso. Comece grátis e cresça com nossa plataforma de profissionais verificados.',
+    canonical: '/Planos',
+    ogImage: OG_IMAGE,
+  });
+
   const [aba, setAba] = useState("prestador");
   const [anual, setAnual] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState(null);

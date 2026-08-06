@@ -1,4 +1,4 @@
-import { useSEO } from '@/hooks/useSEO';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 import { SchemaMarkup } from '@/components/seo/SchemaMarkup';
 import { InvestorLangProvider, useInvestorLang } from '@/components/investors/InvestorLangContext';
 import InvestorNav from '@/components/investors/InvestorNav';
@@ -31,7 +31,7 @@ function InvestidoresContent() {
     title: t.meta.title,
     description: t.meta.description,
     canonical: '/investidores',
-    ogImage: undefined,
+    ogImage: OG_IMAGE,
     noIndex: true,
   });
 

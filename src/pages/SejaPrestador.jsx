@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 import { CheckCircle, BarChart2, Users, Star, Bot, Camera } from 'lucide-react';
 import LeadPrestadorForm from '@/components/leads/LeadPrestadorForm';
 import { Link } from 'react-router-dom';
@@ -62,29 +63,14 @@ const steps = [
 ];
 
 export default function SejaPrestadorPage() {
+  useSEO({
+    title: 'Seja um Prestador de Serviços em Trancoso — Trancoso Resolve',
+    description: 'Cadastre-se como prestador de serviços em Trancoso Resolve. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.',
+    canonical: '/SejaPrestador',
+    ogImage: OG_IMAGE,
+  });
+
   useEffect(() => {
-    document.title = "Seja um Prestador de Serviços em Trancoso — Trancoso Resolve";
-
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Cadastre-se como prestador de serviços em Trancoso Resolve. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/SejaPrestador`;
-
-    let ogUrl = document.querySelector('meta[property="og:url"]');
-    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = `${window.location.origin}/SejaPrestador`;
-
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
-    ogTitle.content = 'Seja um Prestador de Serviços em Trancoso — Trancoso Resolve';
-
-    let ogDesc = document.querySelector('meta[property="og:description"]');
-    if (!ogDesc) { ogDesc = document.createElement('meta'); ogDesc.setAttribute('property', 'og:description'); document.head.appendChild(ogDesc); }
-    ogDesc.content = 'Cadastre-se como prestador de serviços em Trancoso Resolve. Receba clientes verificados, custo zero de marketing, gestão com IA e construa sua reputação online.';
-
     const schemaId = 'schema-seja-prestador';
     const existing = document.getElementById(schemaId);
     if (existing) existing.remove();

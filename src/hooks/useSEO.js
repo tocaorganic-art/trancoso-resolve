@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 
 const BASE_URL = 'https://trancosoresolve.com.br';
 
+export const OG_IMAGE = 'https://trancosoresolve.com.br/og-image.jpg';
+
 export function useSEO({ title, description, canonical, ogImage, noIndex = false }) {
   useEffect(() => {
     const fullTitle = title.includes('Trancoso Resolve') ? title : `${title} | Trancoso Resolve`;

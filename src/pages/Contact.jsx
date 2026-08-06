@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Mail, MessageSquare, MapPin, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 
 const ASSUNTOS = ['Sou cliente', 'Sou prestador', 'Parceria', 'Imprensa', 'Outro'];
 
@@ -9,15 +10,12 @@ export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [status, setStatus] = useState('idle');
 
-  useEffect(() => {
-    document.title = 'Contato | Trancoso Resolve';
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Bahia.';
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/Contact`;
-  }, []);
+  useSEO({
+    title: 'Contato | Trancoso Resolve',
+    description: 'Entre em contato com a Trancoso Resolve. Estamos aqui para ajudar clientes e prestadores de serviço em Trancoso, Bahia.',
+    canonical: '/Contact',
+    ogImage: OG_IMAGE,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 
 export default function PoliticaDevolucoes() {
-  useEffect(() => {
-    document.title = 'Política de Devoluções e Reembolsos - Trancoso Resolve';
-    const meta = document.querySelector('meta[name="description"]') || 
-                 (() => { const m = document.createElement('meta'); m.name = 'description'; document.head.appendChild(m); return m; })();
-    meta.content = 'Política de Devoluções, Reembolsos e Garantia da Trancoso Resolve.';
-  }, []);
+  useSEO({
+    title: 'Política de Devoluções e Reembolsos - Trancoso Resolve',
+    description: 'Política de Devoluções, Reembolsos e Garantia da Trancoso Resolve.',
+    canonical: '/PoliticaDevolucoes',
+    ogImage: OG_IMAGE,
+  });
 
   return (
     <div className="min-h-screen bg-background text-foreground py-12 px-4">

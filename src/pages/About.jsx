@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Shield, Star, Bot, Camera, BarChart2, Users, ArrowRight, CheckCircle, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 
 const pillars = [
   {
@@ -38,23 +39,15 @@ const pillars = [
 ];
 
 export default function AboutPage() {
+  useSEO({
+    title: 'Sobre Nós | Trancoso Resolve — Trancoso, Arraial d\'Ajuda, Porto Seguro e Caraíva',
+    description: 'Conheça a Trancoso Resolve, a plataforma que conecta quem precisa de serviço a profissionais verificados em Trancoso, Arraial d\'Ajuda, Porto Seguro e Caraíva, na Bahia.',
+    canonical: '/About',
+    ogImage: OG_IMAGE,
+  });
+
   useEffect(() => {
-    document.title = 'Sobre Nós | Trancoso Resolve — Trancoso, Arraial d\'Ajuda, Porto Seguro e Caraíva';
-
-    const setMeta = (selector, attr, key, value) => {
-      let el = document.querySelector(selector);
-      if (!el) { el = document.createElement('meta'); if (attr) el.setAttribute(attr, key); else el.name = key; document.head.appendChild(el); }
-      el.content = value;
-    };
-
     const desc = 'Conheça a Trancoso Resolve, a plataforma que conecta quem precisa de serviço a profissionais verificados em Trancoso, Arraial d\'Ajuda, Porto Seguro e Caraíva, na Bahia.';
-    setMeta('meta[name="description"]', null, 'description', desc);
-    setMeta('meta[property="og:title"]', 'property', 'og:title', 'Sobre Nós | Trancoso Resolve — Trancoso, Arraial d\'Ajuda, Porto Seguro e Caraíva');
-    setMeta('meta[property="og:description"]', 'property', 'og:description', desc);
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/About`;
 
     // JSON-LD
     const schemaId = 'schema-about';

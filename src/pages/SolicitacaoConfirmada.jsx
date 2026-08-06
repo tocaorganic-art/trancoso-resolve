@@ -1,12 +1,15 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 
 export default function SolicitacaoConfirmadaPage() {
-  useEffect(() => {
-    document.title = "Solicitação Enviada! — Trancoso Resolve";
-  }, []);
+  useSEO({
+    title: 'Solicitação Enviada! — Trancoso Resolve',
+    description: 'Sua solicitação de serviço foi enviada com sucesso. O prestador entrará em contato em breve pelo WhatsApp ou telefone.',
+    canonical: '/SolicitacaoConfirmada',
+    ogImage: OG_IMAGE,
+  });
 
   return (
     <div className="bg-[#0a1628] min-h-screen pb-24">

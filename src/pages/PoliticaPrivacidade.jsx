@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 
 export default function PoliticaPrivacidade() {
-  useEffect(() => {
-    document.title = 'Política de Privacidade - Trancoso Resolve';
-    const meta = document.querySelector('meta[name="description"]') || 
-                 (() => { const m = document.createElement('meta'); m.name = 'description'; document.head.appendChild(m); return m; })();
-    meta.content = 'Política de Privacidade e Proteção de Dados da Trancoso Resolve. LGPD em conformidade.';
-  }, []);
+  useSEO({
+    title: 'Política de Privacidade - Trancoso Resolve',
+    description: 'Política de Privacidade e Proteção de Dados da Trancoso Resolve. LGPD em conformidade.',
+    canonical: '/PoliticaPrivacidade',
+    ogImage: OG_IMAGE,
+  });
 
   return (
     <div className="min-h-screen bg-background text-foreground py-12 px-4">

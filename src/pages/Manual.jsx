@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { OG_IMAGE, useSEO } from '@/hooks/useSEO';
 import { BookOpen, User, Briefcase, Wrench } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -78,24 +79,14 @@ const ManualContent = ({ title, items }) => (
 );
 
 function ManualSEO() {
+  useSEO({
+    title: 'Manual e FAQ — Trancoso Resolve | Guia Completo da Plataforma',
+    description: 'Manual completo do Trancoso Resolve. Tire dúvidas sobre como contratar, cadastrar serviços, verificação de prestadores e muito mais.',
+    canonical: '/Manual',
+    ogImage: OG_IMAGE,
+  });
+
   useEffect(() => {
-    document.title = "Manual e FAQ — Trancoso Resolve | Guia Completo da Plataforma";
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.appendChild(meta); }
-    meta.content = "Manual completo do Trancoso Resolve. Tire dúvidas sobre como contratar, cadastrar serviços, verificação de prestadores e muito mais.";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-    canonical.href = `${window.location.origin}/Manual`;
-
-    let ogUrl = document.querySelector('meta[property="og:url"]');
-    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = `${window.location.origin}/Manual`;
-
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.appendChild(ogTitle); }
-    ogTitle.content = 'Manual e FAQ — Trancoso Resolve | Guia Completo da Plataforma';
-
     const schemaId = 'schema-manual';
     const existing = document.getElementById(schemaId);
     if (existing) existing.remove();
