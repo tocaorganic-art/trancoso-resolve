@@ -142,12 +142,13 @@ export default function BookingForm({ provider, services, user, onCancel }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label>Seu Nome *</Label>
-                  <Input value={data.client_name} onChange={e => update('client_name', e.target.value)} />
+                  <Label htmlFor="booking-nome">Seu Nome *</Label>
+                  <Input id="booking-nome" value={data.client_name} onChange={e => update('client_name', e.target.value)} />
                 </div>
                 <div>
-                  <Label>Telefone (WhatsApp) *</Label>
+                  <Label htmlFor="booking-telefone">Telefone (WhatsApp) *</Label>
                   <Input
+                    id="booking-telefone"
                     type="tel"
                     placeholder="(XX) XXXXX-XXXX"
                     value={data.client_phone}
@@ -159,9 +160,9 @@ export default function BookingForm({ provider, services, user, onCancel }) {
 
               {services && services.length > 0 && (
                 <div>
-                  <Label>Serviço Desejado *</Label>
+                  <Label htmlFor="booking-servico">Serviço Desejado *</Label>
                   <Select value={data.service_id} onValueChange={v => update('service_id', v)}>
-                    <SelectTrigger>
+                    <SelectTrigger id="booking-servico">
                       <SelectValue placeholder="Selecione um serviço..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -176,10 +177,10 @@ export default function BookingForm({ provider, services, user, onCancel }) {
               )}
 
               <div>
-                <Label>Data Desejada *</Label>
+                <Label htmlFor="booking-data">Data Desejada *</Label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-start text-left font-normal">
+                    <Button id="booking-data" variant="outline" className="w-full justify-start text-left font-normal">
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {data.date ? format(data.date, "PPP", { locale: ptBR }) : "Escolha uma data"}
                     </Button>
@@ -199,8 +200,8 @@ export default function BookingForm({ provider, services, user, onCancel }) {
 
               {data.date && (
                 <div>
-                  <Label>Horário Disponível</Label>
-                  <div className="mt-1">
+                  <Label id="booking-horario-label">Horário Disponível</Label>
+                  <div role="group" aria-labelledby="booking-horario-label" className="mt-1">
                     <SlotPicker
                       providerId={provider.id}
                       selectedDate={data.date}
@@ -212,8 +213,9 @@ export default function BookingForm({ provider, services, user, onCancel }) {
               )}
 
               <div>
-                <Label>Observações</Label>
+                <Label htmlFor="booking-obs">Observações</Label>
                 <Textarea
+                  id="booking-obs"
                   value={data.message}
                   onChange={e => update('message', e.target.value)}
                   placeholder="Detalhes adicionais, necessidades especiais..."
@@ -234,8 +236,8 @@ export default function BookingForm({ provider, services, user, onCancel }) {
             <>
               <p className="text-sm font-semibold text-slate-500 mb-4">Etapa 2 de 2 — Localização do serviço</p>
 
-              <div>
-                <Label>Onde o serviço será realizado?</Label>
+              <div role="group" aria-labelledby="booking-local-label">
+                <Label id="booking-local-label">Onde o serviço será realizado?</Label>
                 <ServiceLocationMap
                   initialPosition={[-16.5925, -39.0931]}
                   onLocationSelect={pos => {
@@ -252,16 +254,18 @@ export default function BookingForm({ provider, services, user, onCancel }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t">
                 <div className="sm:col-span-2">
-                  <Label>Rua / Avenida *</Label>
+                  <Label htmlFor="booking-rua">Rua / Avenida *</Label>
                   <Input
+                    id="booking-rua"
                     value={data.location.address}
                     onChange={e => updateLocation('address', e.target.value)}
                     placeholder="Ex: Rua das Flores"
                   />
                 </div>
                 <div>
-                  <Label>Número</Label>
+                  <Label htmlFor="booking-numero">Número</Label>
                   <Input
+                    id="booking-numero"
                     value={data.location.number}
                     onChange={e => updateLocation('number', e.target.value)}
                     placeholder="123"
@@ -269,12 +273,12 @@ export default function BookingForm({ provider, services, user, onCancel }) {
                 </div>
               </div>
               <div>
-                <Label>Complemento</Label>
-                <Input value={data.location.complement} onChange={e => updateLocation('complement', e.target.value)} placeholder="Apto, casa..." />
+                <Label htmlFor="booking-complemento">Complemento</Label>
+                <Input id="booking-complemento" value={data.location.complement} onChange={e => updateLocation('complement', e.target.value)} placeholder="Apto, casa..." />
               </div>
               <div>
-                <Label>Ponto de Referência</Label>
-                <Input value={data.location.reference} onChange={e => updateLocation('reference', e.target.value)} placeholder="Próximo à..." />
+                <Label htmlFor="booking-referencia">Ponto de Referência</Label>
+                <Input id="booking-referencia" value={data.location.reference} onChange={e => updateLocation('reference', e.target.value)} placeholder="Próximo à..." />
               </div>
 
               <div className="flex gap-3 pt-4 border-t">

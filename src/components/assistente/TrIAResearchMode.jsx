@@ -49,12 +49,15 @@ export default function TrIAResearchMode() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
               placeholder="Pesquise sobre Trancoso, eventos, roteiros..."
+              aria-label="Pesquisar sobre Trancoso"
               className="w-full bg-slate-800 border border-slate-700 hover:border-slate-600 focus:border-purple-500 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none transition-colors focus:shadow-lg focus:shadow-purple-500/20"
             />
           </div>
           <button
+            type="button"
             onClick={() => handleSearch(searchQuery)}
             disabled={!searchQuery.trim() || isSearching}
+            aria-label="Buscar"
             className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             {isSearching ? (

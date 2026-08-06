@@ -16,7 +16,9 @@ export default function TrIASidebar({ isOpen, conversations, activeId, onSelect,
   return (
     <>
       {isOpen && (
-        <div
+        <button
+          type="button"
+          aria-label="Fechar menu"
           className="fixed inset-0 bg-black/60 md:hidden z-30 backdrop-blur-sm"
           onClick={onClose}
         />
@@ -58,12 +60,16 @@ export default function TrIASidebar({ isOpen, conversations, activeId, onSelect,
             conversations.map(convo => (
               <div
                 key={convo.id}
+                role="button"
+                tabIndex={0}
+                aria-label={`Abrir conversa: ${convo.name}`}
                 className={`group relative mx-2 mb-0.5 rounded-xl transition-all cursor-pointer ${
                   activeId === convo.id
                     ? 'bg-orange-500/15 border border-orange-500/30'
                     : 'border border-transparent hover:bg-white/4'
                 }`}
                 onClick={() => onSelect(convo.id)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(convo.id); } }}
               >
                 <div className="flex items-start gap-2.5 p-3 pr-8">
                   <MessageSquare className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${activeId === convo.id ? 'text-orange-400' : 'text-[#5A4A36]'}`} />

@@ -112,7 +112,7 @@ export default function TrIAChatArea({
       {error && (
         <div className="mx-4 mt-3 px-4 py-3 bg-red-950/60 border border-red-800/40 rounded-xl flex items-start gap-3 text-sm text-red-300 animate-fade-in">
           <span className="flex-1">{error}</span>
-          <button onClick={onErrorDismiss} className="shrink-0 text-red-500 hover:text-red-300 transition-colors mt-0.5">
+          <button type="button" onClick={onErrorDismiss} aria-label="Fechar aviso" className="shrink-0 text-red-500 hover:text-red-300 transition-colors mt-0.5">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -175,6 +175,7 @@ export default function TrIAChatArea({
               onKeyDown={handleKeyDown}
               rows={rows}
               placeholder={PLACEHOLDER[language]}
+              aria-label="Digite sua mensagem"
               disabled={isLoading}
               className="flex-1 bg-transparent text-[#F2DEC4] placeholder-[#4A3828] text-sm leading-6 resize-none focus:outline-none disabled:opacity-50 max-h-[120px]"
               style={{ minHeight: '24px' }}

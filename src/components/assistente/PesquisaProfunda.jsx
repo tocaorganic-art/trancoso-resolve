@@ -92,6 +92,7 @@ export default function PesquisaProfunda() {
       <div className="p-4 bg-white border-b border-slate-100 shrink-0">
         <Textarea
           placeholder="Ex: Analise as tendências de turismo em Trancoso para 2025 e sugira estratégias de marketing..."
+          aria-label="Descreva a pesquisa profunda"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           rows={3}
@@ -125,7 +126,14 @@ export default function PesquisaProfunda() {
               {/* Task header */}
               <div className="flex items-start justify-between gap-2 mb-2">
                 <p className="text-sm font-medium text-slate-800 line-clamp-2 flex-1">{task.prompt}</p>
-                <button onClick={() => toggleExpand(task.task_id)} className="text-slate-400 hover:text-slate-600 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => toggleExpand(task.task_id)}
+                  aria-expanded={task.expanded}
+                  aria-controls={`pesquisa-${task.task_id}`}
+                  aria-label={task.expanded ? 'Recolher detalhes da tarefa' : 'Expandir detalhes da tarefa'}
+                  className="text-slate-400 hover:text-slate-600 shrink-0"
+                >
                   {task.expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
               </div>
@@ -141,7 +149,7 @@ export default function PesquisaProfunda() {
 
               {/* Expandable result */}
               {task.expanded && task.result && (
-                <div className="mt-3 pt-3 border-t border-slate-100">
+                <div id={`pesquisa-${task.task_id}`} className="mt-3 pt-3 border-t border-slate-100">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Resultado</p>
                   <div className="prose prose-sm max-w-none text-slate-700">
                     <ReactMarkdown>{task.result}</ReactMarkdown>

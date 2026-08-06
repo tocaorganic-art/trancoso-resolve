@@ -77,6 +77,12 @@ export default function MultilingualAutocomplete({
         <Search className="absolute left-3 w-4 h-4 text-slate-500" />
         <input
           type="text"
+          role="combobox"
+          aria-label={placeholder}
+          aria-autocomplete="list"
+          aria-expanded={suggestions.length > 0}
+          aria-controls="autocomplete-listbox"
+          aria-activedescendant={selectedIndex >= 0 ? `autocomplete-option-${selectedIndex}` : undefined}
           value={input}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
@@ -89,10 +95,17 @@ export default function MultilingualAutocomplete({
       </div>
 
       {suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto">
+        <div
+          id="autocomplete-listbox"
+          role="listbox"
+          className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto"
+        >
           {suggestions.map((suggestion, idx) => (
             <button
               key={`${suggestion.id}-${idx}`}
+              id={`autocomplete-option-${idx}`}
+              role="option"
+              aria-selected={idx === selectedIndex}
               onClick={() => handleSelect(suggestion)}
               className={`w-full text-left px-4 py-2 transition-colors ${
                 idx === selectedIndex

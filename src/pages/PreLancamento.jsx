@@ -607,6 +607,7 @@ export default function PreLancamento() {
                   className="pl-input"
                   type="text"
                   placeholder="Nome completo *"
+                  aria-label="Nome completo"
                   value={form.name}
                   onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
                 />
@@ -615,12 +616,14 @@ export default function PreLancamento() {
                   type="tel"
                   inputMode="tel"
                   placeholder="WhatsApp (73) 99999-9999 *"
+                  aria-label="WhatsApp"
                   value={form.whatsapp}
                   onChange={handlePhone}
                 />
                 <div style={{ position: "relative" }}>
                   <select
                     className="pl-select"
+                    aria-label="Categoria de serviço"
                     value={form.categoria}
                     onChange={(e) => setForm(f => ({ ...f, categoria: e.target.value }))}
                   >
