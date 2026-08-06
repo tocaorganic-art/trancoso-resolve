@@ -422,7 +422,12 @@ export default function HomePage() {
         {
           "@type": "WebSite",
           "url": `${window.location.origin}`,
-          "name": "Trancoso Resolve"
+          "name": "Trancoso Resolve",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": { "@type": "EntryPoint", "urlTemplate": `${window.location.origin}/ServicosCategoria?q={search_term_string}` },
+            "query-input": "required name=search_term_string"
+          }
         },
         {
           "@type": "BreadcrumbList",
