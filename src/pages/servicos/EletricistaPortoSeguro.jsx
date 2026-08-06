@@ -6,13 +6,13 @@ export default function EletricistaPortoSeguro() {
       title="Eletricista em Porto Seguro | Trancoso Resolve"
       metaDescription="Encontre eletricista verificado em Porto Seguro, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="eletricista Porto Seguro, eletricista Porto Seguro BA, profissional Porto Seguro Bahia, elétrica Porto Seguro"
-      canonicalUrl="https://www.trancosoresolve.com.br/servicos/eletricista-porto-seguro"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/eletricista-porto-seguro"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Eletricista Porto Seguro",
         "description": "Eletricistas verificados em Porto Seguro, BA. Emergências e instalações para hotéis, pousadas e residências.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Porto Seguro, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.4497, "longitude": -39.0647 }
       }}

@@ -2,10 +2,10 @@
   "ci": {
     "collect": {
       "url": [
-        "https://www.trancosoresolve.com.br/",
-        "https://www.trancosoresolve.com.br/ServicosCategoria",
-        "https://www.trancosoresolve.com.br/Planos",
-        "https://www.trancosoresolve.com.br/destinos/Trancoso"
+        "https://trancosoresolve.com.br/",
+        "https://trancosoresolve.com.br/ServicosCategoria",
+        "https://trancosoresolve.com.br/Planos",
+        "https://trancosoresolve.com.br/destinos/Trancoso"
       ],
       "numberOfRuns": 3,
       "settings": {

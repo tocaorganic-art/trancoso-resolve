@@ -6,13 +6,13 @@ export default function JardineiroTrancoso() {
       title="Jardineiro em Trancoso, BA | Jardins e Paisagismo para Villas | Trancoso Resolve"
       metaDescription="Contrate jardineiro verificado em Trancoso, Bahia. Manutenção de jardins, poda, paisagismo e cuidado com vegetação nativa para villas e residências de alto padrão. Orçamento grátis."
       keywords="jardineiro Trancoso, jardineiro Trancoso Bahia, profissional Trancoso BA, serviços Trancoso, paisagismo Trancoso"
-      canonicalUrl="https://www.trancosoresolve.com.br/servicos/jardineiro-trancoso"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/jardineiro-trancoso"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Jardineiro Trancoso",
         "description": "Jardineiros verificados em Trancoso, BA. Manutenção e paisagismo para villas e residências de alto padrão.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Trancoso, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
       }}
