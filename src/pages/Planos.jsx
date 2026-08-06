@@ -196,8 +196,11 @@ function FaqItem({ q, r }) {
   return (
     <div className="border border-border rounded-xl overflow-hidden">
       <button
+        type="button"
         className="w-full text-left px-5 py-4 flex justify-between items-center bg-card hover:bg-muted transition-colors"
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-controls={`faq-panel-${q.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
       >
         <span className="font-semibold text-foreground text-sm pr-4">{q}</span>
         {open
@@ -205,7 +208,10 @@ function FaqItem({ q, r }) {
           : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
       </button>
       {open && (
-        <div className="px-5 py-4 bg-muted text-sm text-muted-foreground border-t border-border leading-relaxed">
+        <div
+          id={`faq-panel-${q.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+          className="px-5 py-4 bg-muted text-sm text-muted-foreground border-t border-border leading-relaxed"
+        >
           {r}
         </div>
       )}
@@ -394,8 +400,10 @@ function AnnualStrip({ anual, onToggle }) {
       </span>
 
       <button
+        type="button"
         role="switch"
         aria-checked={anual}
+        aria-label="Cobrança anual"
         onClick={onToggle}
         className={`relative w-12 h-6 rounded-full transition-colors ${anual ? "bg-orange-500" : "bg-border"}`}
       >
@@ -509,8 +517,12 @@ export default function PlanosPage() {
 
         {/* Toggle Prestador / Lojista */}
         <div className="flex items-center justify-center mb-6">
-          <div className="inline-flex bg-muted p-1 rounded-full gap-1">
+          <div role="tablist" aria-label="Tipo de conta" className="inline-flex bg-muted p-1 rounded-full gap-1">
             <button
+              type="button"
+              role="tab"
+              id="aba-prestador"
+              aria-selected={aba === "prestador"}
               onClick={() => setAba("prestador")}
               className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
                 aba === "prestador"
@@ -521,6 +533,10 @@ export default function PlanosPage() {
               Sou Prestador
             </button>
             <button
+              type="button"
+              role="tab"
+              id="aba-lojista"
+              aria-selected={aba === "lojista"}
               onClick={() => setAba("lojista")}
               className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
                 aba === "lojista"

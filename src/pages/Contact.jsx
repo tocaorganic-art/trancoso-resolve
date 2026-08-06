@@ -99,8 +99,9 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Nome *</label>
+                    <label htmlFor="contato-nome" className="block text-sm font-medium text-foreground mb-1">Nome *</label>
                     <input
+                      id="contato-nome"
                       type="text" required value={form.name}
                       onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                       placeholder="Seu nome"
@@ -108,8 +109,9 @@ export default function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Telefone</label>
+                    <label htmlFor="contato-telefone" className="block text-sm font-medium text-foreground mb-1">Telefone</label>
                     <input
+                      id="contato-telefone"
                       type="tel" value={form.phone}
                       onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
                       placeholder="(73) 9 0000-0000"
@@ -118,8 +120,9 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1">Email *</label>
+                  <label htmlFor="contato-email" className="block text-sm font-medium text-foreground mb-1">Email *</label>
                   <input
+                    id="contato-email"
                     type="email" required value={form.email}
                     onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                     placeholder="seu@email.com"
@@ -127,8 +130,9 @@ export default function ContactPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1">Assunto *</label>
+                  <label htmlFor="contato-assunto" className="block text-sm font-medium text-foreground mb-1">Assunto *</label>
                   <select
+                    id="contato-assunto"
                     required value={form.subject}
                     onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
                     className="w-full rounded-lg border border-border bg-muted px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-orange-400"
@@ -138,8 +142,9 @@ export default function ContactPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1">Mensagem *</label>
+                  <label htmlFor="contato-mensagem" className="block text-sm font-medium text-foreground mb-1">Mensagem *</label>
                   <textarea
+                    id="contato-mensagem"
                     required value={form.message}
                     onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
                     placeholder="Deixe sua mensagem, dúvida ou sugestão..."

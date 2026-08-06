@@ -109,6 +109,7 @@ function TwoFAPanel({ user }) {
                 inputMode="numeric"
                 maxLength={6}
                 placeholder="000000"
+                aria-label="Código de verificação 2FA"
                 value={confirmCode}
                 onChange={e => setConfirmCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 className="text-center text-lg font-bold tracking-widest w-36"
@@ -189,6 +190,7 @@ function DangerZonePanel({ user }) {
             <p className="text-sm text-slate-700">Para confirmar, digite seu email: <strong>{user?.email}</strong></p>
             <Input
               placeholder={user?.email}
+              aria-label="Digite seu email para confirmar a exclusão"
               value={typed}
               onChange={e => setTyped(e.target.value)}
             />

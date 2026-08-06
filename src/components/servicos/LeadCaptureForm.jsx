@@ -75,10 +75,11 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+            <label htmlFor="lead-nome" className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
               Nome <span className="text-red-500">*</span>
             </label>
             <input
+              id="lead-nome"
               type="text"
               required
               value={form.name}
@@ -89,10 +90,11 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+            <label htmlFor="lead-whatsapp" className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
               WhatsApp <span className="text-red-500">*</span>
             </label>
             <input
+              id="lead-whatsapp"
               type="tel"
               required
               value={form.phone}
@@ -105,10 +107,11 @@ export default function LeadCaptureForm({ serviceInterest, serviceLabel, source 
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
+          <label htmlFor="lead-mensagem" className="block text-sm font-semibold mb-1" style={{ color: '#2C1A0E' }}>
             Mensagem (opcional)
           </label>
           <textarea
+            id="lead-mensagem"
             value={form.message}
             onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
             placeholder="Descreva brevemente o que precisa..."
