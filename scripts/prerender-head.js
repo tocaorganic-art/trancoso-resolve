@@ -20,7 +20,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
-const BASE_URL = 'https://www.trancosoresolve.com.br';
+const BASE_URL = 'https://trancosoresolve.com.br';
 const DIST_DIR = path.join(__dirname, '..', 'dist');
 
 // Cada entrada = { path, title, description, ogTitle?, ogDescription? }
@@ -261,6 +261,38 @@ const ROUTES = [
     description: 'Guia completo para quem quer morar em Trancoso, Bahia: serviços essenciais, infraestrutura, profissionais locais e dicas de quem vive no Quadrado.',
   },
 
+  // ── Páginas institucionais complementares ──────────────────────────────
+  {
+    path: '/ComoFunciona',
+    title: 'Como Funciona o Trancoso Resolve | Trancoso Resolve',
+    description: 'Entenda como o Trancoso Resolve conecta você a profissionais verificados em Trancoso, Bahia: busque, compare e contrate com segurança.',
+  },
+  {
+    path: '/Seguranca',
+    title: 'Segurança em Trancoso Resolve — Prestadores Verificados',
+    description: 'Conheça os critérios de verificação do Trancoso Resolve: identidade, antecedentes e análise da equipe. Contrate com confiança em Trancoso, Bahia.',
+  },
+  {
+    path: '/PoliticaPrivacidade',
+    title: 'Política de Privacidade | Trancoso Resolve',
+    description: 'Saiba como o Trancoso Resolve coleta, usa e protege seus dados pessoais.',
+  },
+  {
+    path: '/TermosDeServico',
+    title: 'Termos de Serviço | Trancoso Resolve',
+    description: 'Condições de uso da plataforma Trancoso Resolve para clientes e prestadores de serviços.',
+  },
+  {
+    path: '/PoliticaDevolucoes',
+    title: 'Política de Devoluções e Reembolsos | Trancoso Resolve',
+    description: 'Regras de cancelamento, devolução e reembolso da Trancoso Resolve.',
+  },
+  {
+    path: '/prestador-fundador',
+    title: 'Seja um Prestador Fundador em Trancoso | Trancoso Resolve',
+    description: 'Cadastre-se como prestador fundador no Trancoso Resolve e ganhe visibilidade em Trancoso, Arraial d\'Ajuda, Caraíva e Porto Seguro.',
+  },
+
   // ── Páginas privadas (preview bonito, fora do Google) ──────────────────
   {
     path: '/investidores',
@@ -269,6 +301,55 @@ const ROUTES = [
     noIndex: true,
   },
 ];
+
+// ── Páginas privadas (login, cadastro, painel, admin, fluxos) — noindex ──
+// Toda rota fora da lista acima cai no index.html base (home indexable).
+// Para não indexar áreas restritas, geramos um HTML estático por rota com
+// <meta name="robots" content="noindex, nofollow">.
+const privatePages = (paths, title) =>
+  paths.map((path) => ({
+    path,
+    title,
+    description: 'Área restrita do Trancoso Resolve. Acesse com sua conta.',
+    noIndex: true,
+  }));
+
+ROUTES.push(
+  ...privatePages(['/login'], 'Entrar | Trancoso Resolve'),
+  ...privatePages(['/CadastroTipo', '/cadastro'], 'Criar conta | Trancoso Resolve'),
+  ...privatePages(['/Dashboard', '/Financeiro', '/DashboardLojista'], 'Painel | Trancoso Resolve'),
+  ...privatePages(['/MeuPerfilPrestador', '/PrestadorPerfil', '/MeusServicos', '/ServicoDetalhes'], 'Área do prestador | Trancoso Resolve'),
+  ...privatePages(['/MinhaAgenda', '/MeusPedidos'], 'Meus agendamentos | Trancoso Resolve'),
+  ...privatePages(['/Chat', '/Assistentevirtual'], 'Atendimento | Trancoso Resolve'),
+  ...privatePages(['/Manual'], 'Documentação e Manuais | Trancoso Resolve'),
+  ...privatePages(
+    [
+      '/FilaVerificacao',
+      '/AdminPagamentos',
+      '/AdminAntecedentes',
+      '/AdminAssinaturas',
+      '/AdminControleFinanceiro',
+      '/AdminUserManagement',
+      '/AdminMetricas',
+      '/admin/seo',
+      '/admin/marketing',
+      '/admin/metricas',
+      '/MonitoringDashboard',
+      '/DeployDashboard',
+      '/Base44ReportViewer',
+      '/Base44Templates',
+      '/DiagnosticosCompletos',
+      '/ManutencaoSistema',
+      '/GeradorDeImagem',
+    ],
+    'Painel administrativo | Trancoso Resolve'
+  ),
+  ...privatePages(
+    ['/SolicitacaoConfirmada', '/AssinaturaConfirmada', '/PreLancamento', '/ServicoLanding'],
+    'Trancoso Resolve'
+  ),
+  ...privatePages(['/RelatorioDiario', '/VerificacaoDocumento', '/VerificacaoAntecedentes'], 'Trancoso Resolve')
+);
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 

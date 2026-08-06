@@ -6,13 +6,13 @@ export default function DiaristaCaraiva() {
       title="Diarista em Caraíva | Trancoso Resolve"
       metaDescription="Encontre diarista verificada em Caraíva, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="diarista Caraíva, diarista Caraíva Bahia, profissional Caraíva BA, serviços Caraíva, limpeza Caraíva"
-      canonicalUrl="https://www.trancosoresolve.com.br/servicos/diarista-caraiva"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/diarista-caraiva"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Diarista Caraíva",
         "description": "Diaristas verificadas em Caraíva, BA. Limpeza para pousadas, villas e residências.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Caraíva, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.7397, "longitude": -39.1731 }
       }}

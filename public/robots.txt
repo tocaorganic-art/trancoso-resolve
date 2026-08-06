@@ -26,6 +26,18 @@ Disallow: /DiagnosticosCompletos
 Disallow: /VerificacaoDocumento
 Disallow: /VerificacaoAntecedentes
 Disallow: /RelatorioDiario
+Disallow: /login
+Disallow: /CadastroTipo
+Disallow: /cadastro
+Disallow: /PrestadorPerfil
+Disallow: /ServicoDetalhes
+Disallow: /ServicoLanding
+Disallow: /PreLancamento
+Disallow: /SolicitacaoConfirmada
+Disallow: /AssinaturaConfirmada
+Disallow: /Manual
+Disallow: /Assistentevirtual
+Disallow: /DashboardLojista
 Disallow: /api/
 Disallow: /*.json$
 
@@ -37,4 +49,4 @@ Allow: /
 
 Crawl-delay: 1
 
-Sitemap: https://www.trancosoresolve.com.br/sitemap.xml
+Sitemap: https://trancosoresolve.com.br/sitemap.xml

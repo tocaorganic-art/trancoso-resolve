@@ -6,13 +6,13 @@ export default function DiaristaTrancoso() {
       title="Diarista em Trancoso – Limpeza Premium para Villas, Pousadas e Residências de Alto Padrão"
       metaDescription="Contrate diarista verificada em Trancoso para limpeza residencial, villas, pousadas e casas de temporada. Profissionais treinados para residências de alto padrão. Peça orçamento pela Trancoso Resolve."
       keywords="diarista Trancoso, diarista Trancoso Bahia, profissional Trancoso BA, serviços Trancoso, limpeza Trancoso"
-      canonicalUrl="https://www.trancosoresolve.com.br/servicos/diarista-trancoso"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/diarista-trancoso"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Diarista Trancoso",
         "description": "Diaristas verificadas em Trancoso, BA. Limpeza para villas, pousadas e residências de alto padrão.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Trancoso, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
       }}

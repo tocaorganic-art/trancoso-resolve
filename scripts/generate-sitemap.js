@@ -1,6 +1,6 @@
 import { writeFileSync } from 'fs';
 
-const BASE_URL = 'https://www.trancosoresolve.com.br';
+const BASE_URL = 'https://trancosoresolve.com.br';
 const TODAY = new Date().toISOString().split('T')[0];
 
 const routes = [
@@ -11,7 +11,8 @@ const routes = [
   { path: '/Planos',          priority: '0.8', changefreq: 'monthly' },
   { path: '/About',           priority: '0.7', changefreq: 'monthly' },
   { path: '/Contact',         priority: '0.7', changefreq: 'monthly' },
-  { path: '/cadastro',        priority: '0.7', changefreq: 'monthly' },
+  { path: '/Seguranca',       priority: '0.6', changefreq: 'monthly' },
+  { path: '/prestador-fundador', priority: '0.8', changefreq: 'monthly' },
   { path: '/TermosDeServico',         priority: '0.4', changefreq: 'yearly' },
   { path: '/PoliticaPrivacidade',     priority: '0.4', changefreq: 'yearly' },
   { path: '/PoliticaDevolucoes',      priority: '0.4', changefreq: 'yearly' },
