@@ -87,6 +87,25 @@ export default function ServicoDetalhesPage() {
     const schema = document.createElement('script');
     schema.id = schemaId;
     schema.type = 'application/ld+json';
+    // AggregateRating só é emitido com avaliações reais (rating > 0 e
+    // total_reviews > 0) — nunca inventar nota nem quantidade de avaliações.
+    const providerSchema = {
+      "@type": "Person",
+      "name": provider?.full_name || "Profissional",
+      "image": provider?.photo_url,
+      ...(provider?.rating && provider?.total_reviews > 0
+        ? {
+            rating: {
+              "@type": "AggregateRating",
+              "ratingValue": provider.rating,
+              "reviewCount": provider.total_reviews,
+              "bestRating": 5,
+              "worstRating": 1
+            }
+          }
+        : {})
+    };
+
     schema.text = JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
@@ -95,22 +114,11 @@ export default function ServicoDetalhesPage() {
           "name": service.title,
           "description": service.description,
           "serviceType": service.category,
-          "provider": {
-            "@type": "Person",
-            "name": provider?.full_name || "Profissional",
-            "image": provider?.photo_url,
-            "rating": {
-              "@type": "AggregateRating",
-              "ratingValue": provider?.rating || 0,
-              "reviewCount": provider?.total_reviews || 0,
-              "bestRating": 5
-            }
-          },
+          "provider": providerSchema,
           "areaServed": {
             "@type": "Place",
             "name": "Trancoso, BA"
           },
-          "priceRange": "$",
           "offers": {
             "@type": "Offer",
             "price": service.price,
