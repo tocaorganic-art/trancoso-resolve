@@ -81,7 +81,7 @@
 
 - [ ] Pull do branch `main` executado no Base44
 - [ ] Base44 confirma build concluído sem erros
-- [ ] URL de produção (`www.trancosoresolve.com.br`) abre sem erro 502/504
+- [ ] URL de produção (`trancosoresolve.com.br`) abre sem erro 502/504
 - [ ] Commit em produção bate com o SHA do squash merge
 
 ### Validação em produção
@@ -120,7 +120,7 @@ Acione rollback (redeploy do commit anterior na Vercel) se qualquer item abaixo 
 
 - [ ] Nenhum token, chave de API ou credencial no repositório (`git log --all -S "ghp_"`)
 - [ ] `vercel.json` contém bloco `headers` com CSP, X-Frame-Options, etc.
-- [ ] `securityheaders.com` para `www.trancosoresolve.com.br`: nota **A ou superior**
+- [ ] `securityheaders.com` para `trancosoresolve.com.br`: nota **A ou superior**
 - [ ] App Base44 de produção identificado (ID `68eb21726a9614db4a82ba99`)
 - [ ] Banco de dados sem registros de teste (`teste@`, `test-provider-`, etc.)
 - [ ] VisualEditAgent fora de produção (`import.meta.env.DEV`)

@@ -114,7 +114,7 @@ async function sendCapiEvent(
           event_name: eventName,
           event_time: Math.floor(Date.now() / 1000),
           event_id: eventId || crypto.randomUUID(),
-          event_source_url: 'https://www.trancosoresolve.com.br/prestador-fundador',
+          event_source_url: 'https://trancosoresolve.com.br/prestador-fundador',
           action_source: 'website',
           custom_data: customData,
         }],

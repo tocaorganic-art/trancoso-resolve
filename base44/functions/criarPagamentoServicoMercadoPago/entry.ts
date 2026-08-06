@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
     // Sem comissão: prestador recebe 100% do valor negociado.
     const amountBrl = listing.price;
 
-    const BASE_URL = Deno.env.get('BASE_URL') || 'https://www.trancosoresolve.com.br';
+    const BASE_URL = Deno.env.get('BASE_URL') || 'https://trancosoresolve.com.br';
     const notificationUrl = Deno.env.get('MP_NOTIFICATION_URL');
 
     // --- Cria preference de pagamento no Mercado Pago ---

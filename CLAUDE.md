@@ -458,7 +458,7 @@ Nenhuma configurada explicitamente no `.env`. Verificar Vercel dashboard para se
 
 ### Regras críticas de SEO
 
-- **URL canônica:** sempre usar `https://www.trancosoresolve.com.br` (com `www`)
+- **URL canônica:** sempre usar `https://trancosoresolve.com.br` (sem `www`) — decisão 06/08/2026: a infra redireciona `www` → sem `www`; todo canonical/og:url/sitemap/schema deve ficar sem `www`
 - **Canonical das páginas de destino:** `/trancoso`, `/arraial-dajuda`, `/porto-seguro`, `/caraiva` (sem prefixo `/destinos/`)
 - **Sitemap:** regenerar com `npm run sitemap` após adicionar novas páginas
 - **Novos hooks disponíveis:** `useSEO` (genérico), `useDestinationSeo` (destinos), `SchemaMarkup` (JSON-LD por componente)

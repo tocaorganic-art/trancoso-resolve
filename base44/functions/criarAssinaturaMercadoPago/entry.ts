@@ -11,7 +11,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // Variáveis de ambiente necessárias:
 //   MP_ACCESS_TOKEN    — token de acesso Mercado Pago (server-side, nunca expor)
 //   MP_NOTIFICATION_URL — URL do webhook para receber notificações de pagamento
-//   BASE_URL           — URL base do app (ex: https://www.trancosoresolve.com.br)
+//   BASE_URL           — URL base do app (ex: https://trancosoresolve.com.br)
 const PLANOS: Record<string, { nome: string; valor: number; frequencia: 'monthly'; trial_days?: number }> = {
   fundador: {
     nome: 'Prestador Fundador',
@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    const BASE_URL = Deno.env.get('BASE_URL') || 'https://www.trancosoresolve.com.br';
+    const BASE_URL = Deno.env.get('BASE_URL') || 'https://trancosoresolve.com.br';
     const notificationUrl = Deno.env.get('MP_NOTIFICATION_URL');
 
     // --- Cria preapproval (assinatura recorrente) no Mercado Pago ---

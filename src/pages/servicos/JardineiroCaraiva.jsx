@@ -6,13 +6,13 @@ export default function JardineiroCaraiva() {
       title="Jardineiro em Caraíva | Trancoso Resolve"
       metaDescription="Encontre jardineiro verificado em Caraíva, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="jardineiro Caraíva, jardineiro Caraíva Bahia, profissional Caraíva BA, serviços Caraíva, paisagismo Caraíva"
-      canonicalUrl="https://www.trancosoresolve.com.br/servicos/jardineiro-caraiva"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/jardineiro-caraiva"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Jardineiro Caraíva",
         "description": "Jardineiros verificados em Caraíva, BA. Manutenção e paisagismo para pousadas e villas.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Caraíva, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.7397, "longitude": -39.1731 }
       }}

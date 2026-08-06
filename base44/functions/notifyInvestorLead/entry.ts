@@ -39,7 +39,7 @@ Obrigado pelo interesse na tese de investimento da Trancoso Resolve.
 
 Nossa equipe vai analisar sua mensagem e retornar em breve pelo email ou WhatsApp informado.
 
-Enquanto isso, o pacote completo para investidores (deck, memorando, plano de execução e modelo financeiro) está disponível para download na página: https://www.trancosoresolve.com.br/investidores
+Enquanto isso, o pacote completo para investidores (deck, memorando, plano de execução e modelo financeiro) está disponível para download na página: https://trancosoresolve.com.br/investidores
 
 Att,
 Tony Monteiro

@@ -6,13 +6,13 @@ export default function EncanadorTrancoso() {
       title="Encanador em Trancoso, BA | Hidráulica e Manutenção | Trancoso Resolve"
       metaDescription="Contrate encanador verificado em Trancoso, Bahia. Vazamentos, instalações hidráulicas, reparos urgentes e manutenção para villas, pousadas e residências. Atendimento rápido, orçamento grátis."
       keywords="encanador Trancoso, encanador Trancoso Bahia, profissional Trancoso BA, serviços Trancoso, hidráulica Trancoso"
-      canonicalUrl="https://www.trancosoresolve.com.br/servicos/encanador-trancoso"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/encanador-trancoso"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Encanador Trancoso",
         "description": "Encanadores verificados em Trancoso, BA. Reparos hidráulicos e instalações em villas e pousadas.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Trancoso, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.5897, "longitude": -39.0828 }
       }}

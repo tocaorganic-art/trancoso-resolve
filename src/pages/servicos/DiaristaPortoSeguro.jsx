@@ -6,13 +6,13 @@ export default function DiaristaPortoSeguro() {
       title="Diarista em Porto Seguro | Trancoso Resolve"
       metaDescription="Encontre diarista verificada em Porto Seguro, BA. Profissionais avaliados para sua pousada ou villa. Solicite agora pela Trancoso Resolve."
       keywords="diarista Porto Seguro, diarista Porto Seguro BA, profissional Porto Seguro Bahia, limpeza Porto Seguro"
-      canonicalUrl="https://www.trancosoresolve.com.br/servicos/diarista-porto-seguro"
+      canonicalUrl="https://trancosoresolve.com.br/servicos/diarista-porto-seguro"
       schemaData={{
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Trancoso Resolve - Diarista Porto Seguro",
         "description": "Diaristas verificadas em Porto Seguro, BA. Limpeza para hotéis, resorts, pousadas e residências.",
-        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://www.trancosoresolve.com.br" },
+        "provider": { "@type": "LocalBusiness", "name": "Trancoso Resolve", "url": "https://trancosoresolve.com.br" },
         "areaServed": { "@type": "City", "name": "Porto Seguro, BA" },
         "geo": { "@type": "GeoCoordinates", "latitude": -16.4497, "longitude": -39.0647 }
       }}

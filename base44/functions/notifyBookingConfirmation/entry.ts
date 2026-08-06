@@ -60,7 +60,7 @@ ${request.location?.address ? `📍 Local: ${request.location.address}${request.
 Você receberá uma notificação assim que ${providerFirstName} confirmar seu agendamento.
 
 Em caso de dúvidas, entre em contato pelo WhatsApp ou acesse a plataforma:
-https://www.trancosoresolve.com.br/MeusPedidos
+https://trancosoresolve.com.br/MeusPedidos
 
 Um abraço,
 Equipe Trancoso Resolve 🌊
@@ -105,7 +105,7 @@ ${request.location?.reference ? `🗺️ Referência: ${request.location.referen
 • Em caso de imprevisto, entre em contato com antecedência.
 • Após o serviço, avalie o prestador para ajudar a comunidade!
 
-Acesse seus pedidos: https://www.trancosoresolve.com.br/MeusPedidos
+Acesse seus pedidos: https://trancosoresolve.com.br/MeusPedidos
 
 Um abraço,
 Equipe Trancoso Resolve 🌊
@@ -142,7 +142,7 @@ ${request.message ? `💬 Obs. do cliente: "${request.message}"` : ''}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Acesse sua agenda: https://www.trancosoresolve.com.br/MinhaAgenda
+Acesse sua agenda: https://trancosoresolve.com.br/MinhaAgenda
 
 Equipe Trancoso Resolve 🌊
         `.trim();
