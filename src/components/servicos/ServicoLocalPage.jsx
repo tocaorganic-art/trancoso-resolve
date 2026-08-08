@@ -25,7 +25,7 @@ export default function ServicoLocalPage({
   cta,
   ctaButton,
   category,
-  heroEmoji = undefined,
+  heroEmoji: _heroEmoji = undefined,
   serviceLabel = undefined,
   locationLabel = 'Trancoso, Bahia',
 }) {

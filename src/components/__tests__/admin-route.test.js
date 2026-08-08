@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Testes de análise estática — proteção de rotas admin (sem role check)
 // Garantem que AdminRoute existe e é usado nos caminhos sensíveis.
 

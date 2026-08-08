@@ -567,7 +567,7 @@ export default function HomePage() {
 
       <div className="container mx-auto max-w-6xl px-4 py-8 md:py-16">
         {/* Banner Prestador Fundador — visível para não-assinantes */}
-        <FounderBanner />
+        <FounderBanner user={user} />
 
         {/* Recomendações com IA */}
         {user && (isLoadingRecommendations || (recommendedServices?.data && recommendedServices.data.length > 0)) && (

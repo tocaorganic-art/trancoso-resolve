@@ -69,11 +69,11 @@ function TabToggle({ active, onChange }) {
 
 // ─── Plan Card ────────────────────────────────────────────────────────────────
 function PlanCard({
-  badge, badgeColor, headerColor, icon, name, price,
-  trialLabel, vagasLabel, benefits,
-  ctaLabel, ctaNote, onCta,
-  onCtaAvulso, ctaAvulsoLabel,
-  loading, loadingAvulso, disabled, popular, isFree,
+  badge = undefined, badgeColor = undefined, headerColor = undefined, icon = undefined, name = undefined, price = undefined,
+  trialLabel = undefined, vagasLabel = undefined, benefits = undefined,
+  ctaLabel = undefined, ctaNote = undefined, onCta = undefined,
+  onCtaAvulso = undefined, ctaAvulsoLabel = undefined,
+  loading = undefined, loadingAvulso = undefined, disabled = undefined, popular = undefined, isFree = undefined,
 }) {
   return (
     <div className={popular ? 'relative pt-4' : 'relative'}>

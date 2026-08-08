@@ -8,7 +8,7 @@ import { Rocket, X } from "lucide-react";
 
 const FOUNDER_LIMIT = 100;
 
-export default function FounderBanner({ user, subscription }) {
+export default function FounderBanner({ user = undefined, subscription = undefined }) {
   const [dismissed, setDismissed] = useState(() =>
     localStorage.getItem('founder_banner_dismissed') === 'true'
   );

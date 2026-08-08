@@ -1,7 +1,7 @@
 import { Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function FounderBadge({ position, className, size = "md" }) {
+export default function FounderBadge({ position = undefined, className = undefined, size = "md" }) {
   const sizes = {
     sm: "text-xs px-2 py-0.5 gap-1",
     md: "text-sm px-3 py-1 gap-1.5",

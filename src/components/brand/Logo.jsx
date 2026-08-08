@@ -21,7 +21,7 @@ export function LogoMark({ className = "h-12 w-12", title = "Trancoso Resolve", 
 }
 
 // Lockup completo: símbolo + "Trancoso" (Nunito 700) + "RESOLVE" (Nunito 900, caixa-alta).
-export default function Logo({ className, markClassName = "h-12 w-12", textClassName = "", showText = true }) {
+export default function Logo({ className = undefined, markClassName = "h-12 w-12", textClassName = "", showText = true }) {
   return (
     <span className={cn("flex items-center gap-2", className)}>
       <LogoMark className={markClassName} />
