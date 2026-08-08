@@ -36,7 +36,7 @@ export default function TabPrestadores({ providers, requests }) {
     if (filtroStatus !== "todos") data = data.filter(p => (p.status_verificacao || "pendente") === filtroStatus);
     if (filtroOcupacao !== "todos") data = data.filter(p => p.occupation === filtroOcupacao);
     if (busca) data = data.filter(p => (p.full_name || "").toLowerCase().includes(busca.toLowerCase()));
-    return data.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+    return data.sort((a, b) => new Date(b.created_date).getTime() - new Date(a.created_date).getTime());
   }, [providers, filtroStatus, filtroOcupacao, busca]);
 
   return (

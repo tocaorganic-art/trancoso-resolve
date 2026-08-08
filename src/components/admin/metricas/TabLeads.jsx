@@ -36,7 +36,7 @@ export default function TabLeads({ leads, onRefresh }) {
       const cutoff = subDays(new Date(), filtroPeriodo);
       data = data.filter(l => new Date(l.created_date) >= cutoff);
     }
-    return data.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+    return data.sort((a, b) => new Date(b.created_date).getTime() - new Date(a.created_date).getTime());
   }, [leads, filtroTipo, filtroOrigem, filtroServico, filtroPeriodo]);
 
   const exportCSV = () => {

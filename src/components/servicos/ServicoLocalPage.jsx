@@ -14,7 +14,7 @@ export default function ServicoLocalPage({
   keywords,
   canonicalUrl,
   schemaData,
-  faqData,
+  faqData = undefined,
   h1,
   intro,
   servicesTitle,
@@ -25,7 +25,8 @@ export default function ServicoLocalPage({
   cta,
   ctaButton,
   category,
-  serviceLabel,
+  heroEmoji: _heroEmoji = undefined,
+  serviceLabel = undefined,
   locationLabel = 'Trancoso, Bahia',
 }) {
   useEffect(() => {

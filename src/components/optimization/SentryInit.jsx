@@ -37,7 +37,7 @@ class ErrorTracker {
   async sendToBackend(errorData) {
     try {
       await base44.functions.invoke('logError', errorData);
-    } catch (e) {
+    } catch {
       // Silent fail - don't create infinite loops
     }
   }

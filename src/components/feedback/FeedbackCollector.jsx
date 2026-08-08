@@ -14,7 +14,7 @@ export default function FeedbackCollector() {
   const [message, setMessage] = useState('');
 
   const submitFeedbackMutation = useMutation({
-    mutationFn: async (feedbackData) => {
+    mutationFn: async (/** @type {any} */ feedbackData) => {
       // In production, this would save to a Feedback entity
       console.log('Feedback submitted:', feedbackData);
       return feedbackData;

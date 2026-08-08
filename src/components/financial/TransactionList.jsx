@@ -39,7 +39,7 @@ export default function TransactionList({ transactions }) {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => base44.entities.Transaction.delete(id),
+    mutationFn: (/** @type {any} */ id) => base44.entities.Transaction.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions', user?.email] });
     },

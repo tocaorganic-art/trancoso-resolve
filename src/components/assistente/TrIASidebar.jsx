@@ -3,7 +3,7 @@ import { Plus, MessageSquare, Trash2, Sparkles } from 'lucide-react';
 function formatDate(iso) {
   const d = new Date(iso);
   const now = new Date();
-  const diff = now - d;
+  const diff = now.getTime() - d.getTime();
   if (diff < 86400000) return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   if (diff < 604800000) {
     const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];

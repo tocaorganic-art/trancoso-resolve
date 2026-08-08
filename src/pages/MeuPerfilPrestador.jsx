@@ -78,8 +78,6 @@ const ProfileCompleteness = ({ formData }) => {
         }
     }
     
-    const progressColor = score > 80 ? 'bg-[#3E8E5A]' : score > 50 ? 'bg-amber-500' : 'bg-red-600';
-
     return (
         <Card className="mb-8 bg-muted border-border">
             <CardHeader>
@@ -127,7 +125,7 @@ function MeuPerfilPrestadorContent() {
 
   const [formData, setFormData] = useState(null);
   const [uploading, setUploading] = useState({ profile: false, document: false, cover: false });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState(/** @type {{ [key: string]: string }} */ ({}));
 
   useEffect(() => {
     if (provider) {
@@ -174,7 +172,7 @@ function MeuPerfilPrestadorContent() {
 
 
   const mutation = useMutation({
-    mutationFn: (data) => {
+    mutationFn: (/** @type {any} */ data) => {
       const { id, ...rest } = data;
       if (id) {
         return base44.entities.ServiceProvider.update(id, rest);
@@ -269,7 +267,7 @@ function MeuPerfilPrestadorContent() {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors = /** @type {{ [key: string]: string }} */ ({});
     
     if (!formData.full_name || formData.full_name.trim() === '') {
       newErrors.full_name = 'Nome completo é obrigatório.';

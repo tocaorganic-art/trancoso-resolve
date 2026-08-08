@@ -14,7 +14,7 @@ export default function CacheManager() {
     if ('storage' in navigator && 'estimate' in navigator.storage) {
       const estimate = await navigator.storage.estimate();
       setCacheStats({
-        size: ((estimate.usage || 0) / 1024 / 1024).toFixed(2),
+        size: parseFloat(((estimate.usage || 0) / 1024 / 1024).toFixed(2)),
         itemCount: Object.keys(localStorage).length,
       });
     }
@@ -60,7 +60,7 @@ export default function CacheManager() {
           if (item && item.timestamp && (now - item.timestamp > maxAge)) {
             localStorage.removeItem(key);
           }
-        } catch (e) {
+        } catch {
           // Not a timestamped item, skip
         }
       });

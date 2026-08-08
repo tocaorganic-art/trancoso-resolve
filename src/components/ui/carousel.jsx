@@ -17,6 +17,7 @@ function useCarousel() {
   return context
 }
 
+/** @type {any} */
 const Carousel = React.forwardRef((
   {
     orientation = "horizontal",
@@ -24,7 +25,7 @@ const Carousel = React.forwardRef((
     setApi,
     plugins,
     className,
-    children,
+    children = undefined,
     ...props
   },
   ref
@@ -112,7 +113,8 @@ const Carousel = React.forwardRef((
 })
 Carousel.displayName = "Carousel"
 
-const CarouselContent = React.forwardRef(({ className, ...props }, ref) => {
+/** @type {any} */
+const CarouselContent = React.forwardRef(({ className = undefined, ...props }, ref) => {
   const { carouselRef, orientation } = useCarousel()
 
   return (
@@ -130,7 +132,8 @@ const CarouselContent = React.forwardRef(({ className, ...props }, ref) => {
 })
 CarouselContent.displayName = "CarouselContent"
 
-const CarouselItem = React.forwardRef(({ className, ...props }, ref) => {
+/** @type {any} */
+const CarouselItem = React.forwardRef(({ className = undefined, ...props }, ref) => {
   const { orientation } = useCarousel()
 
   return (
@@ -148,7 +151,8 @@ const CarouselItem = React.forwardRef(({ className, ...props }, ref) => {
 })
 CarouselItem.displayName = "CarouselItem"
 
-const CarouselPrevious = React.forwardRef(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+/** @type {any} */
+const CarouselPrevious = React.forwardRef(({ className = undefined, variant = "outline", size = "icon", ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
   return (
@@ -169,7 +173,8 @@ const CarouselPrevious = React.forwardRef(({ className, variant = "outline", siz
 })
 CarouselPrevious.displayName = "CarouselPrevious"
 
-const CarouselNext = React.forwardRef(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+/** @type {any} */
+const CarouselNext = React.forwardRef(({ className = undefined, variant = "outline", size = "icon", ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
 
   return (

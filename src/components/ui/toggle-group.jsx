@@ -5,19 +5,20 @@ import { cn } from "@/lib/utils"
  * ToggleGroup customizado sem dependência do Radix UI
  * Implementação nativa para Base44
  */
-const ToggleGroupContext = React.createContext({
+const ToggleGroupContext = React.createContext(/** @type {{ value: any, onValueChange: (v: any) => void, type: string, size: string, variant: string }} */ ({
   value: "",
   onValueChange: () => {},
   type: "single",
   size: "default",
   variant: "default",
-})
+}))
 
-const ToggleGroup = React.forwardRef(({ 
-  className, 
+/** @type {any} */
+const ToggleGroup = React.forwardRef(/** @param {*} props */ ({
+  className = undefined, 
   variant = "default", 
   size = "default", 
-  children, 
+  children = undefined, 
   type = "single",
   value,
   onValueChange,
@@ -48,8 +49,8 @@ const ToggleGroup = React.forwardRef(({
       value: currentValue, 
       onValueChange: handleValueChange,
       type,
-      size, 
-      variant 
+      size,
+      variant
     }}>
       <div
         ref={ref}
@@ -68,11 +69,12 @@ const ToggleGroup = React.forwardRef(({
 
 ToggleGroup.displayName = "ToggleGroup"
 
-const ToggleGroupItem = React.forwardRef(({ 
-  className, 
-  children, 
-  variant, 
-  size, 
+/** @type {any} */
+const ToggleGroupItem = React.forwardRef(/** @param {*} props */ ({
+  className = undefined,
+  children = undefined, 
+  variant: _variant = undefined,
+  size = undefined, 
   value: itemValue,
   disabled,
   ...props 

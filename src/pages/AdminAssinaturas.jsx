@@ -49,7 +49,7 @@ export default function AdminAssinaturasPage() {
   });
 
   const updateSubscriptionMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.Subscription.update(id, data),
+    mutationFn: (/** @type {any} */ { id, data }) => base44.entities.Subscription.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-subscriptions'] });
     },

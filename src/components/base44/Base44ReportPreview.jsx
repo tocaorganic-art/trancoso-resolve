@@ -46,11 +46,6 @@ export default function Base44ReportPreview({ reportData }) {
     );
   };
 
-  const getMetricStatus = (value, threshold, inverse = false) => {
-    const passed = inverse ? value <= threshold : value >= threshold;
-    return passed ? 'success' : value >= threshold * 0.8 ? 'warning' : 'error';
-  };
-
   const downloadReport = () => {
     const markdown = generateMarkdownReport(reportData);
     const blob = new Blob([markdown], { type: 'text/markdown' });

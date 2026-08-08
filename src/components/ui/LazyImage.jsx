@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ImageOff } from "lucide-react";
 import { getImageFormats } from "@/utils/images";
 
-export default function LazyImage({ src, srcSet, sizes, alt, className, placeholderClassName, priority = false, fallbackSrc }) {
+export default function LazyImage({ src, srcSet = undefined, sizes = undefined, alt, className, placeholderClassName = undefined, priority = false, fallbackSrc = undefined }) {
   const [imgSrc, setImgSrc] = useState(src);
   const [imageFormats, setImageFormats] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // KAN-18: SEO head authority — testes de análise estática
 // Garantem que Layout.jsx não sobrescreve SEO de rotas desconhecidas
 // e que ServicoLocalPage.jsx faz cleanup completo dos meta tags.

@@ -135,7 +135,7 @@ function ChatWindow({ conversation, currentUser, onBack }) {
   }, [messages]);
 
   const sendMessageMutation = useMutation({
-    mutationFn: async (content) => {
+    mutationFn: async (/** @type {any} */ content) => {
       const msg = await base44.entities.ChatMessage.create({
         conversation_id: conversation.id,
         sender_email: currentUser.email,
@@ -271,7 +271,7 @@ export default function ChatPage() {
             <MessageCircle className="w-12 h-12 mx-auto text-brand-primary mb-4" />
             <h2 className="text-xl font-bold text-foreground mb-2">Faça login para usar o chat</h2>
             <p className="text-muted-foreground mb-6">Você precisa estar logado para conversar com prestadores.</p>
-            <Button onClick={() => base44.auth.redirectToLogin()} className="w-full bg-brand-primary hover:bg-orange-600">
+            <Button onClick={() => base44.auth.redirectToLogin(window.location.href)} className="w-full bg-brand-primary hover:bg-orange-600">
               Entrar
             </Button>
           </CardContent>

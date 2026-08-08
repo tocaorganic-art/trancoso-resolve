@@ -15,7 +15,7 @@ import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { isValidURL } from "@/components/utils/validators";
 
-export default function TransactionForm({ transaction, onClose }) {
+export default function TransactionForm({ transaction = undefined, onClose }) {
   const [formData, setFormData] = useState(transaction || {
     type: "Receita",
     category: "Serviço",
@@ -29,7 +29,7 @@ export default function TransactionForm({ transaction, onClose }) {
   const queryClient = useQueryClient();
 
   const saveMutation = useMutation({
-    mutationFn: async (data) => {
+    mutationFn: async (/** @type {any} */ data) => {
       const processedData = {
         ...data,
         amount: parseFloat(data.amount),
@@ -43,7 +43,7 @@ export default function TransactionForm({ transaction, onClose }) {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['transactions']);
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
       toast.success(transaction ? 'Transação atualizada!' : 'Transação criada!');
       onClose();
     },

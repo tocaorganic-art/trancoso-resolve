@@ -44,7 +44,7 @@ export default function TwoFactorChallenge({ action, onSuccess, onCancel }) {
 
       toast.success('Verificação concluída!');
       if (onSuccess) onSuccess();
-    } catch (error) {
+    } catch {
       setAttempts(prev => prev + 1);
       
       if (attempts >= maxAttempts - 1) {

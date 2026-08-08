@@ -52,7 +52,7 @@ export default function PrestadorPerfilPage() {
     location: { address: '', number: '', complement: '', reference: '', lat: null, lng: null },
   });
 
-  const queryClient = useQueryClient();
+  const _queryClient = useQueryClient();
 
   const { data: provider, isLoading } = useQuery({
     queryKey: ['serviceProvider', providerId],
@@ -78,7 +78,7 @@ export default function PrestadorPerfilPage() {
   });
 
   const createRequestMutation = useMutation({
-    mutationFn: (data) => base44.entities.ServiceRequest.create(data),
+    mutationFn: (/** @type {any} */ data) => base44.entities.ServiceRequest.create(data),
     onSuccess: () => {
       navigate('/SolicitacaoConfirmada');
     },
@@ -384,7 +384,7 @@ export default function PrestadorPerfilPage() {
               </Button>
               <WhatsAppCallButton provider={provider} className="flex-1" size="lg" />
               {isUserLoaded && user && (
-              <StartChatButton provider={provider} className="flex-1" size="lg" />
+              <StartChatButton provider={provider} className="flex-1" />
               )}
               </div>
             </div>

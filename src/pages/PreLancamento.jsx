@@ -237,7 +237,7 @@ export default function PreLancamento() {
       if (window.gtag) window.gtag("event", "generate_lead", { currency: "BRL", value: 29.90, event_category: "engagement" });
 
       setSubmitted(true);
-    } catch (err) {
+    } catch {
       setError("Erro ao cadastrar. Tente novamente em instantes.");
     } finally {
       setLoading(false);
@@ -736,6 +736,7 @@ export default function PreLancamento() {
   );
 }
 
+/** @type {import('react').CSSProperties} */
 const secLabel = {
   fontSize: "0.71rem",
   fontWeight: 700,
@@ -746,6 +747,7 @@ const secLabel = {
   marginBottom: 8,
 };
 
+/** @type {import('react').CSSProperties} */
 const secTitle = {
   fontSize: "clamp(1.3rem, 4vw, 1.85rem)",
   fontWeight: 800,

@@ -26,7 +26,7 @@ export default function TabSEO({ pages, keywords }) {
   const getLastWeekData = (url) => lastPages.find(p => p.page_url === url);
 
   const mutation = useMutation({
-    mutationFn: (data) => base44.entities.SearchPageWeekly.create(data),
+    mutationFn: (/** @type {any} */ data) => base44.entities.SearchPageWeekly.create(data),
     onSuccess: () => {
       toast.success("Dados de página adicionados!");
       setShowForm(false);
@@ -44,7 +44,7 @@ export default function TabSEO({ pages, keywords }) {
       clicks: parseInt(form.clicks) || 0,
       impressions: parseInt(form.impressions) || 0,
       position: parseFloat(form.position) || 0,
-      ctr: form.impressions > 0 ? ((parseInt(form.clicks) / parseInt(form.impressions)) * 100).toFixed(2) : 0,
+      ctr: parseInt(form.impressions) > 0 ? ((parseInt(form.clicks) / parseInt(form.impressions)) * 100).toFixed(2) : 0,
     });
   };
 

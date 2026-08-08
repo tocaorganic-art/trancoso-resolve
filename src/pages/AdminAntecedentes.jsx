@@ -71,8 +71,8 @@ export default function AdminAntecedentesPage() {
   });
 
   const reverificaMutation = useMutation({
-    mutationFn: (id) => base44.functions.invoke('verificarAntecedentes', { service_provider_id: id }),
-    onSuccess: (_, id) => {
+    mutationFn: (/** @type {any} */ id) => base44.functions.invoke('verificarAntecedentes', { service_provider_id: id }),
+    onSuccess: (_, _id) => {
       toast.success("🔄 Verificação reenviada para Infosimples.");
       queryClient.invalidateQueries({ queryKey: ["allProviders"] });
     },

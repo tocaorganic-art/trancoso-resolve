@@ -19,7 +19,7 @@ export default function ProviderGrid({
     ratingFilter,
     availabilityFilter,
     neighborhoodFilter,
-    selectedCategory,
+    selectedCategory: _selectedCategory,
     setSearchQuery,
     setPriceFilter,
     setRatingFilter,
