@@ -481,3 +481,14 @@ button, input, select, textarea, code, pre {
 .dark .border-blue-200 {
   border-color: rgba(59, 130, 246, 0.25);
 }
+/* Movimento reduzido — respeita a preferência do sistema em toda a aplicação */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
