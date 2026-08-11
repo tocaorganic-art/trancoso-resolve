@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { APP_VERSION } from '@/lib/performance';
 
 // Simple error tracking without external dependencies
 class ErrorTracker {
@@ -15,6 +16,8 @@ class ErrorTracker {
       stack: error?.stack || '',
       context,
       url: window.location.href,
+      route: window.location.pathname,
+      app_version: APP_VERSION,
       userAgent: navigator.userAgent
     };
 
