@@ -11,8 +11,11 @@ Deno.serve(async (req) => {
 
     const { prestadorId, documentUrl, selfieUrl } = await req.json();
 
-    // Validar que o usuário está verificando a si mesmo
-    if (user.id !== prestadorId) {
+    // Ownership via created_by: prestadorId é o id do registro ServiceProvider
+    // (não o user.id). Só o próprio prestador (ou admin) pode verificar.
+    const providers = await base44.entities.ServiceProvider.filter({ created_by: user.email });
+    const provider = providers?.find(p => p.id === prestadorId);
+    if (!provider) {
       return Response.json({ error: 'Forbidden - Can only verify own profile' }, { status: 403 });
     }
 
@@ -86,15 +89,10 @@ Retorne um JSON com:
     if (shouldApprove) {
       try {
         // Atualizar ServiceProvider com status de verificado
-        const providers = await base44.entities.ServiceProvider.filter({
-          email: user.email,
-        });
-
-        if (providers && providers.length > 0) {
-          const provider = providers[0];
+        if (provider) {
           await base44.entities.ServiceProvider.update(provider.id, {
             verified: true,
-            verification_date: new Date().toISOString(),
+            data_verificacao: new Date().toISOString(),
           });
 
           // Criar registro de verificação bem-sucedida
@@ -116,12 +114,7 @@ Retorne um JSON com:
     } else if (verificationStatus === 'rejected') {
       // Criar registro de verificação rejeitada
       try {
-        const providers = await base44.entities.ServiceProvider.filter({
-          email: user.email,
-        });
-
-        if (providers && providers.length > 0) {
-          const provider = providers[0];
+        if (provider) {
           await base44.entities.Verificacao.create({
             provider_id: provider.id,
             verification_type: 'identity',

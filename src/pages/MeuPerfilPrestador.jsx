@@ -174,13 +174,32 @@ function MeuPerfilPrestadorContent() {
 
 
   const mutation = useMutation({
-    mutationFn: (data) => {
+    mutationFn: async (data) => {
       const { id, ...rest } = data;
-      if (id) {
-        return base44.entities.ServiceProvider.update(id, rest);
+      // PII (CPF/CNPJ) NUNCA no ServiceProvider (leitura pública) — grava em
+      // ServiceProviderPrivate (RLS restrita ao dono/admin).
+      const { cpf, cnpj, ...publico } = rest;
+      let providerId = id;
+
+      if (providerId) {
+        await base44.entities.ServiceProvider.update(providerId, publico);
       } else {
-        return base44.entities.ServiceProvider.create(rest);
+        const created = await base44.entities.ServiceProvider.create(publico);
+        providerId = created.id;
       }
+
+      // Persiste PII na entidade privada (cria se não existir).
+      if (providerId && (cpf || cnpj)) {
+        const privs = await base44.entities.ServiceProviderPrivate.filter({ provider_id: providerId });
+        const privData = { provider_id: providerId, cpf: cpf || '', cnpj: cnpj || '' };
+        if (privs?.[0]?.id) {
+          await base44.entities.ServiceProviderPrivate.update(privs[0].id, { cpf: cpf || '', cnpj: cnpj || '' });
+        } else {
+          await base44.entities.ServiceProviderPrivate.create(privData);
+        }
+      }
+
+      return { id: providerId };
     },
     onMutate: async (newData) => {
       await queryClient.cancelQueries({ queryKey: ['myServiceProvider'] });

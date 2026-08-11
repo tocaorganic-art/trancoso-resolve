@@ -29,22 +29,30 @@ Deno.serve(async (req) => {
 
     await base44.asServiceRole.entities.Verificacao.update(verificacao_id, updateData);
 
-    // Se aprovado, marca o ServiceProvider como verificado e notifica por email
-    if (action === 'aprovar') {
-      const verificacao = await base44.asServiceRole.entities.Verificacao.get(verificacao_id);
-      if (verificacao?.user_email) {
-        const providers = await base44.asServiceRole.entities.ServiceProvider.filter({});
-        const provider = providers.find(p => p.email === verificacao.user_email || p.created_by === verificacao.user_email);
-        if (provider) {
-          await base44.asServiceRole.entities.ServiceProvider.update(provider.id, { verified: true });
-          console.log(`[adminVerificacao] Marked provider ${provider.id} as verified`);
+    // user_email/user_name são gravados DENTRO de description (JSON string)
+    // pelo modal. Extrai top-level ou do JSON para o email notificar o dono.
+    const verificacao = await base44.asServiceRole.entities.Verificacao.get(verificacao_id);
+    let dadosDesc = {};
+    if (verificacao?.description) {
+      try { dadosDesc = JSON.parse(verificacao.description); } catch { dadosDesc = {}; }
+    }
+    const userEmail = verificacao?.user_email || dadosDesc?.user_email || '';
+    const userName = verificacao?.user_name || dadosDesc?.user_name || '';
 
-          // Email de confirmação para o prestador
-          await base44.asServiceRole.integrations.Core.SendEmail({
-            to: verificacao.user_email,
-            from_name: 'Trancoso Resolve',
-            subject: `✅ Identidade verificada! Seu perfil está aprovado`,
-            body: `Olá, ${verificacao.user_name || provider.full_name}!
+    // Se aprovado, marca o ServiceProvider como verificado e notifica por email
+    if (action === 'aprovar' && userEmail) {
+      const providers = await base44.asServiceRole.entities.ServiceProvider.filter({});
+      const provider = providers.find(p => p.email === userEmail || p.created_by === userEmail);
+      if (provider) {
+        await base44.asServiceRole.entities.ServiceProvider.update(provider.id, { verified: true });
+        console.log(`[adminVerificacao] Marked provider ${provider.id} as verified`);
+
+        // Email de confirmação para o prestador
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: userEmail,
+          from_name: 'Trancoso Resolve',
+          subject: `✅ Identidade verificada! Seu perfil está aprovado`,
+          body: `Olá, ${userName || provider.full_name}!
 
 Ótima notícia! Sua identidade foi verificada com sucesso pela equipe da Trancoso Resolve.
 
@@ -60,20 +68,17 @@ Acesse seu dashboard: https://trancosoresolve.com.br/Dashboard
 Bons negócios!
 Equipe Trancoso Resolve`,
           });
-        }
       }
     }
 
     // Se rejeitado, notifica o prestador com o motivo
-    if (action === 'rejeitar') {
-      const verificacao = await base44.asServiceRole.entities.Verificacao.get(verificacao_id);
-      if (verificacao?.user_email) {
-        const motivoTexto = motivo && motivo.trim() ? motivo : 'O documento enviado não pôde ser validado.';
-        await base44.asServiceRole.integrations.Core.SendEmail({
-          to: verificacao.user_email,
-          from_name: 'Trancoso Resolve',
-          subject: `⚠️ Verificação de identidade — ação necessária`,
-          body: `Olá, ${verificacao.user_name}!
+    if (action === 'rejeitar' && userEmail) {
+      const motivoTexto = motivo && motivo.trim() ? motivo : 'O documento enviado não pôde ser validado.';
+      await base44.asServiceRole.integrations.Core.SendEmail({
+        to: userEmail,
+        from_name: 'Trancoso Resolve',
+        subject: `⚠️ Verificação de identidade — ação necessária`,
+        body: `Olá, ${userName}!
 
 Infelizmente não conseguimos verificar sua identidade com o documento enviado.
 
@@ -88,7 +93,6 @@ Se tiver dúvidas, responda este email ou entre em contato via WhatsApp: https:/
 
 Equipe Trancoso Resolve`,
         });
-      }
     }
 
     console.log(`[adminVerificacao] ${action} verificacao ${verificacao_id} by ${user.email}`);

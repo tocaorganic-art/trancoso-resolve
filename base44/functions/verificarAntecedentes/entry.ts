@@ -40,8 +40,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Prestador não encontrado' }, { status: 404 });
     }
 
+    // PII (CPF/CNPJ) vive em ServiceProviderPrivate (RLS restrita), nunca no
+    // ServiceProvider (leitura pública). Fallback para campos legados gravados
+    // no ServiceProvider antes da migração de PII.
+    const [privado] = await base44.asServiceRole.entities.ServiceProviderPrivate.filter({ provider_id: service_provider_id });
+    const cpf = privado?.cpf || prestador.cpf || '';
+    const cnpj = privado?.cnpj || prestador.cnpj || '';
+
     // Se não tiver CPF, marca para análise manual
-    if (!prestador.cpf) {
+    if (!cpf) {
       await base44.asServiceRole.entities.ServiceProvider.update(service_provider_id, {
         status_verificacao: 'em_analise_manual',
         relatorio_verificacao: 'CPF não informado. Verificação automática não pôde ser realizada. Necessária análise manual.',
@@ -63,7 +70,7 @@ Deno.serve(async (req) => {
       'Content-Type': 'application/json',
     };
 
-    const cpfLimpo = prestador.cpf.replace(/\D/g, '');
+    const cpfLimpo = cpf.replace(/\D/g, '');
     const bodyBase = { cpf: cpfLimpo, nome: prestador.full_name };
     const uf = prestador.location?.state || '';
     const resultados = [];
@@ -116,8 +123,8 @@ Deno.serve(async (req) => {
 
     // 4. CEIS e CNEP no Portal da Transparência (apenas para PJ com ponto físico)
     // Nota: Portal da Transparência é público, não requer chave de API
-    if (prestador.tipo_pessoa === 'pj' && prestador.tem_ponto_fisico_em_trancoso && prestador.cnpj) {
-      const cnpjLimpo = prestador.cnpj.replace(/\D/g, '');
+    if (prestador.tipo_pessoa === 'pj' && prestador.tem_ponto_fisico_em_trancoso && cnpj) {
+      const cnpjLimpo = cnpj.replace(/\D/g, '');
       try {
         const ceisRes = await fetch(
           `https://api.portaldatransparencia.gov.br/api-de-dados/ceis?cnpjSancionado=${cnpjLimpo}&pagina=1`,
@@ -139,8 +146,8 @@ Deno.serve(async (req) => {
     }
 
     // 4b. CNPJ na Receita Federal (se houver)
-    if (prestador.cnpj) {
-      const cnpjLimpo = prestador.cnpj.replace(/\D/g, '');
+    if (cnpj) {
+      const cnpjLimpo = cnpj.replace(/\D/g, '');
       try {
         const receitaRes = await fetch(
           'https://api.infosimples.com/api/v2/consultas/receita-federal/cnpj',
@@ -218,6 +225,41 @@ Deno.serve(async (req) => {
       relatorio_verificacao,
       data_verificacao: new Date().toISOString(),
     });
+
+    // 6b. Registra o resultado como Verificacao background_check — a página do
+    // prestador (VerificacaoAntecedentes) filtra por esse tipo.
+    const registroStatus = status_verificacao === 'aprovado'
+      ? 'approved'
+      : (status_verificacao === 'reprovado' ? 'rejected' : 'in_progress');
+    await base44.asServiceRole.entities.Verificacao.create({
+      provider_id: service_provider_id,
+      verification_type: 'background_check',
+      status: registroStatus,
+      result: relatorio_verificacao,
+      verified_at: new Date().toISOString(),
+    });
+
+    // Notifica o prestador com o resultado (fire-and-forget, sem falhar o fluxo)
+    const emailPrestador = prestador.email || prestador.created_by;
+    if (emailPrestador) {
+      const titulo = status_verificacao === 'aprovado'
+        ? '✅ Verificação de antecedentes concluída'
+        : (status_verificacao === 'reprovado' ? '⚠️ Verificação de antecedentes' : '🔎 Verificação em análise manual');
+      base44.asServiceRole.integrations.Core.SendEmail({
+        to: emailPrestador,
+        from_name: 'Trancoso Resolve',
+        subject: titulo,
+        body: `Olá, ${prestador.full_name || 'prestador'}!
+
+Sua verificação de antecedentes foi atualizada para: ${status_verificacao}.
+
+${relatorio_verificacao}
+
+Acesse seu perfil para acompanhar: https://trancosoresolve.com.br/MeuPerfilPrestador
+
+Equipe Trancoso Resolve`,
+      }).catch(e => console.error('[verificarAntecedentes] Falha ao notificar:', e.message));
+    }
 
     console.log(`[verificarAntecedentes] Concluído: ${prestador.full_name} → ${status_verificacao}`);
 

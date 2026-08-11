@@ -19,7 +19,7 @@ export default function VerificacaoDocumentoPage() {
     queryKey: ['myProvider', user?.id],
     queryFn: async () => {
       const providers = await base44.entities.ServiceProvider.filter({
-        email: user.email,
+        created_by: user.email,
       });
       return providers?.[0] || null;
     },
