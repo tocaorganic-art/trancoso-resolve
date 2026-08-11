@@ -93,6 +93,28 @@ Deno.serve(async (req) => {
 
     console.log(`[atualizarStatusVerificacao] admin=${user.email} provider=${provider_id} acao=${acao}`);
 
+    // Notifica o prestador (fire-and-forget, sem falhar o fluxo)
+    if (acao === 'aprovar' || acao === 'reprovar' || acao === 'em_analise_manual') {
+      const emailPrestador = provider.email || provider.created_by;
+      if (emailPrestador) {
+        const labels = { aprovar: 'aprovada ✅', reprovar: 'reprovada ❌', em_analise_manual: 'em análise manual 🔎' };
+        base44.asServiceRole.integrations.Core.SendEmail({
+          to: emailPrestador,
+          from_name: 'Trancoso Resolve',
+          subject: `Sua verificação foi ${labels[acao]}`,
+          body: `Olá, ${provider.full_name || 'prestador'}!
+
+Sua verificação na Trancoso Resolve foi atualizada para: ${labels[acao]}.
+
+${update.relatorio_verificacao || ''}
+
+Acesse seu perfil para acompanhar: https://trancosoresolve.com.br/MeuPerfilPrestador
+
+Equipe Trancoso Resolve`,
+        }).catch((e) => console.error('[atualizarStatusVerificacao] Falha ao notificar:', e.message));
+      }
+    }
+
     return Response.json({ ok: true, provider_id, acao, campos_atualizados: Object.keys(update) });
 
   } catch (error) {
