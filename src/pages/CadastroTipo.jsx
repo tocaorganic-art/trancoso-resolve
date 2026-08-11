@@ -51,24 +51,51 @@ export default function CadastroTipoPage() {
       localStorage.setItem('trial_pendente', 'true');
     });
 
-    // Fire-and-forget: salva CPF e dispara verificação
+    // Cria/atualiza o ServiceProvider de forma confiável e dispara a verificação.
+    // PII (CPF/CNPJ) vai para ServiceProviderPrivate (RLS restrita) — NUNCA no
+    // ServiceProvider, cuja leitura é pública.
     const cpfLimpo = cpf.replace(/\D/g, '');
-    base44.entities.ServiceProvider.filter({ created_by: email })
-      .then(async (providers) => {
-        if (!providers || providers.length === 0) return;
-        const providerId = providers[0].id;
-        const providerData = {
-          tipo_pessoa: tipoPessoa,
-          cpf: cpfLimpo,
-          ...(cnpj && { cnpj: cnpj.replace(/\D/g, '') }),
-          tem_ponto_fisico_em_trancoso: temPontoFisico,
-          ...(razaoSocial && { razao_social: razaoSocial }),
-          ...(nomFantasia && { nome_fantasia: nomFantasia }),
-        };
-        await base44.entities.ServiceProvider.update(providerId, providerData);
+    const cnpjLimpo = cnpj.replace(/\D/g, '');
+    const publicData = {
+      tipo_pessoa: tipoPessoa,
+      tem_ponto_fisico_em_trancoso: temPontoFisico,
+      ...(razaoSocial && { razao_social: razaoSocial }),
+      ...(nomFantasia && { nome_fantasia: nomFantasia }),
+    };
+    const privateData = {
+      cpf: cpfLimpo,
+      ...(cnpjLimpo && { cnpj: cnpjLimpo }),
+    };
+
+    try {
+      const providers = await base44.entities.ServiceProvider.filter({ created_by: email });
+      let providerId = providers?.[0]?.id;
+
+      if (providerId) {
+        await base44.entities.ServiceProvider.update(providerId, publicData);
+      } else {
+        const created = await base44.entities.ServiceProvider.create({
+          full_name: name?.trim() || email?.split('@')[0] || 'Prestador',
+          occupation: 'Outro',
+          email,
+          ...publicData,
+        });
+        providerId = created.id;
+      }
+
+      if (providerId) {
+        const privs = await base44.entities.ServiceProviderPrivate.filter({ provider_id: providerId });
+        if (privs?.[0]?.id) {
+          await base44.entities.ServiceProviderPrivate.update(privs[0].id, privateData);
+        } else {
+          await base44.entities.ServiceProviderPrivate.create({ provider_id: providerId, ...privateData });
+        }
         verificarAntecedentes({ service_provider_id: providerId }).catch(() => {});
-      })
-      .catch(() => {});
+      }
+    } catch (err) {
+      console.error('[CadastroTipo] Falha ao preparar perfil do prestador:', err);
+      localStorage.setItem('prestador_perfil_pendente', 'true');
+    }
 
     // Aguarda o banco propagar o user_type antes de redirecionar (polling com timeout)
     localStorage.setItem('user_type_prestador_pendente', Date.now().toString());

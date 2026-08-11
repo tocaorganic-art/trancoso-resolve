@@ -1,0 +1,58 @@
+{
+  "name": "MpWebhookLog",
+  "type": "object",
+  "properties": {
+    "notification_id": {
+      "type": "string",
+      "description": "ID da notificação enviada pelo Mercado Pago (chave de idempotência)"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Tópico da notificação (payment | preapproval | ...)"
+    },
+    "resource_id": {
+      "type": "string",
+      "description": "ID do recurso (payment_id ou preapproval_id)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "processado",
+        "duplicado",
+        "erro"
+      ],
+      "description": "Resultado do processamento do evento"
+    },
+    "payload_snapshot": {
+      "type": "string",
+      "description": "Snapshot sanitizado do payload (auditoria, sem PII/dados financeiros)"
+    },
+    "recebido_em": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora em que a notificação foi recebida"
+    }
+  },
+  "required": [
+    "notification_id",
+    "topic"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": true,
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

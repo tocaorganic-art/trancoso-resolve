@@ -2,8 +2,16 @@ import base44 from "@base44/vite-plugin"
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
+const buildVersion = process.env.GITHUB_SHA
+  || process.env.VERCEL_GIT_COMMIT_SHA
+  || process.env.BASE44_DEPLOY_SHA
+  || 'dev';
+
 export default defineConfig({
   logLevel: 'error',
+  define: {
+    __APP_VERSION__: JSON.stringify(buildVersion),
+  },
   plugins: [
     base44({
       legacySDKImports: process.env.BASE44_LEGACY_SDK_IMPORTS !== 'false'

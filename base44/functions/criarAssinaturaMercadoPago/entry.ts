@@ -50,6 +50,39 @@ Deno.serve(async (req) => {
 
     const planoConfig = PLANOS[plano];
 
+    // --- Idempotência: nunca cobrar o mesmo usuário duas vezes ---
+    // Se já existir assinatura pendente/ativa/trial para este usuário, devolve
+    // o preapproval pendente (mesmo fluxo) ou bloqueia a criação.
+    const existentes = await base44.asServiceRole.entities.Subscription.filter({
+      user_email: user.email,
+    });
+    const ativa = existentes?.find(s =>
+      ['ativa', 'pendente', 'trial', 'active', 'pending'].includes(s.status)
+    );
+    if (ativa) {
+      // Pendente com preapproval válido → devolve o mesmo checkout em vez de criar outro.
+      if (ativa.status === 'pendente' && ativa.mp_preapproval_id) {
+        const mpPendente = await fetch(`https://api.mercadopago.com/preapproval/${ativa.mp_preapproval_id}`, {
+          headers: { Authorization: `Bearer ${mpToken}` },
+        });
+        if (mpPendente.ok) {
+          const data = await mpPendente.json();
+          if (data?.init_point) {
+            return Response.json({
+              ok: true,
+              checkout_url: data.init_point,
+              preapproval_id: ativa.mp_preapproval_id,
+              reutilizado: true,
+            });
+          }
+        }
+      }
+      return Response.json({
+        error: 'assinatura_existente',
+        mensagem: 'Você já possui uma assinatura em andamento. Acompanhe no painel.',
+      }, { status: 409 });
+    }
+
     // --- Limite de Selos Fundadores ---
     // Quando os 100 Selos Fundadores acabarem, retorna vagas_esgotadas.
     // O preço NÃO muda automaticamente — decisão de precificação é manual.
@@ -89,7 +122,8 @@ Deno.serve(async (req) => {
       },
       back_url: success_url || `${BASE_URL}/AssinaturaConfirmada?plano=${plano}`,
       payer_email: user.email,
-      external_reference: `${user.id}|${plano}|${Date.now()}`,
+      // external_reference estável (sem timestamp) — permite dedup no webhook.
+      external_reference: `assinatura-${user.id}-${plano}`,
     };
 
     if (planoConfig.trial_days) {
@@ -110,7 +144,9 @@ Deno.serve(async (req) => {
       headers: {
         Authorization: `Bearer ${mpToken}`,
         'Content-Type': 'application/json',
-        'X-Idempotency-Key': `assinatura-${user.id}-${plano}-${Date.now()}`,
+        // Chave fixa por usuário+plano: cliques duplicados no MP retornam o
+        // mesmo preapproval (idempotência real, sem Date.now()).
+        'X-Idempotency-Key': `assinatura-${user.id}-${plano}`,
       },
       body: JSON.stringify(preapprovalPayload),
     });

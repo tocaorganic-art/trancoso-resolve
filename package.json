@@ -11,7 +11,6 @@
     "typecheck": "tsc -p ./jsconfig.json",
     "preview": "vite preview",
     "prerender": "node scripts/prerender-head.js",
-    "test": "node --test 'src/**/*.test.js'",
     "sitemap": "node scripts/generate-sitemap.js",
     "deploy": "node -e \"const p=process.platform;require('child_process').execSync(p==='win32'?'pwsh -File scripts/deploy.ps1':'bash scripts/deploy.sh',{stdio:'inherit'})\"",
     "deploy:auto": "npm run deploy",
@@ -20,7 +19,8 @@
     "deploy:vercel": "npx vercel deploy --prod --yes",
     "deploy:base44": "npx base44 deploy --yes",
     "deploy:base44:fn": "npx base44 functions deploy",
-    "deploy:base44:entities": "npx base44 entities push"
+    "deploy:base44:entities": "npx base44 entities push",
+    "test": "node --test src/**/*.test.js"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.31",
@@ -84,6 +84,7 @@
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
+    "web-vitals": "^4.2.4",
     "zod": "^3.24.2"
   },
   "devDependencies": {

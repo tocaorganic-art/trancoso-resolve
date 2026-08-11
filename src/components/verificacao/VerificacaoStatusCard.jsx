@@ -65,7 +65,21 @@ export default function VerificacaoStatusCard({ user }) {
 
   const { data: verificacoes, isLoading } = useQuery({
     queryKey: ["minhaVerificacao", user?.email],
-    queryFn: () => base44.entities.Verificacao.filter({ user_email: user.email }, "-submission_date", 1),
+    queryFn: async () => {
+      // Verificacao não tem user_email top-level (fica na description) — filtra
+      // pelo provider do usuário, que é o campo real do schema.
+      const providers = await base44.entities.ServiceProvider.filter({ created_by: user.email });
+      const provider = providers?.[0];
+      if (!provider?.id) return [];
+      // Sem campo de data real no schema — busca todas e pega a mais recente
+      // por submission_date gravada na description.
+      const lista = await base44.entities.Verificacao.filter({ provider_id: provider.id });
+      return [...(lista || [])].sort((a, b) => {
+        const da = JSON.parse(a.description || '{}').submission_date || '';
+        const db = JSON.parse(b.description || '{}').submission_date || '';
+        return db.localeCompare(da);
+      }).slice(0, 1);
+    },
     enabled: !!user?.email,
   });
 
