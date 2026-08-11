@@ -41,18 +41,17 @@ export default function BackgroundCheckFlow({ prestadorId, onVerificationComplet
     setStep('processing');
 
     try {
-      const result = await base44.functions.invoke('verificarAntecedentesIA', {
-        prestadorId,
-        cpf: formData.cpf.replace(/\D/g, ''),
-        fullName: formData.fullName,
-        dateOfBirth: formData.dateOfBirth,
-        motherName: formData.motherName,
+      // A function real é verificarAntecedentes; ela usa o CPF cadastrado no
+      // registro privado (ServiceProviderPrivate) e valida ownership. O form
+      // acima serve de confirmação/consentimento do próprio prestador.
+      const result = await base44.functions.invoke('verificarAntecedentes', {
+        service_provider_id: prestadorId,
       });
 
       setVerificationResult(result);
       setStep('result');
 
-      if (result.status === 'approved') {
+      if (result.status === 'aprovado') {
         onVerificationComplete?.(result);
       }
     } catch (error) {

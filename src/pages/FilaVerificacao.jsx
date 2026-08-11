@@ -17,6 +17,16 @@ import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import VerificacaoBadge from "@/components/verificacao/VerificacaoBadge";
 
+// LGPD: exibir apenas o necessário — mascarar PII (CPF/CNPJ) na fila admin.
+const maskCPF = (cpf) => {
+  const d = (cpf || '').replace(/\D/g, '');
+  return d.length === 11 ? d.replace(/(\d{3})\d{4}(\d{4})/, '$1.***.***-$2') : (cpf || '');
+};
+const maskCNPJ = (cnpj) => {
+  const d = (cnpj || '').replace(/\D/g, '');
+  return d.length === 14 ? d.replace(/(\d{2})\d{6}(\d{4})/, '$1.***.***/0001-$2') : (cnpj || '');
+};
+
 // Status normalizados (apenas português)
 const STATUS_MAP = {
   'in_progress': 'Em Análise',
@@ -41,6 +51,12 @@ const statusConfig = {
 "Rejeitado": { color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
 };
 
+// Metadados (user_name/user_email/document_url) vivem na description (JSON).
+const metaDeVerificacao = (v) => {
+  if (typeof v?.description !== 'string') return {};
+  try { return JSON.parse(v.description) || {}; } catch { return {}; }
+};
+
 function StatusBadge({ status }) {
   const cfg = statusConfig[status] || {};
   const Icon = cfg.icon || Clock;
@@ -56,6 +72,16 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
   const [motivo, setMotivo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Metadados do prestador (user_name/user_email/document_url) são gravados
+  // pelo modal DENTRO de description (JSON string) — extrai para exibição.
+  let meta = {};
+  if (typeof verificacao?.description === 'string') {
+    try { meta = JSON.parse(verificacao.description); } catch { meta = {}; }
+  }
+  const vUserEmail = verificacao?.user_email || meta?.user_email;
+  const vUserName = verificacao?.user_name || meta?.user_name || meta?.user_full_name;
+  const vDocType = verificacao?.document_type || meta?.document_type;
+
   const { data: provider } = useQuery({
     queryKey: ['providerForVerificacao', verificacao?.provider_id, verificacao?.user_email],
     queryFn: async () => {
@@ -65,7 +91,7 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
       if (verificacao.provider_id) {
         pub = await base44.entities.ServiceProvider.get(verificacao.provider_id);
       } else {
-        const results = await base44.entities.ServiceProvider.filter({ email: verificacao.user_email });
+        const results = await base44.entities.ServiceProvider.filter({ created_by: vUserEmail });
         pub = results[0] || null;
       }
       if (!pub) return null;
@@ -160,14 +186,14 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
           <div className="space-y-4">
             <div>
               <Label className="text-xs text-muted-foreground uppercase tracking-wide">Usuário</Label>
-              <p className="font-medium text-foreground mt-0.5">{verificacao.user_name}</p>
-              <p className="text-sm text-muted-foreground">{verificacao.user_email}</p>
+              <p className="font-medium text-foreground mt-0.5">{vUserName}</p>
+              <p className="text-sm text-muted-foreground">{vUserEmail}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs text-muted-foreground uppercase tracking-wide">Tipo Doc.</Label>
-                <p className="font-medium text-sm mt-0.5">{verificacao.document_type}</p>
+                <p className="font-medium text-sm mt-0.5">{vDocType}</p>
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground uppercase tracking-wide">Status</Label>
@@ -190,13 +216,13 @@ function ReviewModal({ verificacao, isOpen, onClose, onAction }) {
                 {provider.cpf && (
                   <div className="flex items-center gap-2 text-sm text-foreground">
                     <CreditCard className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span>CPF: {provider.cpf}</span>
+                    <span>CPF: {maskCPF(provider.cpf)}</span>
                   </div>
                 )}
                 {provider.cnpj && (
                   <div className="flex items-center gap-2 text-sm text-foreground">
                     <CreditCard className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span>CNPJ: {provider.cnpj}</span>
+                    <span>CNPJ: {maskCNPJ(provider.cnpj)}</span>
                   </div>
                 )}
                 {provider.tipo_pessoa && (
@@ -358,9 +384,11 @@ export default function FilaVerificacaoPage() {
   const filtered = (verificacoes || []).filter((v) => {
     const normalizedStatus = normalizeStatus(v.status);
     const matchStatus = statusFilter === "Todos" || normalizedStatus === statusFilter;
-    const matchSearch = !search.trim() ||
-      (v.user_name || v.user_email)?.toLowerCase().includes(search.toLowerCase()) ||
-      v.user_email?.toLowerCase().includes(search.toLowerCase());
+    const meta = metaDeVerificacao(v);
+    const nome = v.user_name || meta.user_name || meta.user_full_name || '';
+    const email = v.user_email || meta.user_email || '';
+    const busca = `${nome} ${email}`.toLowerCase();
+    const matchSearch = !search.trim() || busca.includes(search.toLowerCase());
     return matchStatus && matchSearch;
   });
 
@@ -478,7 +506,8 @@ export default function FilaVerificacaoPage() {
                     const normalizedStatus = normalizeStatus(v.status);
                     const isPending = ["Em Análise", "Aguardando Admin", "Pendente"].includes(normalizedStatus);
                     const isProcessing = quickActionId === v.id;
-                    const displayName = v.user_name || v.user_email || 'Usuário removido';
+                    const meta = metaDeVerificacao(v);
+                    const displayName = v.user_name || meta.user_name || meta.user_full_name || v.user_email || meta.user_email || 'Usuário removido';
                     return (
                     <tr key={v.id} className="hover:bg-muted transition-colors">
                       <td className="px-6 py-4">
@@ -493,21 +522,19 @@ export default function FilaVerificacaoPage() {
                               {displayName}
                               {normalizedStatus === "Verificado" && <VerificacaoBadge verified size="xs" />}
                             </p>
-                            <p className="text-xs text-muted-foreground">{v.user_email}</p>
+                            <p className="text-xs text-muted-foreground">{v.user_email || meta.user_email || ''}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 py-4 hidden md:table-cell">
                         <span className="text-sm font-medium text-foreground bg-muted px-2 py-0.5 rounded">
-                          {v.document_type}
+                          {v.document_type || meta.document_type || '—'}
                         </span>
                       </td>
                       <td className="px-4 py-4 hidden lg:table-cell">
                         <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                           <Calendar className="w-3.5 h-3.5" />
-                          {v.submission_date
-                            ? format(new Date(v.submission_date), "dd/MM/yyyy HH:mm", { locale: ptBR })
-                            : format(new Date(v.created_date), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+                          {format(new Date(meta.submission_date || v.created_date || Date.now()), "dd/MM/yyyy HH:mm", { locale: ptBR })}
                         </div>
                       </td>
                       <td className="px-4 py-4">

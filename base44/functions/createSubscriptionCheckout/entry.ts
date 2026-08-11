@@ -54,6 +54,19 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Plano inválido' }, { status: 400 });
     }
 
+    // ─── Idempotência: não permitir 2ª assinatura ativa do mesmo usuário ───
+    // (pagamento único/avulso não se repete; assinatura recorrente sim).
+    if (!plan.startsWith('avulso_')) {
+      const minhas = await base44.asServiceRole.entities.Subscription.filter({ user_email: user.email });
+      const jaAssinante = (minhas || []).some(s => ['active', 'trial', 'pending'].includes(s.status));
+      if (jaAssinante) {
+        return Response.json({
+          error: 'assinatura_existente',
+          message: 'Você já possui uma assinatura ativa. Acompanhe no painel.',
+        }, { status: 409 });
+      }
+    }
+
     const customerEmail = user.email;
     const isAvulso = plan.startsWith('avulso_');
     const isLancamento = plan === 'lancamento' || plan === 'empresa_lancamento';

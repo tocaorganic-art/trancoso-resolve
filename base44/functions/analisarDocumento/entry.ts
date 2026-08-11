@@ -9,16 +9,22 @@ Deno.serve(async (req) => {
     // 1. Chamada direta do modal (verificacao_id, document_url, document_type, user_full_name)
     // 2. Chamada via automação entity (event, data)
     let verificacao_id, document_url, document_type, user_full_name;
+    let meta = {};
 
     let user = null;
-    
+
     if (body.event && body.data) {
       // Chamada via automação — sempre permitida
       const verificacao = body.data;
       verificacao_id = body.event.entity_id;
-      document_url = verificacao.document_url;
-      document_type = verificacao.document_type;
-      user_full_name = verificacao.user_name;
+      // O modal grava os metadados DENTRO de description (JSON string);
+      // tenta campos top-level primeiro (chamadas antigas) e depois o JSON.
+      if (typeof verificacao.description === 'string') {
+        try { meta = JSON.parse(verificacao.description); } catch { meta = {}; }
+      }
+      document_url = verificacao.document_url || meta.document_url;
+      document_type = verificacao.document_type || meta.document_type;
+      user_full_name = verificacao.user_name || meta.user_name || meta.user_full_name;
     } else {
       // Chamada direta do modal (requer autenticação e permissão)
       user = await base44.auth.me();
@@ -110,19 +116,26 @@ Compare o nome extraído com o nome cadastrado. Considere 100% de correspondênc
       adminNotes = `✅ IA: Nome confirmado (${aiResult.extracted_name}). Aguardando aprovação manual do admin.`;
     }
 
+    // Preserva metadados originais do modal (user_email/user_name) para que o
+    // adminVerificacao continue conseguindo notificar o dono.
+    const metaBase = typeof meta === 'object' ? meta : {};
+    const novoMeta = {
+      ...metaBase,
+      ai_extracted_name: aiResult.extracted_name || "",
+      ai_extracted_dob: aiResult.extracted_dob || "",
+      ai_confidence: aiResult.confidence || 0,
+      admin_notes: adminNotes,
+      document_url,
+      document_type,
+      user_full_name,
+    };
+    delete novoMeta.description;
+
     // Atualiza a verificação com os dados da IA (usando apenas campos existentes no schema)
     await base44.asServiceRole.entities.Verificacao.update(verificacao_id, {
       status: newStatus,
       result: adminNotes,
-      description: JSON.stringify({
-        ai_extracted_name: aiResult.extracted_name || "",
-        ai_extracted_dob: aiResult.extracted_dob || "",
-        ai_confidence: aiResult.confidence || 0,
-        admin_notes: adminNotes,
-        document_url,
-        document_type,
-        user_full_name,
-      })
+      description: JSON.stringify(novoMeta),
     });
 
     console.log(`[analisarDocumento] Status definido como "${newStatus}" para verificacao ${verificacao_id}`);
