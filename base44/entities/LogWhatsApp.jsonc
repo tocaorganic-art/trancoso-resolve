@@ -6,6 +6,15 @@
       "type": "string",
       "description": "ID do ServiceProvider destinatário"
     },
+    "direcao": {
+      "type": "string",
+      "enum": [
+        "saida",
+        "entrada"
+      ],
+      "default": "saida",
+      "description": "Direção da mensagem: saida (enviada pelo sistema) ou entrada (recebida do usuário)"
+    },
     "tipo": {
       "type": "string",
       "enum": [
@@ -13,27 +22,31 @@
         "lead_novo",
         "lembrete_renovacao",
         "verificacao_aprovada",
-        "aviso_admin"
+        "aviso_admin",
+        "mensagem_recebida",
+        "status_entrega"
       ],
-      "description": "Tipo da mensagem enviada"
+      "description": "Tipo do evento"
     },
     "telefone": {
       "type": "string",
-      "description": "Número de destino no formato E.164 (ex: +5573999999999)"
+      "description": "Número no formato E.164 (destino para saída, remetente para entrada)"
     },
     "mensagem": {
       "type": "string",
-      "description": "Texto da mensagem enviada"
+      "description": "Texto da mensagem"
     },
     "status": {
       "type": "string",
       "enum": [
+        "pendente",
         "enviado",
-        "falhou",
-        "pendente"
+        "entregue",
+        "lido",
+        "falhou"
       ],
       "default": "pendente",
-      "description": "Status do envio"
+      "description": "Status do envio/entrega"
     },
     "message_id": {
       "type": "string",
