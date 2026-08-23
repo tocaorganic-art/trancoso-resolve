@@ -22,12 +22,6 @@ const STATUS_PROD = [
   "published",
   "cancelled",
 ];
-const STATUS_VALID = [
-  "confirmed",
-  "partially_confirmed",
-  "pending_validation",
-  "blocked",
-];
 
 export default function CalendarioEditorialTab({ posts, onRefresh }) {
   const [filtroLocal, setFiltroLocal] = useState("todas");

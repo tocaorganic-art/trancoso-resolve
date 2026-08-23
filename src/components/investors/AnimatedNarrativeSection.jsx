@@ -25,11 +25,12 @@ function highlightText(text, keywords = []) {
   const escaped = keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   const regex = new RegExp(`(${escaped.join('|')})`, 'gi');
   const parts = text.split(regex);
-  return parts.map((part, i) =>
-    regex.test(part)
+  return parts.map((part, i) => {
+    const isKeyword = keywords.some(k => k.toLowerCase() === part.toLowerCase());
+    return isKeyword
       ? <mark key={i} className="bg-transparent text-brand-primary font-semibold not-italic">{part}</mark>
-      : part
-  );
+      : part;
+  });
 }
 
 export default function AnimatedNarrativeSection({
