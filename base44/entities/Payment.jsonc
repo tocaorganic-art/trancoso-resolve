@@ -77,6 +77,14 @@
       "type": "string",
       "description": "Motivo da disputa"
     },
+    "mp_preference_id": {
+      "type": "string",
+      "description": "ID da prefer\u00eancia criada no Mercado Pago"
+    },
+    "mp_payment_id": {
+      "type": "string",
+      "description": "ID do pagamento no Mercado Pago (preenchido pelo webhook)"
+    },
     "notes": {
       "type": "string",
       "description": "Observa\u00e7\u00f5es"

@@ -1,31 +1,32 @@
 {
   "name": "MpWebhookLog",
   "type": "object",
+  "description": "Registro idempotente de notificações recebidas do Mercado Pago. Cada notification_id é gravado antes de processar — se já existir, o evento é ignorado.",
   "properties": {
     "notification_id": {
       "type": "string",
-      "description": "ID da notificação enviada pelo Mercado Pago (chave de idempotência)"
+      "description": "ID único da notificação MP (campo 'id' do payload). Chave de idempotência."
     },
     "topic": {
       "type": "string",
-      "description": "Tópico da notificação (payment | preapproval | ...)"
+      "description": "Tipo do evento MP: payment, subscription_preapproval, subscription_authorized_payment"
     },
     "resource_id": {
       "type": "string",
-      "description": "ID do recurso (payment_id ou preapproval_id)"
+      "description": "ID do recurso MP (payment.id, preapproval.id, etc)"
     },
     "status": {
       "type": "string",
-      "enum": [
-        "processado",
-        "duplicado",
-        "erro"
-      ],
-      "description": "Resultado do processamento do evento"
+      "enum": ["processado", "duplicado", "ignorado", "erro"],
+      "description": "Resultado do processamento"
     },
     "payload_snapshot": {
+      "type": "object",
+      "description": "Snapshot sanitizado do payload para auditoria/reconciliação (sem PII nem dados financeiros)"
+    },
+    "erro": {
       "type": "string",
-      "description": "Snapshot sanitizado do payload (auditoria, sem PII/dados financeiros)"
+      "description": "Mensagem de erro se status=erro"
     },
     "recebido_em": {
       "type": "string",
@@ -33,26 +34,13 @@
       "description": "Data e hora em que a notificação foi recebida"
     }
   },
-  "required": [
-    "notification_id",
-    "topic"
-  ],
+  "required": ["notification_id", "topic"],
   "rls": {
     "read": {
-      "user_condition": {
-        "role": "admin"
-      }
+      "user_condition": { "role": "admin" }
     },
-    "create": true,
-    "update": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
+    "create": false,
+    "update": false,
+    "delete": false
   }
 }

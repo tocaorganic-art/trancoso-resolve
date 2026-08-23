@@ -1,0 +1,190 @@
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+const src = readFileSync(
+  resolve(process.cwd(), 'base44/functions/mercadoPagoWebhook/entry.ts'),
+  'utf-8'
+);
+
+const entitySrc = readFileSync(
+  resolve(process.cwd(), 'base44/entities/MpWebhookLog.jsonc'),
+  'utf-8'
+);
+
+describe('mercadoPagoWebhook — KAN-17 server-side validation & idempotency', () => {
+  describe('validação de assinatura', () => {
+    it('implementa validarAssinatura com HMAC-SHA256', () => {
+      assert.match(src, /validarAssinatura/);
+      assert.match(src, /HMAC.*SHA-256|SHA-256.*HMAC/s);
+    });
+
+    it('lê MP_WEBHOOK_SECRET do ambiente', () => {
+      assert.match(src, /Deno\.env\.get\('MP_WEBHOOK_SECRET'\)/);
+    });
+
+    it('falha com 503 quando MP_WEBHOOK_SECRET não está configurado (fail-closed)', () => {
+      // Ausência da secret não pode ser aceita silenciosamente — é falha de configuração
+      assert.ok(!src.includes('if (!secret) return true'), 'fail-open não deve existir');
+      assert.match(src, /status:\s*503/);
+      assert.match(src, /MP_WEBHOOK_SECRET/);
+    });
+
+    it('rejeita com 400 se assinatura inválida', () => {
+      assert.match(src, /Invalid signature|Assinatura inválida/);
+      assert.match(src, /status:\s*400/);
+    });
+
+    it('valida formato MP (ts=...,v1=...)', () => {
+      assert.match(src, /x-signature/);
+      assert.match(src, /ts.*v1|v1.*ts/s);
+    });
+  });
+
+  describe('idempotência', () => {
+    it('verifica MpWebhookLog antes de processar', () => {
+      assert.match(src, /MpWebhookLog\.filter/);
+      assert.match(src, /notification_id/);
+    });
+
+    it('ignora duplicados com 200 (não retorna erro)', () => {
+      assert.match(src, /duplicado/);
+      assert.ok(src.includes("acao: 'duplicado'"), "deve retornar acao: 'duplicado'");
+    });
+
+    it('grava log antes de processar (grava primeiro, processa depois)', () => {
+      const logCreateIdx = src.indexOf('MpWebhookLog.create');
+      const processarIdx = src.indexOf('processarPagamento');
+      assert.ok(logCreateIdx < processarIdx, 'MpWebhookLog.create deve ocorrer antes de processar');
+    });
+
+    it('permite reprocessamento marcando log anterior como erro', () => {
+      assert.match(src, /status.*erro|erro.*status/s);
+      assert.match(src, /MpWebhookLog\.update/);
+    });
+
+    it('retorna 500 em erro para MP reenviar a notificação', () => {
+      assert.match(src, /status:\s*500/);
+    });
+  });
+
+  describe('tópicos suportados', () => {
+    it('define TOPICS_SUPORTADOS como Set', () => {
+      assert.match(src, /TOPICS_SUPORTADOS.*Set/s);
+    });
+
+    it('suporta tópico payment', () => {
+      assert.ok(src.includes("'payment'"), "deve suportar tópico 'payment'");
+    });
+
+    it('suporta tópico subscription_preapproval (nome oficial MP)', () => {
+      assert.ok(src.includes("'subscription_preapproval'"), "deve suportar tópico 'subscription_preapproval'");
+    });
+
+    it('suporta tópico subscription_authorized_payment (cobrança recorrente)', () => {
+      assert.ok(src.includes("'subscription_authorized_payment'"), "deve suportar tópico 'subscription_authorized_payment'");
+    });
+
+    it('não aceita tópico preapproval isolado (obsoleto/incorreto)', () => {
+      // 'preapproval' como tópico isolado não é emitido pelo MP v2 — usar subscription_preapproval
+      assert.ok(!src.includes("=== 'preapproval'"), "comparação topic === 'preapproval' não deve existir");
+    });
+
+    it('ignora tópicos desconhecidos com 200', () => {
+      assert.match(src, /ignorado/);
+      assert.ok(src.includes("acao: 'ignorado'"), "deve retornar acao: 'ignorado'");
+    });
+  });
+
+  describe('processamento de pagamentos', () => {
+    it('trata subscription_authorized_payment como payment (data.id é payment ID)', () => {
+      // subscription_authorized_payment dispara cobrança recorrente — data.id é payment ID, mesmo fluxo
+      assert.match(src, /subscription_authorized_payment/);
+      assert.match(src, /subscription_authorized_payment.*processarPagamento|processarPagamento.*subscription_authorized_payment/s);
+    });
+
+    it('busca detalhes do payment via API MP (não confia no payload)', () => {
+      assert.match(src, /buscarPagamentoMP/);
+      assert.match(src, /mercadopago\.com\/v1\/payments\//);
+    });
+
+    it('mapeia status MP para status interno', () => {
+      assert.match(src, /STATUS_PAYMENT_MAP/);
+      assert.ok(src.includes("approved:"), "deve mapear 'approved'");
+      assert.ok(src.includes("rejected:"), "deve mapear 'rejected'");
+    });
+
+    it('não reverte pagamento já capturado (exceto reembolso/chargeback)', () => {
+      assert.match(src, /status === 'captured'/);
+      assert.match(src, /refunded.*disputed|disputed.*refunded/s);
+    });
+
+    it('usa external_reference para localizar ServiceRequest', () => {
+      assert.match(src, /external_reference/);
+      assert.match(src, /requestId/);
+    });
+
+    it('atualiza ServiceRequest para Em Andamento após pagamento aprovado', () => {
+      assert.match(src, /Em Andamento/);
+      assert.match(src, /ServiceRequest\.update/);
+    });
+  });
+
+  describe('processamento de assinaturas (subscription_preapproval)', () => {
+    it('busca preapproval via API MP ao receber subscription_preapproval', () => {
+      assert.match(src, /buscarPreapprovalMP/);
+      assert.match(src, /mercadopago\.com\/preapproval\//);
+    });
+
+    it('mapeia status MP de preapproval para status interno', () => {
+      assert.match(src, /STATUS_PREAPPROVAL_MAP/);
+      assert.ok(src.includes("authorized:"), "deve mapear 'authorized'");
+      assert.ok(src.includes("cancelled:"), "deve mapear 'cancelled'");
+    });
+
+    it('localiza Subscription por mp_preapproval_id', () => {
+      assert.match(src, /mp_preapproval_id/);
+      assert.match(src, /Subscription\.filter/);
+    });
+
+    it('atualiza Subscription no banco', () => {
+      assert.match(src, /Subscription\.update/);
+    });
+  });
+
+  describe('schema MpWebhookLog (reconciliação)', () => {
+    it('entidade MpWebhookLog existe', () => {
+      assert.match(entitySrc, /MpWebhookLog/);
+    });
+
+    it('tem campo notification_id como chave de idempotência', () => {
+      assert.match(entitySrc, /notification_id/);
+    });
+
+    it('tem campo status com enum de estados', () => {
+      assert.match(entitySrc, /processado.*duplicado|duplicado.*processado/s);
+    });
+
+    it('tem campo payload_snapshot para auditoria', () => {
+      assert.match(entitySrc, /payload_snapshot/);
+    });
+
+    it('payload_snapshot é sanitizado antes de gravar (sem PII ou dados financeiros)', () => {
+      // Deve existir uma função de sanitização
+      assert.match(src, /sanitizarPayload/);
+      // Deve usar campos seguros, não o payload bruto
+      assert.match(src, /SNAPSHOT_CAMPOS_SEGUROS/);
+      // Nunca gravar payload raw diretamente
+      assert.ok(!src.includes('payload_snapshot: payload,'), 'payload raw não deve ser gravado diretamente');
+      assert.ok(src.includes('payload_snapshot: sanitizarPayload(payload)'), 'deve usar sanitizarPayload');
+    });
+
+    it('RLS bloqueado: apenas admin pode ler, create/update/delete negados', () => {
+      assert.match(entitySrc, /admin/);
+      assert.ok(entitySrc.includes('"create": false'), 'create deve ser false');
+      assert.ok(entitySrc.includes('"update": false'), 'update deve ser false');
+      assert.ok(entitySrc.includes('"delete": false'), 'delete deve ser false');
+    });
+  });
+});

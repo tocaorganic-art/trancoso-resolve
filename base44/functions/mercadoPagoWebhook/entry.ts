@@ -12,7 +12,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 //   MP_ACCESS_TOKEN    — token de acesso MP (para buscar detalhes via API)
 //   MP_WEBHOOK_SECRET  — secret para validação HMAC (OBRIGATÓRIO; ausente = falha segura)
 
-const TOPICS_SUPORTADOS = new Set(['payment', 'preapproval', 'merchant_order']);
+// Tópicos oficiais do Mercado Pago Webhooks v2:
+//   payment                     — pagamento avulso criado ou atualizado
+//   subscription_preapproval    — assinatura (preapproval) criada ou atualizada
+//   subscription_authorized_payment — cobrança recorrente autorizada dentro de uma assinatura
+const TOPICS_SUPORTADOS = new Set(['payment', 'subscription_preapproval', 'subscription_authorized_payment']);
 
 // Campos seguros para armazenar no snapshot de auditoria.
 // Nunca incluir: payer, card, transaction_details, fee_details, personal_data.
@@ -27,7 +31,12 @@ function sanitizarPayload(raw: Record<string, unknown>): Record<string, unknown>
   );
 }
 
-async function validarAssinatura(req: Request, rawBody: string): Promise<{ ok: boolean; erro?: string }> {
+// dataId = payload.data.id (resource ID) — necessário para o manifesto HMAC correto do MP.
+async function validarAssinatura(
+  req: Request,
+  rawBody: string,
+  dataId: string,
+): Promise<{ ok: boolean; erro?: string }> {
   const secret = Deno.env.get('MP_WEBHOOK_SECRET');
   if (!secret) {
     // Ausência da secret é falha de configuração, não falha de autenticação.
@@ -44,9 +53,10 @@ async function validarAssinatura(req: Request, rawBody: string): Promise<{ ok: b
   const parts = Object.fromEntries(xSignature.split(',').map((p) => p.split('=')));
   const ts = parts['ts'];
   const v1 = parts['v1'];
-  if (!ts || !v1) return false;
+  if (!ts || !v1) return { ok: false };
 
-  const manifest = `id:${xRequestId};request-id:${xRequestId};ts:${ts};`;
+  // Manifesto correto: id:<data.id>;request-id:<x-request-id>;ts:<ts>;
+  const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`;
   const key = await crypto.subtle.importKey(
     'raw',
     new TextEncoder().encode(secret),
@@ -62,39 +72,50 @@ async function validarAssinatura(req: Request, rawBody: string): Promise<{ ok: b
   return computed === v1 ? { ok: true } : { ok: false };
 }
 
-async function buscarPagamentoMP(mpToken: string, paymentId: string): Promise<Record<string, unknown> | null> {
+async function buscarPagamentoMP(mpToken: string, paymentId: string): Promise<Record<string, unknown>> {
   const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
     headers: { Authorization: `Bearer ${mpToken}` },
   });
-  if (!res.ok) return null;
+  if (res.status === 429 || res.status >= 500) {
+    throw new Error(`MP API erro transitório ${res.status} ao buscar payment ${paymentId}`);
+  }
+  if (!res.ok) throw new Error(`MP API erro ${res.status} ao buscar payment ${paymentId}`);
   return res.json();
 }
 
-async function buscarPreapprovalMP(mpToken: string, preapprovalId: string): Promise<Record<string, unknown> | null> {
+async function buscarPreapprovalMP(mpToken: string, preapprovalId: string): Promise<Record<string, unknown>> {
   const res = await fetch(`https://api.mercadopago.com/preapproval/${preapprovalId}`, {
     headers: { Authorization: `Bearer ${mpToken}` },
   });
-  if (!res.ok) return null;
+  if (res.status === 429 || res.status >= 500) {
+    throw new Error(`MP API erro transitório ${res.status} ao buscar preapproval ${preapprovalId}`);
+  }
+  if (!res.ok) throw new Error(`MP API erro ${res.status} ao buscar preapproval ${preapprovalId}`);
   return res.json();
 }
 
+// Mapeamento para os enums reais da entidade Payment.
 const STATUS_PAYMENT_MAP: Record<string, string> = {
-  approved:   'pago',
-  authorized: 'autorizado',
-  pending:    'pendente',
-  in_process: 'em_processamento',
-  rejected:   'rejeitado',
-  cancelled:  'cancelado',
-  refunded:   'reembolsado',
-  charged_back: 'chargeback',
+  approved:     'captured',
+  authorized:   'requires_capture',
+  pending:      'processing',
+  in_process:   'processing',
+  rejected:     'canceled',
+  cancelled:    'canceled',
+  refunded:     'refunded',
+  charged_back: 'disputed',
 };
 
+// Mapeamento para os enums reais da entidade Subscription.
 const STATUS_PREAPPROVAL_MAP: Record<string, string> = {
-  authorized: 'ativa',
-  pending:    'pendente',
-  paused:     'pausada',
-  cancelled:  'cancelada',
+  authorized: 'active',
+  pending:    'trial',
+  paused:     'expired',
+  cancelled:  'cancelled',
 };
+
+// Estados terminais do ServiceRequest — não reverter para Em Andamento.
+const ESTADOS_TERMINAIS_SR = new Set(['Cancelado', 'Rejeitado', 'Concluído']);
 
 // ─── CAPI (Meta Conversions API) ─────────────────────────────────────────────
 async function sendCapiEvent(
@@ -129,8 +150,18 @@ async function sendCapiEvent(
 Deno.serve(async (req) => {
   const rawBody = await req.text();
 
+  // Parseia o payload primeiro para extrair data.id — necessário para o manifesto HMAC.
+  let payload: Record<string, unknown>;
+  try {
+    payload = JSON.parse(rawBody);
+  } catch {
+    return Response.json({ error: 'Payload inválido' }, { status: 400 });
+  }
+
+  const dataId = String((payload.data as Record<string, unknown>)?.id || '');
+
   // --- Validação de assinatura (falha segura) ---
-  const validacao = await validarAssinatura(req, rawBody);
+  const validacao = await validarAssinatura(req, rawBody, dataId);
   if (!validacao.ok) {
     const statusCode = validacao.erro ? 503 : 400;
     const msg = validacao.erro || 'Assinatura inválida';
@@ -144,19 +175,11 @@ Deno.serve(async (req) => {
     return Response.json({ error: 'Gateway não configurado' }, { status: 503 });
   }
 
-  let payload: Record<string, unknown>;
-  try {
-    payload = JSON.parse(rawBody);
-  } catch {
-    return Response.json({ error: 'Payload inválido' }, { status: 400 });
-  }
-
   const notificationId = String(payload.id || payload['x-request-id'] || '');
   const topic = String(payload.type || payload.topic || '');
-  const resourceId = String((payload.data as Record<string, unknown>)?.id || payload.resource || '');
+  const resourceId = dataId || String(payload.resource || '');
 
   if (!notificationId || !TOPICS_SUPORTADOS.has(topic)) {
-    // Evento desconhecido ou mal-formado — aceitar para não forçar reenvio
     console.log(`[mercadoPagoWebhook] evento ignorado: topic=${topic} id=${notificationId}`);
     return Response.json({ ok: true, acao: 'ignorado' });
   }
@@ -179,31 +202,34 @@ Deno.serve(async (req) => {
     return Response.json({ ok: true, acao: 'duplicado' });
   }
 
-  // --- Grava log antes de processar (idempotência) ---
+  // Grava log com status 'erro' inicialmente; atualiza para 'processado' apenas ao concluir.
   // payload_snapshot contém apenas metadados de auditoria (sem PII ou dados financeiros).
   const logEntry = await base44.asServiceRole.entities.MpWebhookLog.create({
     notification_id: notificationId,
     topic,
     resource_id: resourceId,
-    status: 'processado',
+    status: 'erro',
     payload_snapshot: sanitizarPayload(payload),
     recebido_em: new Date().toISOString(),
   });
 
   try {
-    if (topic === 'payment') {
+    if (topic === 'payment' || topic === 'subscription_authorized_payment') {
+      // subscription_authorized_payment: data.id é um payment ID — mesmo fluxo de pagamento avulso.
       await processarPagamento(base44, mpToken, resourceId);
-    } else if (topic === 'preapproval') {
+    } else if (topic === 'subscription_preapproval') {
       await processarPreapproval(base44, mpToken, resourceId);
     }
 
+    if (logEntry?.id) {
+      await base44.asServiceRole.entities.MpWebhookLog.update(logEntry.id, { status: 'processado' });
+    }
     console.log(`[mercadoPagoWebhook] processado: topic=${topic} resource=${resourceId} log=${logEntry?.id}`);
     return Response.json({ ok: true, acao: 'processado', log_id: logEntry?.id });
 
   } catch (err) {
     console.error(`[mercadoPagoWebhook] erro ao processar ${notificationId}:`, (err as Error).message);
 
-    // Marca o log como erro para permitir reprocessamento
     if (logEntry?.id) {
       await base44.asServiceRole.entities.MpWebhookLog.update(logEntry.id, {
         status: 'erro',
@@ -218,28 +244,34 @@ Deno.serve(async (req) => {
 
 async function processarPagamento(base44: any, mpToken: string, paymentId: string) {
   const mpPayment = await buscarPagamentoMP(mpToken, paymentId);
-  if (!mpPayment) {
-    console.warn(`[mercadoPagoWebhook] payment ${paymentId} não encontrado na API MP`);
-    return;
-  }
 
   const externalRef = String(mpPayment.external_reference || '');
   const [requestId] = externalRef.split('|');
   const novoStatus = STATUS_PAYMENT_MAP[String(mpPayment.status)] || String(mpPayment.status);
 
-  if (!requestId) return;
+  if (!requestId) {
+    throw new Error(`payment ${paymentId}: external_reference ausente ou mal formado`);
+  }
 
-  // Localiza o Payment no banco via mp_preference_id ou external_reference
-  const payments = await base44.asServiceRole.entities.Payment.filter({ request_id: requestId });
+  // Busca pelo mp_payment_id primeiro; fallback por request_id para pagamentos recém-criados.
+  let payments = await base44.asServiceRole.entities.Payment.filter({ mp_payment_id: paymentId });
   if (!payments || payments.length === 0) {
-    console.warn(`[mercadoPagoWebhook] Payment para request_id=${requestId} não encontrado`);
-    return;
+    payments = await base44.asServiceRole.entities.Payment.filter({ request_id: requestId });
+  }
+  if (!payments || payments.length === 0) {
+    // Lança erro para forçar retry — o registro pode ainda não ter sido persistido.
+    throw new Error(`Payment para request_id=${requestId} não encontrado — possível race condition`);
   }
 
   const payment = payments[0];
 
-  // Não reverter um pagamento já capturado
-  if (payment.status === 'pago' && novoStatus !== 'reembolsado' && novoStatus !== 'chargeback') {
+  // Não reverter estado captured — mas se ServiceRequest não foi atualizado, tentar novamente.
+  if (payment.status === 'captured' && novoStatus === 'captured') {
+    const serviceReqs = await base44.asServiceRole.entities.ServiceRequest.filter({ id: requestId });
+    const sr = serviceReqs?.[0];
+    if (sr && !ESTADOS_TERMINAIS_SR.has(String(sr.status)) && sr.status !== 'Em Andamento') {
+      await base44.asServiceRole.entities.ServiceRequest.update(requestId, { status: 'Em Andamento' });
+    }
     return;
   }
 
@@ -249,12 +281,14 @@ async function processarPagamento(base44: any, mpToken: string, paymentId: strin
     atualizado_em: new Date().toISOString(),
   });
 
-  // Atualiza ServiceRequest se aprovado
-  if (novoStatus === 'pago') {
-    await base44.asServiceRole.entities.ServiceRequest.update(requestId, {
-      status: 'Em Andamento',
-    });
-    console.log(`[mercadoPagoWebhook] ServiceRequest ${requestId} → Em Andamento`);
+  // Promove ServiceRequest apenas se não estiver em estado terminal.
+  if (novoStatus === 'captured') {
+    const serviceReqs = await base44.asServiceRole.entities.ServiceRequest.filter({ id: requestId });
+    const sr = serviceReqs?.[0];
+    if (sr && !ESTADOS_TERMINAIS_SR.has(String(sr.status))) {
+      await base44.asServiceRole.entities.ServiceRequest.update(requestId, { status: 'Em Andamento' });
+      console.log(`[mercadoPagoWebhook] ServiceRequest ${requestId} → Em Andamento`);
+    }
   }
 
   console.log(`[mercadoPagoWebhook] Payment ${payment.id} → ${novoStatus}`);
@@ -262,24 +296,17 @@ async function processarPagamento(base44: any, mpToken: string, paymentId: strin
 
 async function processarPreapproval(base44: any, mpToken: string, preapprovalId: string) {
   const mpPreapproval = await buscarPreapprovalMP(mpToken, preapprovalId);
-  if (!mpPreapproval) {
-    console.warn(`[mercadoPagoWebhook] preapproval ${preapprovalId} não encontrado`);
-    return;
-  }
 
   const externalRef = String(mpPreapproval.external_reference || '');
-  const [userId, plano] = externalRef.split('|');
+  const [, plano] = externalRef.split('|');
   const novoStatus = STATUS_PREAPPROVAL_MAP[String(mpPreapproval.status)] || String(mpPreapproval.status);
-
-  if (!userId) return;
 
   const subscriptions = await base44.asServiceRole.entities.Subscription.filter({
     mp_preapproval_id: preapprovalId,
   });
 
   if (!subscriptions || subscriptions.length === 0) {
-    console.warn(`[mercadoPagoWebhook] Subscription para preapproval=${preapprovalId} não encontrada`);
-    return;
+    throw new Error(`Subscription para preapproval=${preapprovalId} não encontrada`);
   }
 
   await base44.asServiceRole.entities.Subscription.update(subscriptions[0].id, {
@@ -290,7 +317,7 @@ async function processarPreapproval(base44: any, mpToken: string, preapprovalId:
 
   console.log(`[mercadoPagoWebhook] Subscription ${subscriptions[0].id} → ${novoStatus}`);
 
-  if (novoStatus === 'ativa') {
+  if (novoStatus === 'active') {
     await sendCapiEvent('Subscribe', {
       currency: 'BRL',
       value: 19.90,
