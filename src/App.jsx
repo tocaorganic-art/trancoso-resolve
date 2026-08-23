@@ -550,7 +550,7 @@ const AuthenticatedApp = () => {
             <AnimatedPage><OAuthConsentPage /></AnimatedPage>
           } />
           <Route element={<AdminRoute />}>
-            <Route path="/admin/campanha" element={
+            <Route path="/admin/campanha-regional" element={
               <AnimatedPage><CampanhaRegionalPage /></AnimatedPage>
             } />
           </Route>
