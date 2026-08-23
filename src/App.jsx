@@ -85,6 +85,11 @@ const JardineiroArraialDajuda = lazy(() => import('@/pages/servicos/JardineiroAr
 const PedreiroArraialDajuda = lazy(() => import('@/pages/servicos/PedreiroArraialDajuda'));
 const MorarTrancoso = lazy(() => import('@/pages/guides/MorarTrancoso'));
 const PrestadorFundadorPage = lazy(() => import('@/pages/PrestadorFundador'));
+const ParticiparPage = lazy(() => import('@/pages/Participar'));
+const RecomendadorPage = lazy(() => import('@/pages/Recomendador'));
+const CostaDoDescobrimentoPage = lazy(() => import('@/pages/CostaDoDescobrimento'));
+const OAuthConsentPage = lazy(() => import('@/pages/OAuthConsent'));
+const CampanhaRegionalPage = lazy(() => import('@/pages/admin/CampanhaRegional'));
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -524,6 +529,31 @@ const AuthenticatedApp = () => {
               <AnimatedPage><ServicosCategoria /></AnimatedPage>
             </LayoutWrapper>
           } />
+
+          {/* Páginas sincronizadas do base */}
+          <Route path="/participar" element={
+            <LayoutWrapper currentPageName="Participar">
+              <AnimatedPage><ParticiparPage /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/recomendador" element={
+            <LayoutWrapper currentPageName="Recomendador">
+              <AnimatedPage><RecomendadorPage /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/costa-do-descobrimento" element={
+            <LayoutWrapper currentPageName="CostaDoDescobrimento">
+              <AnimatedPage><CostaDoDescobrimentoPage /></AnimatedPage>
+            </LayoutWrapper>
+          } />
+          <Route path="/oauth-consent" element={
+            <AnimatedPage><OAuthConsentPage /></AnimatedPage>
+          } />
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/campanha" element={
+              <AnimatedPage><CampanhaRegionalPage /></AnimatedPage>
+            } />
+          </Route>
 
           {/* Hubs de destino e páginas categoria × destino — devem vir antes do catch-all */}
           <Route path="/:destino/:categoria" element={
