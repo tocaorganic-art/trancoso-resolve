@@ -12,6 +12,145 @@ limpeza, jardinagem, reformas e mais. Produtos digitais: **app web** e **app mob
 
 ---
 
+## 📋 Regra 1 — Fonte Única de Verdade do Projeto
+
+> **Salvo em 10/08/2026 pelo Tony (tocaorganic@gmail.com). Todas as informações abaixo são verificadas e corretas. Use como referência absoluta. Se algo não estiver aqui, diga que precisa conferir com o Tony antes de assumir.**
+
+### 1. Identidade e Domínio
+
+- **Nome:** Trancoso Resolve
+- **Slogan:** "Quem resolve, pertinho de você."
+- **Domínio OFICIAL:** `trancosoresolve.com.br` ⚠️ NUNCA usar `trancosoresolve.com` — é erro crítico
+- **Email admin:** tocaorganic@gmail.com
+- **WhatsApp oficial:** +55 73 99828-3579
+
+### 2. IDs e Configurações Oficiais (verificados)
+
+| Item | Valor |
+|------|-------|
+| Business Manager ID | 2061349114595345 |
+| Conta de Anúncios | act_1303442605221551 |
+| **Pixel Meta OFICIAL** | **1469130194903035** ← único pixel, não usar outros |
+| Dataset CAPI ID | 1730596111295513 |
+| System User CAPI ID | 61590057056280 |
+| GTM | GTM-5CQLT5JM |
+| GA4 | G-3KF75243B4 |
+| Página Facebook ID | 1078663712004650 |
+| Instagram ID | 17841415487972175 |
+| Instagram Handle | @trancosoresolve |
+| App Base44 (TR) | 68eb21726a9614db4a82ba99 |
+| App Base44 (Superagent) | 6a0754c82a7c1aae19211408 |
+| WABA ID (WhatsApp) | 573485269177376 |
+| Phone Number ID (WA) | 606922442501768 |
+| Repositório GitHub | tocaorganic-art/trancoso-resolve-base (branch main) |
+
+> ⚠️ **ATENÇÃO — DOIS PIXELS no Meta:** use SEMPRE o `1469130194903035`. O `1730596111295513` é o Dataset CAPI, **não** o Pixel de browser.
+
+### 3. Regras Obrigatórias
+
+1. Todas as respostas em **português do Brasil**.
+2. Nenhuma arte deve ser criada em formato que não seja Reels (1080×1920, 9:16) sem autorização do Tony.
+3. Stories do Instagram **DEVEM** ter texto legível (headline + CTA) queimado direto na imagem. Nunca publicar story sem texto visível.
+4. Usar SEMPRE o endpoint `graph.instagram.com` para publicações no Instagram.
+5. Passar o token de acesso como query parameter na URL das requisições ao Instagram Graph API.
+6. **Nunca armazenar tokens, chaves ou segredos no Notion.**
+7. Apenas Tony tem autorização para ativar campanhas no Meta Ads. O agente deve apenas pausar/desativar quando solicitado.
+8. Salvar arquivos do projeto no Google Drive (pasta raiz `G:\Meu Drive`).
+9. Não inventar planos, preços nem condições que não foram fornecidos. Se não souber, diga que precisa conferir no painel administrativo.
+10. O sandbox remoto do Base44 é a fonte da verdade para código e entidades. **Nunca** deployar via CLI a partir do `/app` local (só tem 2 entidades, o servidor tem 34+).
+
+### 4. Canais e Integrações
+
+**WhatsApp Business (Cloud API da Meta):**
+- Número: +55 73 99828-3579
+- Templates criados: `trc_bem_vindo_lead`, `trc_lead_confirmado`, `trc_reativacao_lead` (categoria MARKETING, status PENDING)
+- Templates sem variáveis são aprovados; com variáveis são rejeitados
+- Webhook deployado: v5.3.1-live (filtro anti-loop ativo, bloqueia +13368103670 e +5573998283579)
+- Funções: `whatsappWebhook`, `criarTemplateBoasVindas`, `listarTemplatesWhatsApp`, `enviarMensagemWhatsApp`, `fixLoop`
+
+**Facebook Messenger:**
+- Página oficial: Trancoso Resolve (ID `1078663712004650`)
+- Conector `facebook_pages` autorizado: `pages_show_list`, `pages_read_engagement`, `pages_messaging`, `pages_manage_metadata`
+- A página NÃO aparece no `/me/accounts` (está no Business Manager), mas é acessível diretamente pelo ID
+- Não há webhook support no conector — usar polling agendado
+
+**Instagram:**
+- Conta: @trancosoresolve (ID `17841415487972175`)
+- Reconectado e funcionando
+- Stories sendo publicados com texto queimado na imagem (corrigido em 07/08)
+- 3 automações ativas: Segunda, Quarta, Sexta
+
+**Gmail:**
+- Autorizado com scopes `gmail.send` e `gmail.readonly`
+- Usado para bypass em emergências
+
+### 5. Sistema de Pagamentos
+
+- **Gateway oficial: Mercado Pago** (NÃO Stripe — Stripe foi removido)
+- Secrets no Base44: `MP_ACCESS_TOKEN`, `MP_PUBLIC_KEY`, `MP_WEBHOOK_SECRET`
+- Funções: `criarPagamentoServico` (captura manual/escrow, comissão zero), `createSubscriptionCheckout`, `mercadoPagoWebhook` (validação HMAC-SHA256), `stripeWebhook` (stub vazio)
+
+### 6. Entidades e Backend
+
+- **34+ entidades** no app Trancoso Resolve (sandbox remoto = fonte da verdade)
+- Entidades principais: `Lead`, `ServiceProvider`, `Service`, `User`, `BrandAsset`, `ProviderSchedule`
+- Entidade `Lead`: `bairro`, `category_interest`, `consent`, `email`, `horario`, `lead_status`, `locality`, `message`, `nome`, `notas`, `origem`, `profile_type`, `servico`, `status`, `utm_campaign`, `utm_medium`, `utm_source`, `whatsapp`
+- RLS ativo nas entidades
+
+### 7. Deploy e Publicação
+
+- Fonte oficial: repositório GitHub `tocaorganic-art/trancoso-resolve-base` (branch `main`)
+- O sandbox remoto tem as 34 entidades sincronizadas
+- **NUNCA** rodar `npx base44 deploy` do `/app` local (só tem 2 entidades, tenta deletar as 32 ausentes)
+- Para deploy: usar o sandbox remoto OU `base44 site deploy` a partir de checkout atualizado do repo
+- O botão **Publish** no Builder é necessário para colocar código em produção (sync GitHub não faz auto-deploy)
+- O `index.html` tem configuração específica de LGPD e Meta Pixel — nunca sobrescrever
+
+### 8. Automações Ativas (9 total)
+
+1. Responder DMs Instagram e Messenger Facebook (diário 00:00 Bahia)
+2. Responder DMs Instagram e Messenger - Noite (diário 23:50 Bahia)
+3. Post Segunda — Quanto custa?
+4. Post Quarta — Prova Social
+5. Post Sexta — Como Resolver / Prova Social
+6. Stories Segunda
+7. Stories Quarta
+8. Stories Sexta
+9. Outras automações de leads/conteúdo
+
+### 9. SEO e Performance
+
+- 13 páginas SEO com Pixel instalado (10 serviços + 3 bairros)
+- Páginas de serviço: `/servicos/[servico]-trancoso`
+- Páginas de bairro: Quadrado, Pitinga, Rio Verde
+- GSC (28 dias, 09/07 a 05/08): 10 cliques, 210 impressões, CTR 4,76%, posição média 8,5
+- Sitemap registrado no GSC, 0 erros
+- Otimização recente no `ServicosCategoria.jsx`: filtragem local antes de LLM, cache de buscas, debounce 800ms
+
+### 10. Trancoso Move (sub-projeto)
+
+- App de moto-taxi sob demanda para Trancoso/BA
+- Será integrado à Trancoso Resolve quando pronto
+- App live: `tireless-track-wealth-flow.base44.app`
+- Slogan: "Mobilidade que conecta Trancoso"
+- Cores: laranja `#F26A21`, cinza `#333` | Fonte: Nunito
+- Business plan completo (49 páginas) no workspace
+
+### 11. Status Atual (10/08/2026)
+
+- WhatsApp Business re-inscrito na WABA (loop resolvido)
+- Filtro anti-loop v5.3.1-live ativo
+- Facebook Messenger acessível (página oficial habilitada no BM)
+- Instagram reconectado e publicando stories
+- `ServicosCategoria.jsx` otimizado (performance LCP/TTFB)
+- Build limpo, app ready
+- Templates WhatsApp aguardando aprovação da Meta (24-48h)
+- Verificação comercial Meta pendente (Tony usa CPF, não CNPJ)
+- Página Facebook duplicada com 0 seguidores (renomear para evitar confusão)
+- Domínio `trancosoresolve.com.br` não verificado no BM
+
+---
+
 ## 🚀 Comandos de desenvolvimento
 
 ```bash
