@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LocateFixed, MapPin } from 'lucide-react';
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyAOc54TuiYbL5mWlIsdGx7kAsABOvRZ79g";
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const trancosoDefault = { lat: -16.5925, lng: -39.0931 };
 
@@ -15,6 +15,7 @@ const landmarks = [
 
 function loadGoogleMaps() {
   return new Promise((resolve, reject) => {
+    if (!GOOGLE_MAPS_API_KEY) { reject(new Error('Mapa indisponível no momento.')); return; }
     if (window.google?.maps) { resolve(); return; }
     if (document.getElementById('gmaps-script')) {
       const poll = setInterval(() => { if (window.google?.maps) { clearInterval(poll); resolve(); } }, 100);
